@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="hospitalentrys/list">
+        <put-attribute name="body" value="/WEB-INF/views/hospitalentrys/list.jspx"/>
+    </definition>
+<definition extends="default" name="hospitalentrys/show">
+        <put-attribute name="body" value="/WEB-INF/views/hospitalentrys/show.jspx"/>
+    </definition>
+<definition extends="default" name="hospitalentrys/create">
+        <put-attribute name="body" value="/WEB-INF/views/hospitalentrys/create.jspx"/>
+    </definition>
+<definition extends="default" name="hospitalentrys/update">
+        <put-attribute name="body" value="/WEB-INF/views/hospitalentrys/update.jspx"/>
+    </definition>
+<definition extends="default" name="hospitalentrys/findHospitalEntrysByRepositoryMapping">
+        <put-attribute name="body" value="/WEB-INF/views/hospitalentrys/findHospitalEntrysByRepositoryMapping.jspx"/>
+    </definition>
+<definition extends="default" name="hospitalentrys/findHospitalEntrysByRepositoryMappingDirection">
+        <put-attribute name="body" value="/WEB-INF/views/hospitalentrys/findHospitalEntrysByRepositoryMappingDirection.jspx"/>
+    </definition>
+</tiles-definitions>

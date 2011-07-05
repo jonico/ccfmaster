@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="fieldmappingexternalapptemplates/list">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/list.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappingexternalapptemplates/show">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/show.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappingexternalapptemplates/create">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/create.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappingexternalapptemplates/update">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/update.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappingexternalapptemplates/findFieldMappingExternalAppTemplatesByParentAndNameAndDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/findFieldMappingExternalAppTemplatesByParentAndNameAndDirection.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappingexternalapptemplates/findFieldMappingExternalAppTemplatesByParent">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/findFieldMappingExternalAppTemplatesByParent.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappingexternalapptemplates/findFieldMappingExternalAppTemplatesByParentAndDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappingexternalapptemplates/findFieldMappingExternalAppTemplatesByParentAndDirection.jspx"/>
+    </definition>
+</tiles-definitions>

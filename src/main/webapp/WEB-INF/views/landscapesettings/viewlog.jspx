@@ -1,0 +1,111 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+	
+ 	<spring:url value="/landscapesettings/downloadlogfile" var="downloadlog_url" />
+	<spring:url value="/landscapesettings/displaytftoparticipantlogs" var="returntfloglist_url" />
+	<spring:url value="/landscapesettings/displayparticipanttotflogs" var="returnparticipantloglist_url" />
+	<spring:url value="/landscapesettings/showlogfile" var="showlog_url" />
+	<spring:url value="/landscapesettings/taillogfile" var="taillog_url" />
+	<spring:url value="/images/icons/log.gif" var="log_url" />
+	<spring:message code="logname" var="lognamelabel" htmlEscape="false"/>  
+	<spring:message code="logsize" var="logsizelabel" htmlEscape="false"/>  
+	<spring:message code="logmodificationdate" var="logmodificationdatelabel" htmlEscape="false"/>  
+	<spring:message code="nolog" var="nologlabel" htmlEscape="false"/>  
+	<spring:message code="button_return" var="return_button"/>	
+	<spring:message code="button_tail" var="tail_button"/>
+	<spring:message code="button_stoptail" var="stoptail_button"/>
+	
+	<spring:url value="/js/application.js" var="application_url" />
+  	<script src="${fn:escapeXml(application_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+	<spring:url value="/js/prototype.js" var="prototypr_url" />
+	<script src="${fn:escapeXml(prototypr_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+  	
+ 		
+ <form:form>
+  <table class="Container">
+	  <tbody>
+		<tr>
+		<td>
+		<tr class="ContainerHeader">
+     	 <td>  ${lognamelabel}=> ${filename} || ${logsizelabel}=> ${filesize} || ${logmodificationdatelabel}=> ${filemodificationdate} </td>
+    	</tr>
+		
+    	<tr>
+    	<td>
+    	 <div style="width: 1200px; height: 300px; overflow: auto;" id="fileContentDiv">
+    	<pre id="fileContent">
+    	
+    	<p>${fileobject}</p>
+    	
+    	</pre>
+    	</div>
+    	</td>
+   		</tr> 
+    		<tr class="ContainerFooter">
+				
+				<td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+					<strong><a href="#" id="tailButton" onclick="return false">${tail_button}</a></strong>	
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>		
+				 <spring:url value="/images/icons/spinner-gray-bg.gif" var="progress_image_url" />
+ 				 <img id="tailSpinner" class="spinner" src="${fn:escapeXml(progress_image_url)}" />
+				<div class="ButtonSpace"></div>		 
+				<div class="Button">
+				<div class="Middle">
+						<c:if test="${direction eq 'forward'}">
+				     	<a href="${fn:escapeXml(returntfloglist_url)}">${return_button}</a>
+				     	</c:if>
+				     	<c:if test="${direction eq 'reverse'}">
+				     	<a href="${fn:escapeXml(returnparticipantloglist_url)}">${return_button}</a>
+				     	</c:if>
+				</div>
+				</div>
+				</div>
+				</td>
+			</tr>
+			
+		</td>
+		</tr>
+		
+		 </tbody>
+  </table>
+  
+ </form:form>
+	
+	<script type="text/javascript">
+  		Event.observe(window, 'load', function() {
+      $('tailButton').observe('click', toggleLogStreaming)
+      $('tailSpinner').hide()
+
+      // allow initial state of tailing
+      if ('${params.view}' == 'tail') {
+          toggleLogStreaming();
+      }
+  })
+
+  var logStreamer;
+  var tailLog = false
+  function toggleLogStreaming(){
+    tailLog = !tailLog;
+    if (tailLog) {
+  	    logStreamer  = new LogStreamer('${filename}','${direction}', '${filesize}', $('fileContent'), $('fileContentDiv'), "Error",'${fn:escapeXml(taillog_url)}')
+        logStreamer.start();
+        $('tailButton').update('${stoptail_button}');
+        $('tailSpinner').show()
+    }
+    else {
+        logStreamer.stop();
+        $('tailButton').update('${tail_button}');
+        $('tailSpinner').hide()
+    }
+  }
+  
+  </script>
+  
+ 
+ 
+</div>

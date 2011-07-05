@@ -1,0 +1,124 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+
+<spring:message code="create_landscape_header" var="landscapelabel" htmlEscape="false"/>
+<spring:message code="url" var="urllabel" htmlEscape="false"/>
+<spring:message code="hpqctimezone" var="hpqctimezonelabel" htmlEscape="false"/>  
+<spring:message code="hpqcusername" var="hpqcusernamelabel" htmlEscape="false"/>  
+<spring:message code="hpqcpassword" var="hpqcpasswordlabel" htmlEscape="false"/>  
+<spring:message code="qcmaxattachmentsize" var="qcmaxattachmentsizelabel" htmlEscape="false"/>  
+
+
+
+<form:form id="saveqcsettings"  name="saveqcsettings" method="POST" commandName="qcsettingsmodel" modelAttribute="qcsettingsmodel">
+  <table class="Container" >
+		<tbody>
+ 		<tr class="ContainerHeader" >
+ 		<td>
+		<c:out value="${landscapelabel}" />
+		</td> 
+		</tr>
+		<tr>
+		<td>
+		
+		<br/>
+		<br/>
+	<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+			 <tr>
+				<td class="ItemDetailName">
+				<form:label path="qcurlparticipantconfig.name">${urllabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<input type="hidden" name="qcurlparticipantconfig.name" value="ccf.participant.qc.url"/>
+				<form:input path="qcurlparticipantconfig.val"  size="80" cssClass="inputfield" />
+				</td>
+				</tr>
+				
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<field:select field="participant.timezone" id="c_hpqctimezone" items="${timezones}" path="participant.timezone"/>
+				</td>
+				</tr>
+			    <tr>
+				
+				<td class="ItemDetailName">
+				<input type="hidden" name="qcusernamelandscapeconfig.name" value="ccf.landscape.qc.username"/>
+				<form:label path="qcusernamelandscapeconfig.name">${hpqcusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="qcusernamelandscapeconfig.val"  size="60"  cssClass="inputfield" />
+				</td>
+				</tr> 
+  				
+  				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="qcpasswordlandscapeconfig.name" value="ccf.landscape.qc.password"/>
+				<form:label path="qcpasswordlandscapeconfig.val">${hpqcpasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="qcpasswordlandscapeconfig.val" showPassword="true" size="60" cssClass="inputfield"/>
+				 
+				</td>
+				</tr>
+			 
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="qcmaxattachmentsize.name" value="ccf.direction.qc.max.attachmentsize"/>
+				<form:label path="qcmaxattachmentsize.val">${qcmaxattachmentsizelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:input path="qcmaxattachmentsize.val"  size="60" cssClass="inputfield"/>
+				<form:errors path="qcmaxattachmentsize.val" cssClass="errors"/>
+				</td>
+				</tr>
+				
+				
+		</tbody>
+	</table>
+				<spring:url value="/createlandscape/ccfmaster" var="selectparticipant_url" />
+				<spring:url value="/createlandscape/createlandscape" var="createlandscape_url" />
+				<spring:url value="/createlandscape/savelandscape" var="savelandscape_url" />
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<tr class="ContainerFooter">
+				<td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				     	<a href="${fn:escapeXml(selectparticipant_url)}">${cancel_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle"> 
+					<strong> <a href="javascript: submitForm('${fn:escapeXml(savelandscape_url)}');">${save_button}</a></strong> 
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+  
+  
+	<script language="JavaScript">
+		function submitForm(url){
+	  		document.getElementById("createlandscape").action=url;
+	  		document.getElementById("createlandscape").submit();
+		}
+		function submittestConnection(url){
+	  		document.getElementById("createlandscape").action=url;
+	  		document.getElementById("createlandscape").submit();
+		}
+
+	</script>		 
+</div>

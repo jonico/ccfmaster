@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+   
+    <definition extends="ccfpublic" name="createlandscape/index">
+        <put-attribute name="body" value="/WEB-INF/views/createlandscape/selectparticipant.jspx"/>
+    </definition>
+     
+    <definition extends="ccfpublic" name="createlandscape/displayerror">
+        <put-attribute name="body" value="/WEB-INF/views/createlandscape/displayerror.jspx"/>
+    </definition>   
+      
+   	<definition extends="ccfpublic" name="createlandscape/createlandscape">
+        <put-attribute name="body" value="/WEB-INF/views/createlandscape/createlandscape.jspx"/>
+    </definition> 
+     
+    <definition extends="ccfpublic" name="createlandscape/savelandscape">
+        <put-attribute name="body" value="/WEB-INF/views/createlandscape/savelandscape.jspx"/>
+    </definition>  
+      
+    <definition extends="ccfpublic" name="createlandscape/testconnection">
+        <put-attribute name="body" value="/WEB-INF/views/createlandscape/createlandscape.jspx"/>
+    </definition>
+    
+ 
+</tiles-definitions>

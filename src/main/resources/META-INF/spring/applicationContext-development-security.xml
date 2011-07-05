@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- TODO: configure a custom HttpSessionSecurityContextRepository to retrieve 
+		UserInfo depending on the project. See http://static.springsource.org/spring-security/site/docs/3.0.x/reference/core-web-filters.html#security-context-repository 
+		for details. -->
+		
+	<!-- This must go before the http element in order to be used by security:authorize 
+		tags using the access attribute. See http://forum.springsource.org/showpost.php?p=296694&postcount=22 
+		and https://jira.springframework.org/browse/SEC-1452 for details. -->
+	<beans:bean id="expressionHandler"
+		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+		<beans:property name="roleHierarchy" ref="roleHierarchy" />
+	</beans:bean>
+	<beans:bean id="methodSecurityExpressionHandler" 
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"> 
+		<beans:property name="roleHierarchy" ref="roleHierarchy" />
+	</beans:bean>
+
+	<!-- Configure Authentication mechanism -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="LinkedAppAuthenticationProvider" />
+		<authentication-provider ref="IAFAuthenticationProvider" />
+		<authentication-provider ref="TeamForgeAuthenticationProvider" />
+	</authentication-manager>
+	
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.UnanimousBased">
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:bean
+					class="com.collabnet.ccf.ccfmaster.authorization.IntegratedAppVoter" />
+				<!-- cannot customize the WebSecurityExpressionHandler used by the WebExpressionVoter to use our expressionHandler bean.
+				<beans:bean
+					class="org.springframework.security.web.access.expression.WebExpressionVoter">
+					<beans:property name="expressionHandler" ref="expressionHandler"/>
+				</beans:bean>
+				-->
+				<beans:bean
+					class="org.springframework.security.access.vote.AuthenticatedVoter" />
+				<beans:bean
+					class="org.springframework.security.access.vote.RoleHierarchyVoter">
+					<beans:constructor-arg ref="roleHierarchy" />
+				</beans:bean>
+			</beans:list>
+		</beans:property>
+
+	</beans:bean>
+
+	<beans:bean id="roleHierarchy"
+		class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+		<beans:property name="hierarchy">
+			<beans:value>
+				ROLE_TF_SUPER_USER > ROLE_ADMIN
+				ROLE_IAF_USER > ROLE_TF_USER
+				ROLE_TF_USER > ROLE_USER
+				ROLE_ADMIN > ROLE_CCF_CORE_CONFIGURATION 
+				ROLE_ADMIN > ROLE_HOSPITAL
+				ROLE_ADMIN > ROLE_IDENTITY_MAPPINGS
+				ROLE_ADMIN > ROLE_REPOSITORY_MAPPINGS
+				ROLE_ADMIN > ROLE_MAPPING_RULES 
+				ROLE_ADMIN > ROLE_MAPPING_RULE_TEMPLATES 
+				ROLE_ADMIN > ROLE_PAUSE_SYNCHRONIZATION 
+				ROLE_ADMIN > ROLE_RESET_SYNCHRONIZATION_STATUS 
+				ROLE_ADMIN > ROLE_TF_USER
+			</beans:value>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="linkedAppFilter"
+		class="com.collabnet.ccf.ccfmaster.authentication.LinkedAppAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="exceptionIfParameterMissing"
+			value="false" />
+		<beans:property name="continueFilterChainOnUnsuccessfulAuthentication"
+			value="true" />
+	</beans:bean>
+	<beans:bean id="IAFFilter"
+		class="com.collabnet.ccf.ccfmaster.authentication.IafAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="continueFilterChainOnUnsuccessfulAuthentication"
+			value="false" />
+	</beans:bean>
+	<beans:bean id="TeamForgeAuthenticationProvider"
+		class="com.collabnet.ccf.ccfmaster.authentication.TFAuthenticationProvider">
+		<beans:constructor-arg value="#{CCFRunTimeProperties.TfUrl}" />
+		<!-- <beans:property name="userCache">
+			<beans:bean class="com.collabnet.ccf.ccfmaster.authentication.TFAuthenticationProvider.MapUserCache" />
+		</beans:property> -->
+	</beans:bean>
+	<beans:bean id="LinkedAppAuthenticationProvider"
+		class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean class="com.collabnet.ccf.ccfmaster.authentication.LinkedAppUserDetailsService">
+				<beans:constructor-arg value="#{CCFRunTimeProperties.TfUrl}" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="IAFAuthenticationProvider"
+		class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean class="com.collabnet.ccf.ccfmaster.authentication.IafUserDetailsService">
+				<beans:constructor-arg value="#{CCFRunTimeProperties.TfUrl}" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	
+	<global-method-security pre-post-annotations="enabled">
+		<expression-handler ref="methodSecurityExpressionHandler"/>
+	</global-method-security>
+	
+	<!-- HTTP security configurations -->
+	<http auto-config="true" use-expressions="false"
+		access-decision-manager-ref="accessDecisionManager">
+		<custom-filter ref="linkedAppFilter" before="PRE_AUTH_FILTER" />
+		<custom-filter ref="IAFFilter" after="PRE_AUTH_FILTER" />
+
+		<form-login login-processing-url="/resources/j_spring_security_check"
+			login-page="/login" authentication-failure-url="/login?login_error=t" />
+		<logout logout-url="/resources/j_spring_security_logout" />
+		<!-- <http-basic/> -->
+
+		<!-- Configure these elements to secure URIs in your application -->
+		<intercept-url pattern="/linkid/*/hospitalentrys/**"                access="INTEGRATED_APPLICATION_CHECK, ROLE_HOSPITAL" />
+		<intercept-url pattern="/linkid/*/identitymappings/**"              access="INTEGRATED_APPLICATION_CHECK, ROLE_IDENTITY_MAPPINGS" />
+		<intercept-url pattern="/linkid/*/repositorymappings/**"            access="INTEGRATED_APPLICATION_CHECK, ROLE_REPOSITORY_MAPPINGS" />
+		<intercept-url pattern="/linkid/*/repositorymappingdirections/**"   access="INTEGRATED_APPLICATION_CHECK, ROLE_REPOSITORY_MAPPINGS" />
+ 		<intercept-url pattern="/linkid/*/**"                               access="INTEGRATED_APPLICATION_CHECK"/>
+		<intercept-url pattern="/hospitalentrys/**"                         access="ROLE_HOSPITAL"/>
+		<intercept-url pattern="/identitymappings/**"                       access="ROLE_IDENTITY_MAPPINGS" />
+		<intercept-url pattern="/repositorymappings/**"                     access="ROLE_REPOSITORY_MAPPINGS" />
+		<intercept-url pattern="/repositorymappingdirections/**"            access="ROLE_REPOSITORY_MAPPINGS" />
+		<intercept-url pattern="/createlandscape/**"           			    access="ROLE_TF_SUPER_USER" />
+		<intercept-url pattern="/landscapesettings/**"           			access="ROLE_TF_SUPER_USER" />
+		
+		<!-- 
+		<intercept-url pattern="/participants/**"     access="hasRole('ROLE_TF_SUPER_USER')" />
+		<intercept-url pattern="/hospitalentrys/**"   access="hasRole('ROLE_HOSPITAL')" />
+		<intercept-url pattern="/identitymappings/**" access="hasRole('ROLE_IDENTITY_MAPPINGS')" />
+		<intercept-url pattern="/member/**"           access="isAuthenticated()" />
+		<intercept-url pattern="/resources/**"        access="permitAll" />
+		<intercept-url pattern="/**"                  access="permitAll" />
+		 -->
+	</http>
+	
+</beans:beans>

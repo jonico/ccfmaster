@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" 
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<jsp:directive.page contentType="text/html;charset=UTF-8"/>
+	<jsp:output omit-xml-declaration="yes"/>
+
+	<spring:url value="/images/icons/big_bullet.gif" var="bullet_image_url" />
+	<spring:url value="/landscapesettings/displayparticipantsettings" var="qcsettings_url" />
+	<spring:url value="/landscapesettings/displaytfsettings" var="tfsettings_url" />
+	<spring:url value="/landscapesettings/displayccfpropertieslogtemplatetftopart" var="ccfproperties_url" />
+	<spring:url value="/landscapesettings/displayrepositorymappingtftopart" var="repositorymappings_url" />
+	<spring:url value="/landscapesettings/displaytftoparticipantstatus" var="status_url" />
+	<spring:url value="/landscapesettings/displaytftoparticipantlogs" var="logs_url" />
+	
+	
+	<spring:message code="qcsettingsmenulabel" var="label_qcsettings" htmlEscape="false"/>  
+	<spring:message code="swpsettingsmenulabel" var="label_swpsettings" htmlEscape="false"/>
+	<spring:message code="tfsettingsmenulabel" var="label_tfsettings" htmlEscape="false"/>
+	<spring:message code="ccfpropertiesmenulabel" var="label_ccfproperties" htmlEscape="false"/>
+	<spring:message code="repositorymappingsmenulabel" var="label_repositorymappings" htmlEscape="false"/>
+	<spring:message code="statusmenulabel" var="label_status" htmlEscape="false"/>
+	<spring:message code="logmenulabel" var="label_log" htmlEscape="false"/>
+	
+	<c:if test="${participant.systemKind eq 'QC'}"> 
+	
+	<c:if test="${selectedLink==null || selectedLink==''}">
+  	<c:set  var="selectedLink" scope="request" value="qcsettings"/>
+	</c:if> 
+	
+	
+	<c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${selectedLink == 'qcsettings'}" >
+    <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">${label_qcsettings}</a></div>
+	</c:if>
+	
+	<c:if test="${participant.systemKind eq 'SWP'}"> 
+	
+	<c:if test="${selectedLink==null || selectedLink==''}">
+  	<c:set  var="selectedLink" scope="request" value="qcsettings"/>
+	</c:if> 
+	
+	<c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${selectedLink == 'qcsettings'}" >
+    <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">${label_swpsettings}</a></div>
+	</c:if>
+	
+   
+	<c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${selectedLink == 'tfsettings'}" >
+     <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(tfsettings_url)}">${label_tfsettings}</a></div>
+	
+	
+	<c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${selectedLink == 'ccfproperties'}" >
+      <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(ccfproperties_url)}">${label_ccfproperties}</a></div>
+	
+     <c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${requestScope.selectedLink == 'repositorymappings'}" >
+      <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(repositorymappings_url)}">${label_repositorymappings}</a></div>
+	
+	<c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${requestScope.selectedLink == 'status'}" >
+      <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(status_url)}">${label_status}</a></div>
+	
+	
+	<c:set var="itemClass" value="ImageListParent"/>
+    <c:if test="${requestScope.selectedLink == 'logs'}" >
+      <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    </c:if>
+    <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(logs_url)}">${label_log}</a></div>
+
+</div>
+
+
+
+

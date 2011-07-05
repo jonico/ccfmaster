@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus" object="${ccfcorestatus}" path="/ccfcorestatus" z="ZuqcLPbx61eGWHyul9DCitw7YTY=">
+        <field:display field="direction" id="s_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_direction" object="${ccfcorestatus}" z="1iqpLEl9F2nTXnqnlMI4eGYxkKU="/>
+        <field:display field="currentStatus" id="s_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_currentStatus" object="${ccfcorestatus}" z="1Pio1Wt9ZZo6a83463iFqRpTqb4="/>
+        <field:display field="executedCommand" id="s_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_executedCommand" object="${ccfcorestatus}" z="T++UMlLd8xkOBEQfz2PDidSLKLQ="/>
+    </page:show>
+</div>

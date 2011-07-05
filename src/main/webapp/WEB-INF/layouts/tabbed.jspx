@@ -1,0 +1,54 @@
+<div class="TabContainer"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:tiles="http://tiles.apache.org/tags-tiles"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:menu="urn:jsptagdir:/WEB-INF/tags/menu">
+	<jsp:output omit-xml-declaration="yes"/>
+	<tiles:useAttribute name="tabs" />
+	<tiles:useAttribute name="activeTab" />
+	<table cellspacing="0" cellpadding="0" border="0" class="TabTable">
+		<tr>
+			<c:set var="active" value="${tabs[0].value == activeTab }" />
+				<c:forEach items="${tabs}" var="tab" varStatus="status">
+					<c:set var="tabLabel" value="${(empty tab.tooltip) ? tab.value : tab.tooltip}"/>
+					<c:set var="prevActive" value="${active}" />
+					<c:set var="active" value="${activeTab == tab.value}" />
+				<!-- Added to change the label header w.r.t participant -->	
+				<c:if test="${participant.systemKind eq 'SWP'}">
+					<c:choose>
+						<c:when test="${tab.tooltip eq 'HPQC Settings'}">
+							<c:set var="newtabname" value="${fn:replace(tabLabel,'HPQC','SWP')}"/>
+						</c:when>
+						<c:otherwise>
+							<c:set var="newtabname" value="${fn:replace(tabLabel,'QC','SWP')}"/>
+						</c:otherwise>
+					</c:choose>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'QC'}">
+			 			<c:set var="newtabname" value="${(empty tab.tooltip) ? tab.value : tab.tooltip}"/>
+			 	</c:if>
+				<menu:tab
+					label="${newtabname}"
+					url="${tab.link}"
+					first="${status.first}"
+					last="${status.last}"
+					active="${active}"
+					prevActive="${prevActive}" />
+			</c:forEach>
+		</tr>
+        <tr class="TabHeader">
+          <td nowrap="nowrap" 
+              colspan="${2 * fn:length(tabs) + 2}"
+              style="font-size: 1px;"
+          ><img
+              width="1" height="1" alt=""
+              src="images/misc/pixel.gif"
+          /></td>
+        </tr>
+	</table>
+	
+	<tiles:insertAttribute name="tabBody"/>
+</div>

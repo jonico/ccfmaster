@@ -1,0 +1,55 @@
+project --topLevelPackage com.collabnet.ccf.ccfmaster --projectName ccfmaster --java 6
+
+persistence setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+
+entity --class ~.server.domain.Participant
+entity --class ~.server.domain.Landscape
+entity --class ~.server.domain.Direction
+entity --class ~.server.domain.RepositoryMapping
+entity --class ~.server.domain.HospitalEntry
+entity --class ~.server.domain.IdentityMapping
+entity --class ~.server.domain.ExternalApp
+
+focus --class ~.server.domain.Participant
+field string --fieldName description --notNull true
+
+focus --class ~.server.domain.Landscape
+field string --fieldName description --notNull true
+field string --notNull --fieldName externalSystemAppId
+field reference --type ~.server.domain.Participant --notNull --fieldName participantA --cardinality MANY_TO_ONE
+field reference --type ~.server.domain.Participant --notNull --fieldName participantB --cardinality MANY_TO_ONE
+field set --element ~.server.domain.Direction --fieldName directions --mappedBy landscape --cardinality ONE_TO_MANY
+field set --element ~.server.domain.ExternalApp --mappedBy landscape --fieldName externalApps --cardinality ONE_TO_MANY 
+
+enum type --class ~.server.domain.Directions
+enum constant --name FORWARD
+enum constant --name REVERSE
+
+focus --class ~.server.domain.Direction
+field string --fieldName description --notNull
+field enum --type ~.server.domain.Directions --fieldName direction --notNull
+field reference --type ~.server.domain.Landscape --cardinality MANY_TO_ONE --fieldName landscape --notNull
+field set --element ~.server.domain.RepositoryMapping --fieldName repositoryMappings --mappedBy direction --cardinality ONE_TO_MANY --fetch LAZY
+
+focus --class ~.server.domain.HospitalEntry
+field string --fieldName description --notNull true
+field reference --type ~.server.domain.RepositoryMapping --fieldName repositoryMapping --cardinality MANY_TO_ONE --notNull
+
+focus --class ~.server.domain.IdentityMapping
+field string --fieldName description --notNull
+field reference --type ~.server.domain.RepositoryMapping --fieldName repositoryMapping --cardinality MANY_TO_ONE --notNull
+
+focus --class ~.server.domain.RepositoryMapping
+field string --fieldName description --notNull 
+field reference --type ~.server.domain.Direction  --fieldName direction --cardinality MANY_TO_ONE --notNull
+field reference --type ~.server.domain.ExternalApp --fieldName externalApp --notNull --cardinality MANY_TO_ONE 
+field set --element ~.server.domain.HospitalEntry --fieldName hospitalEntries --mappedBy repositoryMapping --cardinality ONE_TO_MANY --fetch LAZY  
+field set --element ~.server.domain.IdentityMapping --fieldName identityMappings --mappedBy repositoryMapping --cardinality ONE_TO_MANY --fetch LAZY 
+
+focus  --class ~.server.domain.ExternalApp
+field string --notNull --fieldName externalAppId
+field string --notNull --fieldName projectId
+field reference --type ~.server.domain.Landscape --fieldName landscape --notNull
+field set --fieldName repositoryMappings --element ~.server.domain.RepositoryMapping --cardinality ONE_TO_MANY --fetch LAZY --mappedBy externalApp
+
+controller all --package ~.controller

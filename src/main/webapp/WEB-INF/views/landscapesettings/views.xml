@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+   
+    <definition extends="ccfmenu" name="landscapesettings/landscapemenu">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/participantsettings.jspx"/>
+    </definition>
+        
+    
+    <definition name="participantSettingsTabs" extends="ccfmenu" >
+     <put-list-attribute name="tabs" cascade="true">
+      <item link="/landscapesettings/displayparticipantsettings"  tooltip="HPQC Settings" value="Page2"/>
+      </put-list-attribute>
+    </definition>
+  
+   <definition name="landscapesettings/displayparticipantsettings" extends="participantSettingsTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/participantsettings.jspx" cascade="true" />
+  </definition>
+  
+   <definition extends="participantSettingsTabs" name="/landscapesettings/saveparticipantsettings">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/participantsettings.jspx"/>
+   </definition>
+   
+   
+   <definition name="tfSettingsTabs" extends="ccfmenu">
+     <put-list-attribute name="tabs" cascade="true">
+      <item link="/landscapesettings/displaytfsettings" tooltip="TeamForge Settings" value="Page2"/>
+      </put-list-attribute>
+    </definition>
+  
+   <definition name="landscapesettings/displaytfsettings" extends="tfSettingsTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/tfsettings.jspx" cascade="true" />
+  </definition>
+  
+  
+   <definition extends="tfSettingsTabs" name="/landscapesettings/savetfsettings">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/tfsettings.jspx"/>
+   </definition>
+   
+  <definition extends="tfSettingsTabs" name="landscapesettings/testconnection">
+         <put-attribute name="body" value="/WEB-INF/views/landscapesettings/tfsettings.jspx"/>
+    </definition>
+    
+     <definition name="ccfPropertiesTabs" extends="ccfmenu">
+     <put-list-attribute name="tabs" cascade="true">
+      <item link="/landscapesettings/displayccfpropertieslogtemplatetftopart" tooltip="Log Template TF to QC" value="Page2"/>
+      <item link="/landscapesettings/displayccfpropertieslogtemplateparttotf" tooltip="Log Template QC to TF" value="Page1"/>
+      <item link="/landscapesettings/displayccfpropertiessynctftopart" tooltip="Sync Behavior TF to QC" value="Page4"/>
+      <item link="/landscapesettings/displayccfpropertiessyncparttotf" tooltip="Sync Behavior QC to TF" value="Page3"/>
+      </put-list-attribute>
+    </definition>
+  
+    <definition name="landscapesettings/displayccfpropertieslogtemplateparttotf" extends="ccfPropertiesTabs">
+    <put-attribute name="activeTab" value="Page1" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/ccfproplogtemplateparttotf.jspx" cascade="true" />
+    </definition>
+   	
+   	<definition extends="ccfPropertiesTabs" name="/landscapesettings/saveccfpropertieslogtemplateparttotf">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/ccfproplogtemplateparttotf.jspx"/>
+   </definition>
+   
+   	
+   	
+   	<definition name="landscapesettings/displayccfpropertieslogtemplatetftopart" extends="ccfPropertiesTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/ccfproplogtemplatetftopart.jspx" cascade="true" />
+    </definition>
+   
+   	<definition extends="ccfPropertiesTabs" name="/landscapesettings/saveccfpropertieslogtemplatetftopart">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/ccfproplogtemplatetftopart.jspx"/>
+   </definition>
+   
+   
+   
+    <definition name="landscapesettings/displayccfpropertiessyncparttotf" extends="ccfPropertiesTabs">
+    <put-attribute name="activeTab" value="Page3" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/ccfpropsyncparttotf.jspx" cascade="true" />
+  	</definition> 
+  	
+  	<definition extends="ccfPropertiesTabs" name="/landscapesettings/saveccfpropertiessyncparttotf">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/ccfpropsyncparttotf.jspx"/>
+   </definition>
+    
+    <definition name="landscapesettings/displayccfpropertiessynctftopart" extends="ccfPropertiesTabs">
+    <put-attribute name="activeTab" value="Page4" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/ccfpropsynctftopart.jspx" cascade="true" />
+  	</definition> 
+  
+  	<definition extends="ccfPropertiesTabs" name="/landscapesettings/saveccfpropertiessynctftopart">
+        <put-attribute name="body" value="/WEB-INF/views/landscapesettings/ccfpropsynctftopart.jspx"/>
+   </definition>
+    
+   
+    
+    <definition name="statusTabs" extends="ccfmenu">
+     <put-list-attribute name="tabs" cascade="true">
+      <item link="/landscapesettings/displaytftoparticipantstatus" tooltip="Status TF to QC" value="Page1"/>
+      <item link="/landscapesettings/displayparticipanttotfstatus" tooltip="Status QC to TF" value="Page2"/>
+      </put-list-attribute>
+    </definition>
+  
+   <definition name="landscapesettings/displaytftoparticipantstatus" extends="statusTabs">
+    <put-attribute name="activeTab" value="Page1" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/statustftopart.jspx" cascade="true" />
+  </definition>
+  
+  <definition extends="statusTabs" name="landscapesettings/startccfcorestatus">
+         <put-attribute name="body" value="/WEB-INF/views/landscapesettings/statustftopart.jspx"/>
+    </definition>
+  
+  <definition extends="statusTabs" name="landscapesettings/stopccfcorestatus">
+         <put-attribute name="body" value="/WEB-INF/views/landscapesettings/statustftopart.jspx"/>
+    </definition>
+    
+      
+  <definition name="landscapesettings/displayparticipanttotfstatus" extends="statusTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/statusparttotf.jspx" cascade="true" />
+  </definition>
+    
+    <definition extends="statusTabs" name="landscapesettings/startparticipantccfcorestatus">
+         <put-attribute name="body" value="/WEB-INF/views/landscapesettings/statusparttotf.jspx"/>
+    </definition>
+  
+  <definition extends="statusTabs" name="landscapesettings/stopparticipantccfcorestatus">
+         <put-attribute name="body" value="/WEB-INF/views/landscapesettings/statusparttotf.jspx"/>
+    </definition>
+    
+    
+     <definition name="logsTabs" extends="ccfmenu">
+     <put-list-attribute name="tabs" cascade="true">
+      <item link="/landscapesettings/displaytftoparticipantlogs" tooltip="Logs TF to QC" value="Page1"/>
+      <item link="/landscapesettings/displayparticipanttotflogs" tooltip="Logs QC to TF" value="Page2"/>
+      </put-list-attribute>
+    </definition>
+       
+     <definition name="landscapesettings/displaytftoparticipantlogs" extends="logsTabs">
+    <put-attribute name="activeTab" value="Page1" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/logstftopart.jspx" cascade="true" />
+  </definition>
+  
+  <definition name="landscapesettings/displayparticipanttotflogs" extends="logsTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/logsparttotf.jspx" cascade="true" />
+  </definition>
+    
+    
+    <definition extends="ccfmenu" name="landscapesettings/showlogs">
+         <put-attribute name="body" value="/WEB-INF/views/landscapesettings/viewlog.jspx"/>
+    </definition>
+     
+     
+    <definition name="mappingsTabs" extends="ccfmenu">
+    	<put-list-attribute name="tabs" cascade="true">
+     	<item link="/landscapesettings/displayrepositorymappingtftopart" tooltip="Repository Mappings TF to QC" value="Page1"/>
+      	<item link="/landscapesettings/displayrepositorymappingparttotf" tooltip="Repository Mappings QC to TF" value="Page2"/>
+      </put-list-attribute>
+   </definition>
+    
+    <definition name="landscapesettings/displayrepositorymappingtftopart" extends="mappingsTabs">
+    <put-attribute name="activeTab" value="Page1" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/repositorymappingtftopart.jspx" cascade="true" />
+  </definition>
+  <definition name="landscapesettings/displayrepositorymappingparttotf" extends="mappingsTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/repositorymappingparttotf.jspx" cascade="true" />
+  </definition>
+    
+     
+</tiles-definitions>
