@@ -1,0 +1,99 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+	<spring:message code="create_landscape_header" var="landscapelabel" htmlEscape="false"/>
+	<spring:message code="choose_synch_particpant" var="synparticipantlabel" htmlEscape="false"/>  
+	<spring:message code="hp_qc_integration" var="hpqcintegrationlabel" htmlEscape="false"/>  
+	<spring:message code="swp_integration" var="swpintegrationlabel" htmlEscape="false"/>  
+	<spring:message code="qcsettingsmenulabel" var="qcsetting_label" htmlEscape="false"/>
+	<spring:message code="swpsettingsmenulabel" var="swpsetting_label" htmlEscape="false"/>
+	<spring:url value="/admin/ccfmaster" var="selectparticipant_url" />
+	<spring:url value="/admin/createlandscape" var="createlandscape_url" />
+	
+<form:form  id="selectparticipant"  name="selectparticipant" commandName="participant" method="POST">  
+  <table class="Container" >
+	<tbody>
+ 		<tr class="ContainerHeader" >
+ 		<td>
+		<c:out value="${landscapelabel}" />
+		</td> 
+		</tr>
+		<tr>
+		<td>
+		<table class="ItemDetailContainer" >
+			<tbody>
+			<tr>
+			<td class="ItemDetailName"> 
+			<strong><c:out value="${synparticipantlabel}" /></strong>
+			<br/>
+			<br/>
+			</td>
+			</tr>
+			<c:forEach var="systemKind" items="${enums}" step="2">
+				<tr>
+					<td class="ItemDetailName"> 	
+						<c:if test="${systemKind eq 'QC'}">
+ 						<form:radiobutton path="systemKind" value="${systemKind}"  />&#160;${qcsetting_label}
+ 						</c:if>
+ 						<c:if test="${systemKind eq 'SWP'}">
+ 						<form:radiobutton path="systemKind" value="${systemKind}"  />&#160;${swpsetting_label}
+ 						</c:if>
+ 					</td>
+ 					</tr>
+				
+ 					<br/> 
+					<br/>
+ 			</c:forEach>
+ 			</tbody>
+		</table>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<tr class="ContainerFooter">
+	<td>
+	<div class="AlignRight">
+	<div class="Button">
+	<div class="Middle">               
+            <spring:message code="button_cancel" var="cancel_button"/>
+			<a href="${fn:escapeXml(selectparticipant_url)}">${cancel_button}</a>
+	</div>
+	</div>
+	<div class="ButtonSpace"> </div> 
+	<div class="Button">
+	<div class="Middle">
+			<strong> <spring:message code="button_next" var="next_button"/>
+			<a href="javascript: submitForm('${fn:escapeXml(createlandscape_url)}');">${next_button}</a></strong> 
+	</div>
+	</div>
+	</div>
+	</td>
+	</tr>
+	</td>
+	</tr>
+	</tbody>
+  </table>
+ </form:form>
+	<script language="JavaScript">
+		function submitForm(url){
+			var radio = valRadio(document.getElementById("selectparticipant").systemKind);
+			if (radio == null) {
+				alert('Please choose Synchronization Participant');
+			}
+			else{
+				document.getElementById("selectparticipant").action=url;
+	  			document.getElementById("selectparticipant").submit();
+			}
+		}
+	
+		function valRadio(radio) {
+	   	 	var cnt = -1;
+	    	for (var i=radio.length-1; i > -1; i--) {
+	        if (radio[i].checked) {cnt = i; i = -1;}
+	    	}
+	    	if (cnt > -1) return radio[cnt].value;
+	    	else return null;
+		}
+	      
+ 	</script>  
+</div>

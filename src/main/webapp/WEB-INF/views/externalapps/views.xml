@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="externalapps/list">
+        <put-attribute name="body" value="/WEB-INF/views/externalapps/list.jspx"/>
+    </definition>
+<definition extends="default" name="externalapps/show">
+        <put-attribute name="body" value="/WEB-INF/views/externalapps/show.jspx"/>
+    </definition>
+<definition extends="default" name="externalapps/create">
+        <put-attribute name="body" value="/WEB-INF/views/externalapps/create.jspx"/>
+    </definition>
+<definition extends="default" name="externalapps/update">
+        <put-attribute name="body" value="/WEB-INF/views/externalapps/update.jspx"/>
+    </definition>
+<definition extends="default" name="externalapps/findExternalAppsByLinkIdEquals">
+        <put-attribute name="body" value="/WEB-INF/views/externalapps/findExternalAppsByLinkIdEquals.jspx"/>
+    </definition>
+<definition extends="default" name="externalapps/findExternalAppsByLandscape">
+        <put-attribute name="body" value="/WEB-INF/views/externalapps/findExternalAppsByLandscape.jspx"/>
+    </definition>
+</tiles-definitions>

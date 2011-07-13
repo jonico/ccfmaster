@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="STDOUT"
+   class="ch.qos.logback.core.ConsoleAppender">
+   <encoder>
+     <pattern>
+        %d{HH:mm:ss.SSS} %-5level %-50logger{36} - %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <logger name="org.springframework.security.access.vote.UnanimousBased" level="DEBUG" />
+  <logger name="com.collabnet.ccf.ccfmaster" level="DEBUG" />
+  <logger
+  	name="com.collabnet.ccf.ccfmaster.authentication.TFAuthenticationProvider$MapUserCache"
+  	level="DEBUG" />
+  <logger name="com.collabnet.ccf.ccfmaster.authentication" level="INFO" />
+  <logger name="org.springframework.web.bind.annotation.support.HandlerMethodInvoker" level="WARN" />
+  <logger name="org.hibernate.SQL" level="WARN" />
+  <logger name="org.hibernate.tool.hbm2ddl" level="WARN" />
+  <logger name="org.springframework.test.context.transaction.TransactionalTestExecutionListener" level="WARN" />
+  <logger name="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" level="WARN" />
+  <logger name="org.hibernate.cfg" level="WARN"/>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+</configuration>

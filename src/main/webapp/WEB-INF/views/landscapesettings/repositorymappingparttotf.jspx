@@ -1,0 +1,246 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_delete" var="delete_button"/>
+<spring:message code="button_resume" var="resume_button"/>
+<spring:message code="button_pause" var="pause_button"/>
+<spring:message code="status" var="label_status"/>  
+<spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
+<spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="status" var="statuslabel" htmlEscape="false"/>  
+<spring:message code="sourceRepository" var="sourceRepositorylabel" htmlEscape="false"/>
+<spring:message code="targetRepository" var="targetRepositorylabel" htmlEscape="false"/>
+<spring:message code="hospital" var="hospitallabel" htmlEscape="false"/>
+<spring:message code="pausedlabel" var="pausedlabel" htmlEscape="false"/>
+<spring:message code="resumelabel" var="resumelabel" htmlEscape="false"/>
+<spring:message code="hospitalcountlabel" var="hospitalcountlabel" htmlEscape="false"/>
+<spring:message code="qcdomainlabel" var="qcdomainlabel" htmlEscape="false"/>
+<spring:message code="swpdomainlabel" var="swpdomainlabel" htmlEscape="false"/>
+
+<spring:url value="/admin/deletesynch?direction=reverse" var="delete_url" />
+<spring:url value="/admin/resumesynch?direction=reverse" var="resume_url" />
+<spring:url value="/admin/pausesynch?direction=reverse" var="pause_url" />
+		
+<spring:url value="/images/icons/control_pause.png" var="paused_image_url" />
+<spring:url value="/images/icons/control_play.png" var="resume_image_url" />
+<spring:url value="/images/icons/database_pending.png" var="hospital_image_url" />
+<spring:url value="/images/icons/logo_qc.png" var="qc_image_url" />
+<spring:url value="/images/icons/logo_swp.png" var="swp_image_url" />  
+ 	 
+<form:form id="repositoryParticipantForm"  name="repositoryParticipantForm" method="POST" commandName="repositoryMappingsModel" modelAttribute="repositoryMappingsModel">
+  <table class="Container" >
+		<tbody>
+		<tr>
+		<td>
+		<c:if test="${!empty connectionmessage}"> 
+   		 <div class="greenText">${connectionmessage}</div> 
+		</c:if>
+		<c:if test="${!empty connectionerror}"> 
+  		<div class="errorMessage">${connectionerror}</div>
+		</c:if>
+		<br/>
+		<br/>
+	<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				<tr class="ContainerHeader">
+				<td colspan="6">
+				<c:if test="${participant.systemKind eq 'QC'}">
+				<strong><c:out value="${qctotflabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'SWP'}">
+				<strong><c:out value="${swptotflabel}" /></strong>
+				</c:if>
+				</td>
+				</tr>
+				<tr class="ItemListHeader">
+    			<c:if test="${fn:length(repositoryMappingsModel.repositoryMappingDirection) > 0}">
+				 <td width="1"><input type="checkbox" id="selectall" onClick='javascript:funcSelectAll()'  name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td>
+     		 	 <c:forEach items="${repositoryMappingsModel.repositoryMappingDirection}" var="rmdlist" varStatus="status">
+     		 	   <tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
+					<td><input type="checkbox"  name="rmdid" value="${rmdlist.repositoryMapping.id}" onClick='javascript:toggleButton()'/></td>
+					<td width="1">
+					<c:if test="${rmdlist.status eq 'PAUSED'}">
+				  			<a href="javascript: resumeForm('${fn:escapeXml(resume_url)}&amp;rmdid=${rmdlist.repositoryMapping.id}');"><img src="${fn:escapeXml(paused_image_url)}" border="0" title="${pausedlabel}" alt="${pausedlabel}"/></a>
+              		</c:if>
+              		<c:if test="${rmdlist.status eq 'RUNNING'}">
+				   		   	<a href="javascript: pauseForm('${fn:escapeXml(pause_url)}&amp;rmdid=${rmdlist.repositoryMapping.id}');"><img src="${fn:escapeXml(resume_image_url)}" border="0" title="${resumelabel}" alt="${resumelabel}"/></a>
+              		</c:if>
+					</td>
+					<c:if test="${participant.systemKind eq 'QC'}">
+		 				<td><img src="${fn:escapeXml(qc_image_url)}" border="0" width="35" height="20" alt="${qcdomainlabel}" title="${qcdomainlabel}"/>&#160;<c:out value= "${rmdlist.repositoryMapping.participantRepositoryId}" /></td>
+		 			</c:if>
+		 			<c:if test="${participant.systemKind eq 'SWP'}">
+		 				<td><img src="${fn:escapeXml(swp_image_url)}" border="0" width="20" height="20" alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${rmdlist.repositoryMapping.participantRepositoryId}" /></td>
+		 			</c:if>
+		 			<c:if test="${repositoryMappingsModel.repositoryIcon[status.index] ne 'null'}">
+						<td><img src="../images/tracker/icons/${repositoryMappingsModel.repositoryIcon[status.index]}" title="${repositoryMappingsModel.repositoryData[status.index]}" class="trackerIcon" />&#160;<a href="${repositoryMappingsModel.tfUrl}/sf/go/${repositoryMappingsModel.repositoryId[status.index]}"><c:out value= "${repositoryMappingsModel.repositoryData[status.index]}" /> : <c:out value= "${repositoryMappingsModel.repositoryId[status.index]}" /></a></td>
+					</c:if>
+					<c:if test="${repositoryMappingsModel.repositoryIcon[status.index] eq 'null'}">
+						<td><c:out value= "${repositoryMappingsModel.repositoryId[status.index]}" /></td>
+					</c:if>
+						<td><a href=""><img src="${fn:escapeXml(hospital_image_url)}" border="0" title="${hospitalcountlabel}" alt="${hospitalcountlabel}" /><strong>(<c:out value= "${repositoryMappingsModel.hospitalCount[status.index]}" />)</strong></a></td>
+		 			</tr> 		
+				  </c:forEach>
+			</c:if>
+			</tr>
+	 		<c:if test="${fn:length(repositoryMappingsModel.repositoryMappingDirection) == 0}">
+	 			<tr class="ItemListHeader">
+	 			<td>${statuslabel}</td> <td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td>
+	 			</tr>
+	 			<tr class="ItemListNoData">
+     		 	<td colspan="5"><center>No Repository Mapping Directions Found</center></td>
+      			</tr>
+			</c:if>
+			</tbody>
+			</table>
+				<br/>
+				<br/>
+				<c:if test="${fn:length(repositoryMappingsModel.repositoryMappingDirection) > 0}">
+				<tr class="ContainerFooter">
+				<td>
+				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<div class="Button">
+				<div class="Middle">
+				     	<strong><a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a></strong>
+				</div>
+				
+				</div>
+				
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+				
+						<strong> <a href="javascript: resumeForm('${fn:escapeXml(resume_url)}');">${resume_button}</a></strong>
+				
+				</div>
+	
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+			
+				<div class="Middle">
+			
+					<strong> <a href="javascript: pauseForm('${fn:escapeXml(pause_url)}');">${pause_button}</a></strong>
+			
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				
+				
+				<tr class="ContainerFooter">
+				<td>
+				
+				<div class="AlignRight" id="disablebutton">
+				<div class="Button">
+				<div class="MiddleDisabled">
+				     	<strong>${delete_button}</strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+						<strong>${resume_button}</strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+					<strong>${pause_button}</strong>
+				</div>
+				</div>
+				</div>
+				
+				</td>
+				</tr>
+				</c:if>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+  
+  
+	<script language="JavaScript">
+		function resumeForm(url){
+			document.getElementById("repositoryParticipantForm").action=url;
+	  		document.getElementById("repositoryParticipantForm").submit();
+			
+		}
+		function pauseForm(url){
+			
+	  		document.getElementById("repositoryParticipantForm").action=url;
+	  		document.getElementById("repositoryParticipantForm").submit();
+			
+		}
+		function deleteForm(url){
+			
+	  		document.getElementById("repositoryParticipantForm").action=url;
+	  		document.getElementById("repositoryParticipantForm").submit();
+			
+		}
+		
+		//Noy used
+		function check()
+		{
+			var checkSelected = false;
+			for (i = 0; i &lt; document.getElementById("repositoryParticipantForm").elements.length; i++)
+			{
+				if (document.getElementById("repositoryParticipantForm").elements[i].checked) {
+				checkSelected = true
+				}
+			}
+			if (!checkSelected) {
+				return false;
+			}
+			return true;
+		 
+		}
+		 
+		function funcSelectAll()
+		{
+		   if(document.forms[0].selectall.checked==true){
+		   
+			   for(var a=0; a &lt;= document.forms[0].elements.length; a++){
+		                 document.forms[0].elements[a].checked = true;   
+		                 document.getElementById("enablebutton").style.display = "inline";
+						 document.getElementById("disablebutton").style.display = "none";
+		         
+		           }
+		     }
+		     else
+		     {
+		           for (var a=0; a &lt; document.forms[0].elements.length; a++)  {
+		                  document.forms[0].elements[a].checked = false;   
+		                  document.getElementById("enablebutton").style.display = "none";
+						  document.getElementById("disablebutton").style.display = "inline";
+						
+		           }
+		     }          
+ 
+		}
+	
+		function toggleButton(){
+			var checkSelected = false;
+			for (i = 0; i &lt; document.getElementById("repositoryParticipantForm").elements.length; i++)
+			{
+				if (document.getElementById("repositoryParticipantForm").elements[i].checked) {
+					checkSelected=true;
+				}
+			}	
+			if(checkSelected){
+				document.getElementById("enablebutton").style.display = "inline";
+				document.getElementById("disablebutton").style.display = "none";
+			}	
+			if (!checkSelected) {
+				document.getElementById("enablebutton").style.display = "none";
+				document.getElementById("disablebutton").style.display = "inline";
+			}
+				
+				
+		}
+		
+	</script>		
+</div>

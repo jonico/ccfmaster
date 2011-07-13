@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByLinkIdEquals" id="ff_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp" path="/externalapps" z="IjxzZKeSOUVkniLnf0VRyMWH9YM=">
+        <field:input disableFormBinding="true" field="linkId" id="f_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_linkId" required="true" validationRegex="^prpl\\d+$" z="cBcQrES61Bbbx9LSqJTiaCDs6T8="/>
+    </form:find>
+</div>

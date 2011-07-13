@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="landscapes/list">
+        <put-attribute name="body" value="/WEB-INF/views/landscapes/list.jspx"/>
+    </definition>
+<definition extends="default" name="landscapes/show">
+        <put-attribute name="body" value="/WEB-INF/views/landscapes/show.jspx"/>
+    </definition>
+<definition extends="default" name="landscapes/create">
+        <put-attribute name="body" value="/WEB-INF/views/landscapes/create.jspx"/>
+    </definition>
+<definition extends="default" name="landscapes/update">
+        <put-attribute name="body" value="/WEB-INF/views/landscapes/update.jspx"/>
+    </definition>
+<definition extends="default" name="landscapes/findLandscapesByPlugIdEquals">
+        <put-attribute name="body" value="/WEB-INF/views/landscapes/findLandscapesByPlugIdEquals.jspx"/>
+    </definition>
+<definition extends="default" name="landscapes/findLandscapesByTeamForgeOrParticipant">
+        <put-attribute name="body" value="/WEB-INF/views/landscapes/findLandscapesByTeamForgeOrParticipant.jspx"/>
+    </definition>
+</tiles-definitions>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:menu="urn:jsptagdir:/WEB-INF/tags/menu" xmlns:sec="http://www.springframework.org/security/tags" id="menu" version="2.0">
+<jsp:output omit-xml-declaration="yes"/>
+<sec:authorize access="hasRole('ROLE_ADMIN')">
+	<menu:menu id="_menu" render="${empty currentExternalApp}" z="user-managed">
+		<menu:category id="c_participant" z="ANH5qTsrRqntSp+G/TNiqRlMyII=">
+			<menu:item id="i_participant_new" messageCode="global_menu_new" url="/participants?form" z="user-managed"/>
+			<menu:item id="i_participant_list" messageCode="global_menu_list" url="/participants?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+		</menu:category>
+		<menu:category id="c_landscape" z="JlM5PXekvvTd+A12cLVlw3XTNmE=">
+			<menu:item id="i_landscape_new" messageCode="global_menu_new" url="/landscapes?form" z="user-managed"/>
+			<menu:item id="i_landscape_list" messageCode="global_menu_list" url="/landscapes?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+	        <menu:item id="fi_landscape_plugidequals" messageCode="global_menu_find" url="/landscapes?find=ByPlugIdEquals&amp;form" z="VHvJ4bnho/eOuHWvy98Z5UDF89o="/>
+        <menu:item id="fi_landscape_teamforgeorparticipant" messageCode="global_menu_find" url="/landscapes?find=ByTeamForgeOrParticipant&amp;form" z="fXkpNjb5VeveY5pb181qc2K+JgI="/>
+            </menu:category>
+		<menu:category id="c_direction" z="uvhVqtnIbnX//xberhUogDM1Q/g=">
+			<menu:item id="i_direction_new" messageCode="global_menu_new" url="/directions?form" z="user-managed"/>
+			<menu:item id="i_direction_list" messageCode="global_menu_list" url="/directions?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+			<menu:item id="fi_direction_landscapeequals" messageCode="global_menu_find" url="/directions?find=ByLandscapeEquals&amp;form" z="/0lsL+gMWuS4a1C1mKsoEI2MCNE="/>
+        <menu:item id="fi_direction_landscapeequalsanddirectionequals" messageCode="global_menu_find" url="/directions?find=ByLandscapeEqualsAndDirectionEquals&amp;form" z="S5y2Apf6xeKD3eDUFPu5tbe8zWM="/>
+            <menu:item id="fi_direction_direction" messageCode="global_menu_find" url="/directions?find=ByDirection&amp;form" z="xVJdweppEpTR5GSGez04MLgt9lM="/>
+            </menu:category>
+		<menu:category id="c_externalapp" z="kjJGmcqrAyJdb71tPIJRWnVO2Vg=">
+			<menu:item id="i_externalapp_new" messageCode="global_menu_new" url="/externalapps?form" z="user-managed"/>
+			<menu:item id="i_externalapp_list" messageCode="global_menu_list" url="/externalapps?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+			<menu:item id="fi_externalapp_linkidequals" messageCode="global_menu_find" url="/externalapps?find=ByLinkIdEquals&amp;form" z="user-managed"/>
+        <menu:item id="fi_externalapp_landscape" messageCode="global_menu_find" url="/externalapps?find=ByLandscape&amp;form" z="b78evyarAkjg3OUXiqV2YBUHBtI="/>
+            </menu:category>
+		<menu:category id="c_hospitalentry" z="YzJEW5enEybUxQXp6ZcyCYvY9GU=">
+			<menu:item id="i_hospitalentry_new" messageCode="global_menu_new" url="/hospitalentrys?form" z="user-managed"/>
+			<menu:item id="i_hospitalentry_list" messageCode="global_menu_list" url="/hospitalentrys?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+			<menu:item id="fi_hospitalentry_repositorymappingdirection" messageCode="global_menu_find" url="/hospitalentrys?find=ByRepositoryMappingDirection&amp;form" z="user-managed"/>
+        </menu:category>
+		<menu:category id="c_identitymapping" z="nLNs8EnS8dyolStCnvnL0w8PdTg=">
+			<menu:item id="i_identitymapping_new" messageCode="global_menu_new" url="/identitymappings?form" z="user-managed"/>
+			<menu:item id="i_identitymapping_list" messageCode="global_menu_list" url="/identitymappings?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+		<menu:item id="fi_identitymapping_repositorymapping" messageCode="global_menu_find" url="/linkid/identitymappings?find=ByRepositoryMapping&amp;form" z="ChITjCnMLApY1JnI5UKdoYMId3c="/>
+            </menu:category>
+		<menu:category id="c_repositorymapping" z="nGwr8jlgueNlU9JUSd9OKr+E0nY=">
+			<menu:item id="i_repositorymapping_new" messageCode="global_menu_new" url="/repositorymappings?form" z="user-managed"/>
+			<menu:item id="i_repositorymapping_list" messageCode="global_menu_list" url="/repositorymappings?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+			<menu:item id="fi_repositorymapping_externalapp" messageCode="global_menu_find" url="/repositorymappings?find=ByExternalApp&amp;form" z="user-managed"/>
+	    </menu:category>
+		<menu:category id="c_repositorymappingdirection" z="Su7vOsc4OygtzcUbvgg2ZgA8MiI=">
+	        <menu:item id="i_repositorymappingdirection_new" messageCode="global_menu_new" url="/repositorymappingdirections?form" z="user-managed"/>
+	        <menu:item id="i_repositorymappingdirection_list" messageCode="global_menu_list" url="/repositorymappingdirections?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+	        <menu:item id="fi_repositorymappingdirection_repositorymappinganddirection" messageCode="global_menu_find" url="/repositorymappingdirections?find=ByRepositoryMappingAndDirection&amp;form" z="user-managed"/>
+	    <menu:item id="fi_repositorymappingdirection_direction" messageCode="global_menu_find" url="/repositorymappingdirections?find=ByDirection&amp;form" z="PIdG9Y2mhwe3uu0KOO6AnlCwJ8s="/>
+            <menu:item id="fi_repositorymappingdirection_repositorymapping" messageCode="global_menu_find" url="/linkid/repositorymappingdirections?find=ByRepositoryMapping&amp;form" z="NRd3zKhG8upBi9zWG6NZDnUVF3c="/>
+            </menu:category>
+	<menu:category id="c_directionconfig" z="Yrv4vbEbrr0Z0UqQUYf+OfzqO+g=">
+                <menu:item id="i_directionconfig_new" messageCode="global_menu_new" url="/directionconfigs?form" z="zHx/2I+TkwOE4ZoszEmikQQu3xk="/>
+            <menu:item id="i_directionconfig_list" messageCode="global_menu_list" url="/directionconfigs?page=1&amp;size=${empty param.size ? 10 : param.size}" z="TwcKrwW04P1H9I8ZBGjcMLwRuR0="/>
+            <menu:item id="fi_directionconfig_direction" messageCode="global_menu_find" url="/directionconfigs?find=ByDirection&amp;form" z="47yNlihi8D3vjg5KjkQl2x3w0PA="/>
+            <menu:item id="fi_directionconfig_directionandname" messageCode="global_menu_find" url="/directionconfigs?find=ByDirectionAndName&amp;form" z="OkbIhFcDZ/oM5HuZjnNzRyHAh5g="/>
+            </menu:category>
+        <menu:category id="c_landscapeconfig" z="OSKYZNKxDn5w1ychKLqMVDagcZM=">
+                <menu:item id="i_landscapeconfig_new" messageCode="global_menu_new" url="/landscapeconfigs?form" z="nugiNCsagyrrtrgXq11wqs/Qjn8="/>
+            <menu:item id="i_landscapeconfig_list" messageCode="global_menu_list" url="/landscapeconfigs?page=1&amp;size=${empty param.size ? 10 : param.size}" z="rQEVY0oASY0gciBtAT2DD2aY2kw="/>
+            <menu:item id="fi_landscapeconfig_landscape" messageCode="global_menu_find" url="/landscapeconfigs?find=ByLandscape&amp;form" z="8Om8YL2TUXbjbh75GKRsRLAe5Z8="/>
+            <menu:item id="fi_landscapeconfig_landscapeandname" messageCode="global_menu_find" url="/landscapeconfigs?find=ByLandscapeAndName&amp;form" z="zIj/apN3l3QvEW0n5qmDXvmKh7M="/>
+            </menu:category>
+        <menu:category id="c_participantconfig" z="z+kRxtM85z/ofYkSWoUgXKKF/NM=">
+                <menu:item id="i_participantconfig_new" messageCode="global_menu_new" url="/participantconfigs?form" z="fda/OThHvuSBpci8R3br5TKDVGk="/>
+            <menu:item id="i_participantconfig_list" messageCode="global_menu_list" url="/participantconfigs?page=1&amp;size=${empty param.size ? 10 : param.size}" z="jQcd/TQDVsIPa9++zQXffefIEss="/>
+            <menu:item id="fi_participantconfig_participant" messageCode="global_menu_find" url="/participantconfigs?find=ByParticipant&amp;form" z="O3hKT4p8W700lqyCl6VBBy8ZtBY="/>
+            <menu:item id="fi_participantconfig_participantandname" messageCode="global_menu_find" url="/participantconfigs?find=ByParticipantAndName&amp;form" z="Kcv5PTabnI+h1IC82/0DJ/NmwkY="/>
+            </menu:category>
+        <menu:category id="c_fieldmappingvaluemapentry" z="XNSvos1fQ81arB4gh8wuGJVrNBQ=">
+                <menu:item id="i_fieldmappingvaluemapentry_new" messageCode="global_menu_new" url="/fieldmappingvaluemapentrys?form" z="deexJraeod6DX7wlS6/NgnhPhvA="/>
+            <menu:item id="i_fieldmappingvaluemapentry_list" messageCode="global_menu_list" url="/fieldmappingvaluemapentrys?page=1&amp;size=${empty param.size ? 10 : param.size}" z="YD7jleB5w4mIQnnUSt7DOA3S5GM="/>
+            </menu:category>
+        <menu:category id="c_fieldmappingvaluemap" z="q9VPfjPvtwi87qtcO+EZDlyVQBY=">
+                <menu:item id="i_fieldmappingvaluemap_new" messageCode="global_menu_new" url="/fieldmappingvaluemaps?form" z="N2ciD4VcKzN1QuNhfuFnvdwoeG0="/>
+            <menu:item id="i_fieldmappingvaluemap_list" messageCode="global_menu_list" url="/fieldmappingvaluemaps?page=1&amp;size=${empty param.size ? 10 : param.size}" z="dXHkYtOV2KaKLhtaPR4iT5taCkM="/>
+            </menu:category>
+        <menu:category id="c_fieldmappingrule" z="4yi2lrQxThRfyGZsH5A93ZuqFic=">
+                <menu:item id="i_fieldmappingrule_new" messageCode="global_menu_new" url="/fieldmappingrules?form" z="kz7HRZDFsgV8jvbmo6lXfgkH0V8="/>
+            <menu:item id="i_fieldmappingrule_list" messageCode="global_menu_list" url="/fieldmappingrules?page=1&amp;size=${empty param.size ? 10 : param.size}" z="i0UZBii8QhI8fqBEnRqaHA7DRHQ="/>
+            </menu:category>
+        <menu:category id="c_fieldmapping" z="3/GqUPWrENDBV0X+LpOA4y6Lxj8=">
+                <menu:item id="i_fieldmapping_new" messageCode="global_menu_new" url="/fieldmappings?form" z="S0klQ8AqeNGAILKn5ztsqzMtTXg="/>
+            <menu:item id="i_fieldmapping_list" messageCode="global_menu_list" url="/fieldmappings?page=1&amp;size=${empty param.size ? 10 : param.size}" z="116btLXFa2QutdZhTukZHke0kbA="/>
+            
+            <menu:item id="fi_fieldmapping_parent" messageCode="global_menu_find" url="/fieldmappings?find=ByParent&amp;form" z="ENIyxuwWvHHpv+Qk1OxR0NtkdXY="/>
+            </menu:category>
+        <menu:category id="c_fieldmappingexternalapptemplate" z="WssK/BY9nKdV/dZZf7xAA2KBxR4=">
+                <menu:item id="i_fieldmappingexternalapptemplate_new" messageCode="global_menu_new" url="/fieldmappingexternalapptemplates?form" z="zNgzQR45CrrTE155Z91uFiKFTXQ="/>
+            <menu:item id="i_fieldmappingexternalapptemplate_list" messageCode="global_menu_list" url="/fieldmappingexternalapptemplates?page=1&amp;size=${empty param.size ? 10 : param.size}" z="QfY10XtJnrwegZnG/tiXybDX1Pc="/>
+            <menu:item id="fi_fieldmappingexternalapptemplate_parentandnameanddirection" messageCode="global_menu_find" url="/fieldmappingexternalapptemplates?find=ByParentAndNameAndDirection&amp;form" z="nVL1dZ1aRB1rvzLk+RD1wTdP2Jc="/>
+            
+            
+            <menu:item id="fi_fieldmappingexternalapptemplate_parentanddirection" messageCode="global_menu_find" url="/fieldmappingexternalapptemplates?find=ByParentAndDirection&amp;form" z="iuLd566mHUUE9pvVLA6yJVWR8kw="/>
+            <menu:item id="fi_fieldmappingexternalapptemplate_parent" messageCode="global_menu_find" url="/fieldmappingexternalapptemplates?find=ByParent&amp;form" z="x0XWpMWW/lp2F774Ap9JCg7pM2U="/>
+            </menu:category>
+        <menu:category id="c_fieldmappinglandscapetemplate" z="n+6T7EgJ4wyQzA2NUO4ceFbSuEo=">
+                <menu:item id="i_fieldmappinglandscapetemplate_new" messageCode="global_menu_new" url="/fieldmappinglandscapetemplates?form" z="0dRDxzbphvUPnDCvJISYr1IkzAM="/>
+            <menu:item id="i_fieldmappinglandscapetemplate_list" messageCode="global_menu_list" url="/fieldmappinglandscapetemplates?page=1&amp;size=${empty param.size ? 10 : param.size}" z="B0dXFVflyTRdyBZ4sbbA62vwRiU="/>
+            <menu:item id="fi_fieldmappinglandscapetemplate_parentandnameanddirection" messageCode="global_menu_find" url="/fieldmappinglandscapetemplates?find=ByParentAndNameAndDirection&amp;form" z="7yf27H1ukTkuz57LMZdmnyq18BE="/>
+            <menu:item id="fi_fieldmappinglandscapetemplate_parent" messageCode="global_menu_find" url="/fieldmappinglandscapetemplates?find=ByParent&amp;form" z="Rg4Js1+xkGg7iVdzVOFlba8d9ow="/>
+            </menu:category>
+        <menu:category id="c_ccfcorestatus" z="DTK1iE81WsxgDarfd0kztidbcGU=">
+                <menu:item id="i_ccfcorestatus_new" messageCode="global_menu_new" url="/ccfcorestatus?form" z="48n2ZMqc5zyTpHvqh+4tDI6nmuk="/>
+            <menu:item id="i_ccfcorestatus_list" messageCode="global_menu_list" url="/ccfcorestatus?page=1&amp;size=${empty param.size ? 10 : param.size}" z="WackJFsEs3icXPU7HwiwsCQclyQ="/>
+            <menu:item id="fi_ccfcorestatus_direction" messageCode="global_menu_find" url="/ccfcorestatuses?find=ByDirection&amp;form" z="JgZzAuZq4UT3tUJyYLrokpcdtTc="/>
+            </menu:category>
+            <!-- Temporary link to navigate ccf webgui need to be removed later on -->
+            <menu:category id="c_ccfgui">
+		        <menu:item id="i_adminconsole_new" url="/admin/ccfmaster" z="user-managed"/>
+		    </menu:category>  
+            
+        <menu:category id="c_seleniumtests" z="PPLMd2yNB6/LSbjIWogAacRPU+Q=">
+                <menu:item id="si_seleniumtests_test" messageCode="selenium_menu_test_suite" url="/resources/selenium/test-suite.xhtml" z="wwunW/IPDcunN97u41MvMJZQ2to="/>
+            </menu:category>
+        </menu:menu>
+</sec:authorize>
+<sec:authorize access="hasRole('ROLE_IAF_USER')">
+	<!-- linkId-specific menu items -->
+	<menu:menu id="linkId_menu" render="${not empty currentExternalApp}">
+		<sec:authorize access="hasRole('ROLE_HOSPITAL')">
+			<menu:category id="c_hospitalentry" z="YzJEW5enEybUxQXp6ZcyCYvY9GU=">
+				<menu:item id="i_hospitalentry_new" messageCode="global_menu_new" url="/linkid/{prpl}/hospitalentrys?form" z="user-managed"/>
+				<menu:item id="i_hospitalentry_list" messageCode="global_menu_list" url="/linkid/{prpl}/hospitalentrys?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+				<menu:item id="fi_hospitalentry_repositorymappingdirection" messageCode="global_menu_find" url="/linkid/{prpl}/hospitalentrys?find=ByRepositoryMappingDirection&amp;form" z="user-managed"/>
+	        </menu:category>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_IDENTITY_MAPPINGS')">
+			<menu:category id="c_identitymapping" z="nLNs8EnS8dyolStCnvnL0w8PdTg=">
+				<menu:item id="i_identitymapping_new" messageCode="global_menu_new" url="/linkid/{prpl}/identitymappings?form" z="user-managed"/>
+				<menu:item id="i_identitymapping_list" messageCode="global_menu_list" url="/linkid/{prpl}/identitymappings?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+			</menu:category>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_REPOSITORY_MAPPINGS')">
+			<menu:category id="c_repositorymapping" z="nGwr8jlgueNlU9JUSd9OKr+E0nY=">
+				<menu:item id="i_repositorymapping_new" messageCode="global_menu_new" url="/linkid/{prpl}/repositorymappings?form" z="user-managed"/>
+				<menu:item id="i_repositorymapping_list" messageCode="global_menu_list" url="/linkid/{prpl}/repositorymappings?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+				<menu:item id="fi_repositorymapping_externalapp" messageCode="global_menu_find" url="/repositorymappings?find=ByExternalApp&amp;form" z="user-managed"/>
+		    </menu:category>
+			<menu:category id="c_repositorymappingdirection" z="Su7vOsc4OygtzcUbvgg2ZgA8MiI=">
+		        <menu:item id="i_repositorymappingdirection_new" messageCode="global_menu_new" url="/linkid/{prpl}/repositorymappingdirections?form" z="user-managed"/>
+		        <menu:item id="i_repositorymappingdirection_list" messageCode="global_menu_list" url="/linkid/{prpl}/repositorymappingdirections?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
+		        <menu:item id="fi_repositorymappingdirection_repositorymappinganddirection" messageCode="global_menu_find" url="/linkid/{prpl}/repositorymappingdirections?find=ByRepositoryMappingAndDirection&amp;form" z="user-managed"/>
+		    </menu:category>
+		</sec:authorize>
+	</menu:menu>
+</sec:authorize>
+</div>

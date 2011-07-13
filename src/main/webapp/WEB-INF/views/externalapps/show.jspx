@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp" object="${externalapp}" path="/externalapps" z="f1J6fKPvUUMGn2HDQ6qfNSAye80=">
+    
+    
+    <field:display field="landscape" id="s_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_landscape" object="${externalapp}" z="e1b+2i3JLhLNAp7V9Otr0eykt9Q="/>
+    
+    <field:display field="linkId" id="s_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_linkId" object="${externalapp}" z="HhAz2ODHyBekjO4suIUz9P+hGq0="/>
+    
+    
+    
+    <field:display field="projectPath" id="s_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_projectPath" object="${externalapp}" z="+dUn9SZhrVFXVe+HuzJ4EaxKD3Q="/>
+    </page:show>
+</div>

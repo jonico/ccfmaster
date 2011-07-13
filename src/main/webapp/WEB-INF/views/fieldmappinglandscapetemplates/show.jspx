@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate" object="${fieldmappinglandscapetemplate}" path="/fieldmappinglandscapetemplates" z="c+jNqm/hcdm2+6oU1oL8iS7Px0U=">
+        <field:display field="parent" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_parent" object="${fieldmappinglandscapetemplate}" z="yENCWe+JXc8tImi67zgj/VrFsxc="/>
+        <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_name" object="${fieldmappinglandscapetemplate}" z="fQJnvMGjY/AbDCVAVFfeQVwHXjU="/>
+        <field:display field="direction" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_direction" object="${fieldmappinglandscapetemplate}" z="FuuLwFpkkyQPgaLGvlgZANDwG74="/>
+        <field:display field="kind" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_kind" object="${fieldmappinglandscapetemplate}" z="HqO54k9Y/LA9ygxfXIzFx/00Lto="/>
+    </page:show>
+</div>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry" object="${hospitalentry}" path="/hospitalentrys" z="LIokM2QkEYBcNYn9vnzV8LmQHyw=">
+        <field:display field="description" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_description" object="${hospitalentry}" z="7OYQcNYfOHzSHVLHMxgTpOt1j74="/>
+        <field:display field="exceptionClassName" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_exceptionClassName" object="${hospitalentry}" z="UdFzHZr1gd/u6P9pIPQRCnJ8uTw="/>
+        <field:display field="exceptionMessage" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_exceptionMessage" object="${hospitalentry}" z="cfGcNuB3tknredT3+LaTwoEqiqc="/>
+        <field:display field="causeExceptionClassName" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_causeExceptionClassName" object="${hospitalentry}" z="zJvD63vMKyRYKMDhJr/8wJ9cygQ="/>
+        <field:display field="causeExceptionMessage" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_causeExceptionMessage" object="${hospitalentry}" z="7mUoe/WPvgfTygXTCWPV7w6t8QY="/>
+        <field:display field="stackTrace" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_stackTrace" object="${hospitalentry}" z="xPjTri+Pvbup6na6F0b9FunsR18="/>
+        <field:display field="adaptorName" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_adaptorName" object="${hospitalentry}" z="EB6EBePh60+OEJMJPLKmpU5SkxQ="/>
+        <field:display field="originatingComponent" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_originatingComponent" object="${hospitalentry}" z="Bmz4KKp6Jfnr9juZmZ3mnECHSIM="/>
+        <field:display field="dataType" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_dataType" object="${hospitalentry}" z="VHJMtJe+iTporLHn8GGEX6aZ2NE="/>
+        <field:display field="data" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_data" object="${hospitalentry}" z="dTINIdA+px3VKr0Qp1nBTILK32o="/>
+        <field:display field="fixed" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_fixed" object="${hospitalentry}" z="jTyinbryYgTLqkomS0BxSMVFiZc="/>
+        <field:display field="reprocessed" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_reprocessed" object="${hospitalentry}" z="LhmWI68NnhI0UMGOcAqTGkNCzgw="/>
+        <field:display field="sourceArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_sourceArtifactId" object="${hospitalentry}" z="ojCHalOghmoqbJrq/8IxvS2tneo="/>
+        <field:display field="targetArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_targetArtifactId" object="${hospitalentry}" z="BBIjwco2I4qdmLlNfJd3iPcrSCs="/>
+        <field:display field="errorCode" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_errorCode" object="${hospitalentry}" z="EVk09wDLBnAhQnqi52QgO7YAoa4="/>
+        <field:display date="true" dateTimePattern="${hospitalEntry_sourcelastmodificationtime_date_format}" field="sourceLastModificationTime" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_sourceLastModificationTime" object="${hospitalentry}" z="DHHPEudkzqlROgp8eZiAIjbRk8s="/>
+        <field:display date="true" dateTimePattern="${hospitalEntry_targetlastmodificationtime_date_format}" field="targetLastModificationTime" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_targetLastModificationTime" object="${hospitalentry}" z="oa24Jv2Q0Pr12OIZdlrESTib+C4="/>
+        <field:display field="sourceArtifactVersion" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_sourceArtifactVersion" object="${hospitalentry}" z="NtGZ1uJLaJE5RilKdPy+iewsR3E="/>
+        <field:display field="targetArtifactVersion" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_targetArtifactVersion" object="${hospitalentry}" z="dS4FYTYWjlP8r3xOq1TmWrUiWkk="/>
+        <field:display field="artifactType" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_artifactType" object="${hospitalentry}" z="K038+anMZy5ePUrlhkhGdDjiMdU="/>
+        <field:display field="genericArtifact" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_genericArtifact" object="${hospitalentry}" z="ueACrfcGcfC9mlvIuluF625bfVc="/>
+        <field:display field="repositoryMappingDirection" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_repositoryMappingDirection" object="${hospitalentry}" z="yrL8KhTFhRGCtT9BVB+7Sf06aBk="/>
+        <field:display field="timestamp" id="s_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_timestamp" object="${hospitalentry}" z="OgSKGtAmI4lNkp7puwWYDJ2mdoY="/>
+    </page:show>
+</div>

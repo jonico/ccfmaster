@@ -1,0 +1,250 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+
+<spring:message code="create_landscape_header" var="landscapelabel" htmlEscape="false"/>
+<spring:message code="create_hp_qc_ctf_landscape" var="createhpqcctflandscapelabel" htmlEscape="false"/>
+<spring:message code="create_swp_landscape" var="createswplandscapelabel" htmlEscape="false"/>    
+<spring:message code="landscapename" var="landscapenamelabel" htmlEscape="false"/>    
+<spring:message code="qcurl" var="qcurllabel" htmlEscape="false"/>
+<spring:message code="swpurl" var="swpurllabel" htmlEscape="false"/>
+<spring:message code="hpqctimezone" var="hpqctimezonelabel" htmlEscape="false"/>  
+<spring:message code="hpqcusername" var="hpqcusernamelabel" htmlEscape="false"/>  
+<spring:message code="hpqcpassword" var="hpqcpasswordlabel" htmlEscape="false"/>  
+<spring:message code="tftimezone" var="tftimezonelabel" htmlEscape="false"/>  
+<spring:message code="tfusername" var="tfusernamelabel" htmlEscape="false"/>  
+<spring:message code="tfpassword" var="tfpasswordlabel" htmlEscape="false"/>  
+<spring:message code="swptimezone" var="swptimezonelabel" htmlEscape="false"/>  
+<spring:message code="swpusername" var="swpusernamelabel" htmlEscape="false"/>  
+<spring:message code="swppassword" var="swppasswordlabel" htmlEscape="false"/>
+<spring:message code="swpresyncusername" var="swpresyncusernamelabel" htmlEscape="false"/>  
+<spring:message code="swpresyncpassword" var="swpresyncpasswordlabel" htmlEscape="false"/>   
+<spring:message code="button_previous" var="previous_button"/>
+<spring:message code="button_save" var="save_button"/>
+<spring:message code="testconnection" var="testconnectionlabel" htmlEscape="false"/>  
+<spring:url value="/admin/ccfmaster" var="selectparticipant_url" />
+<spring:url value="/admin/createlandscape" var="createlandscape_url" />
+<spring:url value="/admin/savelandscape" var="savelandscape_url" />
+			
+
+<spring:url value="/admin/testconnection" var="testconnection_url"/>
+
+<form:form   id="createlandscape"  name="createlandscape" method="POST" commandName="landscapemodel" modelAttribute="landscapemodel">
+  <table class="Container" >
+		<tbody>
+ 		<tr class="ContainerHeader" >
+ 		<td>
+		<c:out value="${landscapelabel}" />
+		</td> 
+		</tr>
+		<tr>
+		<td>
+		<c:if test="${!empty connectionmessage}"> 
+   		 <div class="greenText">${connectionmessage}</div>
+		</c:if>
+		<c:if test="${!empty connectionerror}"> 
+  		<div class="errorMessage">${connectionerror}</div>
+		</c:if>
+		<br/>
+		<br/>
+	<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				
+				<tr>
+				<td class="ItemDetailName">
+				<c:if test="${participant.systemKind eq 'SWP'}">
+				<strong><c:out value="${createswplandscapelabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'QC'}">
+				<strong><c:out value="${createhpqcctflandscapelabel}" /></strong>
+				</c:if>
+				<br/>
+				<br/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName"> 
+				<form:label path="landscape.name">${landscapenamelabel}</form:label>
+				<span class="TextRequired">*</span>
+				</td>
+				<td class="ItemDetailValue">
+				<form:input path="landscape.name" size="80" cssClass="inputfield" />
+				<form:errors path="landscape.name" cssClass="errors"/>
+				</td>
+				</tr> 
+				<c:if test="${participant.systemKind=='QC'}">
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participantUrlParticipantConfig.val">${qcurllabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<input type="hidden" name="participantUrlParticipantConfig.name" value="ccf.participant.qc.url"/>
+				<form:input path="participantUrlParticipantConfig.val"  size="80" cssClass="inputfield" />
+				<form:errors path="participantUrlParticipantConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<field:select field="participant.timezone" id="c_hpqctimezone" items="${timezones}" path="participant.timezone"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantUserNameLandscapeConfig.name" value="ccf.landscape.qc.username"/>
+				<form:label path="participantUserNameLandscapeConfig.val">${hpqcusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="participantUserNameLandscapeConfig.val"  size="60"  cssClass="inputfield" />
+				<form:errors path="participantUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+  				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantPasswordLandscapeConfig.name" value="ccf.landscape.qc.password"/>
+				<form:label path="participantPasswordLandscapeConfig.val">${hpqcpasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="participantPasswordLandscapeConfig.val" showPassword="true" size="60" cssClass="inputfield"/>
+				<form:errors path="participantPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+				<!-- For SWP -->
+				<c:if test="${participant.systemKind=='SWP'}">
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participantUrlParticipantConfig.val">${swpurllabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<input type="hidden" name="participantUrlParticipantConfig.name" value="ccf.participant.swp.url"/>
+				<form:input path="participantUrlParticipantConfig.val"  size="80" cssClass="inputfield" />
+				<form:errors path="participantUrlParticipantConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">${swptimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<field:select field="participant.timezone" id="c_swptimezone" items="${timezones}" path="participant.timezone" />
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantUserNameLandscapeConfig.name" value="ccf.landscape.swp.username"/>
+				<form:label path="participantUserNameLandscapeConfig.name">${swpusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="participantUserNameLandscapeConfig.val"  size="60" cssClass="inputfield"  />
+				<form:errors path="participantUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantPasswordLandscapeConfig.name" value="ccf.landscape.swp.password"/>
+				<form:label path="participantPasswordLandscapeConfig.name">${swppasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="participantPasswordLandscapeConfig.val"  size="60" cssClass="inputfield" showPassword="true"/>
+				<form:errors path="participantPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantResyncUserNameLandscapeConfig.name" value="ccf.landscape.swp.resync.username"/>
+				<form:label path="participantResyncUserNameLandscapeConfig.name">${swpresyncusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="participantResyncUserNameLandscapeConfig.val"  size="60" cssClass="inputfield"  />
+				<form:errors path="participantResyncUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantResyncPasswordLandscapeConfig.name" value="ccf.landscape.swp.resync.password"/>
+				<form:label path="participantResyncPasswordLandscapeConfig.name">${swpresyncpasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="participantResyncPasswordLandscapeConfig.val"  size="60" cssClass="inputfield" showPassword="true" />
+				<form:errors path="participantResyncPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+			 	
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="teamforge.timezone">${tftimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<field:select field="teamforge.timezone" id="c_tftimezone"  items="${timezones}" path="teamforge.timezone" />
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="tfUserNameLandscapeConfig.name" value="ccf.landscape.tf.username"/>
+				<form:label path="tfUserNameLandscapeConfig.val">${tfusernamelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:input path="tfUserNameLandscapeConfig.val"  size="60" cssClass="inputfield"/>
+				<form:errors path="tfUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="tfPasswordLandscapeConfig.name" value="ccf.landscape.tf.password"/>
+				<form:label path="tfPasswordLandscapeConfig.val">${tfpasswordlabel}:</form:label>
+				</td>
+				<td class="ItemDetailName">
+				<form:password  path="tfPasswordLandscapeConfig.val" showPassword="true"  size="60" cssClass="inputfield"/>
+				<input type="submit" value="${testconnectionlabel}" onclick="javascript: submittestConnection('${fn:escapeXml(testconnection_url)}');" />
+				<form:errors path="tfPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr> 
+			</tbody>
+	</table>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<tr class="ContainerFooter">
+				<td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				     	<a href="${fn:escapeXml(selectparticipant_url)}">${previous_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle"> 
+						<input type="hidden" name="participanthidden" value="${participant.systemKind}"/>
+						<input type="hidden" name="participant.systemKind" value="${participant.systemKind}"/>
+						<input type="hidden" name="landscape.plugId" value="${plugid}"/>
+						<input type="hidden" name="teamforge.systemKind" value="${tfsystemkind}"/>
+						<input type="hidden" name="teamforge.systemId" value="${tfsystemid}"/>
+						<input type="hidden" name="participant.systemId" value="${parsystemid}"/>
+						<input type="hidden" name="participant.description" value="${pdescription}"/>
+						<input type="hidden" name="teamforge.description" value="${tdescription}"/>
+						<input type="hidden" name="landscape.teamForge" value="${landscapemodel.teamforge}"/>
+						<input type="hidden" name="landscape.participant" value="${landscape.participant}"/>
+						<input type="hidden" name="participantconfig.participant" value="${landscape.participant}"/>
+						<strong> <a href="javascript: submitForm('${fn:escapeXml(savelandscape_url)}');">${save_button}</a></strong> 
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+	<script language="JavaScript">
+		function submitForm(url){
+	  		document.getElementById("createlandscape").action=url;
+	  		document.getElementById("createlandscape").submit();
+		}
+		function submittestConnection(url){
+	  		document.getElementById("createlandscape").action=url;
+	  		document.getElementById("createlandscape").submit();
+		}
+
+	</script>		 
+</div>

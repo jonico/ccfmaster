@@ -1,0 +1,87 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+  <jsp:directive.attribute name="label" type="java.lang.String" required="true" rtexprvalue="true" description="The label used for this menu item" />
+  <jsp:directive.attribute name="url" type="java.lang.String" required="true" rtexprvalue="true" description="The link URL" />
+  <jsp:directive.attribute name="messageCode" type="java.lang.String" required="false" rtexprvalue="true" description="The global message code to be used (works in conjunction with label)" />
+  <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" rtexprvalue="true" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
+
+  <jsp:directive.attribute name="prevActive" type="java.lang.Boolean" required="false" rtexprvalue="true" description="indicates whether the previous tab was active (default: 'false')" />
+  <jsp:directive.attribute name="active" type="java.lang.Boolean" required="false" rtexprvalue="true" description="indicates whether this tab is active (default: 'false')" />
+  <jsp:directive.attribute name="first" type="java.lang.Boolean" required="false" rtexprvalue="true" description="indicates whether this tab is the first tab (default: 'false')" />
+  <jsp:directive.attribute name="last" type="java.lang.Boolean" required="false" rtexprvalue="true" description="indicates whether this tab is the last tab (default: 'false')" />
+
+<c:if test="${empty render or render}">
+  <c:if test="${empty label}">
+    <spring:message code="menu_item_${fn:toLowerCase(fn:substringAfter(id,'_'))}_label" var="label" htmlEscape="false" />
+  </c:if>
+
+  <c:if test="${not empty messageCode}">
+    <spring:message code="${messageCode}" var="label" arguments="${label}" htmlEscape="false" />
+  </c:if>
+
+  <!-- separator image -->
+  <c:choose>
+	<c:when test="${first}">
+      <c:choose>
+        <c:when test="${active}">
+          <spring:url var="imageUrl" value="/images/tabs/first_active_tab.gif"/>
+        </c:when>
+        <c:otherwise>
+          <spring:url var="imageUrl" value="/images/tabs/first_inactive_tab.gif"/>
+        </c:otherwise>
+      </c:choose>
+      <td style="font-size: 0px;"><img width="9" height="21" alt="" 
+        src="${imageUrl}" /></td>  
+	</c:when>
+		
+	<c:otherwise>
+	  <c:choose>
+	    <c:when test="${(not prevActive) and active}">
+          <spring:url var="imageUrl" value="/images/tabs/inactive_active_tab.gif"/>
+        </c:when>
+	    <c:when test="${(not prevActive) and (not active)}">
+          <spring:url var="imageUrl" value="/images/tabs/inactive_inactive_tab.gif"/>
+        </c:when>
+        <c:otherwise>
+          <spring:url var="imageUrl" value="/images/tabs/active_inactive_tab.gif"/>
+        </c:otherwise>
+      </c:choose>
+      <td style="font-size: 0px;"><img width="19" height="21" alt="" 
+          src="${imageUrl}" /></td>
+	</c:otherwise>
+  </c:choose>
+  
+  <!-- tab contents -->
+  <c:choose>
+    <c:when test="${active}" >
+      <spring:url var="tabBackground" value="/images/tabs/tab_active_middle.gif"/>
+    </c:when>
+    <c:otherwise>
+      <spring:url var="tabBackground" value="/images/tabs/tab_inactive_middle.gif"/>
+    </c:otherwise>
+  </c:choose>
+  <td style="background: url(${tabBackground})" width="0" 
+    class="TabBody">
+    <spring:url var="tabUrl" value="${url}"/>
+    <a href="${tabUrl}"><c:out value="${label}" /></a>
+  </td>
+
+  <!-- stuff that comes after the last tab -->
+  <c:if test="${last}">
+    <c:choose>
+      <c:when test="${active}" >
+        <spring:url var="imageUrl" value="/images/tabs/active_last_tab.gif"/>
+      </c:when>
+      <c:otherwise>
+        <spring:url var="imageUrl" value="/images/tabs/inactive_last_tab.gif"/>
+      </c:otherwise>
+    </c:choose>
+    <td style="font-size: 0px;"><img width="19" height="21" alt="" 
+      src="${imageUrl}" /></td>
+    <spring:url var="imageUrl" value="/images/tabs/horiz_notab_background.gif"/>
+    <td style="background: url(${imageUrl})" width="100%">&#160;</td>
+  </c:if>
+  
+</c:if>
+</jsp:root>

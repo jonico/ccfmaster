@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp" modelAttribute="externalApp" path="/externalapps" versionField="Version" z="Oops8VUEOKC9LDB7CXujFTs68EU=">
+        <field:input field="linkId" id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_linkId" required="true" validationRegex="^prpl\\d+$" z="sdVIZX39nPDcfoD2liHj7j6lp/Q="/>
+        
+        <field:select field="landscape" id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_landscape" itemValue="id" items="${landscapes}" path="/landscapes" required="true" z="KoliueGwqX7LF4f267wJ4o3AkR0="/>
+    
+    
+    <field:input field="projectPath" id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_projectPath" required="true" validationRegex="^projects\\..*" z="0u5DX2Z6uHKxBkpMYMmSJDJofgo="/>
+    </form:update>
+</div>
