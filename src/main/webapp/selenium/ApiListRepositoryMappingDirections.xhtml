@@ -2,44 +2,44 @@
   <head profile="http://selenium-ide.openqa.org/profiles/test-case">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="selenium.base" href="http://localhost:8080/"/>
-    <title>Api List Participants</title>
+    <title>Api List RepositoryMappingDirections</title>
   </head>
   <body>
     <table cellspacing="1" border="1" cellpadding="1">
       <thead>
         <tr>
-          <td rowspan="1" colspan="3">Api List Participants</td>
+          <td rowspan="1" colspan="3">Api List RepositoryMappingDirections</td>
         </tr>
       </thead>
       <tbody>
         <tr>
 	<td>open</td>
-	<td>/CCFMaster/api/participants/</td>
+	<td>/CCFMaster/api/repositorymappingdirections/</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//participantList/participant/id</td>
+	<td>//repositoryMappingDirectionList/repositoryMappingDirection/id</td>
 	<td>1</td>
 </tr>
 <tr>
 	<td>storeText</td>
-	<td>//participant/id[1]</td>
+	<td>//repositoryMappingDirection/id[1]</td>
 	<td>entityId</td>
 </tr>
 <tr>
 	<td>open</td>
-	<td>/CCFMaster/api/participants/${entityId}</td>
+	<td>/CCFMaster/api/repositorymappingdirections/${entityId}</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//participant/id</td>
+	<td>//repositoryMappingDirection/id</td>
 	<td>${entityId}</td>
 </tr>
 <tr>
 	<td>open</td>
-	<td>/CCFMaster/api/participants</td>
+	<td>/CCFMaster/api/repositorymappingdirections</td>
 	<td></td>
 </tr>
 <tr>
