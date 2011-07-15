@@ -12,17 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
 public class DeleteAllParticipantsIT extends SeleneseTestBase {
 //	private Selenium selenium;
-	private static Logger log = LoggerFactory.getLogger(DeleteAllParticipantsIT.class);
+	private static final Logger log = LoggerFactory.getLogger(DeleteAllParticipantsIT.class);
+	static WebDriver browser;
+	static Selenium selenium;
 
 	@BeforeClass
-	public void setUp() throws Exception {
-		WebDriver driver = new FirefoxDriver();
+	public static void launchBrowser() {
 		String baseUrl = System.getProperty("ccf.baseUrl","http://localhost:8080/");
-		log.info("Using {} as baseUrl.", baseUrl);
-		selenium = new WebDriverBackedSelenium(driver, baseUrl);
+		log.info("Launching Firefox with baseUrl: {}", baseUrl);
+		browser = new FirefoxDriver();
+		selenium = new WebDriverBackedSelenium(browser, baseUrl);
 	}
 	
 	@Before
@@ -51,7 +54,8 @@ public class DeleteAllParticipantsIT extends SeleneseTestBase {
 	}
 	
 	@AfterClass
-	public void tearDown() throws Exception {
+	public static void stopBrowser() throws Exception {
+		log.info("Stopping browser.");
 		selenium.stop();
 	}
 }
