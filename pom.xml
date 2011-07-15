@@ -665,7 +665,7 @@
 						<groupId>net.sourceforge.cobertura</groupId>
 						<artifactId>cobertura-runtime</artifactId>
 						<version>${cobertura.version}</version>
-						<scope>provided</scope>
+						<scope>runtime</scope>
 						<type>pom</type>
 					</dependency>
 				</dependencies>
