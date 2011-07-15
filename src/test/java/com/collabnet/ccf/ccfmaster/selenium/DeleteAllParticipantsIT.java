@@ -30,12 +30,16 @@ public class DeleteAllParticipantsIT extends SeleneseTestBase {
 	
 	@Before
 	public void login() {
+		try {
 		selenium.open("/CCFMaster/login");
-		selenium.click("j_username");
+//		selenium.click("j_username");
 		selenium.type("j_username", "admin");
 		selenium.type("j_password", "admin");
 		selenium.click("proceed");
 		selenium.waitForPageToLoad("30000");
+		} catch (Exception e) {
+			log.error("Error loggin in. Base64 screenshot\n:{}", selenium.captureScreenshotToString());
+		}
 	}
 
 	@Test
