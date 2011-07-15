@@ -6,6 +6,17 @@
         <!-- <context:exclude-filter expression=".*_Roo_.*" type="regex"/> -->
 		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
 	</context:component-scan>
+	
+	<bean id="CCFRunTimeProperties" class="com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder">
+		<property name="ccfBaseUrl" value="${ccf.baseUrl:http://ccfmaster:8080/CCFMaster}"/>
+		<property name="ccfDBPort" value="${ccf.db.port:9002}" />
+		<property name="ccfHome" value="${ccf.home:/tmp}" />
+		<property name="iafServiceEndpoint" value="${ccf.iafServiceEndpoint:http://localhost:8090/services/DummyService}" />
+		<property name="jmxForwardPort" value="${ccf.forward.jmxport:8001}" />
+		<property name="jmxReversePort" value="${ccf.reverse.jmxport:8002}" />
+		<property name="tfUrl" value="${ccf.tf.url:http://pebblevm}"/>
+		<property name="maxAttachmentSize" value="10485760"/>
+	</bean> 
 
 	<!-- Turns on support for mapping requests to Spring MVC @Controller methods
 	     Also registers default Formatters and Validators for use across all @Controllers -->

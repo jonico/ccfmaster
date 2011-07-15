@@ -98,6 +98,8 @@
             <menu:item id="i_fieldmappinglandscapetemplate_list" messageCode="global_menu_list" url="/fieldmappinglandscapetemplates?page=1&amp;size=${empty param.size ? 10 : param.size}" z="B0dXFVflyTRdyBZ4sbbA62vwRiU="/>
             <menu:item id="fi_fieldmappinglandscapetemplate_parentandnameanddirection" messageCode="global_menu_find" url="/fieldmappinglandscapetemplates?find=ByParentAndNameAndDirection&amp;form" z="7yf27H1ukTkuz57LMZdmnyq18BE="/>
             <menu:item id="fi_fieldmappinglandscapetemplate_parent" messageCode="global_menu_find" url="/fieldmappinglandscapetemplates?find=ByParent&amp;form" z="Rg4Js1+xkGg7iVdzVOFlba8d9ow="/>
+            <menu:item id="fi_fieldmappinglandscapetemplate_parentanddirection" messageCode="global_menu_find" url="/fieldmappinglandscapetemplates?find=ByParentAndDirection&amp;form" z="bBui76DK8lgccjkqjPSIZArKFFE="/>
+            <menu:item id="fi_fieldmappinglandscapetemplate_direction" messageCode="global_menu_find" url="/fieldmappinglandscapetemplates?find=ByDirection&amp;form" z="vlAyLeFiUWOnvv+24bPOpWkcf78="/>
             </menu:category>
         <menu:category id="c_ccfcorestatus" z="DTK1iE81WsxgDarfd0kztidbcGU=">
                 <menu:item id="i_ccfcorestatus_new" messageCode="global_menu_new" url="/ccfcorestatus?form" z="48n2ZMqc5zyTpHvqh+4tDI6nmuk="/>

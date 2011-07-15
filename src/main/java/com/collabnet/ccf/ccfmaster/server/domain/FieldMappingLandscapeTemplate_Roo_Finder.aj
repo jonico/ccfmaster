@@ -12,11 +12,29 @@ import javax.persistence.TypedQuery;
 
 privileged aspect FieldMappingLandscapeTemplate_Roo_Finder {
     
+    public static TypedQuery<FieldMappingLandscapeTemplate> FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByDirection(Directions direction) {
+        if (direction == null) throw new IllegalArgumentException("The direction argument is required");
+        EntityManager em = FieldMappingLandscapeTemplate.entityManager();
+        TypedQuery<FieldMappingLandscapeTemplate> q = em.createQuery("SELECT o FROM FieldMappingLandscapeTemplate AS o WHERE o.direction = :direction", FieldMappingLandscapeTemplate.class);
+        q.setParameter("direction", direction);
+        return q;
+    }
+    
     public static TypedQuery<FieldMappingLandscapeTemplate> FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParent(Landscape parent) {
         if (parent == null) throw new IllegalArgumentException("The parent argument is required");
         EntityManager em = FieldMappingLandscapeTemplate.entityManager();
         TypedQuery<FieldMappingLandscapeTemplate> q = em.createQuery("SELECT o FROM FieldMappingLandscapeTemplate AS o WHERE o.parent = :parent", FieldMappingLandscapeTemplate.class);
         q.setParameter("parent", parent);
+        return q;
+    }
+    
+    public static TypedQuery<FieldMappingLandscapeTemplate> FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndDirection(Landscape parent, Directions direction) {
+        if (parent == null) throw new IllegalArgumentException("The parent argument is required");
+        if (direction == null) throw new IllegalArgumentException("The direction argument is required");
+        EntityManager em = FieldMappingLandscapeTemplate.entityManager();
+        TypedQuery<FieldMappingLandscapeTemplate> q = em.createQuery("SELECT o FROM FieldMappingLandscapeTemplate AS o WHERE o.parent = :parent AND o.direction = :direction", FieldMappingLandscapeTemplate.class);
+        q.setParameter("parent", parent);
+        q.setParameter("direction", direction);
         return q;
     }
     

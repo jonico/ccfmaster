@@ -76,6 +76,13 @@ public class LinkIdApiRepositoryMappingDirectionController extends AbstractApiLi
 		validateRepositoryMappingDirection(rmd);
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByRepositoryMappingDirection(rmd).getResultList());
 	}
+	
+	@RequestMapping(value = "/{id}/hospitalentrys/count", method = GET)
+	public @ResponseBody String showHospitalEntriesCount(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id) {
+		RepositoryMappingDirection rmd = RepositoryMappingDirection.findRepositoryMappingDirection(id);
+		validateRepositoryMappingDirection(rmd);
+		return Long.toString(HospitalEntry.countHospitalEntrysByRepositoryMappingDirection(rmd));
+	}
 
 	@RequestMapping(value = "/{id}/fieldmappings", method = GET)
 	public @ResponseBody FieldMappingList showFieldMappings(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id) {

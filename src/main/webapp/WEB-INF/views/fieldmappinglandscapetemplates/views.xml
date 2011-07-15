@@ -19,4 +19,10 @@
 <definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParent">
         <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParent.jspx"/>
     </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParentAndDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParentAndDirection.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByDirection.jspx"/>
+    </definition>
 </tiles-definitions>

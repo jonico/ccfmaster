@@ -52,8 +52,18 @@ public class ApiHospitalEntryController extends AbstractApiController<HospitalEn
 	}
 	
 	@RequestMapping(value = "/{direction}/")
-	public @ResponseBody HospitalEntryList hospitalEntrys(@PathVariable("direction") Directions direction) {
+	public @ResponseBody HospitalEntryList hospitalEntrysDirectionScope(@PathVariable("direction") Directions direction) {
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByDirection(direction).getResultList());
+	}
+	
+	@RequestMapping(value = "/{direction}/count")
+	public @ResponseBody String hospitalEntrysDirectionScopeCount(@PathVariable("direction") Directions direction) {
+		return Long.toString(HospitalEntry.countHospitalEntrysByDirection(direction));
+	}
+	
+	@RequestMapping(value = "/count/")
+	public @ResponseBody String hospitalEntrysCount() {
+		return Long.toString(HospitalEntry.countHospitalEntrys());
 	}
 
 	private void validateRequestBody(Long id, HospitalEntry requestBody) {

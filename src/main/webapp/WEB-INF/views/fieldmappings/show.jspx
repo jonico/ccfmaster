@@ -7,5 +7,7 @@
         <field:display field="scope" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_scope" object="${fieldmapping}" z="TErW0sXPJ6atfsaT4/nVZNl+/bo="/>
         <field:display field="param" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_param" object="${fieldmapping}" z="IYxD5qfb1oByn+mDtQ40Kh4t0FA="/>
         <field:display field="kind" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_kind" object="${fieldmapping}" z="ulhhBtVWn3AY2btCnNs2OKt0dJg="/>
+    <field:display field="rules" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_rules" object="${fieldmapping}" z="sg9ZYtSCLdnxe/GKLOSoaKDeIY4="/>
+        <field:display field="valueMaps" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_valueMaps" object="${fieldmapping}" z="/cc6F9ALodXsiISaGCJVUgauoPE="/>
     </page:show>
 </div>

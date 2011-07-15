@@ -67,6 +67,13 @@ public class LinkIdApiRepositoryMappingController extends AbstractApiLinkIdContr
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByRepositoryMapping(rm).getResultList());
 	}
 	
+	@RequestMapping(value = "/{id}/hospitalentrys/count", method = GET)
+	public @ResponseBody String showHospitalEntriesCount(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id) {
+		RepositoryMapping rm = RepositoryMapping.findRepositoryMapping(id);
+		validateRepositoryMapping(rm);
+		return Long.toString(HospitalEntry.countHospitalEntrysByRepositoryMapping(rm));
+	}
+	
 	@RequestMapping(value = "/{id}/repositorymappingdirections", method = GET)
 	public @ResponseBody RepositoryMappingDirectionList showRepositoryMappingDirections(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id) {
 		RepositoryMapping rm = RepositoryMapping.findRepositoryMapping(id);
@@ -86,6 +93,13 @@ public class LinkIdApiRepositoryMappingController extends AbstractApiLinkIdContr
 		RepositoryMapping rm = RepositoryMapping.findRepositoryMapping(id);
 		validateRepositoryMapping(rm);
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByRepositoryMappingAndDirection(rm, direction).getResultList());
+	}
+	
+	@RequestMapping(value = "/{id}/hospitalentrys/{direction}/count", method = GET)
+	public @ResponseBody String showHospitalEntriesDirectionScopeCount(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id, @PathVariable("direction") Directions direction) {
+		RepositoryMapping rm = RepositoryMapping.findRepositoryMapping(id);
+		validateRepositoryMapping(rm);
+		return Long.toString(HospitalEntry.countHospitalEntrysByRepositoryMappingAndDirection(rm, direction));
 	}
 
 	@Override

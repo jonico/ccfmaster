@@ -42,6 +42,17 @@ public class HospitalEntryAPIIntegrationTest extends AbstractAPIIntegrationTest 
     }
     
     @Test
+    public void testCountWithCountMethod() {
+        org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", dod.getRandomHospitalEntry());
+        long count = com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry.countHospitalEntrys();
+        org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", dod.getRandomHospitalEntry());
+        String result = restTemplate.getForObject(ccfAPIUrl + "/hospitalentrys/count/", String.class);
+        org.junit.Assert.assertTrue("Counter for 'HospitalEntry' incorrectly reported there were no entries", count > 0);
+        org.junit.Assert.assertNotNull("Find entries method for 'HospitalEntry' illegally returned null", result);
+        org.junit.Assert.assertEquals("Find entries method for 'HospitalEntry' returned an incorrect number of entries", count, Long.parseLong(result));
+    }
+    
+    @Test
     public void testCountLandscapeScope() {
     	com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry obj = dod.getRandomHospitalEntry();
         org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", obj);
@@ -50,6 +61,17 @@ public class HospitalEntryAPIIntegrationTest extends AbstractAPIIntegrationTest 
         org.junit.Assert.assertTrue("Counter for 'HospitalEntry' incorrectly reported there were no entries", count > 0);
         org.junit.Assert.assertNotNull("Find entries method for 'HospitalEntry' illegally returned null", result);
         org.junit.Assert.assertEquals("Find entries method for 'HospitalEntry' returned an incorrect number of entries", count, result.size());
+    }
+    
+    @Test
+    public void testCountLandscapeScopeWithCountMethod() {
+    	com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry obj = dod.getRandomHospitalEntry();
+        org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", obj);
+        long count = com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry.countHospitalEntrysByLandscape(obj.getRepositoryMappingDirection().getRepositoryMapping().getExternalApp().getLandscape());
+        String result = restTemplate.getForObject(ccfAPIUrl + "/landscapes/" + obj.getRepositoryMappingDirection().getRepositoryMapping().getExternalApp().getLandscape().getPlugId() +  "/hospitalentrys/count/", String.class);
+        org.junit.Assert.assertTrue("Counter for 'HospitalEntry' incorrectly reported there were no entries", count > 0);
+        org.junit.Assert.assertNotNull("Find entries method for 'HospitalEntry' illegally returned null", result);
+        org.junit.Assert.assertEquals("Find entries method for 'HospitalEntry' returned an incorrect number of entries", count, Long.parseLong(result));
     }
     
     @Test
@@ -64,6 +86,17 @@ public class HospitalEntryAPIIntegrationTest extends AbstractAPIIntegrationTest 
     }
     
     @Test
+    public void testCountLandscapeAndDirectionScopeWithCountMethod() {
+    	com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry obj = dod.getRandomHospitalEntry();
+        org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", obj);
+        long count = com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry.countHospitalEntrysByLandscapeAndDirection(obj.getRepositoryMappingDirection().getRepositoryMapping().getExternalApp().getLandscape(), obj.getRepositoryMappingDirection().getDirection());
+        String result = restTemplate.getForObject(ccfAPIUrl + "/landscapes/" + obj.getRepositoryMappingDirection().getRepositoryMapping().getExternalApp().getLandscape().getPlugId() +  "/hospitalentrys/" + obj.getRepositoryMappingDirection().getDirection() + "/count/", String.class);
+        org.junit.Assert.assertTrue("Counter for 'HospitalEntry' incorrectly reported there were no entries", count > 0);
+        org.junit.Assert.assertNotNull("Find entries method for 'HospitalEntry' illegally returned null", result);
+        org.junit.Assert.assertEquals("Find entries method for 'HospitalEntry' returned an incorrect number of entries", count, Long.parseLong(result));
+    }
+    
+    @Test
     public void testCountDirectionScope() {
     	com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry obj = dod.getRandomHospitalEntry();
         org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", obj);
@@ -72,6 +105,17 @@ public class HospitalEntryAPIIntegrationTest extends AbstractAPIIntegrationTest 
         org.junit.Assert.assertTrue("Counter for 'HospitalEntry' incorrectly reported there were no entries", count > 0);
         org.junit.Assert.assertNotNull("Find entries method for 'HospitalEntry' illegally returned null", result);
         org.junit.Assert.assertEquals("Find entries method for 'HospitalEntry' returned an incorrect number of entries", count, result.size());
+    }
+    
+    @Test
+    public void testCountDirectionScopeWithCountMethod() {
+    	com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry obj = dod.getRandomHospitalEntry();
+        org.junit.Assert.assertNotNull("Data on demand for 'HospitalEntry' failed to initialize correctly", obj);
+        long count = com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry.countHospitalEntrysByDirection(obj.getRepositoryMappingDirection().getDirection());
+        String result = restTemplate.getForObject(ccfAPIUrl +  "/hospitalentrys/" + obj.getRepositoryMappingDirection().getDirection() + "/count/", String.class);
+        org.junit.Assert.assertTrue("Counter for 'HospitalEntry' incorrectly reported there were no entries", count > 0);
+        org.junit.Assert.assertNotNull("Find entries method for 'HospitalEntry' illegally returned null", result);
+        org.junit.Assert.assertEquals("Find entries method for 'HospitalEntry' returned an incorrect number of entries", count, Long.parseLong(result));
     }
     
     @Test

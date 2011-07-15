@@ -71,7 +71,7 @@ public class ApiLandscapeController extends AbstractApiController<Landscape>{
 	
 	@RequestMapping(value = "/{id}/repositorymappingdirections/{direction}", method=RequestMethod.GET)
 	public @ResponseBody RepositoryMappingDirectionList repositoryMappingDirections(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
-		log.debug("direction: {} landscape: {}", direction, landscape);
+		//log.debug("direction: {} landscape: {}", direction, landscape);
 		return new RepositoryMappingDirectionList(RepositoryMappingDirection.findRepositoryMappingDirectionsByLandscapeAndDirection(landscape, direction).getResultList());
 	}
 	
@@ -80,10 +80,21 @@ public class ApiLandscapeController extends AbstractApiController<Landscape>{
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByLandscape(landscape).getResultList());
 	}
 	
+	@RequestMapping(value = "/{id}/hospitalentrys/count", method=RequestMethod.GET)
+	public @ResponseBody String hospitalEntrysCount(@PathVariable("id") Landscape landscape) {
+		return Long.toString(HospitalEntry.countHospitalEntrysByLandscape(landscape));
+	}
+	
 	@RequestMapping(value = "/{id}/hospitalentrys/{direction}", method=RequestMethod.GET)
 	public @ResponseBody HospitalEntryList hospitalEntrys(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
-		log.debug("direction: {} landscape: {}", direction, landscape);
+		//log.debug("direction: {} landscape: {}", direction, landscape);
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByLandscapeAndDirection(landscape, direction).getResultList());
+	}
+	
+	@RequestMapping(value = "/{id}/hospitalentrys/{direction}/count", method=RequestMethod.GET)
+	public @ResponseBody String hospitalEntrysCount(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
+		//log.debug("direction: {} landscape: {}", direction, landscape);
+		return Long.toString(HospitalEntry.countHospitalEntrysByLandscapeAndDirection(landscape, direction));
 	}
 	
 	@RequestMapping(value = "/{id}/identitymappings", method=RequestMethod.GET)

@@ -7,5 +7,7 @@
         <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_name" object="${fieldmappinglandscapetemplate}" z="fQJnvMGjY/AbDCVAVFfeQVwHXjU="/>
         <field:display field="direction" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_direction" object="${fieldmappinglandscapetemplate}" z="FuuLwFpkkyQPgaLGvlgZANDwG74="/>
         <field:display field="kind" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_kind" object="${fieldmappinglandscapetemplate}" z="HqO54k9Y/LA9ygxfXIzFx/00Lto="/>
+    <field:display field="rules" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_rules" object="${fieldmappinglandscapetemplate}" z="OA3pj41DPV/a5xPQG2pV5S/iQvU="/>
+        <field:display field="valueMaps" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingLandscapeTemplate_valueMaps" object="${fieldmappinglandscapetemplate}" z="6dvvRGL71L4A/4QAPFFIW+gGzoA="/>
     </page:show>
 </div>

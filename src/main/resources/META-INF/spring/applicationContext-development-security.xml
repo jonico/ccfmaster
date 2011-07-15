@@ -174,10 +174,14 @@
 		<intercept-url method="PUT" pattern="/api/fieldmappinglandscapetemplates/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="DELETE" pattern="/api/fieldmappinglandscapetemplates/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/hospitalentrys/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/count/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/hospitalentrys/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/hospitalentrys/{direction}/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/{direction}/count/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/landscape/{plugId}/hospitalentrys/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscape/{plugId}/hospitalentrys/count/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/landscape/{plugId}/hospitalentrys/{direction}/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscape/{plugId}/hospitalentrys/{direction}/count/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="POST" pattern="/api/hospitalentrys/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="PUT" pattern="/api/hospitalentrys/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="DELETE" pattern="/api/hospitalentrys/*" access="ROLE_TF_SUPER_USER"/>
@@ -246,11 +250,16 @@
 		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/fieldmappinglandscapetemplates/" access="ROLE_TF_USER"/>
 		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/fieldmappinglandscapetemplates/{direction}/" access="ROLE_TF_USER"/>
 		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/{direction}/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/{direction}/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/*/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/*/hospitalentrys/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/{direction}/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/{direction}/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="POST" pattern="/api/linkid/{linkId}/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/hospitalentrys/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
 		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/hospitalentrys/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>

@@ -6,5 +6,6 @@
         <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_name" object="${fieldmappingvaluemap}" z="gHrrnaGOQivNLdNZGuyyUgZurxE="/>
         <field:display field="defaultValue" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_defaultValue" object="${fieldmappingvaluemap}" z="BSrgQv9uv9Q8sYjG/p+AXvoXDOQ="/>
         <field:display field="hasDefault" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_hasDefault" object="${fieldmappingvaluemap}" z="lG5Sz0kurEAlEygm/C4qN/TQr5A="/>
+    <field:display field="entries" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_entries" object="${fieldmappingvaluemap}" z="mAb1Gdh3D7SarWi6foc6F7FykO0="/>
     </page:show>
 </div>

@@ -38,6 +38,7 @@ public class LinkIdApiHospitalEntryController extends AbstractApiLinkIdControlle
 	public @ResponseBody HospitalEntryList list(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByExternalApp(ea).getResultList());
 	}
+	
 
 	@Override
 	public @ResponseBody HospitalEntry show(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id) {
@@ -60,9 +61,19 @@ public class LinkIdApiHospitalEntryController extends AbstractApiLinkIdControlle
 		rm.remove();
 	}
 	
+	@RequestMapping(value = "/count/", method = RequestMethod.GET)
+	public @ResponseBody String hospitalEntryCount(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
+		return Long.toString(HospitalEntry.countHospitalEntrysByExternalApp(ea));
+	}
+	
 	@RequestMapping(value = "/{direction}/", method = RequestMethod.GET)
 	public @ResponseBody HospitalEntryList hospitalEntrysDirectionScope(@PathVariable("direction") Directions direction, @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
 		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByExternalAppAndDirection(ea, direction).getResultList());
+	}
+	
+	@RequestMapping(value = "/{direction}/count", method = RequestMethod.GET)
+	public @ResponseBody String hospitalEntrysDirectionScopeCount(@PathVariable("direction") Directions direction, @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
+		return Long.toString(HospitalEntry.countHospitalEntrysByExternalAppAndDirection(ea, direction));
 	}
 
 	private void validateRequestBody(Long id, HospitalEntry requestBody) {
