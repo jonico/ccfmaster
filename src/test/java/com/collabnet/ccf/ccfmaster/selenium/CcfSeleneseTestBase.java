@@ -1,7 +1,6 @@
 package com.collabnet.ccf.ccfmaster.selenium;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -22,7 +21,13 @@ public class CcfSeleneseTestBase extends SeleneseTestBase {
 	protected Selenium selenium;
 	
 	public CcfSeleneseTestBase() {
-		this(staticSelenium);
+		this(ensureBrowserLaunched());
+	}
+	
+	private static Selenium ensureBrowserLaunched() {
+		if (staticSelenium == null)
+			launchBrowser();
+		return staticSelenium;
 	}
 	
 	protected CcfSeleneseTestBase(Selenium selenium) {
@@ -31,10 +36,10 @@ public class CcfSeleneseTestBase extends SeleneseTestBase {
 	}
 
 	@BeforeClass
-	public static void launchBrowser() throws URISyntaxException {
-		String baseUrl = System.getProperty("ccf.baseUrl","http://localhost:8080/");
+	public static void launchBrowser() {
+		String baseUrl = System.getProperty("ccf.baseUrl", "http://localhost:8080/");
 		// not interested in path.
-		URI uri = new URI(baseUrl);
+		URI uri = URI.create(baseUrl);
 		String port = uri.getPort() == -1 ? "" : ":" + uri.getPort();
 		baseUrl = String.format("%s://%s%s/", uri.getScheme(), uri.getHost(), port);
 		log.info("Launching Firefox with baseUrl: {}", baseUrl);

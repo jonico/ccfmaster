@@ -48,7 +48,7 @@ public class CcfAuthenticatedTestBase extends CcfSeleneseTestBase {
 			selenium.waitForPageToLoad("30000");
 		} catch (RuntimeException e) {
 			log.error("Exception while logging in", e);
-			log.error("Base64 screenshot\n:{}",
+			log.error("Base64 screenshot:\n{}",
 					selenium.captureScreenshotToString());
 			throw e;
 		}
