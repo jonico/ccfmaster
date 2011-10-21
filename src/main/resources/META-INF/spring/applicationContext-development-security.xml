@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- TODO: configure a custom HttpSessionSecurityContextRepository to retrieve 
+		UserInfo depending on the project. See http://static.springsource.org/spring-security/site/docs/3.0.x/reference/core-web-filters.html#security-context-repository 
+		for details. -->
+		
+	<!-- This must go before the http element in order to be used by security:authorize 
+		tags using the access attribute. See http://forum.springsource.org/showpost.php?p=296694&postcount=22 
+		and https://jira.springframework.org/browse/SEC-1452 for details. -->
+	<beans:bean id="expressionHandler"
+		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+		<beans:property name="roleHierarchy" ref="roleHierarchy" />
+	</beans:bean>
+	<beans:bean id="methodSecurityExpressionHandler" 
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"> 
+		<beans:property name="roleHierarchy" ref="roleHierarchy" />
+	</beans:bean>
+
+	<!-- Configure Authentication mechanism -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="LinkedAppAuthenticationProvider" />
+		<authentication-provider ref="IAFAuthenticationProvider" />
+		<authentication-provider ref="TeamForgeAuthenticationProvider" />
+	</authentication-manager>
+	
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.UnanimousBased">
+		<!-- <beans:property name="allowIfAllAbstainDecisions" value="false" /> -->
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:bean
+					class="com.collabnet.ccf.ccfmaster.authorization.IntegratedAppVoter" />
+				<!-- cannot customize the WebSecurityExpressionHandler used by the WebExpressionVoter to use our expressionHandler bean.
+				<beans:bean
+					class="org.springframework.security.web.access.expression.WebExpressionVoter">
+					<beans:property name="expressionHandler" ref="expressionHandler"/>
+				</beans:bean>
+				-->
+				<beans:bean
+					class="org.springframework.security.access.vote.AuthenticatedVoter" />
+				<beans:bean
+					class="org.springframework.security.access.vote.RoleHierarchyVoter">
+					<beans:constructor-arg ref="roleHierarchy" />
+				</beans:bean>
+			</beans:list>
+		</beans:property>
+
+	</beans:bean>
+
+	<beans:bean id="roleHierarchy"
+		class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+		<beans:property name="hierarchy">
+			<beans:value>
+				ROLE_TF_SUPER_USER > ROLE_ADMIN
+				ROLE_IAF_USER > ROLE_TF_USER
+				ROLE_TF_USER > ROLE_USER
+				ROLE_ADMIN > ROLE_CCF_CORE_CONFIGURATION 
+				ROLE_ADMIN > ROLE_HOSPITAL
+				ROLE_ADMIN > ROLE_IDENTITY_MAPPINGS
+				ROLE_ADMIN > ROLE_REPOSITORY_MAPPINGS
+				ROLE_ADMIN > ROLE_MAPPING_RULES 
+				ROLE_ADMIN > ROLE_MAPPING_RULE_TEMPLATES 
+				ROLE_ADMIN > ROLE_PAUSE_SYNCHRONIZATION 
+				ROLE_ADMIN > ROLE_RESET_SYNCHRONIZATION_STATUS 
+				ROLE_ADMIN > ROLE_TF_USER
+			</beans:value>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="linkedAppFilter"
+		class="com.collabnet.ccf.ccfmaster.authentication.LinkedAppAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="continueFilterChainOnUnsuccessfulAuthentication"
+			value="true" />
+		<beans:property name="checkForPrincipalChanges" value="true" />
+		<beans:property name="invalidateSessionOnPrincipalChange" value="true" />
+	</beans:bean>
+	<beans:bean id="IAFFilter"
+		class="com.collabnet.ccf.ccfmaster.authentication.IafAuthenticationFilter">
+		<beans:property name="checkForPrincipalChanges" value="true" />
+		<beans:property name="invalidateSessionOnPrincipalChange" value="true" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="continueFilterChainOnUnsuccessfulAuthentication"
+			value="true" />
+	</beans:bean>
+	<beans:bean id="TeamForgeAuthenticationProvider"
+		class="com.collabnet.ccf.ccfmaster.authentication.TFAuthenticationProvider">
+		<beans:constructor-arg value="#{CCFRunTimeProperties.TfUrl}" />
+		<!-- <beans:property name="userCache">
+			<beans:bean class="com.collabnet.ccf.ccfmaster.authentication.TFAuthenticationProvider.MapUserCache" />
+		</beans:property> -->
+	</beans:bean>
+	<beans:bean id="LinkedAppAuthenticationProvider"
+		class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean class="com.collabnet.ccf.ccfmaster.authentication.LinkedAppUserDetailsService">
+				<beans:constructor-arg value="#{CCFRunTimeProperties.TfUrl}" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="IAFAuthenticationProvider"
+		class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+		<beans:property name="preAuthenticatedUserDetailsService">
+			<beans:bean class="com.collabnet.ccf.ccfmaster.authentication.IafUserDetailsService">
+				<beans:constructor-arg value="#{CCFRunTimeProperties.TfUrl}" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- We need a custom bean here since the default implementation would not create a new session if we previously invalidated our session after having changed the IAF project  -->
+	<beans:bean id="SessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy">
+		<beans:property name="alwaysCreateSession" value="true" />
+	</beans:bean>
+	
+	<global-method-security pre-post-annotations="enabled">
+		<expression-handler ref="methodSecurityExpressionHandler"/>
+	</global-method-security>
+	
+	<!-- HTTP security configurations -->
+	<http auto-config="true" use-expressions="false"
+		access-decision-manager-ref="accessDecisionManager" access-denied-page="/accessDenied">
+		<custom-filter ref="linkedAppFilter" before="PRE_AUTH_FILTER" />
+		<custom-filter ref="IAFFilter" after="PRE_AUTH_FILTER" />
+		<session-management 
+			session-authentication-strategy-ref="SessionAuthenticationStrategy"
+			invalid-session-url="/sessionTimeout" />
+		<form-login login-processing-url="/resources/j_spring_security_check"
+			login-page="/login" authentication-failure-url="/login?login_error=t" />
+		<logout logout-url="/resources/j_spring_security_logout" />
+		<!-- <http-basic/> -->
+
+		<!-- Configure these elements to secure URIs in your application -->
+		<intercept-url pattern="/linkid/*/hospitalentrys/**"                access="INTEGRATED_APPLICATION_CHECK, ROLE_HOSPITAL" />
+		<intercept-url pattern="/linkid/*/identitymappings/**"              access="INTEGRATED_APPLICATION_CHECK, ROLE_IDENTITY_MAPPINGS" />
+		<intercept-url pattern="/linkid/*/repositorymappings/**"            access="INTEGRATED_APPLICATION_CHECK, ROLE_REPOSITORY_MAPPINGS" />
+		<intercept-url pattern="/linkid/*/repositorymappingdirections/**"   access="INTEGRATED_APPLICATION_CHECK, ROLE_REPOSITORY_MAPPINGS" />
+ 		<intercept-url pattern="/linkid/*/**"                               access="INTEGRATED_APPLICATION_CHECK"/>
+		<intercept-url pattern="/hospitalentrys/**"                         access="ROLE_HOSPITAL"/>
+		<intercept-url pattern="/identitymappings/**"                       access="ROLE_IDENTITY_MAPPINGS" />
+		<intercept-url pattern="/repositorymappings/**"                     access="ROLE_REPOSITORY_MAPPINGS" />
+		<intercept-url pattern="/repositorymappingdirections/**"            access="ROLE_REPOSITORY_MAPPINGS" />
+		
+		
+		
+		<!-- 
+		<intercept-url pattern="/participants/**"     access="hasRole('ROLE_TF_SUPER_USER')" />
+		<intercept-url pattern="/hospitalentrys/**"   access="hasRole('ROLE_HOSPITAL')" />
+		<intercept-url pattern="/identitymappings/**" access="hasRole('ROLE_IDENTITY_MAPPINGS')" />
+		<intercept-url pattern="/member/**"           access="isAuthenticated()" />
+		<intercept-url pattern="/resources/**"        access="permitAll" />
+		<intercept-url pattern="/**"                  access="permitAll" />
+		-->
+		
+		<!-- Admin-scope web UI -->
+		<intercept-url pattern="/admin/**" access="ROLE_TF_SUPER_USER"/> 
+		<intercept-url pattern="/update-core/**" access="ROLE_TF_SUPER_USER" /> 
+		
+		<intercept-url pattern="/" access="ROLE_TF_USER"/> 
+		
+		<!-- Project-scope web UI -->
+		<intercept-url pattern="/project/hospitalentrys/**" access="ROLE_HOSPITAL"/>
+		<intercept-url pattern="/project/repositorymappings/pause" access="ROLE_PAUSE_SYNCHRONIZATION"/> 
+		<intercept-url pattern="/project/repositorymappings/resume" access="ROLE_PAUSE_SYNCHRONIZATION"/> 
+		<intercept-url pattern="/project/repositorymappings/delete" access="ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/> 
+		<intercept-url pattern="/project/repositorymappings/**" access="ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url pattern="/project/" access="ROLE_IAF_USER"/> 
+		<intercept-url pattern="/project/fieldmappingtemplates/**"  access="ROLE_MAPPING_RULE_TEMPLATES" />
+		<intercept-url pattern="/project/identitymappings/**"  access="ROLE_IDENTITY_MAPPINGS" />
+		 
+		<!-- block everything else -->
+		<intercept-url pattern="/project/**" access="ROLE_DOES_NOT_EXIST"/> 
+		 
+		<!-- API call access control -->
+		<!-- Site admin API -->
+		<intercept-url method="PUT" pattern="/api/ccfcorestatuses/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/directions/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/directions/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/directions/*/directionconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/directionconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/directionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/directionconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/directionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/directionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/externalapps/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/externalapps/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/externalapps/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/fieldmappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/fieldmappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/fieldmappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/fieldmappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/fieldmappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/fieldmappingexternalapptemplates/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/fieldmappingexternalapptemplates/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/fieldmappingexternalapptemplates/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/fieldmappingexternalapptemplates/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/fieldmappingexternalapptemplates/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/fieldmappinglandscapetemplates/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/fieldmappinglandscapetemplates/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/fieldmappinglandscapetemplates/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/count/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/{direction}/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/hospitalentrys/{direction}/count/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/hospitalentrys/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/hospitalentrys/count/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/hospitalentrys/{direction}/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/hospitalentrys/{direction}/count/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/hospitalentrys/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/hospitalentrys/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/hospitalentrys/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/identitymappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/identitymappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/identitymappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/identitymappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/identitymappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/identitymappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/landscapes/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/landscapes/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/landscapes/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/*/landscapeconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapeconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapeconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/landscapeconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/landscapeconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/landscapeconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/directions/*/logs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/directions/*/logs/**" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/directions/*/logs/**" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/participants/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/participants/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/participants/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/participantconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/participantconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/participantconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/repositorymappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/repositorymappings/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/repositorymappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/repositorymappings/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/repositorymappingdirections/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/repositorymappingdirections/{direction}/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappingdirections/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappingdirections/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappingdirections/{direction}/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/repositorymappingdirections/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/repositorymappingdirections/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/repositorymappingdirections/*" access="ROLE_TF_SUPER_USER"/>
+
+		<!-- regular user access -->
+		<intercept-url method="GET" pattern="/api/ccfcorestatuses/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/directions/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/directions/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/directions/{direction}/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/{domainName}/projects/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/{domainName}/projects/{projectName}" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/{domainName}/projects/{projectName}/defectFields/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/{domainName}/projects/{projectName}/requirementTypes/{requirementTypeName}" access="ROLE_TF_USER" />
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/{domainName}/projects/{projectName}/requirementTypes/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/qcmetadata/domains/{domainName}/projects/{projectName}/requirementTypes/{requirementTypeName}/requirementFields/" access="ROLE_TF_USER" />
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/directions/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/directions/{direction}/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/externalapps/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/externalapps/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/externalapps/{linkId}" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/externalapps/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/fieldmappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULES"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/*/fieldmappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULES"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/fieldmappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULES"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/fieldmappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULES"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/fieldmappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULES"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/fieldmappingexternalapptemplates/" access="INTEGRATED_APPLICATION_CHECK"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/fieldmappingexternalapptemplates/*" access="INTEGRATED_APPLICATION_CHECK"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/fieldmappingexternalapptemplates/{direction}/" access="INTEGRATED_APPLICATION_CHECK"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/fieldmappingexternalapptemplates/" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULE_TEMPLATES"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/fieldmappingexternalapptemplates/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULE_TEMPLATES"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/fieldmappingexternalapptemplates/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_MAPPING_RULE_TEMPLATES"/>
+		<intercept-url method="GET" pattern="/api/fieldmappinglandscapetemplates/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/fieldmappinglandscapetemplates/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/fieldmappinglandscapetemplates/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}/fieldmappinglandscapetemplates/{direction}/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/{direction}/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/hospitalentrys/{direction}/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/*/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/*/hospitalentrys/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/{direction}/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/hospitalentrys/{direction}/count/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/hospitalentrys/" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/hospitalentrys/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/hospitalentrys/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_HOSPITAL"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/identitymappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_IDENTITY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/identitymappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_IDENTITY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/identitymappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_IDENTITY_MAPPINGS"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/identitymappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_IDENTITY_MAPPINGS"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/identitymappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_IDENTITY_MAPPINGS"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/identitymappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_IDENTITY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/landscapes/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/landscapes/{plugId}" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/participants/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/participants/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/participantconfigs/" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/participantconfigs/*" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/participants/*/participantconfigs" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/repositorymappings/" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/repositorymappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/repositorymappings/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/{direction}/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/repositorymappingdirections/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/*/repositorymappingdirections/{direction}/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/repositorymappingdirections/" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/repositorymappingdirections/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/repositorymappingdirections/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
+		<intercept-url method="GET" pattern="/api/timezones/" access="ROLE_TF_USER"/>
+		
+		<!-- block all other API calls -->
+		<intercept-url pattern="/api/**" access="ROLE_DOES_NOT_EXIST" />
+	</http>
+</beans:beans>

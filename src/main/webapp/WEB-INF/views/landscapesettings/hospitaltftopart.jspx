@@ -1,0 +1,338 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_delete" var="delete_button"/>
+<spring:message code="button_replay" var="replay_button"/>
+<spring:message code="button_examine" var="examine_button"/>
+<spring:message code="button_export" var="export_button"/>
+<spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
+<spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:message code="timestamplabel" var="timestamplabel" htmlEscape="false"/>
+<spring:message code="adaptornamelabel" var="adaptornamelabel" htmlEscape="false"/>
+<spring:message code="originatingcomponentlabel" var="originatingcomponentlabel" htmlEscape="false"/>
+<spring:message code="sourceartifactlabel" var="sourceartifactlabel" htmlEscape="false"/>
+<spring:message code="targetartifactlabel" var="targetartifactlabel" htmlEscape="false"/>
+<spring:message code="errorcodelabel" var="errorcodelabel" htmlEscape="false"/>
+<spring:message code="exceptionlabel" var="exceptionlabel" htmlEscape="false"/>
+<spring:message code="causeexceptionlabel" var="causeexceptionlabel" htmlEscape="false"/>
+<spring:message code="hospitaldetaillabel" var="hospitaldetaillabel" htmlEscape="false"/>
+<spring:message code="exceptiondetaillabel" var="exceptiondetaillabel" htmlEscape="false"/>
+<spring:message code="errorlabel" var="errorlabel" htmlEscape="false"/>
+<spring:message code="hospitalentryfailedlabel" var="hospitalentryfailedlabel" htmlEscape="false"/>
+<spring:message code="hospitalentryreplayedlabel" var="hospitalentryreplayedlabel" htmlEscape="false"/>
+<spring:message code="qcdomainlabel" var="qcdomainlabel" htmlEscape="false"/>
+<spring:message code="swpdomainlabel" var="swpdomainlabel" htmlEscape="false"/>
+<spring:message code="sourceartifactidlabel" var="sourceartifactidlabel" htmlEscape="false"/>
+<spring:message code="targetartifactidlabel" var="targetartifactidlabel" htmlEscape="false"/>
+<spring:message code="nohospitalentrymessagelabel" var="nohospitalentrymessagelabel" htmlEscape="false"/>
+<spring:url value="/admin/deletehospital?direction=FORWARD" var="delete_url" />
+<spring:url value="/admin/replayhospital?direction=FORWARD" var="replay_url" />
+<spring:url value="/admin/examinehospital?direction=FORWARD" var="examine_url" />
+<spring:url value="/admin/displayhospitalindetail?direction=FORWARD" var="hospital_url" />
+<spring:url value="/admin/exporthospitalentry" var="export_url" />
+<spring:url value="/admin/applyhospitalfilter?direction=FORWARD" var="applyhospitalfilter_url" />     
+<spring:url value="/admin/displaytftoparticipanthospital?direction=FORWARD" var="removehospitalfilter_url" />
+		
+<spring:url value="/images/icons/exception.png" var="exception_image_url" />
+<spring:url value="/images/icons/hospital_entry.png" var="hospital_entry_image_url" />
+<spring:url value="/images/icons/database_pending.png" var="hospital_image_url" />
+<spring:url value="/images/icons/logo_qc.png" var="qc_image_url" />
+<spring:url value="/images/icons/logo_swp.png" var="swp_image_url" />
+
+<spring:url value="/images/icons/error.png" var="error_image_url" />  
+<spring:url value="/images/icons/hospital_entry_replay.png" var="error_replay_image_url" />  
+<spring:url value="/images/icons/hospital_entry_failed.png" var="error_failed_url" />
+<spring:url value="/js/ccf-functions.js" var="ccfscript_url" />
+<script src="${fn:escapeXml(ccfscript_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+ 	
+<form:form id="hospitalTeamForgeForm" action="${fn:escapeXml(applyhospitalfilter_url)}" name="hospitalTeamForgeForm" method="POST" commandName="hospitalmodel" modelAttribute="hospitalmodel">
+  <table class="Container" >
+		<tbody>
+		<tr>
+		<td colspan="4">
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+		<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				<tr class="ContainerHeader" >
+				<td colspan="4">
+				<c:if test="${participant.systemKind eq 'QC'}">
+				<strong><c:out value="${tftoqclabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'SWP'}">
+				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				</td>
+				<util:header-row  
+				formname="hospitalTeamForgeForm"
+				applylink="${applyhospitalfilter_url}"
+				removelink="${removehospitalfilter_url}"
+				rmdid="${rmdid}">
+				</util:header-row>
+				</tr>
+				<c:if test="${fn:length(hospitalmodel) > 0}">
+				<tr class="ItemListHeader" >  
+				 <td><input type="checkbox" id="selectall" onClick='javascript:funcSelectAll()'  name="selectall"></input></td><td>${timestamplabel}</td><td>${originatingcomponentlabel}</td><td>${sourceartifactlabel}</td><td>${targetartifactlabel}</td><td>${errorcodelabel}</td><td>${causeexceptionlabel}</td>
+				 <c:if test="${not empty rmdid}">
+     		 	 <tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td></td><td></td><td width="200px"><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}"  size="12" class="inputfield" readonly="readonly" onKeyPress="return submitenter(this,event)"/></td><td  width="200px"><strong>${targetartifactidlabel}:</strong><input type="text" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" readonly="readonly" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td></tr>
+     		 	 </c:if>
+     		 	 <c:if test="${empty rmdid}">
+     		 	 <tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td></td><td></td><td width="200px"><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}"  size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td  width="200px"><strong>${targetartifactidlabel}:</strong><input type="text" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td></tr>
+     		 	 </c:if>
+     		 	 <c:forEach items="${hospitalmodel}" var="hospitalist" varStatus="status">
+     		 	 	<c:set var="hospitalentry" value="${hospitalist.hospitalEntry}" />
+     		 	 	<c:set var="errorurl" value="${error_image_url}"/>
+     		 	 	<c:set var="errortitle" value="${errorlabel}"/>
+     		 	 	<c:if test="${hospitalentry.errorCode eq 'replay' and hospitalentry.reprocessed eq 'true'}">
+					<c:set var="errorurl" value="${error_failed_url}"/>
+					<c:set var="errortitle" value="${hospitalentryfailedlabel}"/>
+					</c:if>
+     		 	 	<c:if test="${hospitalentry.errorCode eq 'replay'and hospitalentry.reprocessed eq 'false'}">
+					<c:set var="errorurl" value="${error_replay_image_url}"/>
+					<c:set var="errortitle" value="${hospitalentryreplayedlabel}"/>
+					</c:if>
+     		  	    <tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
+					<td ><input type="checkbox"  name="hospitalid" value="${hospitalentry.id}" onClick='javascript:toggleButton()'/></td>
+					<td nowrap="nowrap">${hospitalentry.timestamp}</td>
+					<td >${hospitalentry.originatingComponent}</td>
+					<c:if test="${hospitalist.artifactIcon ne 'null'}">
+					<td><img src="../images/tracker/icons/${hospitalist.artifactIcon}" title="${hospitalist.repositoryData}"  alt="${hospitalist.repositoryData}" border="0" class="trackerIcon" />&#160;${hospitalentry.sourceArtifactId}&#160;:&#160;<a href="${hospitalist.tfUrl}/sf/go/${hospitalentry.sourceArtifactId}">${hospitalist.artifactData}</a></td>
+					</c:if>
+					<c:if test="${hospitalist.artifactIcon eq 'null'}">
+					<td nowrap="nowrap">${hospitalentry.sourceArtifactId}</td>
+					</c:if>
+					<c:if test="${participant.systemKind eq 'QC'}">
+						<td ><img src="${fn:escapeXml(qc_image_url)}" border="0"  alt="${qcdomainlabel}" title="${qcdomainlabel}"/>&#160;${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.targetArtifactId}</td>
+					</c:if>
+			 		<c:if test="${participant.systemKind eq 'SWP'}">
+				 		<td ><img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}" title="${swpdomainlabel}"/>&#160;${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.targetArtifactId}</td>
+			 		</c:if>
+					<td nowrap="nowrap" ><img src="${fn:escapeXml(errorurl)}" alt="${errortitle}" title="${errortitle}" border="0" /> ${hospitalentry.errorCode}</td>
+					<td ><img src="${fn:escapeXml(exception_image_url)}" title="${exceptiondetaillabel}" alt="${exceptiondetaillabel}" border="0" />&#160;<a href="javascript: viewhospital('${fn:escapeXml(hospital_url)}&amp;hospitalid=${hospitalentry.id}');">${hospitalentry.causeExceptionMessage}</a></td>	
+		 			</tr> 		
+				  </c:forEach>
+				  </tr>
+				
+			</c:if>
+			 	
+	 		<c:if test="${fn:length(hospitalmodel) == 0}">
+	 			
+	 			<tr class="ItemListHeader">
+	 			<td></td><td>${timestamplabel}</td> <td>${adaptornamelabel}</td><td>${originatingcomponentlabel}</td><td>${sourceartifactlabel}</td><td>${targetartifactlabel}</td><td>${errorcodelabel}</td><td>${exceptionlabel}</td><td>${causeexceptionlabel}</td>
+	 			<c:if test="${not empty rmdid}">
+     		 	 <tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td></td><td></td><td></td><td><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}"  size="12" class="inputfield" readonly="readonly" onKeyPress="return submitenter(this,event)"/></td><td><strong>${targetartifactidlabel}:</strong><input type="text" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" readonly="readonly" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td><td></td></tr>
+     		 	 </c:if>
+     		 	 <c:if test="${empty rmdid}">
+     		 	 <tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td></td><td></td><td></td><td><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}"  size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td><strong>${targetartifactidlabel}:</strong><input type="text" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td><td></td></tr>
+     		 	 </c:if>
+	 			</tr>
+	 			<tr class="ItemListNoData">
+     		 	<td colspan="9"><center>${nohospitalentrymessagelabel}</center></td>
+      			</tr>
+			</c:if>
+			</tbody>
+			</table>
+				<br/>
+				<br/>
+				<c:if test="${fn:length(hospitalmodel) > 0}">
+				
+				 
+				<tr class="ContainerFooter">
+				<td>
+					<util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}"
+						direction="${direction}"
+						rmdid="${param.rmdid}"
+					/>
+				</td>
+				<td>
+				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<div class="Button">
+				<div class="Middle">
+				     	<strong><a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a></strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+						<strong> <a href="javascript: replayForm('${fn:escapeXml(replay_url)}');">${replay_button}</a></strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+					<input type="hidden" name="rmdid" value="${rmdid}"/>
+					<strong> <a href="javascript: examineForm('${fn:escapeXml(examine_url)}');">${examine_button}</a></strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+						<strong> <a href="javascript: exportForm('${fn:escapeXml(export_url)}');">${export_button}</a></strong>
+				</div>
+				</div>
+				</div>
+				</td>
+			
+				<td>
+				<div id="disablebutton" class="AlignRight">
+				<div class="Button">
+				<div class="MiddleDisabled">
+				     	<strong>${delete_button}</strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+						<strong>${replay_button}</strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+					<strong>${examine_button}</strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+						<strong>${export_button}</strong>
+				</div>
+				</div>
+				</div>
+				</td>
+				
+				<td>
+				<div id="disableexaminebutton" class="AlignRight" style="display:none;">
+				<div class="Button">
+				<div class="Middle">
+				     	<strong><a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a></strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+						<strong> <a href="javascript: replayForm('${fn:escapeXml(replay_url)}');">${replay_button}</a></strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+					<strong>${examine_button}</strong>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+						<strong> <a href="javascript: exportForm('${fn:escapeXml(export_url)}');">${export_button}</a></strong>
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				
+				</c:if>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+ 
+	<script language="JavaScript">
+		
+
+		function viewhospital(url){
+  			document.getElementById("hospitalTeamForgeForm").action=url;
+  			document.getElementById("hospitalTeamForgeForm").submit();
+		}
+
+	
+		function replayForm(url){
+	  		document.getElementById("hospitalTeamForgeForm").action=url;
+	  		document.getElementById("hospitalTeamForgeForm").submit();
+			
+		}
+		function examineForm(url){
+			
+	  		document.getElementById("hospitalTeamForgeForm").action=url;
+	  		document.getElementById("hospitalTeamForgeForm").submit();
+		
+		}
+		function deleteForm(url){
+			var result = confirm ("Do you want to delete the selected failed shipment(s)?")
+			if (result){
+	  		document.getElementById("hospitalTeamForgeForm").action=url;
+	  		document.getElementById("hospitalTeamForgeForm").submit();
+			}
+			
+		}
+		
+		function exportForm(url){
+	  		document.getElementById("hospitalTeamForgeForm").action=url;
+	  		document.getElementById("hospitalTeamForgeForm").submit();
+		}
+		
+		
+		function funcSelectAll()
+		{
+		   if(document.forms[0].selectall.checked==true){
+		   
+			   for(i=0; i &lt;= document.forms[0].elements.length; i++){
+		                 document.forms[0].elements[i].checked = true;
+		                 document.getElementById("enablebutton").style.display = "none";
+						 document.getElementById("disablebutton").style.display = "none";
+						 document.getElementById("disableexaminebutton").style.display = "inline";
+		           }
+		     }
+		     else
+		     {
+		           for (j=0; j &lt; document.getElementById("hospitalTeamForgeForm").elements.length; j++)  {
+		                  document.getElementById("hospitalTeamForgeForm").elements[j].checked = false; 
+		                  document.getElementById("enablebutton").style.display = "none";
+						  document.getElementById("disablebutton").style.display = "inline";
+						  document.getElementById("disableexaminebutton").style.display = "none";
+						
+		           }
+		     }          
+ 
+		}
+
+		
+		function toggleButton(){
+			var checkSelected = false;
+			var count=0;
+			for (i = 0; i &lt; document.getElementById("hospitalTeamForgeForm").elements.length; i++)
+			{
+				if (document.getElementById("hospitalTeamForgeForm").elements[i].checked) {
+					checkSelected=true;
+					count++;
+				}
+			}	
+			if(checkSelected){
+				if(count>1){
+					document.getElementById("enablebutton").style.display = "none";
+					document.getElementById("disablebutton").style.display = "none";
+					document.getElementById("disableexaminebutton").style.display = "inline";	
+				}
+				else{
+					document.getElementById("enablebutton").style.display = "inline";
+					document.getElementById("disablebutton").style.display = "none";
+					document.getElementById("disableexaminebutton").style.display = "none";
+				}
+				
+			}	
+			if (!checkSelected) {
+				document.getElementById("enablebutton").style.display = "none";
+				document.getElementById("disablebutton").style.display = "inline";
+				document.getElementById("disableexaminebutton").style.display = "none";
+			}
+				
+				
+		}
+		
+	</script>		
+</div>

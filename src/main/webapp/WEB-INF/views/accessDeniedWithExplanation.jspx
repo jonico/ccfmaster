@@ -1,0 +1,24 @@
+<div xmlns:spring="http://www.springframework.org/tags"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="security_login_title" var="title" />
+	<spring:url value="/admin/ccfmaster" var="adminUrl"/>
+	<util:panel id="title" title="Access denied">
+		<h3>You do not have appropriate permissions to access this part of TeamForge Connector Server.</h3>
+		<sec:authorize access="!hasRole('ROLE_IAF_USER') and !hasRole('ROLE_TF_SUPER_USER') and hasRole('ROLE_TF_USER')">
+			<sec:authentication property="principal.serverUrl" var="tfUrl" />
+			<p>Since you are not a TeamForge Site admin, you can only access TeamForge Connector Server if you <a href="${tfUrl}/sf/">log into</a> TeamForge,
+			navigate to a project synchronized by this server and click on the corresponding icon in the project bar.</p>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_TF_SUPER_USER') and !hasRole('ROLE_IAF_USER')">
+			<sec:authentication property="principal.serverUrl" var="tfUrl" />
+			<p>As a TeamForge Site admin, you can only access the <a href="${adminUrl}">site admin part</a> of TeamForge Connector Server. For project mode access, you have to <a href="${tfUrl}/sf/">log into</a> TeamForge,
+			navigate to a project synchronized by this server and click on the corresponding icon in the project bar.</p>
+		</sec:authorize>
+	</util:panel>
+</div>
+

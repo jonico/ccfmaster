@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule" object="${fieldmappingrule}" path="/fieldmappingrules" z="7gIh5C/6asu5E7s4lHLdierPp0g=">
+        <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_name" object="${fieldmappingrule}" z="y8KURdu4smoe8wBLjCacnri9Ly4="/>
+        <field:display field="description" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_description" object="${fieldmappingrule}" z="7ottE6A7894tArIzF6sicHk3j2o="/>
+        <field:display field="type" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_type" object="${fieldmappingrule}" z="MclZmmGS52d7CPiYTxOflBSoec0="/>
+        <field:display field="source" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_source" object="${fieldmappingrule}" z="HHNhUj/sLAGhKOs0pNJFgU1c5Og="/>
+        <field:display field="sourceIsTopLevelAttribute" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_sourceIsTopLevelAttribute" object="${fieldmappingrule}" z="DPqSFOOCtOCDKqGbCEkxxfXVayE="/>
+        <field:display field="target" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_target" object="${fieldmappingrule}" z="zZozvzFmpcJkh9WX0Yuw3P3BxXg="/>
+        <field:display field="targetIsTopLevelAttribute" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_targetIsTopLevelAttribute" object="${fieldmappingrule}" z="5/3WAnqX7F+OwKtH/2Bk3NzOzQo="/>
+        <field:display field="condition" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_condition" object="${fieldmappingrule}" z="onXif6KBaauE/kAyidvi0Q7wFwk="/>
+        <field:display field="valueMapName" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_valueMapName" object="${fieldmappingrule}" z="FGUf3rjn0HLm4qwvzYvjgSCeg1A="/>
+        <field:display field="xmlContent" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_xmlContent" object="${fieldmappingrule}" z="fx54l68tahnvwUKOBjWj3JGqpuw="/>
+    </page:show>
+</div>

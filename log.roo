@@ -1,0 +1,236 @@
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-11-08 03:33:49
+focus  --class ~.server.domain.Landscape
+field string --notNull --fieldName externalSystemAppId
+class --class ~.server.domain.ExternalAppPK
+// [failed] entity --class ~.server.domain.ExternalApp --identifierType ~.server.domain.ExternalAppPK
+entity --class ~.server.domain.ExternalApp --identifierType ~.server.domain.ExternalAppPK
+field string --fieldName projectID --class ~.server.domain.ExternalAppPK
+focus  --class ~.server.domain.ExternalApp
+field string --fieldName externalAppId --class ~.server.domain.ExternalAppPK
+controller all --package ~.controller
+focus  --class ~.server.domain.ExternalApp
+field string --notNull --fieldName externalAppId
+field string --notNull --fieldName projectId
+field reference --type ~.server.domain.Landscape --fieldName landscape --notNull
+focus  --class ~.server.domain.Landscape
+// [failed] field set --element ~.server.domain.ExternalApp --mappedBy landscape --fieldName externalApps --cardinality MANY_TO_ONE 
+field set --element ~.server.domain.ExternalApp --mappedBy landscape --fieldName externalApps --cardinality ONE_TO_MANY 
+// [failed] focus  --class ~.server.domain.ExternalApp
+// [failed] field reference --type ~.server.domain.Landscape --fieldName landscape --notNull --cardinality MANY_TO_ONE 
+field reference --type ~.server.domain.Landscape --fieldName landscape2 --notNull --cardinality MANY_TO_ONE 
+persistence setup --provider HIBERNATE --database HYPERSONIC_PERSISTENT 
+focus  --class ~.server.domain.RepositoryMapping
+field reference --type ~.server.domain.ExternalApp --fieldName externalApp --notNull --cardinality MANY_TO_ONE 
+focus  --class ~.server.domain.ExternalApp
+field set --fieldName repositoryMappings --element ~.server.domain.RepositoryMapping --cardinality ONE_TO_MANY --fetch LAZY --mappedBy externalApp
+security setup
+addon list
+// [failed] finder list
+finder list --filter *
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-11-11 06:28:13
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-11-22 07:26:30
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-11-22 07:28:28
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-11-22 08:13:00
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-06 16:12:01
+// [failed] finder list --class com.collabnet.ccf.ccfmaster.server.domain.Landscape
+quit
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-06 16:35:01
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-06 16:36:10
+finder list --class ~.server.domain.Landscape
+finder add --class ~.server.domain.Landscape --finderName findLandscapesByExternalSystemAppId
+finder add --class ~.server.domain.Landscape --finderName findLandscapesByExternalSystemAppIdEquals
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-07 09:59:41
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 03:22:30
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 03:29:22
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 03:29:29
+poll now 
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 03:32:16
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 03:32:23
+poll now
+poll now
+poll now
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 03:47:23
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 03:47:29
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 03:48:23
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 03:48:29
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 03:49:07
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 03:49:14
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 03:49:47
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 04:05:47
+controller scaffold --class ~.controller.LinkIdController --entity ~.server.domain.RepositoryMapping
+focus --class ~.server.domain.Direction
+finder list --depth 2
+finder list --depth 2 --filter direction,landscape
+// [failed] focus --class ~.server.domain.RepositoryMapping
+finder list 
+focus --class ~.server.domain.Direction
+finder list 
+focus --class ~.server.domain.RepositoryMapping
+finder list 
+finder add findRepositoryMappingsByExternalApp
+poll now
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2010-12-17 08:15:30
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2010-12-17 08:15:42
+focus --class ~.server.domain.ExternalApp
+finder list 
+// [failed] finder add --finderName findExternalAppsByLinkIdEquals
+finder add --finderName findExternalAppsByLinkIdEquals
+focus --class ~.server.domain.IdentityMapping
+field string --fieldName sourceArtifactId --notNull --sizeMax 128
+field string --fieldName targetArtifactId --notNull --sizeMax 128
+field date --fieldName sourceLastModificationTime --type java.util.Date
+field date --fieldName targetLastModificationTime --type java.util.Date
+field string --fieldName sourceArtifactVersion --sizeMax 128
+field string --fieldName targetArtifactVersion --sizeMax 128
+field string --fieldName artifactType --sizeMax 128 --notNull 
+focus --class ~.server.domain.RepositoryMapping
+field string --fieldName sourceRepositoryId --sizeMax 128 --notNull 
+field string --fieldName targetRepositoryId --sizeMax 128 --notNull 
+field string --fieldName sourceRepositoryKind --sizeMax 128
+field string --fieldName targetRepositoryKind --sizeMax 128
+focus --class ~.server.domain.Participant
+// [failed] field string --fieldName systemId --sizeMax 128 --notNull 
+field string --fieldName systemId --sizeMax 128 --notNull 
+field string --fieldName systemKind --sizeMax 128
+focus --class ~.server.domain.RepositoryMapping
+field date --fieldName lastSourceArtifactModificationDate --type java.util.Date
+field string --fieldName lastSourceArtifactVersion --sizeMax 128
+field string --fieldName lastSourceArtifactId --sizeMax 128
+field string --fieldName conflictResolutionPolicy --sizeMax 128 --column CONFLICT_RESOLUTION_PRIORITY
+focus --class ~.server.domain.Participant
+field string --fieldName timeZone --sizeMax 128
+field string --fieldName encoding --sizeMax 128
+focus --class ~.server.domain.HospitalEntry
+// [failed] field string --fieldName timestamp --sizeMax 128
+// [failed] field string --fieldName timeStamp --sizeMax 128
+field string --fieldName timestamp --sizeMax 128 --permitReservedWords 
+field string --sizeMax 128 --fieldName exceptionClassName
+field string --sizeMax 256 --fieldName exceptionMessage
+field string --sizeMax 128 --fieldName causeExceptionClassName
+field string --sizeMax 256 --fieldName causeExceptionMessage
+field string --sizeMax 65536 --fieldName stackTrace
+field string --sizeMax 128 --fieldName adaptorName
+field string --sizeMax 128 --fieldName originatingComponent
+field string --sizeMax 128 --fieldName dataType
+// [failed] field string --sizeMax 65536 --fieldName data
+field string --sizeMax 65536 --fieldName data --permitReservedWords 
+field boolean --fieldName fixed
+// [failed] field boolean --fieldName reprocessed
+field boolean --fieldName reprocessed
+field string --sizeMax 128 --fieldName sourceArtifactId
+field string --sizeMax 128 --fieldName targetArtifactId
+field string --sizeMax 128 --fieldName errorCode
+field date --fieldName sourceLastModificationTime --type java.util.Date
+// [failed] field date --fieldName targetLastModificationTime --type java.util.Date
+field date --fieldName targetLastModificationTime --type java.util.Date
+field string --sizeMax 128 --fieldName sourceArtifactVersion
+field string --sizeMax 128 --fieldName targetArtifactVersion
+field string --sizeMax 128 --fieldName artifactType
+field string --sizeMax 10485760 --fieldName genericArtifact
+// [failed] controller scaffold --class ~.server.domain.Landscape
+// [failed] controller scaffold --class ~.controller.LandscapeController
+controller scaffold --class ~.controller.LandscapeController --entity ~.server.domain.Landscape
+help controller all
+controller all --package ~.controller
+focus --class ~.server.domain.Landscape
+field string --fieldName plugId --notNull 
+help controller scaffold
+// [failed] controller scaffold --class ~.controller.LandscapeController --entity Landscape
+controller scaffold --class ~.controller.LandscapeController --entity Landscape
+// [failed] controller scaffold --class ~.controller.LandscapeController --entity Landscape
+controller scaffold --class ~.controller.LandscapeController --entity Landscape
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-05 05:20:05
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-05 05:20:17
+controller scaffold --entity ~.server.domain.RepositoryMapping --class ~.controller.LinkIdRepositoryMappingController --path /linkid/{linkid}/repositorymappings
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-06 06:58:45
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-06 07:01:07
+controller scaffold --entity ~.server.domain.RepositoryMapping --class ~.controller.LinkIdRepositoryMappingController --path /linkid/repositorymappings
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-10 03:07:23
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-10 03:07:38
+test integration --entity ~.server.domain.RepositoryMapping --permitReservedWords 
+test mock --entity ~.server.domain.RepositoryMapping
+test integration --entity ~.server.domain.ExternalApp --permitReservedWords 
+// [failed] test integration --entity ~.server.domain.Direction --permitReservedWords 
+test integration --entity ~.server.domain.Direction --permitReservedWords 
+test integration --entity ~.server.domain.Landscape --permitReservedWords 
+test integration --entity ~.server.domain.Participant
+perform tests 
+perform tests 
+perform tests 
+perform tests 
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-10 06:41:25
+perform tests
+quit
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-10 06:41:47
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-10 06:42:25
+perform tests
+quit
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-10 06:44:27
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-10 08:19:18
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-11 03:15:21
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-11 03:27:51
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-11 03:29:53
+backup
+quit
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-11 03:30:08
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-11 03:31:50
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-11 03:32:48
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log opened at 2011-01-11 03:33:02
+// Spring Roo 1.1.0.RELEASE [rev 793f2b0] log closed at 2011-01-11 03:33:10
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-11 03:34:27
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-11 08:54:48
+quit
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-11 08:55:04
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-11 08:55:31
+quit
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-11 08:55:46
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-11 08:56:06
+hint perform
+hint
+exit
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-11 08:57:44
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-13 04:09:31
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-14 02:00:46
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-14 02:12:03
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-14 02:13:38
+poll status 
+poll now
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-14 04:50:43
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-14 04:50:57
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-17 05:24:18
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-17 05:24:36
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-24 01:47:48
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-24 02:14:40
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-25 03:29:50
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-25 03:30:07
+entity --class ~.server.domain.RepositoryMappingDirection 
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-25 04:10:04
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-25 04:10:12
+controller scaffold --entity ~.server.domain.RepositoryMappingDirection --class ~.controller.RepositoryMappingDirectionController 
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-25 07:11:44
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-25 07:11:51
+controller scaffold --entity ~.server.domain.RepositoryMappingDirection --class ~.controller.LinkIdRepositoryMappingDirectionController --path /linkid/repositorymappingdirections
+// [failed] finder list --class ~.controller.LinkIdRepositoryMappingController
+finder list --class ~.server.domain.RepositoryMappingDirection --filter direction
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter And,RepositoryMapping,Equals
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter RepositoryMappingEquals,And,DirectionEquals
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter RepositoryMappingEquals,DirectionEquals
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter ByRepositoryMappingEquals
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter ByRepositoryMapping
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter ByDirection,AndRepositoryMapping
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter ByDirection
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter ByRepositoryMapping,Directions
+finder list --class ~.server.domain.RepositoryMappingDirection --depth 2 --filter ByRepositoryMapping,Directions,And
+finder add --finderName findRepositoryMappingDirectionsByRepositoryMappingAndDirection
+// [failed] finder add --finderName findRepositoryMappingDirectionByRepositoryMappingAndDirection
+controller scaffold --entity ~.server.domain.HospitalEntry --class ~.server.domain.LinkIdHospitalEntryController --path /linkid/hospitalentrys
+controller scaffold --entity ~.server.domain.IdentityMapping --class ~.server.domain.LinkIdIdentityMappingController --path /linkid/identitymappings
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-27 04:54:53
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-27 04:55:05
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-01-28 02:42:19
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-01-28 05:09:57
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-02-01 02:55:39
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log closed at 2011-02-10 07:36:54
+// Spring Roo 1.1.1.RELEASE [rev 156ccd6] log opened at 2011-02-10 07:37:08
+// Spring Roo 1.1.3.RELEASE [rev 4404ffb] log opened at 2011-05-25 08:21:20

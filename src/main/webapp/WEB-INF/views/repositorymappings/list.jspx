@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping" items="${repositorymappings}" z="3m+8Xvlk8iZbvMA+Yi8RIQaxS9A=">
+        <table:table data="${repositorymappings}" id="l_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping" path="/repositorymappings" z="kODiDj6pjHw4rF84/bPMQVqAuBk=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_description" property="description" z="xybcXVl6iFE37Yb25FUm2PRsyy8="/>
+            
+            
+            
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_externalApp" property="externalApp" z="Jq7355PT0EFEM8Ui9rKUo+HsIqU="/>
+        
+        
+        
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_teamForgeRepositoryId" property="teamForgeRepositoryId" z="1gIc4xUbbs33qPtuTz2bT2Pe/yY="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_participantRepositoryId" property="participantRepositoryId" z="xXuTv5e/uS+1MWTMcuZm+/MCuRc="/>
+        </table:table>
+    </page:list>
+</div>

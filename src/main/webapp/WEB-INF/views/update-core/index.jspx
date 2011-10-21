@@ -1,0 +1,43 @@
+<util:panel title="Core update" id="index" xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
+<jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_next" var="next_button"/>
+<spring:message code="button_cancel" var="cancel_button"/>
+
+<c:if test="${not empty exception}">
+<div class="errorMessage">${exception.message}</div>
+</c:if>
+<c:forEach items="${flowRequestContext.messageContext.allMessages}" var="message">
+<c:choose>
+	<c:when test="${message.severity == 'INFO' }">
+		<div class="greenText">${message.text}</div>
+	</c:when>
+	<c:otherwise>
+		<div class="errorMessage">${message.text}</div>
+	</c:otherwise>
+</c:choose>
+</c:forEach>
+
+	<h3>Welcome to the core update wizard</h3>
+	<p>You are currently using the following core:</p>
+	<table>
+		<tr>
+			<th>Description:</th>
+			<td>${currentDescription}</td>
+		</tr>
+		<tr>
+			<th>Version:</th>
+			<td>${currentVersion}</td>
+		</tr>
+	</table>
+	
+
+<form:form modelAttribute="fileUploadHandler" enctype="multipart/form-data" method="post">
+
+	<p>Please choose the File you want to use.</p>
+	Select file: <input type="file" name="file"/><br />		
+	<input type="submit" name="_eventId_cancel" value="${cancel_button}" />		
+	<input type="submit" name="_eventId_upload" value="${next_button} >" />		
+</form:form>	
+
+</util:panel> 

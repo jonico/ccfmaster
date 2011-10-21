@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByExternalApp" id="ff_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping" path="/repositorymappings" z="Hzb3VYSk6vEQ5D/IF3rfcKYk2SI=">
+        <field:select disableFormBinding="true" field="externalApp" id="f_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_externalApp" itemValue="id" items="${externalapps}" path="/externalapps" required="true" z="KdkcOhUpCDULGysVkJSqnQEsG5M="/>
+    </form:find>
+</div>

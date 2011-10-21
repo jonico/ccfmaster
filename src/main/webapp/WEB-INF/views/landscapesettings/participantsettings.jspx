@@ -1,0 +1,271 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="qcurl" var="qcurllabel" htmlEscape="false"/>
+<spring:message code="swpurl" var="swpurllabel" htmlEscape="false"/>
+<spring:message code="hpqctimezone" var="hpqctimezonelabel" htmlEscape="false"/>  
+<spring:message code="hpqcusername" var="hpqcusernamelabel" htmlEscape="false"/>  
+<spring:message code="hpqcpassword" var="hpqcpasswordlabel" htmlEscape="false"/>  
+<spring:message code="participantmaxattachmentsize" var="participantmaxattachmentsizelabel" htmlEscape="false"/>
+<spring:message code="swptimezone" var="swptimezonelabel" htmlEscape="false"/>  
+<spring:message code="swpusername" var="swpusernamelabel" htmlEscape="false"/>  
+<spring:message code="swppassword" var="swppasswordlabel" htmlEscape="false"/>
+<spring:message code="swpresyncusername" var="swpresyncusernamelabel" htmlEscape="false"/>  
+<spring:message code="swpresyncpassword" var="swpresyncpasswordlabel" htmlEscape="false"/>   
+
+<spring:message code="bytes" var="byteslabel" htmlEscape="false"/>  
+<spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="button_save" var="save_button"/>
+
+<spring:url value="/admin/displayparticipantsettings" var="cancelpartsettings_url" />
+<spring:url value="/admin/saveparticipantsettings" var="savepartsettings_url" />
+			
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/js/jquery-ui-1.8.16.custom.min.js" var="jqueryui_url" />
+<script src="${fn:escapeXml(jqueryui_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/styles/jquery-ui-1.8.16.custom.css" var="jqueryui_url" />
+<link rel="stylesheet" type="text/css" href="${jqueryui_url}"><!-- Prevent self-closing --> </link>
+
+
+<form:form id="saveparticipantsettings"  name="saveparticipantsettings"  method="POST" commandName="qcsettingsmodel" modelAttribute="qcsettingsmodel">
+  <table class="Container" >
+		<tbody>
+		<tr>
+		<td>
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+	<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				
+				<c:if test="${participant.systemKind eq 'QC'}"> 
+				
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="participantUrlParticipantConfig.name">${qcurllabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<input type="hidden" name="participantUrlParticipantConfig.name" value="ccf.participant.qc.url"/>
+				<form:input path="participantUrlParticipantConfig.val"  size="80" cssClass="inputfield" />
+				<form:errors path="participantUrlParticipantConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:select  path="participant.timezone" items="${timezones}" id="c_hpqctimezone" cssClass="inputfield"></form:select>
+				</td>
+				</tr>
+			    <tr>
+				
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantUserNameLandscapeConfig.name" value="ccf.landscape.qc.username"/>
+				<form:label path="participantUserNameLandscapeConfig.name">${hpqcusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="participantUserNameLandscapeConfig.val"  size="60"  cssClass="inputfield" />
+				<form:errors path="participantUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr> 
+  				
+  				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantPasswordLandscapeConfig.name" value="ccf.landscape.qc.password"/>
+				<form:label path="participantPasswordLandscapeConfig.val">${hpqcpasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="participantPasswordLandscapeConfig.val" showPassword="true" size="60" cssClass="inputfield"/>
+				 <form:errors path="participantPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+			 	<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantMaxAttachmentSize.name" value="ccf.direction.qc.max.attachmentsize"/>
+				<form:label path="participantMaxAttachmentSize.val">${participantmaxattachmentsizelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:input path="participantMaxAttachmentSize.val"  size="60" cssClass="inputfield"/>${byteslabel}
+				<form:errors path="participantMaxAttachmentSize.val" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+			 	<c:if test="${participant.systemKind eq 'SWP'}"> 
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="participantUrlParticipantConfig.name">${swpurllabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<input type="hidden" name="participantUrlParticipantConfig.name" value="ccf.participant.swp.url"/>
+				<form:input path="participantUrlParticipantConfig.val"  size="80" cssClass="inputfield" />
+				<form:errors path="participantUrlParticipantConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">${swptimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:select  path="participant.timezone" items="${timezones}" id="c_hpqctimezone" cssClass="inputfield"></form:select>
+				</td>
+				</tr>
+			    <tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantUserNameLandscapeConfig.name" value="ccf.landscape.swp.username"/>
+				<form:label path="participantUserNameLandscapeConfig.name">${swpusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="participantUserNameLandscapeConfig.val"  size="60"  cssClass="inputfield" />
+				<form:errors path="participantUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr> 
+  				
+  				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantPasswordLandscapeConfig.name" value="ccf.landscape.swp.password"/>
+				<form:label path="participantPasswordLandscapeConfig.val">${swppasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="participantPasswordLandscapeConfig.val" showPassword="true" size="60" cssClass="inputfield"/>
+				 <form:errors path="participantPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantResyncUserNameLandscapeConfig.name" value="ccf.landscape.swp.resync.username"/>
+				<form:label path="participantResyncUserNameLandscapeConfig.name">${swpresyncusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="participantResyncUserNameLandscapeConfig.val"  size="60"  cssClass="inputfield" />
+				<form:errors path="participantResyncUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr> 
+  				
+  				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantResyncPasswordLandscapeConfig.name" value="ccf.landscape.swp.resync.password"/>
+				<form:label path="participantResyncPasswordLandscapeConfig.val">${swpresyncpasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="participantResyncPasswordLandscapeConfig.val" showPassword="true" size="60" cssClass="inputfield"/>
+				 <form:errors path="participantResyncPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+			 	<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="participantMaxAttachmentSize.name" value="ccf.direction.swp.max.attachmentsize"/>
+				<form:label path="participantMaxAttachmentSize.val">${participantmaxattachmentsizelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:input path="participantMaxAttachmentSize.val"  id="participantMaxAttachmentSize.val" size="60" cssClass="inputfield"/>${byteslabel} 	
+				<form:errors path="participantMaxAttachmentSize.val" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+			 	
+			
+		</tbody>
+	</table>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<tr class="ContainerFooter">
+				<td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				     	<a href="${fn:escapeXml(cancelpartsettings_url)}">${cancel_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle">
+					<input type="hidden" name="participant.systemKind" value="${systemkind}"/>
+					<input type="hidden" name="participant.systemId" value="${systemid}"/>
+					<input type="hidden" name="participant.description" value="${description}"/>
+					<input type="hidden" name="urlparticipantconfig.version" value="${version}"/>
+					<input type="hidden" name="urlparticipantconfig.id" value="${id}"/>
+					<input type="hidden" name="username.version" value="${usernameversion}"/>
+					<input type="hidden" name="username.id" value="${usernameid}"/>
+					<input type="hidden" name="password.version" value="${passwordversion}"/>
+					<input type="hidden" name="password.id" value="${passwordid}"/>
+					<input type="hidden" name="resyncusername.version" value="${resyncusernameversion}"/>
+					<input type="hidden" name="resyncusername.id" value="${resyncusernameid}"/>
+					<input type="hidden" name="resyncpassword.version" value="${resyncpasswordversion}"/>
+					<input type="hidden" name="resyncpassword.id" value="${resyncpasswordid}"/>
+					<input type="hidden" name="participant.version" value="${participantversion}"/>
+					<input type="hidden" name="participant.id" value="${participantid}"/>
+					<input type="hidden" name="landscape.version" value="${landscapeversion}"/>
+					<input type="hidden" name="landscape.id" value="${landscapeid}"/>
+					<input type="hidden" name="maxattachmentsize.version" value="${maxattachmentsizeversion}"/>
+					<input type="hidden" name="maxattachmentsize.id" value="${maxattachmentsizeid}"/>
+					<input type="hidden"  id="restart" name="restart" value="false"/>
+					<strong> <a href="#" id="save">${save_button}</a></strong> 
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+  			<!--  Jquery Dialog Div that shows message with multiple buttons  -->
+  				<c:if test="${participant.systemKind eq 'SWP'}"> 
+  				<div id="dialog" title="Save ScrumWorks Pro Settings">
+  				<p>Changes to the ScrumWorks Pro settings will only apply after connector restart</p>
+`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel. to close the window</p>
+				</div>
+  				</c:if>
+  				
+  				<c:if test="${participant.systemKind eq 'QC'}"> 
+  				<div id="dialog" title="Save Quality Center Settings">
+  				<p>Changes to the Quality Center settings will only apply after connector restart</p>
+`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel. to close the window</p>
+				</div>
+				</c:if>
+  		
+	<script language="JavaScript">
+		function submitForm(url){
+	  		document.getElementById("saveparticipantsettings").action=url;
+	  		document.getElementById("saveparticipantsettings").submit();
+		}
+		
+		$(function(){
+	        // jQuery UI Dialog    
+		   $('#dialog').dialog({
+	            autoOpen: false,
+	            width: 400,
+	            modal: true,
+	            resizable: false,
+	            buttons: {
+	                "Save And Restart": function() {
+	                	document.getElementById("saveparticipantsettings").action='${savepartsettings_url}';
+	                	document.getElementById("restart").value="true";
+	        	  		document.getElementById("saveparticipantsettings").submit();
+	                },
+	                "Save Only": function() {
+	                	document.getElementById("saveparticipantsettings").action='${savepartsettings_url}';
+	                	document.getElementById("restart").value="false";
+	        	  		document.getElementById("saveparticipantsettings").submit();
+	                },
+	                "Cancel": function() {
+	                $(this).dialog("close");
+	                }
+	            }
+	        });
+
+	        $('a#save').click(function(e){
+	           e.preventDefault();
+			   $('#dialog').dialog('open');
+	        });
+	});
+	</script>		 
+</div>

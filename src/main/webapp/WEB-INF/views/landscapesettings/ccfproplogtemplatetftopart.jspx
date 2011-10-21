@@ -1,0 +1,130 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+
+ 
+<spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="button_save" var="save_button"/>
+
+<spring:url value="/admin/displayccfpropertieslogtemplatetftopart" var="cancelccfproplogtemplatetftopart_url" />
+<spring:url value="/admin/saveccfpropertieslogtemplate?param_direction=forward" var="saveccfproplogtemplatetftopart_url" />
+<spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
+<spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/js/jquery-ui-1.8.16.custom.min.js" var="jqueryui_url" />
+<script src="${fn:escapeXml(jqueryui_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/styles/jquery-ui-1.8.16.custom.css" var="jqueryui_url" />
+<link rel="stylesheet" type="text/css" href="${jqueryui_url}"><!-- Prevent self-closing --> </link>
+
+
+<form:form id="ccfPropLogTemplateTFPart"  name="ccfPropLogTemplateTFPart" method="POST" commandName="directionConfig" modelAttribute="directionConfig">
+  <table class="Container" >
+		<tbody>
+		<tr>
+		<td>
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+	<table class="ItemDetailContainer" width="100%" >
+		<tbody>
+				<tr class="ContainerHeader">
+				<td class="ItemDetailName">
+				<c:if test="${participant.systemKind eq 'QC'}">
+				<strong><c:out value="${tftoqclabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'SWP'}">
+				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailValue" align="left">
+				<input type="hidden" name="name" value="ccf.direction.logmessagetemplate"/>
+				<form:textarea path="val"  cols="120" rows="25"  styleClass="inputfield" /> 
+				<form:errors path="val" cssClass="errors"/>
+				</td> 
+				</tr>	
+		</tbody>
+	</table>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<tr class="ContainerFooter">
+				<td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				     	<a href="${fn:escapeXml(cancelccfproplogtemplatetftopart_url)}">${cancel_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle">
+				
+					<input type="hidden" name="directionconfig.id" value="${directionConfigid}"/>
+					<input type="hidden" name="directionconfig.version" value="${directionConfigversion}"/>
+					<input type="hidden" name="direction" value="${direction}"/>
+					<input type="hidden"  id="restart" name="restart" value="false"/>
+					<strong> <a id="save">${save_button}</a></strong> 
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+  				<!--  Jquery Dialog Div that shows message with multiple buttons  -->
+  				<div id="dialog" title="Save Log Template Settings">
+  				<p>Changes to the settings will only apply after connector restart</p>
+`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel. to close the window</p>
+				</div>
+  
+	<script language="JavaScript">
+		function submitForm(url){
+	  		document.getElementById("ccfPropLogTemplateTFPart").action=url;
+	  		document.getElementById("ccfPropLogTemplateTFPart").submit();
+		}
+		$(function(){
+	        // jQuery UI Dialog    
+		   $('#dialog').dialog({
+	            autoOpen: false,
+	            width: 400,
+	            modal: true,
+	            resizable: false,
+	            buttons: {
+	                "Save And Restart": function() {
+	                	document.getElementById("ccfPropLogTemplateTFPart").action='${saveccfproplogtemplatetftopart_url}';
+	                	document.getElementById("restart").value="true";
+	        	  		document.getElementById("ccfPropLogTemplateTFPart").submit();
+	                },
+	                "Save Only": function() {
+	                	document.getElementById("ccfPropLogTemplateTFPart").action='${saveccfproplogtemplatetftopart_url}';
+	                	document.getElementById("restart").value="false";
+	        	  		document.getElementById("ccfPropLogTemplateTFPart").submit();
+	                },
+	                "Cancel": function() {
+	                $(this).dialog("close");
+	                }
+	            }
+	        });
+
+	        $('a#save').click(function(e){
+	           e.preventDefault();
+			   $('#dialog').dialog('open');
+	        });
+	});
+		
+	</script>		 
+</div>

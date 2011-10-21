@@ -1,0 +1,16 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:spring="http://www.springframework.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+  
+  <jsp:directive.attribute name="cause" type="java.lang.Throwable" required="true" rtexprvalue="true" description="The exception to show" />
+  
+  <c:if test="${not empty cause}">
+	<h3>caused by: ${cause}</h3>
+	<c:forEach items="${cause.stackTrace}" var="trace">
+		<c:out value="${trace}" />
+		<br />
+	</c:forEach>
+	<c:if test="${not empty cause.cause}">
+		<util:exceptionCause cause="${cause.cause}" />
+	</c:if>
+  </c:if>
+</jsp:root>

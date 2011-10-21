@@ -1,0 +1,223 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:url value="/project/identitymappings" var="return_url" />
+<spring:url value="/project/identitymappings/save" var="save_url" />
+<spring:message code="button_return" var="return_button"/>
+<spring:message code="button_save" var="save_button"/>
+<spring:message code="sourcelabel" var="sourcelabel" htmlEscape="false"/>
+<spring:message code="targetlabel" var="targetlabel" htmlEscape="false"/>
+<spring:message code="parentlabel" var="parentlabel" htmlEscape="false"/>
+<spring:message code="systemidlabel" var="systemidlabel" htmlEscape="false"/>
+<spring:message code="repositoryidlabel" var="repositoryidlabel" htmlEscape="false"/>
+<spring:message code="artifactidlabel" var="artifactidlabel" htmlEscape="false"/>
+<spring:message code="lastmodificationlabel" var="lastmodificationlabel" htmlEscape="false"/>
+<spring:message code="artifactversionlabel" var="artifactversionlabel" htmlEscape="false"/>
+<spring:message code="sourceartifactidlabel" var="sourceartifactidlabel" htmlEscape="false"/>
+<spring:message code="targetartifactidlabel" var="targetartifactidlabel" htmlEscape="false"/>
+<spring:message code="sourcerespositorylabel" var="sourcerespositorylabel" htmlEscape="false"/>
+<spring:message code="targetrespositorylabel" var="targetrespositorylabel" htmlEscape="false"/>
+<spring:message code="detaillabel" var="detaillabel" htmlEscape="false"/>
+<spring:url value="/images/icons/identityMappingView.gif" var="idmapping_image_url" />
+
+
+<form:form id="identitymappingdetailForm"  name="identitymappingdetailForm" method="POST" commandName="identitymappingsmodel" modelAttribute="identitymappingsmodel">
+  <table class="Container" >
+  <tbody>
+  		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+  		<tr>
+  		<td>
+			<tr class="ContainerHeader">
+			<c:set var="identityMappingEntry" value="${identitymappingsmodel.identityMappingEntry}" />
+			<td colspan="2"><img src="${fn:escapeXml(idmapping_image_url)}" title="${detaillabel}" alt="${detaillabel}" border="0" /> &#160;Identity Mapping Details for ${identityMappingEntry.sourceArtifactId}/${identityMappingEntry.targetArtifactId} of artifact type ${identityMappingEntry.artifactType} </td>
+    		</tr>
+    		<tr>
+  			<td class="ItemDetailContainerCell" width="50%"> 
+   			<table width="100%"> 
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		<strong>${sourcelabel}</strong>
+     		</td>  
+    		</tr> 
+    		<tr> 
+     		<td class="ItemDetailName"> 
+     		${artifactidlabel}:
+     		</td>
+     		<td class="ItemDetailValue"> 
+     		<form:input path="identityMappingEntry.sourceArtifactId"  size="40"  cssClass="inputfield" readonly="true"/>
+     		</td>
+     		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${repositoryidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<form:input path="identityMappingEntry.repositoryMapping.teamForgeRepositoryId"  size="40"  cssClass="inputfield" readonly="true" />	
+     		</td> 
+    		</tr>
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${lastmodificationlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+ 			<form:input path="identityMappingEntry.sourceLastModificationTime"  size="40"  cssClass="inputfield"  readonly="true" />
+    		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactversionlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<form:input id="sourceArtifactVersion" path="identityMappingEntry.sourceArtifactVersion"  size="40"  cssClass="inputfield" />
+     		</td> 
+    		</tr>  
+    		</table>
+    		</td>
+    		<td class="ItemDetailContainerCell" width="50%"> 
+   			<table width="100%"> 
+   			<tr valign="top"> 
+     		<td class="ItemDetailName"> 
+       		<strong>${targetlabel}</strong>
+     		</td> 
+     		</tr> 
+     		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<form:input path="identityMappingEntry.targetArtifactId"  size="40"  cssClass="inputfield"  readonly="true"/>
+     		</td>
+     		</tr>  
+    		<tr> 
+     		<tr> 
+     		<td class="ItemDetailName"> 
+       		${repositoryidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<form:input path="identityMappingEntry.repositoryMapping.participantRepositoryId"  size="40"  cssClass="inputfield"  readonly="true" />
+     		</td> 
+    		</tr>	
+     		<td class="ItemDetailName"> 
+       		${lastmodificationlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<form:input path="identityMappingEntry.targetLastModificationTime"  size="40"  cssClass="inputfield"   readonly="true"/>
+     		</td> 
+    		</tr>   
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactversionlabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<form:input id="targetArtifactVersion" path="identityMappingEntry.targetArtifactVersion"  size="40"  cssClass="inputfield" />
+     		</td> 
+    		</tr>  
+    		</table>
+    		</td>
+    		</tr>
+    		<c:if test="${identityMappingEntry.artifactType eq 'attachment'}">
+    		<tr>
+    		<td> 
+   			<table width="100%"> 
+			<tr valign="top"> 
+     		<td class="ItemDetailName"> 
+       		<strong>${parentlabel}</strong>
+     		</td> 
+     		</tr> 
+     		<tr> 
+     		<td class="ItemDetailName"> 
+       		${sourcerespositorylabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+ 			<form:input path="identityMappingEntry.depParentSourceRepositoryId"  size="40"  cssClass="inputfield"  readonly="true" />  	 
+     		</td> 
+    		</tr>
+     		<tr> 
+     		<td class="ItemDetailName"> 
+       		${sourceartifactidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<form:input path="identityMappingEntry.depParentSourceArtifactId"  size="40"  cssClass="inputfield"  readonly="true"/>
+     		</td> 
+    		</tr>
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${targetrespositorylabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<form:input path="identityMappingEntry.depParentTargetRepositoryId"  size="40"  cssClass="inputfield"  readonly="true" />
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${targetartifactidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<form:input path="identityMappingEntry.depParentTargetArtifactId"  size="40"  cssClass="inputfield"  readonly="true" />
+     		</td>
+     		</tr>  
+    		</table>
+    		</td>
+    		</tr>
+    		</c:if>
+    			<br/>
+				<br/>
+				<tr class="ContainerFooter" >
+				<td colspan="8">
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+			 	<c:if test="${not empty rmdid}">
+					<spring:url value="/project/identitymappings?rmdid={rmdid}" var="identity_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+					</spring:url>
+					<a href="${identity_url}">${return_button}</a>
+				</c:if>
+				<c:if test="${not empty sessionScope.sourceFilterArtifactId or not empty sessionScope.targetFilterArtifactId}">
+				<spring:url value="/project/identitymappings/applyfilter" var="apply_filteridentity_url"/>
+				<c:set scope="session" var="externalLink" value="true"></c:set>
+				<a href="${apply_filteridentity_url}">${return_button}</a>
+				</c:if>
+				<c:if test="${empty rmdid and empty sessionScope.sourceFilterArtifactId and empty sessionScope.targetFilterArtifactId}">
+			     	<a href="${return_url}">${return_button}</a>
+		     	</c:if>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle">
+				<input type="hidden" name="idmapping.version" value="${idmappingversion}"/>
+				<input type="hidden" name="idmapping.id" value="${idmappingid}"/>
+				<input type="hidden" name="rmdid" value="${rmdid}"/>
+				<strong> <a id="save"  href="javascript: submitForm('${fn:escapeXml(save_url)}');">${save_button}</a></strong>
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+	</td>
+   	</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	<script language="JavaScript">
+		function submitForm(url){
+			if(document.getElementById("sourceArtifactVersion").value==''){
+				alert('Source artifact version cannot be empty.Enter a valid source artifact version');
+			}
+			else if(document.getElementById("targetArtifactVersion").value==''){
+				alert('Target artifact version cannot be empty.Enter a valid target artifact version');
+			}
+			else{
+	  			document.getElementById("identitymappingdetailForm").action=url;
+	  			document.getElementById("identitymappingdetailForm").submit();
+			}
+		}
+	
+</script>	
+ 
+ 
+	
+</div>

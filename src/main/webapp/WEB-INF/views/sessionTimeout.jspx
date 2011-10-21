@@ -1,0 +1,17 @@
+<div xmlns:spring="http://www.springframework.org/tags"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="security_login_title" var="title" />
+	<util:panel id="title" title="Session timeout">
+		<h3>You just logged out or your session timed out.</h3>
+		<p>You will be redirected to <a href="${tfUrl}/sf">your TeamForge instance</a>.</p>
+		<spring:url value="/login" var="login_url" />
+		<p>If you want to work with the site-admin portion of the Connector, you can go to the <a href="${login_url}">login page</a> to authenticate
+		using your TeamForge site admin credentials.</p>
+	</util:panel>
+</div>
+

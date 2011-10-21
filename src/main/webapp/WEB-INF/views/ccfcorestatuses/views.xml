@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="ccfcorestatuses/list">
+        <put-attribute name="body" value="/WEB-INF/views/ccfcorestatuses/list.jspx"/>
+    </definition>
+<definition extends="default" name="ccfcorestatuses/show">
+        <put-attribute name="body" value="/WEB-INF/views/ccfcorestatuses/show.jspx"/>
+    </definition>
+<definition extends="default" name="ccfcorestatuses/create">
+        <put-attribute name="body" value="/WEB-INF/views/ccfcorestatuses/create.jspx"/>
+    </definition>
+<definition extends="default" name="ccfcorestatuses/update">
+        <put-attribute name="body" value="/WEB-INF/views/ccfcorestatuses/update.jspx"/>
+    </definition>
+<definition extends="default" name="ccfcorestatuses/findCcfCoreStatusesByDirection">
+        <put-attribute name="body" value="/WEB-INF/views/ccfcorestatuses/findCcfCoreStatusesByDirection.jspx"/>
+    </definition>
+</tiles-definitions>

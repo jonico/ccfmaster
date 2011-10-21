@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="directionconfigs/list">
+        <put-attribute name="body" value="/WEB-INF/views/directionconfigs/list.jspx"/>
+    </definition>
+<definition extends="default" name="directionconfigs/show">
+        <put-attribute name="body" value="/WEB-INF/views/directionconfigs/show.jspx"/>
+    </definition>
+<definition extends="default" name="directionconfigs/create">
+        <put-attribute name="body" value="/WEB-INF/views/directionconfigs/create.jspx"/>
+    </definition>
+<definition extends="default" name="directionconfigs/update">
+        <put-attribute name="body" value="/WEB-INF/views/directionconfigs/update.jspx"/>
+    </definition>
+<definition extends="default" name="directionconfigs/findDirectionConfigsByDirection">
+        <put-attribute name="body" value="/WEB-INF/views/directionconfigs/findDirectionConfigsByDirection.jspx"/>
+    </definition>
+<definition extends="default" name="directionconfigs/findDirectionConfigsByDirectionAndName">
+        <put-attribute name="body" value="/WEB-INF/views/directionconfigs/findDirectionConfigsByDirectionAndName.jspx"/>
+    </definition>
+</tiles-definitions>

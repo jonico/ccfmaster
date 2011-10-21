@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping" modelAttribute="repositoryMapping" path="/repositorymappings" versionField="Version" z="J1fpmr77abewJJoY5aXpg9sYAow=">
+        <field:input field="description" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_description" required="true" z="uDkrA25oac/Y5sd3r1X+wh397k0="/>
+        <field:select field="externalApp" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_externalApp" itemValue="id" items="${externalapps}" path="/externalapps" required="true" z="PKs+rBjS+9xtI4hCNsUmz5BkTsU="/>
+        <field:textarea field="teamForgeRepositoryId" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_teamForgeRepositoryId" required="true" z="klR7OkyDiS0nEDWQ/9awtExna6Q="/>
+        <field:textarea field="participantRepositoryId" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_participantRepositoryId" required="true" z="5P2+vreVuW8XEGMJo9fhJO05QGQ="/>
+    </form:update>
+</div>

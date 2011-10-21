@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByTeamForgeOrParticipant" id="ff_com_collabnet_ccf_ccfmaster_server_domain_Landscape" path="/landscapes" z="YoJ/NfHPZnLrCEsyhtvTQVn3oXc=">
+        <field:select disableFormBinding="true" field="teamForge" id="f_com_collabnet_ccf_ccfmaster_server_domain_Landscape_teamForge" itemValue="id" items="${participants}" path="/participants" required="true" z="4jMB7MrnAo8403obLJaTueXPd6k="/>
+        <field:select disableFormBinding="true" field="participant" id="f_com_collabnet_ccf_ccfmaster_server_domain_Landscape_participant" itemValue="id" items="${participants}" path="/participants" required="true" z="9kKqLKezcZ/FBNVKQn4eT4/znOk="/>
+    </form:find>
+</div>

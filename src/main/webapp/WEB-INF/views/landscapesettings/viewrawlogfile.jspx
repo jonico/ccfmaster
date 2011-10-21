@@ -1,0 +1,59 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	<spring:url value="/admin/taillogfile" var="taillog_url" />	
+	<spring:url value="/admin/showlogfile" var="showlog_url" />
+	
+	<spring:url value="/js/application.js" var="application_url" />
+  	<script src="${fn:escapeXml(application_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+	<spring:url value="/js/prototype.js" var="prototypr_url" />
+	<script src="${fn:escapeXml(prototypr_url)}" type="text/javascript"><!-- Prevent self-closing --> </script>
+	
+	<spring:message code="viewfulllog_label" var="viewfulllog_label" htmlEscape="false"/>
+
+	<form:form>
+		<table class="Container">
+			<tbody>
+				<tr>
+				<td><strong>
+				<c:if test="${skippedkilobytes ne '0'}">
+				Skipping ${skippedkilobytes} kilobytes..
+				</c:if>
+				<a target="_blank" href="${fn:escapeXml(showlog_url)}?filename=${filename}&amp;direction=${direction}">${viewfulllog_label}</a>
+				</strong>
+				</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="fileContentDiv">
+							<pre id="fileContent">
+							<c:out value="${xmlcontent}"/>  
+							</pre>
+							</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	
+<script type="text/javascript">
+
+Event.observe(window, 'load', function() {
+ // allow initial state of tailing
+   // if ('${params.view}' == 'tail') {
+        toggleLogStreaming();
+    //}
+})
+
+
+   var logStreamer;
+  var tailLog = true;
+  function toggleLogStreaming(){
+    if (tailLog) {
+  	    logStreamer  = new LogStreamer('${filename}','${direction}', '${filesize}', $('fileContent'), $('fileContentDiv'), "Error",'${fn:escapeXml(taillog_url)}')
+        logStreamer.start();
+    }
+    else {
+        logStreamer.stop();
+    }
+  }
+  </script>
+</div>

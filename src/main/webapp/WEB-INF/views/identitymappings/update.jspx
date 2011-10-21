@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping" modelAttribute="identityMapping" path="/identitymappings" versionField="Version" z="X+FDINf6jF6s3g9rFX9JpoLhM+8=">
+        <field:input field="description" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_description" required="true" z="cjIaMLxrQ1DKooAtbp+8L1lSPvU="/>
+        <field:select field="repositoryMapping" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_repositoryMapping" itemValue="id" items="${repositorymappings}" path="/repositorymappings" required="true" z="OGfrP4fvnZA6M/ZV8KFvdPZCLVA="/>
+        <field:textarea field="sourceArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_sourceArtifactId" required="true" z="2DguhtmyIhDKvWG9RGtZglyOa0E="/>
+        <field:textarea field="targetArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_targetArtifactId" required="true" z="5SVuUM4G14Tj3miYg2WAMHLBSRI="/>
+        <field:datetime dateTimePattern="${identityMapping_sourcelastmodificationtime_date_format}" field="sourceLastModificationTime" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_sourceLastModificationTime" z="AK5a5RhxgpjsWc40AsI0YFgCsfA="/>
+        <field:datetime dateTimePattern="${identityMapping_targetlastmodificationtime_date_format}" field="targetLastModificationTime" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_targetLastModificationTime" z="MjrjZ626G90T1H30hKhNVXRxxjo="/>
+        <field:textarea field="sourceArtifactVersion" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_sourceArtifactVersion" z="XPdhoqT8zV4OqxSRifx2lyIuK3s="/>
+        <field:textarea field="targetArtifactVersion" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_targetArtifactVersion" z="WVsx5HbLNFmD3V1+J+rWFt+/09g="/>
+        <field:textarea field="artifactType" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_artifactType" required="true" z="O35zhERHvgL39kFfiC7kUMepfUU="/>
+        <field:textarea field="depChildSourceArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildSourceArtifactId" z="Qzwrk87rQZItGUQXQ0vUnGeSKVk="/>
+        <field:textarea field="depChildSourceRepositoryId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildSourceRepositoryId" z="t5IO2AlEu6iu9QfCdeclR9mmrMI="/>
+        <field:textarea field="depChildSourceRepositoryKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildSourceRepositoryKind" z="X4P7NlVoUJL6aWD3aVBzqYz13sU="/>
+        <field:textarea field="depChildTargetArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildTargetArtifactId" z="a5Bwy81VQxwq5uA0x1vGEQ253BA="/>
+        <field:textarea field="depChildTargetRepositoryId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildTargetRepositoryId" z="0GLMTiWPtdl4czTFzYGVbBZZHTY="/>
+        <field:textarea field="depChildTargetRepositoryKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildTargetRepositoryKind" z="PoUruOgpEJNNS/OIgAIoQ7Q2gPg="/>
+        <field:textarea field="depParentSourceArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentSourceArtifactId" z="g4vJADpw4uHvZeoA2gM/f9OR/O8="/>
+        <field:textarea field="depParentSourceRepositoryId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentSourceRepositoryId" z="204HdRcUhdOYfgU7ZUvC5XOqxLk="/>
+        <field:textarea field="depParentSourceRepositoryKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentSourceRepositoryKind" z="NPYUZYJl/HSJf8RAlJuDxOfkbMk="/>
+        <field:textarea field="depParentTargetArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentTargetArtifactId" z="LcZQP9KStqAkyzpJGWPgXn29BgA="/>
+        <field:textarea field="depParentTargetRepositoryId" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentTargetRepositoryId" z="oycrHCEJKKXOUgRNvhHiuU2vmD4="/>
+        <field:textarea field="depParentTargetRepositoryKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentTargetRepositoryKind" z="bd/HWj5KndFI5YuqmlO8uEme520="/>
+    </form:update>
+</div>

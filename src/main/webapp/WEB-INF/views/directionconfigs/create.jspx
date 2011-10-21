@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig" modelAttribute="directionConfig" path="/directionconfigs" render="${empty dependencies}" z="NmC1FyLP0z38mhRwkJesBuD42sw=">
+        <field:select field="direction" id="c_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig_direction" itemValue="id" items="${directions}" path="/directions" required="true" z="wKjLsfNdMkJoV+4/VfRB887UC8c="/>
+        <field:input field="name" id="c_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig_name" required="true" z="jAo5PJtid7Mo+3s6k/+p4aR9i4s="/>
+        <field:textarea field="val" id="c_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig_val" required="true" z="qM1HntdQWwrWWSW3sAoz1qmskJc="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig" render="${not empty dependencies}" z="a6qUmRzzxSv91PSxQIu38Hq73R0="/>
+</div>

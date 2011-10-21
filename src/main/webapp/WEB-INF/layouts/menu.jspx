@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" 
+	 xmlns:spring="http://www.springframework.org/tags"
+	 xmlns:c="http://java.sun.com/jsp/jstl/core"
+	 xmlns:sec="http://www.springframework.org/security/tags"
+	 xmlns:tiles="http://tiles.apache.org/tags-tiles"
+	 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	 id="menu">
+	<jsp:directive.page contentType="text/html;charset=UTF-8"/>
+	<jsp:output omit-xml-declaration="yes"/>
+	<!-- <tiles:useAttribute name="menuItems" /> -->
+	<tiles:useAttribute name="activeMenuItem" />
+	
+	<spring:url value="/images/icons/big_bullet.gif" var="bullet_image_url" />
+	<c:forEach items="${menuItems}" var="item">
+		<!-- we can't use access/SpEL here because of https://jira.springsource.org/browse/SEC-1611 -->
+		<sec:authorize ifAllGranted="${item.role}">
+		  	<spring:url value="${item.link}" var="itemUrl" />
+		  	<c:set value="${empty item.tooltip ? item.value : item.tooltip}" var="itemLabel"/>
+		  	<c:set value="${fn:replace(itemLabel,'PARTICIPANT',participant.systemKind)}" var="itemLabel" />
+		  	<!-- Don't show field mapping template in menu bar if participant is SWP  -->
+		  	<c:if test="${participant.systemKind eq 'SWP' and item.value ne 'fieldmappingtemplates'}">
+		  	<div class="${item.value == activeMenuItem ? 'ImageListParentSelectedNoTop' : 'ImageListParent'}">
+				<img src="${bullet_image_url}"  height="9" width="9" hspace="5" />
+				<a href="${itemUrl}">${itemLabel}</a>
+			</div>
+		  	</c:if>
+		  	<c:if test="${participant.systemKind ne 'SWP'}">
+		  	<div class="${item.value == activeMenuItem ? 'ImageListParentSelectedNoTop' : 'ImageListParent'}">
+				<img src="${bullet_image_url}"  height="9" width="9" hspace="5" />
+				<a href="${itemUrl}">${itemLabel}</a>
+			</div>
+		  	</c:if>
+		 	
+		</sec:authorize>
+	</c:forEach>
+</div>
+
+
+
+

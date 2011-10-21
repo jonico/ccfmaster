@@ -1,0 +1,87 @@
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:menu="urn:jsptagdir:/WEB-INF/tags/menu">
+	<jsp:output omit-xml-declaration="yes" />
+	<jsp:directive.attribute name="formname" type="java.lang.String" required="true" rtexprvalue="true" />
+	<jsp:directive.attribute name="applylink" type="java.lang.String" required="true" rtexprvalue="true" />
+	<jsp:directive.attribute name="removelink" type="java.lang.String" required="true" rtexprvalue="true"/>
+	<jsp:directive.attribute name="rmdid" type="java.lang.String" rtexprvalue="true"/>
+
+	<spring:url value="/images/table/icon_ApplyFilters.gif" var="icon_HideFilters_image_url" />
+	<spring:url value="/images/table/icon_RemoveFilters.gif" var="icon_RemoveFilters_image_url" />
+	<spring:message code="applylabel" var="applylabel" htmlEscape="false" />
+	<spring:message code="removelabel" var="removelabel" htmlEscape="false" />
+
+
+	<td colspan="5">
+		<div class="AlignRight">
+			<script type="text/javascript">
+				function applyFilter() {
+					document.getElementById('${formname}').action = '${applylink}';
+					document.getElementById('${formname}').submit();
+				}
+			</script>
+				<c:if test="${not empty rmdid }">
+					<div class="FilterAppButton" id="applyfilterbutton">
+					<table class="AppButtonTableDisabled" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td class="AppButtonPadding">
+							<img src="${icon_HideFilters_image_url}" width="16" height="16"	alt="Columns" />
+							</td>
+							<td class="AppButtonText"><strong>${applylabel}</strong>
+							</td>
+						</tr>
+					</table>
+					</div>
+				</c:if>
+				<c:if test="${empty rmdid }">
+				<div class="FilterAppButton" id="applyfilterbutton" onclick="javascript:applyFilter()">
+					<table class="AppButtonTable" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td class="AppButtonPadding"><img
+								src="${icon_HideFilters_image_url}" width="16" height="12"
+								alt="Columns" />
+							</td>
+							<td class="AppButtonText">
+							<c:set scope="session" var="externalLink" value="false"></c:set>
+							<c:set scope="session" var="fromExternalFunction" value="false"></c:set>
+							<a href="#"	onclick="javascript:applyFilter()"> <strong>${applylabel}</strong></a>
+							</td>
+						</tr>
+						<td class="AppButtonPaddingRight"></td>
+					</table>
+					</div>
+				</c:if>
+			
+
+			<script type="text/javascript">
+				function removeFilter(url) {
+					location.href = url;
+				}
+			</script>
+			<div class="FilterAppButton" id="removefilterbutton" onclick="javascript:removeFilter('${removelink}')">
+				<table class="AppButtonTable" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="AppButtonPadding">
+						<img src="${icon_RemoveFilters_image_url}" width="16" height="16" alt="Columns" />
+						</td>
+						<td class="AppButtonText"><a href="${removelink}"> 
+						<strong>${removelabel}</strong>
+						</a>
+						</td>
+						<td class="AppButtonPaddingRight"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</td>
+
+
+</div>
+
+
+
+

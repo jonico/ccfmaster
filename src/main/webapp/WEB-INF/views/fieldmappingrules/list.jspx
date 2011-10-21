@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule" items="${fieldmappingrules}" z="3iPBtSIia1+VVdtAu8UFuugVw5M=">
+        <table:table data="${fieldmappingrules}" id="l_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule" path="/fieldmappingrules" z="4ypyJI4Uu+sEOOD78w7iyZoW54k=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_name" property="name" z="mhG7yqRr0hl3jfFXwA49YmNA5xY="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_description" property="description" z="BBOykLQxXjOrfpOnASaLSS3CFtI="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_type" property="type" z="iC8NfN9SeyHrGO/sn7pDFOm0hxk="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_source" property="source" z="nJ5kHJcJq+Dnh9JOhgsMkQT1amc="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_sourceIsTopLevelAttribute" property="sourceIsTopLevelAttribute" z="1hG9svM7RoMffqoYYT1W2U5k484="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_target" property="target" z="+VidBSIo5nMjA8RYTJwF4uOgNZM="/>
+        </table:table>
+    </page:list>
+</div>

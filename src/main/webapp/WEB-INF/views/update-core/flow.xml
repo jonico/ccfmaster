@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<secured attributes="ROLE_TF_SUPER_USER" match="all"/>
+	
+	<var name="coreZipFile" class="com.collabnet.ccf.ccfmaster.server.core.update.CoreZipFile" />
+	<var name="fileUploadHandler" class="com.collabnet.ccf.ccfmaster.server.core.update.FileUploadHandler" />
+	<var name="participant" class="com.collabnet.ccf.ccfmaster.server.core.update.SerializableParticipant" />
+	<var name="landscape" class="com.collabnet.ccf.ccfmaster.server.core.update.SerializableLandscape" />
+
+	<view-state id="selectFile" view="update-core/index" model="fileUploadHandler">
+		<on-render>
+			<set name="requestScope.selectedLink" value="'status'" type="java.lang.String" />
+			<set name="viewScope.currentDescription" value="fileUploadHandler.currentDescription" />
+			<set name="viewScope.currentVersion" value="fileUploadHandler.currentVersion" />
+		</on-render>
+		<transition to="canceled" on="cancel" bind="false" />
+		<transition to="validateZip" on="upload" />
+	</view-state>
+	
+	<action-state id="validateZip">
+		<evaluate expression="fileUploadHandler.coreZipFile" />
+		<transition on="success" to="checkVersion" />
+		<transition on="error" to="selectFile" />
+		<transition on-exception="java.io.IOException" to="selectFile" />
+	</action-state>
+	
+	<action-state id="checkVersion">
+    	<evaluate expression="fileUploadHandler.checkVersion" />
+		<transition on="success" to="showUpdate" />
+		<transition on="error" to="selectFile" />
+		<transition on-exception="java.io.IOException" to="selectFile" />
+	</action-state>
+
+	<view-state id="showUpdate" view="update-core/validate">
+		<on-render>
+			<set name="requestScope.selectedLink" value="'status'" type="java.lang.String" />
+		</on-render>
+    	<transition to="stopCores" on="submit" />
+    	<transition to="canceled" on="cancel" />
+    </view-state>
+
+    <end-state id="canceled" view="externalRedirect:contextRelative:/update-core/canceled">
+    	<on-entry>
+    		<evaluate expression="coreZipFile.close()" />
+    	</on-entry>
+    </end-state>
+    
+	<action-state id="stopCores">
+    	<evaluate expression="fileUploadHandler.stopCores" />
+    	<transition on="success" to="backup" />
+    	<transition on="error" to="showUpdate" />
+	</action-state>
+
+    <action-state id="backup">
+    	<evaluate expression="fileUploadHandler.createBackup" />
+    	<transition on="success" to="updateCore"/>
+    	<transition on="error"   to="showUpdate" />
+    	<transition to="update-failure" on-exception="java.lang.Exception" />
+    </action-state>
+
+	<action-state id="updateCore">
+    	<evaluate expression="fileUploadHandler.performUpdate" />
+    	<transition on="success" to="startCores" />
+    	<transition on="error"   to="showUpdate" />
+    	<transition to="update-failure" on-exception="java.lang.Exception" />
+    </action-state>
+    
+    <action-state id="startCores">
+    	<evaluate expression="fileUploadHandler.startCores" />
+    	<evaluate expression="coreZipFile.close()" />
+    	<transition on="success" to="update-success" />
+    	<transition on-exception="java.lang.Exception" to="update-failure" />
+    </action-state>
+    
+    <end-state id="update-success" view="externalRedirect:contextRelative:/update-core/success" />
+    
+    <end-state id="update-failure" view="externalRedirect:contextRelative:/update-core/failure" >
+    	<on-entry>
+    		<evaluate expression="coreZipFile.close()" />
+    	</on-entry>
+    </end-state>
+    
+</flow>

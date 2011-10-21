@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_Landscape" modelAttribute="landscape" path="/landscapes" versionField="Version" z="fm0WECPCUXa/7+hPARwf6hdQ4UQ=">
+        
+        <field:select field="teamForge" id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_teamForge" itemValue="id" items="${participants}" path="/participants" required="true" z="k59YkYiGcNjgVxOhMqebQwvojhI="/>
+        <field:select field="participant" id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_participant" itemValue="id" items="${participants}" path="/participants" required="true" z="gYAVqgnfBKHc9c9lFLmIlwe9g6A="/>
+        <field:input field="plugId" id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_plugId" required="true" validationRegex="^plug\\d+$" z="Ecg/sEK2c3P4HrBM3agGQIVy1Jc="/>
+    
+    <field:input field="name" id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_name" required="true" z="c+y7mesmt/fuYMtgJFuCXhWCQgs="/>
+    </form:update>
+</div>

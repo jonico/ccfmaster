@@ -1,0 +1,172 @@
+<div xmlns:spring="http://www.springframework.org/tags"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="tftimezone" var="tftimezonelabel" htmlEscape="false"/>  
+<spring:message code="tfusername" var="tfusernamelabel" htmlEscape="false"/>  
+<spring:message code="tfpassword" var="tfpasswordlabel" htmlEscape="false"/>  
+<spring:message code="participantmaxattachmentsize" var="participantmaxattachmentsizelabel" htmlEscape="false"/>
+<spring:message code="bytes" var="byteslabel" htmlEscape="false"/>  
+<spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="button_save" var="save_button"/>
+<spring:message code="testconnection" var="testconnectionlabel" htmlEscape="false"/>  
+<spring:url value="/admin/displaytfsettings" var="canceltfsettings_url" />
+<spring:url value="/admin/savetfsettings" var="savetfsettings_url" />
+<spring:url value="/admin/tftestconnection" var="testconnection_url"/>		
+
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/js/jquery-ui-1.8.16.custom.min.js" var="jqueryui_url" />
+<script src="${fn:escapeXml(jqueryui_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/styles/jquery-ui-1.8.16.custom.css" var="jqueryui_url" />
+<link rel="stylesheet" type="text/css" href="${jqueryui_url}"><!-- Prevent self-closing --> </link>
+
+
+<form:form id="savetfsettings"  name="savetfsettings" method="POST" commandName="tfsettingsmodel" modelAttribute="tfsettingsmodel">
+  <table class="Container" >
+		<tbody>
+		<tr>
+		<td>
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<c:if test="${!empty connectionmessage}"> 
+   		 <div class="greenText">${connectionmessage}</div>
+		</c:if>
+		<c:if test="${!empty connectionerror}"> 
+  		<div class="errorMessage">${connectionerror}</div>
+		</c:if>
+		<br/>
+		<br/>
+		
+	<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="teamforge.timezone">${tftimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:select path="teamforge.timezone" items="${timezones}" id="c_tftimezone" cssClass="inputfield"></form:select>
+				</td>
+				</tr>
+			    <tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="tfUserNameLandscapeConfig.name" value="ccf.landscape.tf.username"/>
+				<form:label path="tfUserNameLandscapeConfig.val">${tfusernamelabel}:</form:label></td>
+				<td class="ItemDetailValue">
+				<form:input path="tfUserNameLandscapeConfig.val"  size="60"  cssClass="inputfield" />
+				<form:errors path="tfUserNameLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr> 
+  				
+  				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="tfPasswordLandscapeConfig.name" value="ccf.landscape.tf.password"/>
+				<form:label path="tfPasswordLandscapeConfig.val">${tfpasswordlabel}:</form:label></td>
+				<td class="ItemDetailValue" >
+				<form:password path="tfPasswordLandscapeConfig.val" showPassword="true" size="60" cssClass="inputfield"/>
+				<input type="submit" value="${testconnectionlabel}" onclick="javascript: submittestConnection('${fn:escapeXml(testconnection_url)}');" />
+				<form:errors path="tfPasswordLandscapeConfig.val" cssClass="errors"/>
+				</td>
+				</tr>
+			 
+				<tr>
+				<td class="ItemDetailName">
+				<input type="hidden" name="tfMaxAttachmentSize.name" value="ccf.direction.tf.max.attachmentsize"/>
+				<form:label path="tfMaxAttachmentSize.val">${participantmaxattachmentsizelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:input path="tfMaxAttachmentSize.val"  size="60" cssClass="inputfield"/>${byteslabel}
+				<form:errors path="tfMaxAttachmentSize.val" cssClass="errors"/>
+				</td>
+				</tr>
+		</tbody>
+	</table>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<tr class="ContainerFooter">
+				<td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				     	<a href="${fn:escapeXml(canceltfsettings_url)}">${cancel_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle">
+					<input type="hidden" name="teamforge.systemKind" value="TF"/>
+					<input type="hidden" name="teamforge.systemId" value="${tfsystemid}"/>
+					<input type="hidden" name="teamforge.description" value="${tfdescription}"/>
+					<input type="hidden" name="tfusername.version" value="${tfusernameversion}"/>
+					<input type="hidden" name="tfusername.id" value="${tfusernameid}"/>
+					<input type="hidden" name="tfpassword.version" value="${tfpasswordversion}"/>
+					<input type="hidden" name="tfpassword.id" value="${tfpasswordid}"/>
+					<input type="hidden" name="teamforge.version" value="${teamforgeversion}"/>
+					<input type="hidden" name="teamforge.id" value="${teamforgeid}"/>
+					<input type="hidden" name="landscape.version" value="${landscapeversion}"/>
+					<input type="hidden" name="landscape.id" value="${landscapeid}"/>
+					<input type="hidden" name="tfmaxattachmentsize.version" value="${tfmaxattachmentsizeversion}"/>
+					<input type="hidden" name="tfmaxattachmentsize.id" value="${tfmaxattachmentsizeid}"/>
+					<input type="hidden"  id="restart" name="restart" value="false"/>
+					<strong> <a href="#" id="save">${save_button}</a></strong> 
+				</div>
+				</div>
+				</div>
+				
+				</td>
+				</tr>
+				</td>
+				</tr> 
+	</tbody>
+  	</table>
+</form:form>   
+ 				<!--  Jquery Dialog Div that shows message with multiple buttons  -->
+  				<div id="dialog" title="Save TeamForge Settings">
+  				<p>Changes to the TeamForge settings will only apply after connector restart</p>
+`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel. to close the window</p>
+				</div>
+  
+	<script language="JavaScript">
+		
+		function submittestConnection(url){
+	  		document.getElementById("savetfsettings").action=url;
+	  		document.getElementById("savetfsettings").submit();
+		}
+		
+		$(function(){
+	        // jQuery UI Dialog    
+		   $('#dialog').dialog({
+	            autoOpen: false,
+	            width: 400,
+	            modal: true,
+	            resizable: false,
+	            buttons: {
+	                "Save And Restart": function() {
+	                	document.getElementById("savetfsettings").action='${savetfsettings_url}';
+	                	document.getElementById("restart").value="true";
+	        	  		document.getElementById("savetfsettings").submit();
+	                },
+	                "Save Only": function() {
+	                	document.getElementById("savetfsettings").action='${savetfsettings_url}';
+	                	document.getElementById("restart").value="false";
+	        	  		document.getElementById("savetfsettings").submit();
+	                },
+	                "Cancel": function() {
+	                $(this).dialog("close");
+	                }
+	            }
+	        });
+
+	        $('a#save').click(function(e){
+	           e.preventDefault();
+			   $('#dialog').dialog('open');
+	        });
+	});
+	</script>
+</div>

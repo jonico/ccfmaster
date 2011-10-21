@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp" items="${externalapps}" z="tBQA3wQjrKVsKFzMVRa0XsXd+/8=">
+        <table:table data="${externalapps}" id="l_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp" path="/externalapps" z="GZ7wkXcEQB56N8GLcKiP4QEIzw4=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_linkId" property="linkId" z="UkzZdehm98tyFlnb7C46lxqG2Gs="/>
+            
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_landscape" property="landscape" z="3SjCUy2/8qbpeKfjiT1FTrkUgDg="/>
+        
+        
+        
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_projectPath" property="projectPath" z="1zkC4lmxLMU3rH3+rTcLgBYStOQ="/>
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_ExternalApp_projectTitle" property="projectTitle" z="DVnbBXc3x9T9YUBRKfraeo810oQ="/>
+        </table:table>
+    </page:list>
+</div>
