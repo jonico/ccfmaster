@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_Direction" items="${directions}" z="wHJ1Yw0ppS2dRQCDkycX+sJFMI8=">
+        <table:table data="${directions}" id="l_com_collabnet_ccf_ccfmaster_server_domain_Direction" path="/directions" z="0Cp3IMcqfOd6Llap5W0/hQhYeK0=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_description" property="description" z="59Oi3zuDRsVOZw6LmKmv/SCRGo4="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_direction" property="direction" z="gB3HL33D2OGhyRZgyHXPCdcuvnU="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_landscape" property="landscape" z="dzxNHyOzIcEnjca9cI22Ll2jvqM="/>
+            
+        
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_shouldStartAutomatically" property="shouldStartAutomatically" z="GS8qFEwdN0OpZnQGVEYkPR30g7E="/>
+        </table:table>
+    </page:list>
+</div>

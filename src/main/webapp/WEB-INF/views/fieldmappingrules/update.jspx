@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule" modelAttribute="fieldMappingRule" path="/fieldmappingrules" versionField="Version" z="CwtfUuisbVXhprDs7MTX5VvWz1I=">
+        <field:input field="name" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_name" z="6Ju9eyR3JFl7fgFIl9qbmHIrYoY="/>
+        <field:input field="description" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_description" z="sunMcvcsFMkh7X0chNTExMySrt8="/>
+        <field:select field="type" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_type" items="${fieldmappingruletypes}" path="fieldmappingruletypes" required="true" z="Oz7Q+/OYZ1w7QRJCfUsoiX3Me9k="/>
+        <field:input field="source" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_source" z="OkeuZrSxVnfhynDws1Vbi1ccR9Y="/>
+        <field:checkbox field="sourceIsTopLevelAttribute" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_sourceIsTopLevelAttribute" z="ZoZJ5ObobQ8Qu+/Wak0fAb4CiyU="/>
+        <field:input field="target" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_target" z="+Lkm6hOxYfzt15sWHHSK8tEQa64="/>
+        <field:checkbox field="targetIsTopLevelAttribute" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_targetIsTopLevelAttribute" z="nKLdGYtt1N6Hd76YVN9PI+VQnos="/>
+        <field:textarea field="condition" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_condition" z="S+aFlUJompUAYpsqOc3jfpIvU+8="/>
+        <field:input field="valueMapName" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_valueMapName" z="SGm+RHMnsxvJUFU/m7TUmtchkjY="/>
+        <field:textarea field="xmlContent" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingRule_xmlContent" z="i3fipq8WKzqcAR6iSI5Im7jR4rs="/>
+    </form:update>
+</div>

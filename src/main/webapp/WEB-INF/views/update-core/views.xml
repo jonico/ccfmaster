@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="statusTabs" name="update-core/*">
+	    <put-attribute name="activeTab" value="update-core" cascade="true" />
+        <put-attribute name="tabBody" value="/WEB-INF/views/update-core/{1}.jspx" cascade="true" />
+    </definition>
+</tiles-definitions>

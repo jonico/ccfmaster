@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap" items="${fieldmappingvaluemaps}" z="djHCYvqunhem3hBdGGc5YrPXJ2M=">
+        <table:table data="${fieldmappingvaluemaps}" id="l_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap" path="/fieldmappingvaluemaps" z="6O/d6swrV3VIJexBgrs9vUFKm/U=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_name" property="name" z="vqLVcdHGWwGVWS4x9p6nCQO4nHA="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_entries" property="entries" z="ew71zWpZ+CPUR6vgUYnUeNbocio="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_defaultValue" property="defaultValue" z="UPPYG34ilmTzavoXn88LXe8snAs="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMap_hasDefault" property="hasDefault" z="2x6Po+EZhk2mEYjS9EWiAm+NpV4="/>
+            
+        </table:table>
+    </page:list>
+</div>

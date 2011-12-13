@@ -1,0 +1,68 @@
+<div xmlns:spring="http://www.springframework.org/tags"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
+	<jsp:output omit-xml-declaration="yes" />
+	<spring:message code="reloginlabel" var="reloginlabel" htmlEscape="false"/>  
+	 <table class="Container">
+ 	  <tr class="ContainerHeader">
+  		<td colspan="5">
+   		${reloginlabel}
+  		</td>
+ 	  </tr>
+ 	  <tr><td><br/></td></tr>
+ 	  <tr>
+  	  <td class="PaddedTable">
+  	  <form name="redirect">
+      <table width="100%" >
+      <tr>
+       <td> 
+    <center> <h3>You just logged out or your previous login expired.</h3>
+		<p>You will be redirected to <a href="${tfUrl}/sf">TeamForge instance</a> in <input type="text" readonly="readonly" size="1" name="redirect2"/> seconds.</p>
+		<spring:url value="/login" var="login_url" />
+		<p>If you intent to work with the site-admin portion of the Connector, Please <a href="${login_url}">Login Here </a>using your TeamForge site admin credentials.</p>
+       </center>  
+       </td>
+       
+     </tr>
+     
+    </table>
+    </form>
+   </td>
+  </tr>
+  <tr><td><br/></td></tr>
+  <tr class="ContainerFooter">
+   				 
+ <td>
+ <br/>
+ <br/>
+ </td>
+ <td></td>
+    
+    </tr>
+    </table>
+    
+    
+<script>
+
+var targetURL='${tfUrl}/sf'
+//change the second to start counting down from
+var countdownfrom=15
+var currentsecond=document.redirect.redirect2.value=countdownfrom+1
+function countredirect(){
+if (currentsecond!=1){
+currentsecond-=1
+document.redirect.redirect2.value=currentsecond
+}
+else{ 
+window.location=targetURL
+return
+}
+setTimeout("countredirect()",1000)
+}
+countredirect()
+
+</script>
+</div>

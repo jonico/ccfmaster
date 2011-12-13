@@ -1,0 +1,128 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+<spring:message code="loginlabel" var="loginlabel" htmlEscape="false"/>  
+<spring:url value="/login" var="login_url" />
+<spring:message code="button_login" var="login_button"/>
+<spring:message code="button_reset" var="reset_button"/>
+<spring:message code="security_login_form_name_message" var="security_login_form_name_message"/>
+<spring:message code="security_login_form_password_message" var="security_login_form_password_message"/>
+
+
+<spring:url value="/js/jquery-1.6.2.min.js" var="application_url" />
+<script src="${fn:escapeXml(application_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+  	
+
+   <c:if test="${not empty param.login_error}">
+      <div class="errorMessage">
+        <p>
+          <spring:message code="security_login_unsuccessful" />
+          <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
+        </p>
+      </div>
+    </c:if>
+    <spring:url value="/resources/j_spring_security_check" var="form_url" />
+   <form id="loginform" action="${fn:escapeXml(form_url)}"  name="loginform"  method="POST">
+    
+      <table class="Container">
+ 	  <tr class="ContainerHeader">
+  		<td>
+   		${loginlabel}
+  		</td>
+ 	  </tr>
+ 	  <tr><td><br/></td></tr>
+ 	  <tr>
+  	  <td class="PaddedTable">
+      <table cellpadding="4" width="100%" >
+      <tr>
+       <td width="10%"> <label for="j_username">
+          <spring:message code="security_login_form_name" />
+        </label></td>
+        <td>
+           <input id="j_username" type='text' name='j_username' style="width:150px" cssClass="inputfield"/>&#160;
+           <span class="tooltiplogin">${security_login_form_name_message}</span>
+        </td>
+     </tr>
+      <tr>
+        <td width="10%"><label for="j_password">
+          <spring:message code="security_login_form_password" />
+        </label>
+		</td>
+        <td>
+         <input id="j_password" type='password' name='j_password' style="width:150px" cssClass="inputfield" onKeyPress="return submitenter(this,event)"/>&#160;
+         <span class="tooltiplogin">${security_login_form_password_message}</span>
+        </td>
+      </tr>
+    </table>
+   </td>
+  </tr>
+  <tr><td><br/></td></tr>
+  <tr class="ContainerFooter">
+   				 
+     <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+      
+   				 <td>
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				<a id="proceed" href="javascript: loginForm('${fn:escapeXml(form_url)}');">${login_button}</a>
+        		</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle">
+    			<a id="reset" href="${fn:escapeXml(login_url)}">${reset_button}</a>
+        		</div>
+        		</div>
+        		</div>
+   
+     </td>   
+        
+    
+    </tr>
+    </table>
+</form>
+ 
+	<script language="JavaScript">
+		function loginForm(url){
+	  		document.getElementById("loginform").action=url;
+	  		document.getElementById("loginform").submit();
+		}
+		
+		function submitenter(myfield,e)
+		{
+		var keycode;
+		if (window.event) keycode = window.event.keyCode;
+		else if (e) keycode = e.which;
+		else return true;
+
+		if (keycode == 13)
+		   {
+		   myfield.form.submit();
+		   return false;
+		   }
+		else
+		   return true;
+		}
+		
+		
+		$(document).ready(function() {
+			$("input:text:visible:first").focus();
+			
+			$(function() {
+				$('.tooltiplogin').hide();
+				$('.tooltiplogin').prev('input').focus(function(){
+					$(this).next().fadeIn('fast');
+				}).focusout(function(){
+					$(this).next().fadeOut('fast');
+				});
+
+			});
+		});	
+		
+		
+		
+		 
+	</script> 
+	
+</div>
+

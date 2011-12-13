@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMapEntry" object="${fieldmappingvaluemapentry}" path="/fieldmappingvaluemapentrys" z="BT/SPMSEvdDm7AwWlKUG2fD3ox4=">
+        <field:display field="source" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMapEntry_source" object="${fieldmappingvaluemapentry}" z="xHhAH2iwDlhw5QgvaoDWns4ZEws="/>
+        <field:display field="target" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingValueMapEntry_target" object="${fieldmappingvaluemapentry}" z="WnG0OLYI/mBNWVNMswPI5iJOIhQ="/>
+    </page:show>
+</div>

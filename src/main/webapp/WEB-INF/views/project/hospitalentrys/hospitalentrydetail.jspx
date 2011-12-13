@@ -1,0 +1,280 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:url value="/project/hospitalentrys" var="return_url" />
+<spring:message code="button_return" var="return_button"/>
+<spring:url value="/images/icons/hospital_icon.png" var="hospital_image_url" />
+<spring:url value="/images/icons/exception.png" var="exception_image_url" />
+
+<spring:message code="hospitaldetaillabel" var="hospitaldetaillabel" htmlEscape="false"/>
+<spring:message code="exceptiondetaillabel" var="exceptiondetaillabel" htmlEscape="false"/>
+<spring:message code="sourcelabel" var="sourcelabel" htmlEscape="false"/>
+<spring:message code="repositoryidlabel" var="repositoryidlabel" htmlEscape="false"/>
+<spring:message code="artifactidlabel" var="artifactidlabel" htmlEscape="false"/>
+<spring:message code="lastmodificationlabel" var="lastmodificationlabel" htmlEscape="false"/>
+<spring:message code="artifactversionlabel" var="artifactversionlabel" htmlEscape="false"/>
+<spring:message code="targetlabel" var="targetlabel" htmlEscape="false"/>
+<spring:message code="causemessagelabel" var="causemessagelabel" htmlEscape="false"/>
+<spring:message code="messagelabel" var="messagelabel" htmlEscape="false"/>
+<spring:message code="stacktracelabel" var="stacktracelabel" htmlEscape="false"/>
+<spring:message code="errorcodelabel" var="errorcodelabel" htmlEscape="false"/>
+
+
+
+<form:form id="hospitalentrydetailForm"  name="hospitalentrydetailForm" method="POST" commandName="hospitalmodel" modelAttribute="hospitalmodel">
+  <table class="Container" >
+  <tbody>
+  <tr>
+  	<td>
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+			<tr class="ContainerHeader">
+			<c:set var="hospitalentry" value="${hospitalist.hospitalEntry}" />
+			<c:if test="${hospitalentry.reprocessed eq 'true'}">
+			<c:set var="processedstatus" value="Already Processed"/>
+			</c:if>
+			<c:if test="${hospitalentry.reprocessed eq 'false'}">
+			<c:set var="processedstatus" value="Not Processed"/>
+			</c:if>
+			<td colspan="2"><img src="${fn:escapeXml(hospital_image_url)}" title="${hospitaldetaillabel}" alt="${hospitaldetaillabel}" border="0" />&#160;${hospitaldetaillabel}&#160; for ${hospitalentry.sourceArtifactId}&#160;( ${hospitalentry.artifactType} failed in ${hospitalentry.originatingComponent} &#160;- ${processedstatus} ) </td>
+    		</tr>
+    		<tr>
+  			<td class="ItemDetailContainerCell" width="50%"> 
+   			<table width="100%"> 
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		<strong>${sourcelabel}</strong>
+     		</td>  
+    		</tr> 
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${repositoryidlabel}:
+     		</td> 
+     		
+     		<td class="ItemDetailValue">
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		<c:if test="${hospitalist.repositoryIcon ne 'null'}">
+     		<img src="../../images/tracker/icons/${hospitalist.repositoryDetail.icon}" class="trackerIcon"  title="${hospitalist.repositoryDetail.description}" alt="${hospitalist.repositoryDetail.description}" border="0"/>&#160;<a href="${hospitalist.tfUrl}/sf/go/${hospitalist.repositoryId}">${hospitalist.repositoryDetail.description}&#160;:&#160;<c:out value= "${hospitalentry.repositoryMappingDirection.repositoryMapping.teamForgeRepositoryId}" /></a>
+     		</c:if>
+     		<c:if test="${hospitalist.repositoryIcon eq 'null'}">
+     		${hospitalentry.repositoryMappingDirection.repositoryMapping.teamForgeRepositoryId}
+     		</c:if>
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<input type="text" value="${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		</td> 
+    		</tr>
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		<c:if test="${hospitalist.artifactIcon ne 'null'}">
+     		<img src="../../images/tracker/icons/${hospitalist.artifactIcon}" class="trackerIcon"  title="${hospitalist.repositoryDetail.description}" alt="${hospitalist.repositoryDetail.description}" border="0" />&#160;<c:out value= "${hospitalentry.sourceArtifactId}" />&#160;:&#160;<a href="${hospitalist.tfUrl}/sf/go/${hospitalentry.sourceArtifactId}">${hospitalist.artifactData}</a>
+     		</c:if>
+     		<c:if test="${hospitalist.artifactIcon eq 'null'}">
+     		${hospitalentry.sourceArtifactId}
+     		</c:if>
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<input type="text" value="${hospitalentry.sourceArtifactId}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${lastmodificationlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		<input type="text" value="${hospitalentry.sourceLastModificationTime}"  cssClass="inputfield" readonly="readonly" size="40"/> 
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<input type="text" value="${hospitalentry.targetLastModificationTime}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactversionlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		 <c:if test="${direction eq 'FORWARD'}"> 
+     		<input type="text" value="${hospitalentry.sourceArtifactVersion}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<input type="text" value="${hospitalentry.targetArtifactVersion}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		</td> 
+    		</tr>  
+    		</table>
+    		</td>
+    		<td class="ItemDetailContainerCell" width="50%"> 
+   			<table width="100%"> 
+   			<tr valign="top"> 
+     		<td class="ItemDetailName"> 
+       		<strong>${targetlabel}</strong>
+     		</td> 
+     		</tr> 
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${repositoryidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		<input type="text" value="${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<c:if test="${hospitalist.repositoryIcon ne 'null'}">
+     		<img src="../../images/tracker/icons/${hospitalist.repositoryDetail.icon}" class="trackerIcon"  title="${hospitalist.repositoryDetail.description}" alt="${hospitalist.repositoryDetail.description}" border="0"/>&#160;<a href="${hospitalist.tfUrl}/sf/go/${hospitalist.repositoryId}">${hospitalist.repositoryDetail.description}&#160;:&#160;<c:out value= "${hospitalentry.repositoryMappingDirection.repositoryMapping.teamForgeRepositoryId}" /></a>
+     		</c:if>
+     		<c:if test="${hospitalist.repositoryIcon eq 'null'}">
+     		${hospitalentry.repositoryMappingDirection.repositoryMapping.teamForgeRepositoryId}
+     		</c:if>
+     		</c:if>
+     		</td> 
+    		</tr>
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactidlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		<input type="text" value="${hospitalentry.targetArtifactId}"  cssClass="inputfield" readonly="readonly" size="40"/> 
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<c:if test="${hospitalist.artifactIcon ne 'null'}">
+     		<img src="../../images/tracker/icons/${hospitalist.artifactIcon}" class="trackerIcon"  title="${hospitalist.repositoryDetail.description}" alt="${hospitalist.repositoryDetail.description}" border="0" />&#160;<c:out value= "${hospitalentry.targetArtifactId}" />&#160;:&#160;<a href="${hospitalist.tfUrl}/sf/go/${hospitalentry.targetArtifactId}">${hospitalist.artifactData}</a>
+     		</c:if>
+     		<c:if test="${hospitalist.artifactIcon eq 'null'}">
+     		${hospitalentry.targetArtifactId}
+     		</c:if>
+     		</c:if>
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${lastmodificationlabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		 <input type="text" value="${hospitalentry.targetLastModificationTime}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<input type="text" value="${hospitalentry.sourceLastModificationTime}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${artifactversionlabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<c:if test="${direction eq 'FORWARD'}"> 
+     		<input type="text" value="${hospitalentry.targetArtifactVersion}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		</c:if>
+     		<c:if test="${direction eq 'REVERSE'}">
+     		<input type="text" value="${hospitalentry.sourceArtifactVersion}"  cssClass="inputfield" readonly="readonly" size="40"/>
+     		 </c:if>
+     		</td> 
+    		</tr>  
+    		</table>
+    		</td>
+    		</tr>
+    		
+    		<tr class="ContainerHeader">
+     			 <td colspan="2"><img src="${fn:escapeXml(exception_image_url)}" title="${exceptiondetaillabel}" alt="${exceptiondetaillabel}" border="0" />&#160;${exceptiondetaillabel}</td>
+    		</tr>
+			<tr>
+  			<td> 
+			
+   			<table width="100%"> 
+   			<br/>
+    		<br/>
+   			<tr> 
+     		<td class="ItemDetailName"> 
+       		${causemessagelabel}:
+     		</td> 
+     		<td class="ItemDetailValue">
+     		<textarea rows="3" cols="140" cssClass="inputfield" readonly="readonly">${hospitalentry.causeExceptionMessage}</textarea> 
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${messagelabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<textarea rows="3" cols="140" cssClass="inputfield" readonly="readonly">${hospitalentry.exceptionMessage}</textarea>
+     		
+     		</td> 
+    		</tr>  
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${errorcodelabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		 <input type="text" value="${hospitalentry.errorCode}" size="80"  cssClass="inputfield" readonly="readonly"/>
+     		</td> 
+    		</tr> 
+    		<tr> 
+     		<td class="ItemDetailName"> 
+       		${stacktracelabel}:
+     		</td> 
+     		<td class="ItemDetailValue"> 
+     		<textarea rows="10" cols="140" cssClass="inputfield" readonly="readonly">${hospitalentry.stackTrace}</textarea>
+     		
+     		</td> 
+    		</tr>   
+   			</table>
+    		</td></tr>
+    			<br/>
+				<br/>
+				<tr class="ContainerFooter" >
+				<td colspan="8">
+				<div class="AlignRight">
+				<div class="Button">
+				<div class="Middle">
+				<c:if test="${not empty rmdid }">
+					<spring:url value="/project/hospitalentrys?rmdid={rmdid}&amp;direction=${direction}" var="hospital_url">
+					<spring:param name="rmdid" value="${rmdid}" />
+					</spring:url>
+					<a href="${hospital_url}">${return_button}</a>
+				</c:if>
+				<c:if test="${not empty sessionScope.sourceFilterArtifactId or not empty sessionScope.targetFilterArtifactId}">
+						<spring:url value="/project/hospitalentrys/applyfilter?direction=${direction}" var="apply_filter_hospital_url"/>
+						<c:set scope="session" var="fromExternalFunction" value="true"></c:set>
+						<a href="${apply_filter_hospital_url}">${return_button}</a>
+				</c:if>
+				<c:if test="${empty rmdid and empty sessionScope.sourceFilterArtifactId and empty sessionScope.targetFilterArtifactId}">
+			     	<a href="${return_url}?direction=${direction}">${return_button}</a>
+		     	</c:if>
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				
+				</td>
+    		</tr>
+    		
+    			
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+ 
+	<script language="JavaScript">
+		
+
+		function viewhospital(url){
+  			document.getElementById("hospitalentrydetailForm").action=url;
+  			document.getElementById("hospitalentrydetailForm").submit();
+		}
+
+		
+		
+	</script>		
+</div>

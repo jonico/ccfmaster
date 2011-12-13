@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_Landscape" object="${landscape}" path="/landscapes" z="Lfd1XFJgj1qfouVGLoeUHwP9Kd8=">
+        
+        <field:display field="teamForge" id="s_com_collabnet_ccf_ccfmaster_server_domain_Landscape_teamForge" object="${landscape}" z="c3ydQ3vTBmCg4dvaePpT1qBAwhc="/>
+        <field:display field="participant" id="s_com_collabnet_ccf_ccfmaster_server_domain_Landscape_participant" object="${landscape}" z="x/B/Vay0f0EaqZmCI3bv0FeBKg8="/>
+        
+        <field:display field="plugId" id="s_com_collabnet_ccf_ccfmaster_server_domain_Landscape_plugId" object="${landscape}" z="nIbQYHfpj2e4sUKIzr66QjNj9o8="/>
+    
+    
+    <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_Landscape_name" object="${landscape}" z="HBmtvKH8YeQoYCTCRWzMPDoWmsA="/>
+    </page:show>
+</div>

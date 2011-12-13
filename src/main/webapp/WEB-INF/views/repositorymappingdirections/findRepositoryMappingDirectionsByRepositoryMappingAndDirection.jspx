@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByRepositoryMappingAndDirection" id="ff_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection" path="/repositorymappingdirections" z="4TvEFc7HJ5T3inY2AGLmd3wJaNY=">
+        <field:select disableFormBinding="true" field="repositoryMapping" id="f_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_repositoryMapping" itemValue="id" items="${repositorymappings}" path="/repositorymappings" required="true" z="9b16UV7vlhGbO/mCtfpKXiy34uA="/>
+        <field:select disableFormBinding="true" field="direction" id="f_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_direction" items="${directionses}" path="/directionses" required="true" z="UzdRS2eRfS5tIqxtKdDaw9GCzQI="/>
+    </form:find>
+</div>

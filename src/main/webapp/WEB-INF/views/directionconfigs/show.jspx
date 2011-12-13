@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig" object="${directionconfig}" path="/directionconfigs" z="zO+oD6oIb9UCDmLyLMZvR/fm9Qo=">
+        <field:display field="direction" id="s_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig_direction" object="${directionconfig}" z="T64I4eK6q6mPaJ86ZLJYdV38knM="/>
+        <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig_name" object="${directionconfig}" z="irzMd76fegp4xAfmpVzHUoek8Kk="/>
+        <field:display field="val" id="s_com_collabnet_ccf_ccfmaster_server_domain_DirectionConfig_val" object="${directionconfig}" z="rTBWAQMFT4nL1dTzX75TBIzzMWg="/>
+    </page:show>
+</div>

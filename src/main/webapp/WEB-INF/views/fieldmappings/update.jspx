@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping" modelAttribute="fieldMapping" path="/fieldmappings" versionField="Version" z="XttQZZiCo3M+DT56sBkBBNIci0Q=">
+        <field:select field="parent" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_parent" itemValue="id" items="${repositorymappingdirections}" path="/repositorymappingdirections" required="true" z="lafPLZ3aKqjWfOtM0nU7GVazGPE="/>
+        <field:select field="scope" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_scope" items="${fieldmappingscopes}" path="fieldmappingscopes" required="true" z="Sv7wLcI5YVxAA2W5pN5Wn4F2Oc4="/>
+        
+        <field:select field="kind" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_kind" items="${fieldmappingkinds}" path="fieldmappingkinds" required="true" z="9Pany+ia+mxpNeBzcwAUN6NErsM="/>
+        <field:simple field="rules" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_rules" messageCode="entity_reference_not_managed" messageCodeAttribute="Field Mapping Rule" z="54i+X3cn1cn3emFYqS+b4nKzAlg="/>
+        <field:simple field="valueMaps" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_valueMaps" messageCode="entity_reference_not_managed" messageCodeAttribute="Field Mapping Value Map" z="+hUU3Fq0S8CZ3ON8KYxALHwdKtI="/>
+    <field:input field="name" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_name" required="true" validationRegex="[\\w\\s]+" z="/E08DFc5cqLIlW7jpNvB+DbRUz0="/>
+    </form:update>
+</div>

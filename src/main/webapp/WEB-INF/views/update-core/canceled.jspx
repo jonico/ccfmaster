@@ -1,0 +1,35 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
+<jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_next" var="next_button"/>
+<spring:message code="button_return" var="return_button"/>
+
+<c:if test="${not empty exception}">
+<div class="errorMessage">${exception.message}</div>
+</c:if>
+<table class="ItemDetailContainer" width="100%" >
+	<tbody>
+			<tr class="ContainerHeader">
+			<td colspan="5">
+			Core Update
+			</td>
+			</tr>
+			<br/>
+			<br/>
+			<tr>
+			<td> <br/></td>
+			</tr>
+			<tr>
+			<td colspan="8">
+			<h3>You canceled the core update.</h3>
+			</td>
+			</tr>
+
+<tr>
+<td colspan="8">
+If you change your mind, you can always run the update later.
+</td>
+</tr>
+</tbody>
+</table>
+</div> 

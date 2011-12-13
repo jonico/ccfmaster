@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+	<definition name="project/fieldmappingtemplates" extends="ccfproject">
+		<put-attribute name="activeMenuItem" value="fieldmappingtemplates" cascade="true"/>
+		<put-list-attribute name="tabs" cascade="true">
+			<item link="/project/fieldmappingtemplates?direction=FORWARD" value="Forward" tooltip="TF &#8658; PARTICIPANT"/>
+			<item link="/project/fieldmappingtemplates?direction=REVERSE" value="Reverse" tooltip="PARTICIPANT &#8658; TF"/>
+		</put-list-attribute>
+	</definition>
+     
+	<definition name="project/fieldmappingtemplates/FORWARD" extends="project/fieldmappingtemplates">
+		<put-attribute name="activeTab" value="Forward" cascade="true" />
+		<put-attribute name="tabBody" value="/WEB-INF/views/project/fieldmappingtemplates/fieldmappingtemplatestftopart.jspx" cascade="true" />
+	</definition>    
+
+	<definition name="project/fieldmappingtemplates/REVERSE" extends="project/fieldmappingtemplates">
+		<put-attribute name="activeTab" value="Reverse" cascade="true" />
+		<put-attribute name="tabBody" value="/WEB-INF/views/project/fieldmappingtemplates/fieldmappingtemplatesparttotf.jspx" cascade="true" />
+	</definition>
+	
+	 <definition name="project/fieldmappingtemplates/upload" extends="project/fieldmappingtemplates">
+         <put-attribute name="body" value="/WEB-INF/views/project/fieldmappingtemplates/fileopenpopup.jspx"/>
+    </definition>
+	
+	
+	 <definition name="project/fieldmappingtemplates/bulkimport" extends="project/fieldmappingtemplates">
+         <put-attribute name="body" value="/WEB-INF/views/project/fieldmappingtemplates/fieldmappingtemplatelist.jspx"/>
+    </definition>
+	
+	 <definition name="project/fieldmappingtemplates/status" extends="project/fieldmappingtemplates">
+         <put-attribute name="body" value="/WEB-INF/views/project/fieldmappingtemplates/fieldmappingtemplateimportstatus.jspx"/>
+    </definition> 
+	
+	
+	
+</tiles-definitions>

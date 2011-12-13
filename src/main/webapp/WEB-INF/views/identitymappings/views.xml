@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="identitymappings/list">
+        <put-attribute name="body" value="/WEB-INF/views/identitymappings/list.jspx"/>
+    </definition>
+<definition extends="default" name="identitymappings/show">
+        <put-attribute name="body" value="/WEB-INF/views/identitymappings/show.jspx"/>
+    </definition>
+<definition extends="default" name="identitymappings/create">
+        <put-attribute name="body" value="/WEB-INF/views/identitymappings/create.jspx"/>
+    </definition>
+<definition extends="default" name="identitymappings/update">
+        <put-attribute name="body" value="/WEB-INF/views/identitymappings/update.jspx"/>
+    </definition>
+<definition extends="default" name="identitymappings/findIdentityMappingsByRepositoryMapping">
+        <put-attribute name="body" value="/WEB-INF/views/identitymappings/findIdentityMappingsByRepositoryMapping.jspx"/>
+    </definition>
+<definition extends="default" name="identitymappings/findIdentityMappingsBySourceArtifactIdOrTargetArtifactId">
+        <put-attribute name="body" value="/WEB-INF/views/identitymappings/findIdentityMappingsBySourceArtifactIdOrTargetArtifactId.jspx"/>
+    </definition>
+</tiles-definitions>

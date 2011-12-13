@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:sec="http://www.springframework.org/schema/security" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<bean class="com.collabnet.ccf.ccfmaster.server.domain.LogFileFactory" />
+	<context:component-scan base-package="com.collabnet.ccf.ccfmaster" use-default-filters="false">
+        <!-- <context:exclude-filter expression=".*_Roo_.*" type="regex"/> -->
+		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+	</context:component-scan>
+	
+	<bean class="com.collabnet.ccf.ccfmaster.server.core.MockQCMetaDataProvider" />
+	
+	<bean id="CCFRunTimeProperties" class="com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder">
+		<property name="ccfBaseUrl" value="${ccf.baseUrl:http://ccfmaster:8080/CCFMaster}"/>
+		<property name="ccfDBPort" value="${ccf.db.port:9002}" />
+		<property name="ccfHome" value="${ccf.home:/tmp}" />
+		<property name="iafServiceEndpoint" value="${ccf.iafServiceEndpoint:http://localhost:8090/services/DummyService}" />
+		<property name="jmxForwardPort" value="${ccf.forward.jmxport:8001}" />
+		<property name="jmxReversePort" value="${ccf.reverse.jmxport:8002}" />
+		<property name="tfUrl" value="${ccf.tf.url:http://pebblevm}"/>
+		<property name="maxAttachmentSize" value="10485760"/>
+	</bean> 
+
+	<!-- Turns on support for mapping requests to Spring MVC @Controller methods
+	     Also registers default Formatters and Validators for use across all @Controllers -->
+   	<mvc:annotation-driven conversion-service="applicationConversionService"/>
+	<!--Installs application converters and formatters-->
+	<bean class="com.collabnet.ccf.ccfmaster.controller.ApplicationConversionServiceFactoryBean" id="applicationConversionService" />
+
+<!--
+	<mvc:resources location="/, classpath:/META-INF/web-resources/" mapping="/resources/**"/>
+	
+	<mvc:default-servlet-handler/>
+	
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang"/>
+	</mvc:interceptors>
+	
+	<mvc:view-controller path="/login"/>
+    <mvc:view-controller path="/" view-name="index"/>
+	<mvc:view-controller path="/uncaughtException"/>
+	<mvc:view-controller path="/resourceNotFound"/>
+	<mvc:view-controller path="/dataAccessFailure"/>
+	<mvc:view-controller path="/accessDenied"/>
+
+	<bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id="messageSource" p:basenames="WEB-INF/i18n/messages,WEB-INF/i18n/application" p:fallbackToSystemLocale="false"/>
+	
+	<bean class="org.springframework.web.servlet.i18n.CookieLocaleResolver" id="localeResolver" p:cookieName="locale"/>	
+	
+	<bean class="org.springframework.ui.context.support.ResourceBundleThemeSource" id="themeSource"/>
+	
+	<bean class="org.springframework.web.servlet.theme.CookieThemeResolver" id="themeResolver" p:cookieName="theme" p:defaultThemeName="standard"/>
+
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" p:defaultErrorView="uncaughtException">
+		<property name="exceptionMappings">
+			<props>
+				<prop key=".PermissionDeniedDataAccessException">accessDenied</prop>
+				<prop key=".DataRetrievalFailureException">resourceNotFound</prop>
+				<prop key=".DataAccessException">dataAccessFailure</prop>
+				<prop key=".NoSuchRequestHandlingMethodException">resourceNotFound</prop>
+				<prop key=".TypeMismatchException">resourceNotFound</prop>
+				<prop key=".MissingServletRequestParameterException">resourceNotFound</prop>
+				<prop key=".AccessDeniedException">accessDenied</prop>
+				<prop key=".BadRequestException">badRequest</prop>
+				<prop key=".IllegalArgumentException">badRequest</prop>
+			</props>
+		</property>
+		<property name="statusCodes">
+			<props>
+				<prop key="resourceNotFound">404</prop>
+				<prop key="accessDenied">403</prop>
+				<prop key="badRequest">401</prop>
+				<prop key="dataAccessFailure">500</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver"/>
+<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" id="tilesViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+  </bean>
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" id="tilesConfigurer">
+    <property name="definitions">
+      <list>
+        <value>/WEB-INF/layouts/layouts.xml</value>
+        <value>/WEB-INF/views/**/views.xml</value>
+      </list>
+    </property>
+  </bean>
+ -->
+
+
+</beans>

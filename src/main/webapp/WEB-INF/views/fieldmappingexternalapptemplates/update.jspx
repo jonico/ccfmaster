@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate" modelAttribute="fieldMappingExternalAppTemplate" path="/fieldmappingexternalapptemplates" versionField="Version" z="GqsTo0D+yWkkG7xIzpUlXdjghAI=">
+        <field:select field="parent" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate_parent" itemValue="id" items="${externalapps}" path="/externalapps" required="true" z="/zvIst6chLjgoR755S2LbsMdDMc="/>
+        <field:input field="name" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate_name" required="true" validationRegex="[\\w\\s]+" z="OAxlb5TX316ytE/8CmfoZgNJoR0="/>
+        <field:select field="direction" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate_direction" items="${directionses}" path="directionses" required="true" z="NQCT8Q7+/iPSToIbbhfRM/QRmUs="/>
+        <field:select field="kind" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate_kind" items="${fieldmappingkinds}" path="fieldmappingkinds" required="true" z="DxV1ukoGjjOxgPo2MZmz/bPLOQE="/>
+    <field:simple field="rules" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate_rules" messageCode="entity_reference_not_managed" messageCodeAttribute="Field Mapping Rule" z="IXTlFSY2p7b7DP1k6YiX4Fl5sk4="/>
+        <field:simple field="valueMaps" id="c_com_collabnet_ccf_ccfmaster_server_domain_FieldMappingExternalAppTemplate_valueMaps" messageCode="entity_reference_not_managed" messageCodeAttribute="Field Mapping Value Map" z="qETd1dbFYSL4NLTSFdHt0Oy1QRo="/>
+    </form:update>
+</div>

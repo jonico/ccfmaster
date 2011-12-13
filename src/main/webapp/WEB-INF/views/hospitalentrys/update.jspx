@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry" modelAttribute="hospitalEntry" path="/hospitalentrys" versionField="Version" z="Wj1Rsg1s6DPJFq/qaZhc1RJpzg4=">
+        <field:input field="description" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_description" required="true" z="3xmzYb6PDgPjPY56GGT1IlmuYME="/>
+        <field:select field="repositoryMappingDirection" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_repositoryMappingDirection" itemValue="id" items="${repositorymappingdirections}" path="/repositorymappingdirections" required="true" z="zNj8Wu6tSaA0cd0+y6sZV9bE05A="/>
+        <field:textarea field="exceptionClassName" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_exceptionClassName" z="rnonQPdW+tsN7AUb6StDZQadBNY="/>
+        <field:textarea field="exceptionMessage" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_exceptionMessage" z="vVxRylVb060PQyVoliKW9P59xi0="/>
+        <field:textarea field="causeExceptionClassName" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_causeExceptionClassName" z="EYQ7RG6jZ6l2X3thxU0lE2Jv078="/>
+        <field:textarea field="causeExceptionMessage" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_causeExceptionMessage" z="vkyR+i6r9cJI4PF9nKVG7W7MKdM="/>
+        <field:textarea field="stackTrace" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_stackTrace" z="IdlwymyiSeee9sgAaClK4t9T9P0="/>
+        <field:textarea field="adaptorName" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_adaptorName" z="h0wTKMPXCeNAfgrS5/3EwUxzcr4="/>
+        <field:textarea field="originatingComponent" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_originatingComponent" z="0G/UjCntc6haJm1T6m8Dzht3Dws="/>
+        <field:textarea field="dataType" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_dataType" z="202VSmLgYEnBOz7QRgIkJg5LMOM="/>
+        <field:textarea field="data" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_data" z="2vc6U+jN7Qscdf7RFuPoWSSQYpQ="/>
+        <field:checkbox field="fixed" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_fixed" z="7NT4F8/dA3fK6FAFLM11dO7KCLs="/>
+        <field:checkbox field="reprocessed" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_reprocessed" z="dU5ENzp/ikGEm7defXgT107KL70="/>
+        <field:textarea field="sourceArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_sourceArtifactId" validationRegex="^[^']?$" z="aogtqXYszQwEQrK2dKWSnygcM/Y="/>
+        <field:textarea field="targetArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_targetArtifactId" validationRegex="^[^']?$" z="ys0nNjej/xl8i4gp0DZ0RiIJmDc="/>
+        <field:textarea field="errorCode" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_errorCode" validationRegex="^[^']?$" z="XBUNEZj9FkKfMzXOKyJdd6vXvjs="/>
+        <field:datetime dateTimePattern="${hospitalEntry_sourcelastmodificationtime_date_format}" field="sourceLastModificationTime" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_sourceLastModificationTime" z="rFKBjTuG0FhwFEW05CjWfH0DSaQ="/>
+        <field:datetime dateTimePattern="${hospitalEntry_targetlastmodificationtime_date_format}" field="targetLastModificationTime" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_targetLastModificationTime" z="xsqpQbl3bJSYKau/zVNawtrDeKk="/>
+        <field:textarea field="sourceArtifactVersion" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_sourceArtifactVersion" z="60VqvsA3YhnlRn9ngHRY2kDvKw4="/>
+        <field:textarea field="targetArtifactVersion" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_targetArtifactVersion" z="G+yWmuF1WZ+emVVM+qyvmobERtI="/>
+        <field:textarea field="artifactType" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_artifactType" validationRegex="^[^']?$" z="hriV0cCeP1Ym+EyV7j53tBMpHT4="/>
+        <field:textarea field="genericArtifact" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_genericArtifact" z="Vecfwotv4S6o/jM/h9I+TkSIBao="/>
+        <field:textarea field="timestamp" id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_timestamp" z="Jtq4Nt90sUOdGlJ918BEJSqasL4="/>
+    </form:update>
+</div>
