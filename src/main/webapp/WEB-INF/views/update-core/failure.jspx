@@ -1,0 +1,40 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
+<jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_next" var="next_button"/>
+<spring:message code="button_return" var="return_button"/>
+
+<c:if test="${not empty exception}">
+<div class="errorMessage">${exception.message}</div>
+</c:if>
+
+<table class="ItemDetailContainer" width="100%" >
+	<tbody>
+			<tr class="ContainerHeader">
+			<td colspan="5">
+			Core Update
+			</td>
+			</tr>
+			<br/>
+			<br/>
+			<tr>
+			<td> <br/></td>
+			</tr>
+			<tr>
+			<td colspan="8">
+			<h3>Core update failed.</h3>
+			</td>
+			</tr>
+
+<spring:url value="/admin/displaytftoparticipantlogs" var="logs_url" />
+<spring:url value="/update-core" var="update_url" />
+<tr>
+<td colspan="8">
+An error has occurred during the upgrade process. Please <a href="${logs_url}">review the log files</a>
+to determine possible causes and <a href="${update_url}">try again</a>.
+</td>
+</tr>
+</tbody>
+</table>
+
+</div> 

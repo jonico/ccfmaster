@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping" object="${fieldmapping}" path="/fieldmappings" z="52u0bcaEL0m4D1RIeIvXX01kpAQ=">
+        <field:display field="parent" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_parent" object="${fieldmapping}" z="8aaas3SMZCg1jXn1kLLvPVlll0o="/>
+        <field:display field="scope" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_scope" object="${fieldmapping}" z="TErW0sXPJ6atfsaT4/nVZNl+/bo="/>
+        
+        <field:display field="kind" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_kind" object="${fieldmapping}" z="ulhhBtVWn3AY2btCnNs2OKt0dJg="/>
+    <field:display field="rules" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_rules" object="${fieldmapping}" z="sg9ZYtSCLdnxe/GKLOSoaKDeIY4="/>
+        <field:display field="valueMaps" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_valueMaps" object="${fieldmapping}" z="/cc6F9ALodXsiISaGCJVUgauoPE="/>
+    <field:display field="name" id="s_com_collabnet_ccf_ccfmaster_server_domain_FieldMapping_name" object="${fieldmapping}" z="6P2FSV17gPmIYVJVnqDMmD2PRcA="/>
+    </page:show>
+</div>

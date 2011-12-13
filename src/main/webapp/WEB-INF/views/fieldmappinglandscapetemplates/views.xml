@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="fieldmappinglandscapetemplates/list">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/list.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/show">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/show.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/create">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/create.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/update">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/update.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParentAndNameAndDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParentAndNameAndDirection.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParent">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParent.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParentAndDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByParentAndDirection.jspx"/>
+    </definition>
+<definition extends="default" name="fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByDirection">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappinglandscapetemplates/findFieldMappingLandscapeTemplatesByDirection.jspx"/>
+    </definition>
+</tiles-definitions>

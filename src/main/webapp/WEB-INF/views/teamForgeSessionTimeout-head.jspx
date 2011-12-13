@@ -1,0 +1,6 @@
+<sec:authorize xmlns:sec="http://www.springframework.org/security/tags" access="hasRole('ROLE_IAF_USER')">
+	<sec:authentication property="principal.serverUrl" var="tfUrl" />
+	<sec:authentication property="principal.linkId" var="linkId" />
+	<sec:authentication property="principal.projectPath" var="projectPath" />
+	<meta http-equiv="refresh" content="15; url=${tfUrl}/sf/pluggable/do/viewPluggableComponent/${projectPath}/${linkId}" />
+</sec:authorize>

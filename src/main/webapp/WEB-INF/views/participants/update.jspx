@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_Participant" modelAttribute="participant" path="/participants" versionField="Version" z="XSgo7CXdiOrmdMs3LrkideoJ8K0=">
+        <field:input field="description" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_description" required="true" z="V5EYKs1cmJf50MfC/hzFIzQDa7Q="/>
+        <field:textarea field="systemId" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemId" required="true" z="I4OKLGRSlvSnyGaKoLq1YTvXMeU="/>
+        <field:textarea field="encoding" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_encoding" z="eH043PJgYRqqBKZswL8tLRFHlro="/>
+        <field:select field="timezone" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_timezone" items="${timezones}" path="timezones" required="true" z="rtbVaKjrdUcEr3UT4L+9e6Qj6NU="/>
+        <field:select field="systemKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemKind" items="${systemkinds}" path="systemkinds" required="true" z="LaxxgAKuhpSHuz4Uz3/sBm2oGO4="/>
+    </form:update>
+</div>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>LandscapeSettingsSWP</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">LandscapeSettingsSWP</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>http://localhost:8080/CCFMaster/admin/ccfmaster</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>participantUserNameLandscapeConfig.val</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>participantPasswordLandscapeConfig.val</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>id=participantUserNameLandscapeConfig.val.errors</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>id=participantPasswordLandscapeConfig.val.errors</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>participantUserNameLandscapeConfig.val</td>
+	<td>ccfuser</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>participantPasswordLandscapeConfig.val</td>
+	<td>ccfuser</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=div.greenText</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=TeamForge</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>tfUserNameLandscapeConfig.val</td>
+	<td>ccfuser</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>tfPasswordLandscapeConfig.val</td>
+	<td>ccfuser</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=div.greenText</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Test Connection']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=div.greenText</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=CCF Properties</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>val</td>
+	<td>An Artifact has been quarantined.<br /><br />SOURCE_SYSTEM_ID: &lt;SOURCE_SYSTEM_ID&gt;<br /><br />SOURCE_REPOSITORY_ID: &lt;SOURCE_REPOSITORY_ID&gt;<br /><br />SOURCE_ARTIFACT_ID: &lt;SOURCE_ARTIFACT_ID&gt;<br /><br />TARGET_SYSTEM_ID: &lt;TARGET_SYSTEM_ID&gt;<br /><br />TARGET_REPOSITORY_ID: &lt;TARGET_REPOSITORY_ID&gt;<br /><br />TARGET_ARTIFACT_ID: &lt;TARGET_ARTIFACT_ID&gt;<br /><br />ERROR_CODE: &lt;ERROR_CODE&gt;<br /><br />TIMESTAMP: &lt;TIMESTAMP&gt;<br /><br />EXCEPTION_CLASS_NAME: &lt;EXCEPTION_CLASS_NAME&gt;<br /><br />EXCEPTION_CLASS_NAME: &lt;EXCEPTION_CLASS_NAME&gt; updated</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=div.greenText</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Log Template SWP to TF</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>val</td>
+	<td>An Artifact has been quarantined.<br /><br />SOURCE_SYSTEM_ID: &lt;SOURCE_SYSTEM_ID&gt;<br /><br />SOURCE_REPOSITORY_ID: &lt;SOURCE_REPOSITORY_ID&gt;<br /><br />SOURCE_ARTIFACT_ID: &lt;SOURCE_ARTIFACT_ID&gt;<br /><br />TARGET_SYSTEM_ID: &lt;TARGET_SYSTEM_ID&gt;<br /><br />TARGET_REPOSITORY_ID: &lt;TARGET_REPOSITORY_ID&gt;<br /><br />TARGET_ARTIFACT_ID: &lt;TARGET_ARTIFACT_ID&gt;<br /><br />ERROR_CODE: &lt;ERROR_CODE&gt;<br /><br />TIMESTAMP: &lt;TIMESTAMP&gt;<br /><br />EXCEPTION_CLASS_NAME: &lt;EXCEPTION_CLASS_NAME&gt;<br /><br />EXCEPTION_CLASS_NAME: &lt;EXCEPTION_CLASS_NAME&gt; added</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=div.greenText</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Sync Behavior TF to SWP</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Sync Behavior SWP to TF</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Repository Mappings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Status</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Logs</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Logs SWP to TF</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

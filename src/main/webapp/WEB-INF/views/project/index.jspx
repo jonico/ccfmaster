@@ -1,0 +1,26 @@
+<div 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+  <spring:message var="app_name" code="application_name" />
+  <spring:message var="title" code="welcome_titlepane" arguments="${app_name}" />
+  <util:panel id="title" title="${title}">
+    <h3 id="welcome">
+        Hello <sec:authentication property="principal.fullName" />,
+    <spring:message code="welcome_h3" arguments="${app_name}" />
+    </h3>
+	<p>
+		Welcome to the TeamForge Connector
+		<c:if test="${not empty landscape}"> for ${landscape.name}</c:if>.
+		If you can only see this tab, contact your project administrator
+		for further connector permissions.
+	</p>
+	<p>
+	  Your roles: <span id="roles"><sec:authentication property="authorities" /></span>
+    </p>
+  </util:panel>
+</div>

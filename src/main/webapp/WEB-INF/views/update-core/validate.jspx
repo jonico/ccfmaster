@@ -1,0 +1,85 @@
+<div
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:form="http://www.springframework.org/tags/form"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page">
+	<jsp:output omit-xml-declaration="yes" />
+
+	<spring:message code="button_next" var="next_button" />
+	<spring:message code="button_cancel" var="cancel_button" />
+<form:form modelAttribute="fileUploadHandler" method="post">
+<table class="Container" >
+<tbody>
+<tr>
+<td>
+
+	<c:forEach items="${flowRequestContext.messageContext.allMessages}" var="message">
+	<c:choose>
+		<c:when test="${message.severity == 'INFO' }">
+			<div class="greenText">${message.text}</div>
+		</c:when>
+		<c:otherwise>
+			<div class="errorMessage">${message.text}</div>
+		</c:otherwise>
+	</c:choose>
+	</c:forEach>
+	
+	<table class="ItemDetailContainer" width="100%" >
+		<tbody>
+			<tr class="ContainerHeader">
+			<td colspan="5">
+			Core Update
+			</td>
+			</tr>
+			<br/>
+			<br/>
+			<tr>
+			<td> <br/></td>
+			</tr>
+	<c:if test="${'false' eq coreZipFile.saasMode}">
+				<tr>
+				<td colspan="8">
+				<h3>Are you sure you want to proceed update to the uploaded core?</h3>
+				</td>
+				</tr>
+				<tr>
+				<td class="ItemDetailName"><strong>Uploaded core description:</strong></td>
+				<td class="ItemDetailValue">${coreZipFile.description}</td>
+				</tr> 	
+				<tr><td class="ItemDetailName"><strong>Version:</strong></td>
+				<td class="ItemDetailValue">${coreZipFile.version}
+				<br/>
+				<br/>
+				</td>
+				</tr>
+				<tr>
+				<td colspan="5">
+		<p>Please note that the update may take a couple of minutes. Before
+		the update, all running ccf cores will be stopped and a backup will be
+		created. After the upgrade, the cores that were stopped will be
+		started again. Should anything go wrong, you will be returned to this
+		page, so you can retry the update.</p>
+		</td>
+		</tr>
+		<tr class="ContainerFooter" >
+		<td colspan="5" align="right">		
+		<input type="submit" name="_eventId_submit" value="${next_button}" class="Button"  />
+		<input type="submit" name="_eventId_cancel" value="${cancel_button}" class="Button" />
+		</td>
+		</tr>
+	</c:if>
+	</tbody>
+	</table>
+	
+	<c:if test="${'true' eq coreZipFile.saasMode}">
+	<p>Core update wizard is not supported in SAAS Mode.</p>
+	</c:if>
+	</td>
+</tr>
+</tbody>
+</table>
+</form:form>
+</div>

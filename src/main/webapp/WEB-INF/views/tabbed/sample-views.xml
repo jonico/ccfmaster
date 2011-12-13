@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+  <!--
+  Declare the group of tabs once.
+  The links are relative to the application context,
+  i.e. "/foo" will be converted to "/CCFMaster/foo"
+  -->
+  <definition name="myTabs" extends="tabbed">
+    <put-list-attribute name="tabs" cascade="true">
+      <item link="/" value="Home" />
+      <!--
+      You can use the tooltip attribute to specify an alternate title
+      will be shown as the tab's label. In addition, the label is looked
+      up using spring's property mechanism, so it can be used as a l10n key.
+      -->
+      <item link="/tabs/firstTab" tooltip="Long Title With Spaces" value="Page2"/>
+      <item link="/tabs/secondTab" value="Page3" />
+    </put-list-attribute>
+  </definition>
+  
+  <!--
+   Each tab view inherits the list of tabs from the base definition.
+   You need to define which tab name the view corresponds to by
+   setting the activeTab attribute.
+   The tabBody should point at the jspx file that contains the content
+   that should be shown in the tab.
+  -->
+  <definition name="tabs/firstTab" extends="myTabs">
+    <put-attribute name="activeTab" value="Page2" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/index.jspx" cascade="true" />
+  </definition>
+  <definition name="tabs/secondTab" extends="myTabs">
+    <put-attribute name="activeTab" value="Page3" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/index.jspx" cascade="true" />
+  </definition>
+</tiles-definitions>

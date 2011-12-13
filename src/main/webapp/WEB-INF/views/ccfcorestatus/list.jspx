@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus" items="${ccfcorestatuses}" z="LyNfWacFEa206k5kBVXEMpuf+wI=">
+        <table:table data="${ccfcorestatuses}" id="l_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus" path="/ccfcorestatus" z="eqXr6I5LrDCFLOhGbGnCdL4qIH0=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_direction" property="direction" z="oSE7ixVPibFQO5HV7u1IxGxf/k0="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_currentStatus" property="currentStatus" z="vsjN/SMPZd9FBf2g9RZJgthQvFQ="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_executedCommand" property="executedCommand" z="+JTird84/cOTGvKh+7rn1R9nsv0="/>
+        </table:table>
+    </page:list>
+</div>

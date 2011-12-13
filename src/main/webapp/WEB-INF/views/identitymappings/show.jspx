@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping" object="${identitymapping}" path="/identitymappings" z="cHrV1eX2GUgTOi7dlkidCcwed60=">
+    <field:display field="description" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_description" object="${identitymapping}" z="3O4EO3mG9clmCY8D7XnnsMBD+sU="/>
+        
+    <field:display field="sourceArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_sourceArtifactId" object="${identitymapping}" z="q6b97JHw/OZMo7GJrYp3A7i8glE="/>
+    
+    <field:display field="targetArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_targetArtifactId" object="${identitymapping}" z="cDmhV2COtwFTyzamfeZYq4Ml4Pw="/>
+    <field:display date="true" dateTimePattern="${identityMapping_sourcelastmodificationtime_date_format}" field="sourceLastModificationTime" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_sourceLastModificationTime" object="${identitymapping}" z="8kD83Nko4mYcsN80FCFoGZaRlo0="/>
+    <field:display date="true" dateTimePattern="${identityMapping_targetlastmodificationtime_date_format}" field="targetLastModificationTime" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_targetLastModificationTime" object="${identitymapping}" z="el/PIv21sSAqeVjDIGAXBxYUom0="/>
+    <field:display field="sourceArtifactVersion" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_sourceArtifactVersion" object="${identitymapping}" z="YldnD0VkqigsoipHQRcGvH3Nuy8="/>
+    <field:display field="targetArtifactVersion" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_targetArtifactVersion" object="${identitymapping}" z="g2Ii9tKh2s1YCfyOrBRraples+A="/>
+    <field:display field="artifactType" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_artifactType" object="${identitymapping}" z="RByorZ4xeWykih7GmnAsYVA6ZVA="/>
+    <field:display field="depChildSourceArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildSourceArtifactId" object="${identitymapping}" z="sQ4RAwBwL3zUfRTTxxD/PIB0jYw="/>
+    <field:display field="depChildSourceRepositoryId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildSourceRepositoryId" object="${identitymapping}" z="rG6+VOczRr3Zju1HeJGaoPNGId4="/>
+    <field:display field="depChildSourceRepositoryKind" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildSourceRepositoryKind" object="${identitymapping}" z="8m528AWdu9IGIasC9zXoR14LXnY="/>
+    <field:display field="depChildTargetArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildTargetArtifactId" object="${identitymapping}" z="mlc3VqQVGCamj71AbPmit0/LCHw="/>
+    <field:display field="depChildTargetRepositoryId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildTargetRepositoryId" object="${identitymapping}" z="riTW7I5hK9pnTLTHrlNiFyNGocc="/>
+    <field:display field="depChildTargetRepositoryKind" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depChildTargetRepositoryKind" object="${identitymapping}" z="AfN1RIcTSZPejDFY2dOzaFqb0k4="/>
+    <field:display field="depParentSourceArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentSourceArtifactId" object="${identitymapping}" z="B2GZ4vD0ETooLRYLlEVvv5SDZp0="/>
+    <field:display field="depParentSourceRepositoryId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentSourceRepositoryId" object="${identitymapping}" z="CSjMUUwkqTrog9YcrntjXrfLEF8="/>
+    <field:display field="depParentSourceRepositoryKind" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentSourceRepositoryKind" object="${identitymapping}" z="m1n0GsTIR6goFzgkXKHjOC3u+x4="/>
+    <field:display field="depParentTargetArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentTargetArtifactId" object="${identitymapping}" z="pQaP8JibAjggBP0v5EJT1AsqvwY="/>
+    <field:display field="depParentTargetRepositoryId" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentTargetRepositoryId" object="${identitymapping}" z="t+FMKYXANsfCezEZdA2ffJnZrPo="/>
+    <field:display field="depParentTargetRepositoryKind" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_depParentTargetRepositoryKind" object="${identitymapping}" z="ikGebCWKO0rEpo1yUpUJdUFi4EU="/>
+    
+    <field:display field="repositoryMapping" id="s_com_collabnet_ccf_ccfmaster_server_domain_IdentityMapping_repositoryMapping" object="${identitymapping}" z="920pn1BdoLuxqAqMVTP0Zb2d9QA="/>
+    
+    </page:show>
+</div>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_Landscape" items="${landscapes}" z="I4CLL+X0UP3KMZZ+b91QmxLt1mY=">
+        <table:table data="${landscapes}" id="l_com_collabnet_ccf_ccfmaster_server_domain_Landscape" path="/landscapes" z="mYLuecf3/IypVeiXJIyGrydkWUQ=">
+            
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_teamForge" maxLength="-1" property="teamForge" z="user-managed"/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_participant" property="participant" z="lhSQP4cdzxELZvAVFHolkVmlazc="/>
+            
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_plugId" property="plugId" z="kDKvwcvvPIYOC9HWtWUUPjm1ZvY="/>
+        
+        
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Landscape_name" property="name" z="c3Zx7ZEzKf35zC6V6euLFDAYAIU="/>
+        </table:table>
+    </page:list>
+</div>

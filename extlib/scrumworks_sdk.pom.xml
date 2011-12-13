@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>scrumworks_sdk</groupId>
+	<artifactId>scrumworks_sdk</artifactId>
+	<version>4.5.0-SNAPSHOT</version>
+	<name>scrumworks_sdk</name>
+	<description>Scrumworks sdk jar file</description>
+	<parent>
+		<groupId>com.collabnet.ccf</groupId>
+		<artifactId>repo-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>repo-parent.pom</relativePath>
+	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+</project>

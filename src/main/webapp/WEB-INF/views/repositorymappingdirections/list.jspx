@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection" items="${repositorymappingdirections}" z="qXedKQFbHXshj7M1yi+ZNcmLxdo=">
+        <table:table data="${repositorymappingdirections}" id="l_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection" path="/repositorymappingdirections" z="IVKyHrHu1MqSZaUy8jVXxbQqXqs=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_direction" property="direction" z="4XhI1A8STiRzx4gXv22PkCxW2G0="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_repositoryMapping" property="repositoryMapping" z="xEqUpfnO1WQV0HlsLe7/u6zgx60="/>
+            
+            
+            <table:column date="true" dateTimePattern="${repositoryMappingDirection_lastsourceartifactmodificationdate_date_format}" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactModificationDate" property="lastSourceArtifactModificationDate" z="Sm0Lv0eGRP5+tMiu9ZyQGMZS9hA="/>
+            
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_status" property="status" z="FHM0HvXCX2WLG6gIY5zXUyyyCFE="/>
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactVersion" property="lastSourceArtifactVersion" z="BheTGtOOq1rVZfG55AD3HWAqGPo="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactId" property="lastSourceArtifactId" z="T2m+d0XkW/vK5NStRgg10N/iXrc="/>
+        </table:table>
+    </page:list>
+</div>
