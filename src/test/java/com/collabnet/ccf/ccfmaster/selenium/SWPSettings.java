@@ -107,16 +107,22 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 	}
 
 	@Test
-	public void status() {
+	public void connectorStatus() {
 		Util.testStatus(selenium);
 		
 	}
 	
 	@Test
-	public void logs() {
+	public void connectorLogs() {
 		selenium.click("link=Logs");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=Logs SWP to TF");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Logs TF to SWP");
+		selenium.waitForPageToLoad("30000");
+		selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=ccf-info.log");
 		selenium.waitForPageToLoad("30000");
 	}
 	

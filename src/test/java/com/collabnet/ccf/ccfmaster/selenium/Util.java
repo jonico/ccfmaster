@@ -271,6 +271,15 @@ public final class Util {
 			selenium.click("link=Status");
 			selenium.waitForPageToLoad("30000");
 			assertEquals("STOPPED", selenium.getValue("id=currentStatus"));
+			selenium.click("link=Start");
+			selenium.waitForPageToLoad("90000");
+			selenium.click("link=Refresh");
+			assertEquals("STARTED", selenium.getValue("id=currentStatus"));
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=Stop");
+			selenium.waitForPageToLoad("120000");
+			selenium.click("link=Refresh");
+			assertEquals("STOPPED", selenium.getValue("id=currentStatus"));
 		}catch (AssertionError e) {
 			final String msg = "testStatus failed. Base64 screenshot:\n";
 			logScreenshot(msg, selenium);

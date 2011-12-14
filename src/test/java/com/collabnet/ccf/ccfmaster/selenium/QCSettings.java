@@ -96,18 +96,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	}
 	
 	@Test
-	public void fieldMappingTemplates(){
-		selenium.click("link=Field Mapping Templates");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("name=fmtid");
-		selenium.chooseOkOnNextConfirmation();
-		selenium.click("link=Delete");
-		assertEquals("Default Field Mapping Template(s) cannot be deleted", selenium.getAlert());
-		
-	}
-	
-	
-	@Test
 	public void exportFieldMappingTemplates(){
 		selenium.click("link=Field Mapping Templates");
 		selenium.waitForPageToLoad("30000");
@@ -116,14 +104,31 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Export");
 	}
 	
+		
+	@Test
+	public void mergeFieldMappingTemplates(){
+		selenium.click("link=Field Mapping Templates");
+		selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
+		selenium.waitForPageToLoad("30000");
+		//XML file should be stored on below path in the machine where the selenium tests is running.
+		//TODO check if we can export the field mapping template to the below path 
+		selenium.type("id=file", "C:\\Selenium automated\\Default TF Planning Folder to QC Requirement.xml");
+		selenium.click("link=Next");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("id=textbox", "Default TF Planning Folder to QC Requirement");
+		selenium.click("link=Import Selected");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isElementPresent("Updated Successfully"));	
+	} 
+	
 	
 	@Test
 	public void importFieldMappingTemplates(){
 		selenium.click("link=Field Mapping Templates");
 		selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
 		selenium.waitForPageToLoad("30000");
-		//selenium.type("id=file", "C:\\Users\\selvakumar\\Desktop\\Default TF Planning Folder to QC Requirement.xml");
-		//XML  file stored on below path in cu116
+		//XML file should be stored on below path in the machine where the selenium tests is running.
+		//TODO check if we can export the field mapping template to the below path 
 		selenium.type("id=file", "C:\\Selenium automated\\Default TF Planning Folder to QC Requirement.xml");
 		selenium.click("link=Next");
 		selenium.waitForPageToLoad("30000");
@@ -133,7 +138,24 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Return");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isElementPresent("new Default TF Planning Folder to QC Requirement"));	
+	} 
+	
+	
+	@Test
+	public void displayAndDeleteFieldMappingTemplate(){
+		selenium.click("link=Field Mapping Templates");
+		selenium.click("link=Field Mapping Templates QC to TF");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Field Mapping Templates TF to QC");
+		selenium.waitForPageToLoad("30000");
+		//selenium.check("name=fmtid value=new Default TF Planning Folder to QC Requirement");
+		selenium.click("xpath=(//input[@type='checkbox'])[last()]");
+		selenium.chooseOkOnNextConfirmation();
+		selenium.click("link=Delete");
+		selenium.waitForPageToLoad("30000");
+		assertEquals("Selected Field Mapping Templates deleted successfully", selenium.getText("css=div.greenText"));
 	}
+	
 	
 	@Test
 	public void failedShipments(){
@@ -151,18 +173,23 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	}
 	
 	@Test
-	public void status() {
+	public void connectorStatus() {
 		Util.testStatus(selenium);
 		
 	}
 	
 	@Test
-	public void logs() {
+	public void connectorLogs() {
 		selenium.click("link=Logs");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=Logs QC to TF");
 		selenium.waitForPageToLoad("30000");
-
+		selenium.click("link=Logs TF to QC");
+		selenium.waitForPageToLoad("30000");
+		selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=ccf-info.log");
+		selenium.waitForPageToLoad("30000");
 	}
 	
 	private void validateQcUserCredentials(){
