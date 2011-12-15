@@ -172,7 +172,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		
 	}
 	
-	/*@Test
+	@Test
 	public void connectorStatus() {
 		Util.testStatus(selenium);
 		
@@ -190,7 +190,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=ccf-info.log");
 		selenium.waitForPageToLoad("30000");
-	}*/
+	}
 	
 	private void validateQcUserCredentials(){
 		try{
