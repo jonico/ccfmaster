@@ -273,7 +273,7 @@ public final class Util {
 			
 				assertEquals("STOPPED", selenium.getValue("id=currentStatus"));
 				selenium.click("link=Start");
-				for (int second = 0; second < 5; second++) {
+				for (int second = 0; second < 10; second++) {
 					selenium.click("link=Refresh");
 					selenium.waitForPageToLoad("30000");
 					if (selenium.isTextPresent("STARTED")) {
