@@ -41,13 +41,13 @@ public class MockDataUtil {
 		
 	public static void createRepositoryMappingAndRepositoryMappingDirection(Selenium selenium) {
 		final String description = "Repo 1";
-		final String tfRepoId = "tracker1013";
+		final String tfRepoId = "tracker1068";
 		final String partRepoId = "12";
 		createRepositoryMapping(selenium, description, tfRepoId, partRepoId);
 		
 		final Directions direction = Directions.FORWARD;
 		final String lastSourceArtifactVersion = "132";
-		final String lastSourceArtifactId = "artf1053";
+		final String lastSourceArtifactId = "artf1788";
 		final Date lastSourceArtifactModificationDate = new Date();
 		createRepositoryMappingDirection(selenium, direction,
 				lastSourceArtifactVersion, lastSourceArtifactId, lastSourceArtifactModificationDate);
@@ -164,7 +164,7 @@ public class MockDataUtil {
 	
 	public static void createIdentityMapping(Selenium selenium) {
 		final String description="idmap 1";
-		final String sourceArtifactId_id="artf1053";
+		final String sourceArtifactId_id="artf1788";
 		final String targetArtifactId_id= "12";
 		final Date sourceLastModificationTime = new Date();
 		final Date targetLastModificationTime = new Date();
