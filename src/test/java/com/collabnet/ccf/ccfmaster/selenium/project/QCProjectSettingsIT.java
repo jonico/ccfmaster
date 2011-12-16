@@ -26,6 +26,7 @@ import static org.junit.matchers.JUnitMatchers.*;
 	ProjectScopeHospitalRoleLogin.class,
 	ProjectScopeRMRoleLogin.class,
 	ProjectScopeIdMappingRoleLogin.class,
+	ProjectIdentityMappingsPage.class
 })
 public class QCProjectSettingsIT {
 	private static final Logger log = LoggerFactory.getLogger(QCProjectSettingsIT.class);
@@ -44,6 +45,7 @@ public class QCProjectSettingsIT {
 			assertThat(selenium.getLocation(), containsString(ProjectIndexController.PROJECT_INDEX_PATH));
 			MockDataUtil.createRepositoryMappingAndRepositoryMappingDirection(selenium);
 			MockDataUtil.createFailedShipments(selenium);
+			MockDataUtil.createIdentityMapping(selenium);
 		} catch (RuntimeException e) {
 			WebDriver driver = SeleniumSuite.getDriver();
 			if (driver instanceof TakesScreenshot) {

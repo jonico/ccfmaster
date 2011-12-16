@@ -174,6 +174,10 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	
 	@Test
 	public void connectorStatus() {
+		selenium.click("link=Status");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Status QC to TF");
+		selenium.waitForPageToLoad("30000");
 		Util.testStatus(selenium);
 		
 	}

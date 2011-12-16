@@ -108,6 +108,10 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 
 	@Test
 	public void connectorStatus() {
+		selenium.click("link=Status");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Status SWP to TF");
+		selenium.waitForPageToLoad("30000");
 		Util.testStatus(selenium);
 		
 	}
