@@ -41,13 +41,13 @@ public class MockDataUtil {
 		
 	public static void createRepositoryMappingAndRepositoryMappingDirection(Selenium selenium) {
 		final String description = "Repo 1";
-		final String tfRepoId = "tracker1068";
+		final String tfRepoId = "tracker1013";
 		final String partRepoId = "12";
 		createRepositoryMapping(selenium, description, tfRepoId, partRepoId);
 		
 		final Directions direction = Directions.FORWARD;
 		final String lastSourceArtifactVersion = "132";
-		final String lastSourceArtifactId = "artf1788";
+		final String lastSourceArtifactId = "artf1053";
 		final Date lastSourceArtifactModificationDate = new Date();
 		createRepositoryMappingDirection(selenium, direction,
 				lastSourceArtifactVersion, lastSourceArtifactId, lastSourceArtifactModificationDate);
@@ -160,5 +160,33 @@ public class MockDataUtil {
 		selenium.click("id=proceed");
 		selenium.waitForPageToLoad("30000");
 	}
-
+	
+	
+	public static void createIdentityMapping(Selenium selenium) {
+		final String description="idmap 1";
+		final String sourceArtifactId_id="artf1053";
+		final String targetArtifactId_id= "12";
+		final Date sourceLastModificationTime = new Date();
+		final Date targetLastModificationTime = new Date();
+		final String sourceArtifactVersion_id="123";
+		final String targetArtifactVersion_id="124";
+		final String artifactType_id="plain";
+		
+		selenium.open("/CCFMaster/identitymappings?form");
+		selenium.click("id=_description_id");
+		selenium.type("id=_description_id", description);
+		selenium.type("id=_sourceArtifactId_id", sourceArtifactId_id);
+		selenium.type("id=_targetArtifactId_id", targetArtifactId_id);
+		String sourceLastModificationTimeStr = dateFormat.format(sourceLastModificationTime );
+		selenium.type("id=_sourceLastModificationTime_id", sourceLastModificationTimeStr);
+		String targetLastModificationTimeStr = dateFormat.format(targetLastModificationTime);
+		selenium.type("id=_targetLastModificationTime_id", targetLastModificationTimeStr);
+		selenium.click("id=_sourceArtifactVersion_id");
+		selenium.type("id=_sourceArtifactVersion_id", sourceArtifactVersion_id);
+		selenium.type("id=_targetArtifactVersion_id", targetArtifactVersion_id);
+		selenium.type("id=_artifactType_id", artifactType_id);
+		selenium.click("id=proceed");
+		selenium.waitForPageToLoad("30000");
+	}
+	
 }
