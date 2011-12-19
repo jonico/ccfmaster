@@ -34,14 +34,6 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
 		verifyTrue(selenium.isElementPresent("Default TF Planning Folder to QC Requirement"));	
 	} 
 	
-	@Test
-	public void exportFieldMappingTemplates(){
-		selenium.click("link=Field Mapping Templates");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("name=fmtid");
-		selenium.chooseOkOnNextConfirmation();
-		selenium.click("link=Export");
-	}
 	
 	@Test
 	public void mergeFieldMappingTemplates(){
@@ -58,6 +50,15 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isElementPresent("Updated Successfully"));	
 	} 
+	
+	/*@Test
+	public void exportFieldMappingTemplates(){
+		selenium.click("link=Field Mapping Templates");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("name=fmtid");
+		selenium.chooseOkOnNextConfirmation();
+		selenium.click("link=Export");
+	}*/
 	
 	@Test
 	public void displayAndDeleteFieldMappingTemplate(){
