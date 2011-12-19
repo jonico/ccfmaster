@@ -26,7 +26,8 @@ import static org.junit.matchers.JUnitMatchers.*;
 	ProjectScopeHospitalRoleLogin.class,
 	ProjectScopeRMRoleLogin.class,
 	ProjectScopeIdMappingRoleLogin.class,
-	ProjectIdentityMappingsPage.class
+	ProjectIdentityMappingsPage.class,
+	ProjectFieldMappingsPage.class
 })
 public class QCProjectSettingsIT {
 	private static final Logger log = LoggerFactory.getLogger(QCProjectSettingsIT.class);
