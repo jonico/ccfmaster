@@ -30,16 +30,9 @@ public class ProjectScopeHospitalRoleLogin extends ProjectScopeTestBase{
 	public void checkHospital() {
 		driver.get(Util.baseUrl() + "/CCFMaster/project/hospitalentrys?direction=FORWARD&size=1");
 		assertEquals("Failed Shipments", activeMenuEntry().getText());
-		selenium.waitForPageToLoad("30000");
-		selenium.click("name=hospitalid");
-		selenium.click("link=Replay");
-		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isElementPresent("css=div.greenText"));
-		selenium.click("name=hospitalid");
-		selenium.click("link=Examine");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("link=Return");
-		selenium.waitForPageToLoad("30000");
+		Util.testFailedShipmentOperations(selenium);
+		Util.testFailedShipmentFilter(selenium, "artf1785");
+		Util.testFailedShipmentRemoveFilter(selenium);
+		Util.testFailedShipmentDelete(selenium);
 	}
-
 }

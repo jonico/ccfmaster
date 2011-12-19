@@ -1,7 +1,8 @@
 package com.collabnet.ccf.ccfmaster.selenium.project;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -51,6 +52,12 @@ public class ProjectRepositoryMappingsPage extends ProjectScopeTestBase {
 			pagination.openPrevPage();
 			validatePagination(pagination);
 		}
+	}
+	
+	@Test
+	public void testRepositoryMappingOperation(){
+		Util.testRepositoryMappings(selenium);
+		Util.testDeleteRepositoryMappings(selenium);// only for admin roles
 	}
 
 	/**

@@ -22,8 +22,8 @@ import static org.junit.matchers.JUnitMatchers.*;
 @RunWith(SeleniumSuite.class)
 @SuiteClasses({
 	ProjectIndexPage.class,
-	ProjectRepositoryMappingsPage.class,
 	ProjectScopeHospitalRoleLogin.class,
+	ProjectRepositoryMappingsPage.class,
 	ProjectScopeRMRoleLogin.class,
 	ProjectScopeIdMappingRoleLogin.class,
 	ProjectIdentityMappingsPage.class,
