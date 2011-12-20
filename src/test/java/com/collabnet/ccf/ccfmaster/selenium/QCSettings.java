@@ -91,7 +91,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	@Test
 	public void repositoryMappings() {
 		Util.testRepositoryMappings(selenium);
-//		Util.testFailedShipmentCount(selenium);
+		Util.testFailedShipmentCount(selenium);
 		
 	}
 	

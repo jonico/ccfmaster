@@ -15,6 +15,8 @@ public final class Util {
 
 	private static final Logger log = LoggerFactory.getLogger(Util.class);
 	
+	private static final String TfTestConnection_SuccessMsg ="Team Forge: Test Connection Success.";
+	
 	// prevent instantiation.
 	private Util() {
 	}
@@ -88,7 +90,10 @@ public final class Util {
 			selenium.type("participantPasswordLandscapeConfig.val", "invalid");
 			selenium.type("tfUserNameLandscapeConfig.val", "admin");
 			selenium.type("tfPasswordLandscapeConfig.val", "admin");
-			selenium.click("link=Save");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("css=input[type=\"button\"]");
+			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
 			assertFalse("Found error ID on page.", selenium.isElementPresent("id=_title_ccferror_id"));
@@ -120,6 +125,10 @@ public final class Util {
 			selenium.type("participantResyncPasswordLandscapeConfig.val", "invalid");
 			selenium.type("tfUserNameLandscapeConfig.val", "admin");
 			selenium.type("tfPasswordLandscapeConfig.val", "admin");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("css=input[type=\"button\"]");
+			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
 			assertEquals("http://example.org/scrumworks-api/api2/scrumworks?wsdl", selenium.getValue("participantUrlParticipantConfig.val"));
@@ -157,7 +166,6 @@ public final class Util {
 	
 	public static void testTeamforgeSettings(Selenium selenium){
 		try{
-			final String text = "Team Forge: Test Connection Success.";
 			selenium.click("link=TeamForge");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("tfUserNameLandscapeConfig.val", "ccfuser");
@@ -167,8 +175,8 @@ public final class Util {
 			selenium.waitForPageToLoad("30000");
 			assertTrue(selenium.isElementPresent("css=div.greenText"));
 			selenium.click("//input[@value='Test Connection']");
-			waitUntilTextPresent(selenium,text);
-			assertTrue(selenium.isTextPresent(text)); 
+			waitUntilTextPresent(selenium,TfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg)); 
 		}catch (AssertionError e) {
 			final String msg = "test Team forge Settings failed. Base64 screenshot:\n";
 			logScreenshot(msg, selenium);
@@ -239,16 +247,21 @@ public final class Util {
 	}
 	
 	public static void testFailedShipmentCount(Selenium selenium){
-		selenium.open("/CCFMaster/admin/displayrepositorymappingtftopart");
-		selenium.click("link=Repository Mappings");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("name=rmdid");
-		int failedShipmentCount =  Integer.valueOf(selenium.getEval("link=1"));
-		selenium.click("link=1");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("name=hospitalid");
-		//Xpath count always will be greater than 1 when compared with failedShipment List
-		assertEquals( (failedShipmentCount+1),selenium.getXpathCount("//input[@type='checkbox']").intValue());
+		try{
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("name=rmdid");
+			int failedShipmentCount =  Integer.valueOf(selenium.getEval("link=1"));
+			selenium.click("link=1");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("name=hospitalid");
+			//Xpath count always will be greater than 1 when compared with failedShipment List
+			assertEquals( (failedShipmentCount+1),selenium.getXpathCount("//input[@type='checkbox']").intValue());
+		}catch(AssertionError e){
+			final String msg = "test FailedShipment Count failed. Base64 screenshot:\n";
+			logScreenshot(msg, selenium);
+			throw e;
+		}
 	}
 	
 	public static void testFailedShipmentFilter(Selenium selenium,String artifactId){

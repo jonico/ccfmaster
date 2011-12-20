@@ -90,7 +90,7 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 	public void repositoryMappings() {
 		navigateSwpRespositoryMappingTab();		
 		Util.testRepositoryMappings(selenium);
-//		Util.testFailedShipmentCount(selenium);
+		Util.testFailedShipmentCount(selenium);
 		
 	}
 
