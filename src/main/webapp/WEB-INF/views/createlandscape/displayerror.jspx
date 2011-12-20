@@ -13,7 +13,13 @@
 		
 		<util:panel title="CCF Master Error" id="ccferror">
 		<c:if test="${!empty errormessage}"> 
-  		<strong><div class="errorMessage">${errormessage}</div></strong>
+	  		<div class="errorMessage"><strong>${errormessage}</strong></div>
+		</c:if>		 
+		<c:if test="${!empty connectionerror}"> 
+	  		<div class="errorMessage"><strong>${connectionerror}</strong></div>
+		</c:if>
+		<c:if test="${(empty errormessage) and (empty connectionerror)}">
+	  		<div class="errorMessage"><strong>An error occurred but no details were supplied. Please Contact the TeamForge Connector developers.</strong></div>
 		</c:if>		 
 		</util:panel>
 </div>
