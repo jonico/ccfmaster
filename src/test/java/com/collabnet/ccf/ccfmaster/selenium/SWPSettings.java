@@ -97,11 +97,6 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 	@Test
 	public void failedShipments() {
 		Util.testFailedShipments(selenium);
-		
-	}
-	
-	@Test
-	public void deleteRepositoryMappings() {
 		Util.testDeleteRepositoryMappings(selenium);
 		
 	}

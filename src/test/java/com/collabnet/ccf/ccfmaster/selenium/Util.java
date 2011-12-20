@@ -97,7 +97,7 @@ public final class Util {
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
 			assertFalse("Found error ID on page.", selenium.isElementPresent("id=_title_ccferror_id"));
-			assertTrue("Max Attachment Size not present on screen after create landscape", selenium.isTextPresent("Max Attachment Size"));
+//			assertTrue("Max Attachment Size not present on screen after create landscape", selenium.isTextPresent("Max Attachment Size"));
 			assertThat(selenium.getValue("participantUrlParticipantConfig.val"), equalTo("http://example.org/qcbin/"));
 			assertThat(selenium.getValue("participantUserNameLandscapeConfig.val"), equalTo("invalid") );
 		} catch (RuntimeException e) {
@@ -254,7 +254,7 @@ public final class Util {
 			int failedShipmentCount =  Integer.valueOf(selenium.getEval("link=1"));
 			selenium.click("link=1");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("name=hospitalid");
+//			selenium.click("name=hospitalid");
 			//Xpath count always will be greater than 1 when compared with failedShipment List
 			assertEquals( (failedShipmentCount+1),selenium.getXpathCount("//input[@type='checkbox']").intValue());
 		}catch(AssertionError e){

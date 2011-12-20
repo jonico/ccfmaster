@@ -160,14 +160,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	@Test
 	public void failedShipments(){
 		Util.testFailedShipments(selenium);
-		
-	}
-	
-	/**
-	 * Delete repository mappings after executing hospital and identity mappings tests
-	 */
-	@Test
-	public void deleteRepositoryMappings() {
 		Util.testDeleteRepositoryMappings(selenium);
 		
 	}
