@@ -91,9 +91,9 @@ public final class Util {
 			selenium.type("tfUserNameLandscapeConfig.val", "admin");
 			selenium.type("tfPasswordLandscapeConfig.val", "admin");
 //			selenium.waitForPageToLoad("30000");
-//			selenium.click("css=input[type=\"button\"]");
-//			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
-//			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
+			selenium.click("css=input[type=\"button\"]");
+			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
 			selenium.click("link=Save");
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
@@ -127,9 +127,9 @@ public final class Util {
 			selenium.type("tfUserNameLandscapeConfig.val", "admin");
 			selenium.type("tfPasswordLandscapeConfig.val", "admin");
 //			selenium.waitForPageToLoad("30000");
-//			selenium.click("css=input[type=\"button\"]");
-//			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
-//			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
+			selenium.click("css=input[type=\"button\"]");
+			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
 			assertEquals("http://example.org/scrumworks-api/api2/scrumworks?wsdl", selenium.getValue("participantUrlParticipantConfig.val"));
