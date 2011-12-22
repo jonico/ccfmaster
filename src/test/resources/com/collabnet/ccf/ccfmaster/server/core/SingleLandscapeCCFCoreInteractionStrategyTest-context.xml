@@ -22,5 +22,6 @@
 			</map>
 		</property>
 		<property name="ccfHome" value="${java.io.tmpdir}/ccfcore"/>
+		<property name="isArchiveRequired" value="true"/>
 	</bean>
 </beans>

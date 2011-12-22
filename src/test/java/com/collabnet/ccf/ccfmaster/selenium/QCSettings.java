@@ -164,7 +164,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		
 	}
 	
-	@Test
+	/*@Test
 	public void connectorStatus() {
 		selenium.click("link=Status");
 		selenium.waitForPageToLoad("30000");
@@ -186,7 +186,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=ccf-info.log");
 		selenium.waitForPageToLoad("30000");
-	}
+	}*/
 	
 	private void validateQcUserCredentials(){
 		try{
