@@ -276,8 +276,10 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 				+ File.separator + "archive" + File.separator + LANDSCAPE_DIRECTORY_PREFIX
 				+ context.getId());
 		try {
-			FileUtils.copyDirectory(ccfLandscapeDirectory,
-					ccfLandscapeArchiveDirectory, true);
+			if(Boolean.parseBoolean(getIsArchiveRequired())){ // archiving of landscape based on isArchiveRequired property  
+				FileUtils.copyDirectory(ccfLandscapeDirectory,
+						ccfLandscapeArchiveDirectory, true);
+			}
 		} catch (IOException e) {
 			throw new CoreConfigurationException("Could not archive landscape "
 					+ context.getName() + ": " + e.getMessage(), e);

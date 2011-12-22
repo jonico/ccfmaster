@@ -114,6 +114,7 @@
 		<property name="ccfHome" value="#{CCFRunTimeProperties.ccfHome}" />
 		<property name="ccfCoreZipFileLocation" value="WEB-INF/ccfcore/ccfcore.zip" />
 		<property name="immutableLandscapePropertyFileName" value="immutableLandscape.properties" />
+		<property name="isArchiveRequired" value="#{CCFRunTimeProperties.isArchiveRequired}" />
 		
 		<property name="propertyMap">
 			<map>

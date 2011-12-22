@@ -10,5 +10,6 @@
 		<property name="tfUrl" value="${ccf.tf.url:http://pebblevm}"/>
 		<property name="maxAttachmentSize" value="10485760"/>
 		<property name="saasMode" value="${ccf.saasmode:false}"/>
+		<property name="isArchiveRequired" value="${ccf.isArchiveRequired:true}"/>
 	</bean> 
 </beans>

@@ -92,5 +92,14 @@ public abstract class CCFCoreInteractionStrategy<T> {
 	}
 
 	private String ccfHome;
+	
+	private String isArchiveRequired;
 
+	public String getIsArchiveRequired() {
+		return isArchiveRequired;
+	}
+
+	public void setIsArchiveRequired(String isArchiveRequired) {
+		this.isArchiveRequired = isArchiveRequired;
+	}
 }

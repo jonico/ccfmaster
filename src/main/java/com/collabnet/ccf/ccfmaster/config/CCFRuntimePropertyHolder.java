@@ -26,6 +26,8 @@ public class CCFRuntimePropertyHolder {
 	
 	private String saasMode;
 	
+	private String isArchiveRequired;
+	
 	public String getTfUrl() {
 		return tfUrl;
 	}
@@ -122,6 +124,15 @@ public class CCFRuntimePropertyHolder {
 		this.saasMode = saasMode;
 		log.info("CCF Runtime Property SAAS Mode set to " + saasMode);
 	}
+	
+	public String getIsArchiveRequired() {
+		return isArchiveRequired;
+	}
 
+
+	public void setIsArchiveRequired(String isArchiveRequired) {
+		this.isArchiveRequired = isArchiveRequired;
+		log.info("CCF Runtime Property isArchiveRequired set to " + isArchiveRequired);
+	}
 
 }
