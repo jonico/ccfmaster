@@ -194,8 +194,8 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 			selenium.click("link=HP Quality Center");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("id=participantUrlParticipantConfig", "http://cu117.cloud.sp.collab.net:8080/qcbin");
-			selenium.type("id=participantUserNameLandscapeConfig", "alex_qc");
-			selenium.type("id=participantPasswordLandscapeConfig", "");
+			selenium.type("id=participantUserNameLandscapeConfig", "CCFUser");
+			selenium.type("id=participantPasswordLandscapeConfig", "CCFUser");
 			selenium.click("css=input[type=\"button\"]");
 			Util.waitUntilTextPresent(selenium, text);
 			verifyTrue(selenium.isTextPresent(text));

@@ -311,12 +311,14 @@ public final class Util {
 		}
 	}
 	
-	public static Wait waitUntilTextPresent(final Selenium selenium,final String text){
-		return new Wait("Couldn't find Text !") {
+	public static void waitUntilTextPresent(final Selenium selenium,final String text){
+		Wait wait = new Wait() {
 		    public boolean until() {
 		        return selenium.isTextPresent(text);
 		    }
 		};
+		
+		wait.wait("Couldn't find Text !", 60000l); // waits for 60 seconds
 	}
 	
 }
