@@ -101,18 +101,28 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 		
 	}
 
-	/*@Test
-	public void connectorStatus() {
-		selenium.click("link=Status");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("link=Status SWP to TF");
-		selenium.waitForPageToLoad("30000");
-		Util.testStatus(selenium);
-		
+	@Test
+	public void connectorStatusAndLogs() {
+		try {
+			boolean needRerun = false;
+			selenium.click("link=Status");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=Status SWP to TF");
+			selenium.waitForPageToLoad("30000");
+			needRerun = Util.testStatus(selenium);
+			if (needRerun) {
+				Util.testStatus(selenium); // need to validate the status again(i.e if STARTED -> need to check STOPPED status and Vice versa)
+			}
+			testSwpLogs();
+		} catch (AssertionError e) {
+			final String msg = "testStatus failed. Base64 screenshot:\n";
+			Util.logScreenshot(msg, selenium);
+			throw e;
+		}
 	}
 	
-	@Test
-	public void connectorLogs() {
+	
+	public void testSwpLogs() {
 		selenium.click("link=Logs");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=Logs SWP to TF");
@@ -123,7 +133,7 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=ccf-info.log");
 		selenium.waitForPageToLoad("30000");
-	}*/
+	}
 	
 	private void validateCcfUserCredentials(){
 		try{

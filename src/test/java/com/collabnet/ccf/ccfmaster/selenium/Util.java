@@ -17,6 +17,10 @@ public final class Util {
 	
 	private static final String TfTestConnection_SuccessMsg ="Team Forge: Test Connection Success.";
 	
+	private static final String xpath_Started_elemLocator = "//input[@name='currentStatus' and @value='STARTED']";
+	
+	private static final String xpath_Stopped_elemLocator = "//input[@name='currentStatus' and @value='STOPPED']";
+	
 	// prevent instantiation.
 	private Util() {
 	}
@@ -280,35 +284,29 @@ public final class Util {
 		selenium.waitForPageToLoad("30000");
 	}
 	
-	public static void testStatus(Selenium selenium) {
-		try {
-			selenium.click("link=Status");
-			selenium.waitForPageToLoad("30000");
-			
-				//assertEquals("STOPPED", selenium.getValue("id=currentStatus"));
-				selenium.click("link=Start");
-				for (int second = 0; second < 10; second++) {
-					selenium.click("link=Refresh");
-					selenium.waitForPageToLoad("30000");
-					if (selenium.isTextPresent("STARTED")) {
-						break;
-					}
-				}
-				//assertEquals("STARTED", selenium.getValue("id=currentStatus"));
-							selenium.click("link=Stop");
-				for (int second = 0; second < 20; second++) {
-					selenium.click("link=Refresh");
-					selenium.waitForPageToLoad("30000");
-					if (selenium.isTextPresent("STOPPED")) {
-						break;
-					}
-				}
-				//assertEquals("STOPPED", selenium.getValue("id=currentStatus"));
-		} catch (AssertionError e) {
-			final String msg = "testStatus failed. Base64 screenshot:\n";
-			logScreenshot(msg, selenium);
-			throw e;
+	public static boolean testStatus(Selenium selenium) {
+		boolean testStatusPassed = false;
+		selenium.click("link=Status");
+		selenium.waitForPageToLoad("30000");
+		if (selenium.isElementPresent(xpath_Stopped_elemLocator)) {
+			selenium.click("link=Start");
+			testStatusPassed = checkStatusMsg(selenium,
+					xpath_Started_elemLocator, "STARTED");
+		} else if (selenium.isElementPresent(xpath_Started_elemLocator)) {
+			selenium.click("link=Stop");
+			testStatusPassed = checkStatusMsg(selenium,
+					xpath_Stopped_elemLocator, "STOPPED");
 		}
+		return testStatusPassed;
+	}
+
+	private static boolean checkStatusMsg(Selenium selenium, String xpathStr, String statusMsg) {
+		do {
+			selenium.click("link=Refresh");
+			selenium.waitForPageToLoad("30000");
+		} while (!selenium.isElementPresent(xpathStr));
+//		assertEquals(statusMsg, selenium.getValue(xpathStr));
+		return statusMsg.equals(selenium.getValue(xpathStr));
 	}
 	
 	public static void waitUntilTextPresent(final Selenium selenium,final String text){
