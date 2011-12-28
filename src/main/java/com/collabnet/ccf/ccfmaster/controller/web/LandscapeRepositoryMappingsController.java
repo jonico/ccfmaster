@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mvc.extensions.flash.FlashMap;
@@ -49,8 +50,8 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
     public String displayrepositorymappingtftopart(
     		@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
-    		Model model, HttpServletRequest request) {
-		doList(Directions.FORWARD, page, size, model);
+    		Model model, HttpServletRequest request,HttpSession session) {
+		doList(Directions.FORWARD, page, size, model,session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 	 }
     
@@ -60,8 +61,10 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	* 
 	*/  
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_RESUMESYNCHRONIZATION, method = RequestMethod.POST)
-    public String  resumeSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request) {
+    public String  resumeSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request,HttpSession session) {
 		 setStatusForRMDs(RepositoryMappingDirectionStatus.RUNNING, paramdirection, model, request);
+		 model.asMap().clear();
+		 populatePageandSizeInModel(model, session);
 		 if(paramdirection.equals(FORWARD)){
 			 return "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 		 }
@@ -110,8 +113,10 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	* 
 	*/  
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_PAUSESYNCHRONIZATION, method = RequestMethod.POST)
-    public String  pauseSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request) {
+    public String  pauseSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request,HttpSession session) {
 		setStatusForRMDs(RepositoryMappingDirectionStatus.PAUSED, paramdirection, model, request);
+		model.asMap().clear();
+		populatePageandSizeInModel(model, session);
 		if (paramdirection.equals(FORWARD)) {
 			return "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 		} else {
@@ -124,7 +129,7 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	* 
 	*/  
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_DELETESYNCHRONIZATION, method = RequestMethod.POST)
-    public String  deleteSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request) {
+    public String  deleteSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request,HttpSession session) {
 		String[] items = request.getParameterValues(RMDID);
 		if (items == null) 
 			items = new String[0];
@@ -139,8 +144,9 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 		} catch(Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.RMDDELETEFAILUREMESSAGE, exception.getMessage());
 		}
-		
-		//List<RepositoryMappingDirection> rmds = RepositoryMappingDirection.findRepositoryMappingDirectionsByDirection(directions).getResultList();
+		 model.asMap().clear();
+		 populatePageandSizeInModel(model, session);
+		 //List<RepositoryMappingDirection> rmds = RepositoryMappingDirection.findRepositoryMappingDirectionsByDirection(directions).getResultList();
 		//populateModel(model, rmds);
 		
 		if(paramdirection.equals(FORWARD)){
@@ -158,8 +164,8 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
     public String displayrepositorymappingparttotf(
     		@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
-    		Model model, HttpServletRequest request) {
-		doList(Directions.REVERSE, page, size, model);
+    		Model model, HttpServletRequest request,HttpSession session) {
+		doList(Directions.REVERSE, page, size, model,session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGPARTTOTF;
 	}
 
@@ -170,12 +176,14 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	 * @param size
 	 * @param model
 	 */
-	private void doList(Directions direction, Integer page, Integer size, Model model) {
+	private void doList(Directions direction, Integer page, Integer size, Model model,HttpSession session) {
 		List<RepositoryMappingDirection> rmds = paginate(
 				RepositoryMappingDirection.findRepositoryMappingDirectionsByDirection(direction),
 				RepositoryMappingDirection.countRepositoryMappingDirectionsByDirection(direction),
 				page, size, model)
 			.getResultList();
+		session.setAttribute("sizesession", size);
+		session.setAttribute("pagesession", page);
 		populateModel(model, rmds);
 	}
 
@@ -220,5 +228,10 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 		}
 		return rmmList;
 	}	
+	
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	}
 	
 }

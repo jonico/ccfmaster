@@ -61,6 +61,8 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
 			Model model, HttpServletRequest request,HttpSession session) {
 			cleanSession(session);
+			session.setAttribute("sizesession", size);
+			session.setAttribute("pagesession", page);
 			populateHospitalPagedModel(model,Directions.FORWARD,request,null,page,size);
 			return UIPathConstants.LANDSCAPESETTINGS_DISPLAYHOSPITALTFTOPART;
 	}
@@ -196,7 +198,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYHOSPITALINDETAIL, method = RequestMethod.POST)
 	public String  viewHospital(@RequestParam(ControllerConstants.DIRECTION) Directions directions,
 			@RequestParam(RMD_ID_REQUEST_PARAM) String rmdid,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request,HttpSession session ) {
 		RequestContext ctx = new RequestContext(request);
 		String hospitalId= request.getParameter(HOSPITALID);
 		try{
@@ -206,6 +208,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		catch(Exception exception){
 			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.VIEWHOSPITALFAILUREMESSAGE)+ exception.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYHOSPITALINDETAIL;
 
 	}
@@ -217,7 +220,8 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_EXAMINEHOSPITAL, method = RequestMethod.POST)
 	public String  examineHospital(@RequestParam(ControllerConstants.DIRECTION) Directions directions,
 			@RequestParam(RMD_ID_REQUEST_PARAM) String rmdid,
-			Model model, HttpServletRequest request,HttpServletResponse response) {
+			Model model, HttpServletRequest request,HttpServletResponse response,HttpSession session) {
+		RequestContext ctx = new RequestContext(request);
 		Landscape landscape=ControllerHelper.findLandscape(model);
 		String hospitalId= request.getParameter(HOSPITALID);
 		HospitalEntry hospitalEntryWithId=HospitalEntry.findHospitalEntry(new Long(hospitalId));
@@ -229,15 +233,19 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			result=XmlWebHelper.xmlToString(element);
 		} 
 		catch(Exception exception){
-			FlashMap.setErrorMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE, exception.getMessage());
+			//FlashMap.setErrorMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE, exception.getMessage());
+			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE)+ exception.getMessage());
+
 		}
-		response.setContentType("text/xml; charset=utf-8");
+		//response.setContentType("text/xml; charset=utf-8");
+		model.asMap().clear();
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("genericArtifact",result);
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);
 		model.addAttribute("direction",directions.name());
 		model.addAttribute("selectedLink", "hospital");
+		populatePageandSizeInModel(model, session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYEXAMINEHOSPITAL;
 	}
 
@@ -263,6 +271,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALDELETEFAILUREMESSAGE, exception.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		populateHospitalModel(model,directions,request,null);
 		return getNextView(directions, source_filter_artifact_id,
 				target_filter_artifact_id, rmdid, session);
@@ -319,6 +328,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALREPLAYFAILUREMESSAGE, exception.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		populateHospitalModel(model,directions,request,null);
 		return getNextView(directions, source_filter_artifact_id,
 				target_filter_artifact_id, rmdid, session);	
@@ -416,4 +426,8 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		session.removeAttribute(FROM_EXTERNAL_FUNCTION);
 	}
 	
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	}
 }

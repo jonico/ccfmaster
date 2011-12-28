@@ -64,8 +64,8 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	public String displayFieldMappingTftoPart(
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
-			Model model,HttpServletRequest request) {
-		doList(Directions.FORWARD, page, size, model);
+			Model model,HttpServletRequest request, HttpSession session) {
+		doList(Directions.FORWARD, page, size, model,session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESTFTOPART;
 	}
 	/**
@@ -74,14 +74,17 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 * @param size
 	 * @param model
 	 */
-	private void doList(Directions directions, Integer page, Integer size, Model model) {
+	private void doList(Directions directions, Integer page, Integer size, Model model,HttpSession session) {
 		Landscape landscape=ControllerHelper.findLandscape(model);
+
 		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate = paginate(
 				FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndDirection(landscape, directions),
 				FieldMappingLandscapeTemplate.countFieldMappingLandscapeTemplatesByDirection(directions),
 				page, size, model)
 				.getResultList();
 		model.addAttribute("fieldMappingLandscapeTemplate",	fieldMappingLandscapeTemplate);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
 		populateFieldMappingTemplatesModel(model);
 	}
 	/**
@@ -93,8 +96,8 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	public String displayFieldMappingParttoTf(
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
-			Model model,HttpServletRequest request) {
-		doList(Directions.REVERSE, page, size, model);
+			Model model,HttpServletRequest request, HttpSession session) {
+		doList(Directions.REVERSE, page, size, model,session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESPARTTOTF;
 	}
 
@@ -120,7 +123,8 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	public String deleteFieldMappingTemplate(@RequestParam(ControllerConstants.DIRECTION) String paramdirection,
 			@RequestParam(FMTID) String[] items,
 			@ModelAttribute("fieldMappingLandscapeTemplate") FieldMappingLandscapeTemplate fieldMappingLandscapeTemplateModel,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request,
+			@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size,HttpSession session) {
 		String[] newfmtId=null;
 		try {
 			for (String fmtId:items) {
@@ -134,11 +138,18 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			FlashMap.setErrorMessage(ControllerConstants.FMTDELETEFAILUREMESSAGE,exception.getMessage());
 		}
 		model.asMap().clear();
+		populatePageandSizeInModel(model, session);
 		if (paramdirection.equals(ControllerConstants.FORWARD)) {
 			return  "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESTFTOPART;
 		} else {
 			return  "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESPARTTOTF;
 		}
+	}
+
+
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
 	}
 
 	@InitBinder
@@ -183,7 +194,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 * 
 	 */
 	@RequestMapping(value = "/"+ UIPathConstants.LANDSCAPESETTINGS_UPLOADFIELDMAPPINGTEMPLATES)
-	public String uploadFieldMappingTemplate(@RequestParam(ControllerConstants.DIRECTION) String paramdirection,Model model) {
+	public String uploadFieldMappingTemplate(@RequestParam(ControllerConstants.DIRECTION) String paramdirection,Model model, HttpSession session) {
 		Landscape landscape = ControllerHelper.findLandscape(model);
 		FileUpload fileUpload = new FileUpload();
 		model.addAttribute("fileUpload", fileUpload);
@@ -191,6 +202,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		model.addAttribute("landscape", landscape);
 		model.addAttribute("direction", paramdirection);
 		model.addAttribute("selectedLink", "fieldmappingtemplates");
+		populatePageandSizeInModel(model, session);
 		return UIPathConstants.LANDSCAPESETTINGS_UPLOADFIELDMAPPINGTEMPLATES;
 	}
 
@@ -218,6 +230,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			log.debug("Error importing field mapping template: " + exception.getMessage(), exception);
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
+			populatePageandSizeInModel(model, session);
 			return "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_UPLOADFIELDMAPPINGTEMPLATES+"?direction="+paramdirection;
 		}
 		try {
@@ -237,12 +250,14 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			model.addAttribute("fieldMappingLandscapeTemplatelist", fieldMappingLandscapeTemplatelist);
 			model.addAttribute("direction", paramdirection);
 			populateFieldMappingTemplatesModel(model);
+			populatePageandSizeInModel(model, session);
 			session.setAttribute(FROMSESSION, fieldMappingLandscapeTemplateList);
 			return  UIPathConstants.LANDSCAPESETTINGS_LISTFIELDMAPPINGTEMPLATES;
 
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
+			populatePageandSizeInModel(model, session);
 			return "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_UPLOADFIELDMAPPINGTEMPLATES+"?direction="+paramdirection;
 		}
 	}
@@ -309,6 +324,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		}
 		model.addAttribute("status",importStatus);
 		model.addAttribute("directions",paramdirection);
+		populatePageandSizeInModel(model, session);
 		populateFieldMappingTemplatesModel(model);
 		return UIPathConstants.LANDSCAPESETTINGS_FIELDMAPPINGTEMPLATESIMPORTSTATUS;
 	}

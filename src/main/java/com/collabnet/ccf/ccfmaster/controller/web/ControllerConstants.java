@@ -187,6 +187,11 @@ public class ControllerConstants {
 	
 	//Pagination 
 	public static final int PAGINATION_SIZE = 15;
+	public static final String PAGE_IN_SESSION = "pagesession";
+	public static final String SIZE_IN_SESSION = "sizesession";
+	public static final String DEFAULT_PAGE_SIZE = "15";
+	public static final String DEFAULT_PAGE = "1";
+
 	
 	public static final String FORWARD = "forward";
 	
