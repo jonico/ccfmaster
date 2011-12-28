@@ -15,7 +15,9 @@ public final class Util {
 
 	private static final Logger log = LoggerFactory.getLogger(Util.class);
 	
-	private static final String TfTestConnection_SuccessMsg ="Team Forge: Test Connection Success.";
+	private static final String tfTestConnection_SuccessMsg ="Team Forge: Test Connection Success.";
+	
+	private static final String tfTestConnection_InvalidUser_ErrorMsg = "Team Forge: Test Connection Failure.Error logging in. Please verify the username and password.";
 	
 	private static final String xpath_Started_elemLocator = "//input[@name='currentStatus' and @value='STARTED']";
 	
@@ -96,8 +98,8 @@ public final class Util {
 			selenium.type("tfPasswordLandscapeConfig.val", "admin");
 //			selenium.waitForPageToLoad("30000");
 			selenium.click("css=input[type=\"button\"]");
-			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
-			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
+			waitUntilTextPresent(selenium, tfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(tfTestConnection_SuccessMsg));
 			selenium.click("link=Save");
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
@@ -132,8 +134,8 @@ public final class Util {
 			selenium.type("tfPasswordLandscapeConfig.val", "admin");
 //			selenium.waitForPageToLoad("30000");
 			selenium.click("css=input[type=\"button\"]");
-			waitUntilTextPresent(selenium, TfTestConnection_SuccessMsg);
-			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg));
+			waitUntilTextPresent(selenium, tfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(tfTestConnection_SuccessMsg));
 			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
 			assertEquals("http://example.org/scrumworks-api/api2/scrumworks?wsdl", selenium.getValue("participantUrlParticipantConfig.val"));
@@ -173,15 +175,21 @@ public final class Util {
 		try{
 			selenium.click("link=TeamForge");
 			selenium.waitForPageToLoad("30000");
-			selenium.type("tfUserNameLandscapeConfig.val", "ccfuser");
-			selenium.type("tfPasswordLandscapeConfig.val", "ccfuser");
-			selenium.click("link=Save");
-			selenium.click("//button[2]");
-			selenium.waitForPageToLoad("30000");
+			updateTfUserCredentials(selenium,"","");
+//			assertTrue(selenium.isElementPresent("css=span#tfUserNameLandscapeConfig.val.errors"));
+//			assertTrue(selenium.isElementPresent("css=span#tfPasswordLandscapeConfig.val.errors"));
+			//validate incorrect user credentials
+			updateTfUserCredentials(selenium,"abc","abc");
 			assertTrue(selenium.isElementPresent("css=div.greenText"));
 			selenium.click("//input[@value='Test Connection']");
-			waitUntilTextPresent(selenium,TfTestConnection_SuccessMsg);
-			assertTrue(selenium.isTextPresent(TfTestConnection_SuccessMsg)); 
+			waitUntilTextPresent(selenium,tfTestConnection_InvalidUser_ErrorMsg);
+			assertTrue(selenium.isTextPresent(tfTestConnection_InvalidUser_ErrorMsg));
+			//validate correct user credentials
+			updateTfUserCredentials(selenium,"ccfuser","ccfuser");
+			assertTrue(selenium.isElementPresent("css=div.greenText"));
+			selenium.click("//input[@value='Test Connection']");
+			waitUntilTextPresent(selenium,tfTestConnection_SuccessMsg);
+			assertTrue(selenium.isTextPresent(tfTestConnection_SuccessMsg)); 
 		}catch (AssertionError e) {
 			final String msg = "test Team forge Settings failed. Base64 screenshot:\n";
 			logScreenshot(msg, selenium);
@@ -317,6 +325,14 @@ public final class Util {
 		};
 		
 		wait.wait("Couldn't find Text !", 60000l); // waits for 60 seconds
+	}
+	
+	private static void updateTfUserCredentials(Selenium selenium,String userName, String password){
+		selenium.type("id=tfUserNameLandscapeConfig", userName);
+		selenium.type("id=tfPasswordLandscapeConfig", password);
+		selenium.click("id=save");
+		selenium.click("//button[2]");
+		selenium.waitForPageToLoad("30000");
 	}
 	
 }
