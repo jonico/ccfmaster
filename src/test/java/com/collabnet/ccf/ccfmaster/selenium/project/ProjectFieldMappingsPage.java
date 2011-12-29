@@ -52,7 +52,6 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
 	} 
 	
 	
-	@Test
 	public void exportFieldMappingTemplates(){
 		selenium.click("link=Field Mapping Templates");
 		selenium.waitForPageToLoad("30000");
@@ -62,7 +61,8 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
 	}
 	
 	@Test
-	public void displayAndDeleteFieldMappingTemplate(){
+	public void exportAndDeleteFieldMappingTemplate(){
+		exportFieldMappingTemplates();
 		selenium.click("link=Field Mapping Templates");
 		selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=REVERSE");
 		selenium.waitForPageToLoad("30000");
