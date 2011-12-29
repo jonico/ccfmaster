@@ -237,8 +237,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE)+ exception.getMessage());
 
 		}
-		//response.setContentType("text/xml; charset=utf-8");
-		model.asMap().clear();
+		response.setContentType("text/xml; charset=utf-8");
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("genericArtifact",result);
 		model.addAttribute("participant",landscape.getParticipant());
