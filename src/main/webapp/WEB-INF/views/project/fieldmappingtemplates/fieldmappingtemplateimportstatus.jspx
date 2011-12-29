@@ -60,10 +60,10 @@
 				<div class="Button">
 				<div class="Middle">
 					<c:if test="${directions eq 'FORWARD'}">
-						<a href="${fn:escapeXml(returnforward_url)}">${return_button}</a>
+						<a href="${fn:escapeXml(returnforward_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
 						</c:if>
 						<c:if test="${directions eq 'REVERSE'}">
-						<a href="${fn:escapeXml(returnreverse_url)}">${return_button}</a>
+						<a href="${fn:escapeXml(returnreverse_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
 						</c:if>
 				</div>
 				</div>

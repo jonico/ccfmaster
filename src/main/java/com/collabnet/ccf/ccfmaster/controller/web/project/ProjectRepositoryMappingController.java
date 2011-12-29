@@ -5,6 +5,8 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mvc.extensions.flash.FlashMap;
 import org.springframework.stereotype.Controller;
@@ -44,13 +46,15 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions direction,
 			@RequestParam(value = PAGE_REQUEST_PARAM, required = false) Integer page,
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
-			Model model) {
+			Model model,HttpSession session) {
 		List<RepositoryMappingDirection> rmds = paginate(
 				RepositoryMappingDirection.findRepositoryMappingDirectionsByExternalAppAndDirection(ea, direction),
 				RepositoryMappingDirection.countRepositoryMappingDirectionsByExternalAppAndDirection(ea, direction),
 				page, size, model)
 				.getResultList();
 		List<RepositoryMappingsModel> rmmList = LandscapeRepositoryMappingsController.makeRepositoryMappingsModel(rmds, tfUrl);
+		session.setAttribute("sizesession", size);
+		session.setAttribute("pagesession", page);
 		model.addAttribute("repositoryMappingsModel", rmmList);
 		return PROJECT_REPOSITORY_MAPPING_NAME + "/" + direction;
 	}
@@ -59,10 +63,11 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 	public String pause(
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(DIRECTION_REQUEST_PARAM) Directions direction,
-			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection[] rmds) {
+			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection[] rmds, Model model,HttpSession session) {
 		RepositoryMappingDirectionStatus status = RepositoryMappingDirectionStatus.PAUSED;
 		Iterable<RepositoryMappingDirection> validRmds = filter(Arrays.asList(rmds), isValidRmd(ea, direction));
 		setStatusForRmds(validRmds, status);
+		populatePageandSizeInModel(model, session);
 		return redirectUrl(direction);
 	}
 
@@ -70,10 +75,11 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 	public String resume(
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(DIRECTION_REQUEST_PARAM) Directions direction,
-			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection[] rmds) {
+			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection[] rmds, Model model,HttpSession session) {
 		RepositoryMappingDirectionStatus status = RepositoryMappingDirectionStatus.RUNNING;
 		Iterable<RepositoryMappingDirection> validRmds = filter(Arrays.asList(rmds), isValidRmd(ea, direction));
 		setStatusForRmds(validRmds, status);
+		populatePageandSizeInModel(model, session);
 		return redirectUrl(direction);
 	}
 	
@@ -81,7 +87,7 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 	public String delete(
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(DIRECTION_REQUEST_PARAM) Directions direction,
-			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection[] rmds) {
+			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection[] rmds, Model model,HttpSession session) {
 		Iterable<RepositoryMappingDirection> validRmds = filter(Arrays.asList(rmds), isValidRmd(ea, direction));
 		try {
 			for (RepositoryMappingDirection rmd : validRmds) {
@@ -91,6 +97,7 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.RMDDELETEFAILUREMESSAGE, e.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		return redirectUrl(direction);
 	}
 
@@ -123,5 +130,11 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 				       ea.getId().equals(externalApp.getId());
 			}
 		};
+	}
+	
+	
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
 	}
 }

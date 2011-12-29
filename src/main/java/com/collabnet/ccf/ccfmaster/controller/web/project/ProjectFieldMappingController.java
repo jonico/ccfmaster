@@ -67,12 +67,14 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions direction,
 			@RequestParam(value = PAGE_REQUEST_PARAM, required = false) Integer page,
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
-			Model model) {
+			Model model,HttpSession session) {
 		final List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplates = paginate(
 				FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParentAndDirection(ea, direction), 
 				FieldMappingExternalAppTemplate.countFieldMappingExternalAppTemplatesByParentAndDirection(ea, direction),
 				page, size, model)
 				.getResultList();
+		session.setAttribute("sizesession", size);
+		session.setAttribute("pagesession", page);
 		model.addAttribute("fieldMappingLandscapeTemplate",	fieldMappingExternalAppTemplates);
 		return PROJECT_FIELD_MAPPING_TEMPLATES_NAME + "/" + direction;
 	}
@@ -111,7 +113,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(FMT_ID_REQUEST_PARAM) FieldMappingExternalAppTemplate[] entries,
 			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions directions,
-			Model model) {
+			Model model,HttpSession session) {
 		try{
 			Iterable<FieldMappingExternalAppTemplate> validEntries = Iterables.filter(Arrays.asList(entries), isValidFieldMappingExternalAppTemplate(directions, ea));
 			for (FieldMappingExternalAppTemplate entry : validEntries) {
@@ -122,6 +124,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			FlashMap.setErrorMessage(ControllerConstants.FMTDELETEFAILUREMESSAGE,exception.getMessage());
 		}
 		model.asMap().clear();
+		populatePageandSizeInModel(model, session);
 		return "redirect:" + PROJECT_FIELD_MAPPING_TEMPLATES_PATH + "?direction=" + directions;
 	}
 	
@@ -131,7 +134,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 	 * 
 	 */
 	@RequestMapping("/upload")
-	public String uploadFieldMappingTemplate(@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions directions,Model model) {
+	public String uploadFieldMappingTemplate(@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions directions,Model model, HttpSession session) {
 		Landscape landscape = ControllerHelper.findLandscape(model);
 		FileUpload fileUpload = new FileUpload();
 		model.addAttribute("fileUpload", fileUpload);
@@ -139,6 +142,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 		model.addAttribute("landscape", landscape);
 		model.addAttribute("direction", directions.name());
 		model.addAttribute("selectedLink", "fieldmappingtemplates");
+		populatePageandSizeInModel(model, session);
 		return PROJECT_FIELD_MAPPING_TEMPLATES_NAME + "/upload";
 	}
 
@@ -166,6 +170,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			log.debug("Error unmarshalling field mapping template: " + exception.getMessage(), exception);
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
+			populatePageandSizeInModel(model, session);
 			return "redirect:" + PROJECT_FIELD_MAPPING_TEMPLATES_PATH + "/upload?direction="+directions.name();
 		}
 		try {
@@ -186,11 +191,13 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			model.addAttribute("direction", directions.name());
 			populateFieldMappingExternalAppTemplatesModel(model,directions,ea);
 			session.setAttribute(FROMSESSION, fieldMappingExternalAppTemplateList);
+			populatePageandSizeInModel(model, session);
 			return PROJECT_FIELD_MAPPING_TEMPLATES_NAME + "/bulkimport";
 		
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
+			populatePageandSizeInModel(model, session);
 			return "redirect:" + PROJECT_FIELD_MAPPING_TEMPLATES_PATH + "/upload?direction="+directions.name();
 		}
 	}
@@ -230,6 +237,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 		}
 		model.addAttribute("status",importStatus);
 		model.addAttribute("directions",directions.name());
+		populatePageandSizeInModel(model, session);
 		populateFieldMappingExternalAppTemplatesModel(model,directions,ea);
 		return PROJECT_FIELD_MAPPING_TEMPLATES_NAME +  "/status";
 
@@ -354,4 +362,8 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 		};
 	}
 
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	}
 }

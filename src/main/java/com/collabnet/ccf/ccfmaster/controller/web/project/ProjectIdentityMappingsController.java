@@ -62,6 +62,8 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 			Model model,
 			HttpSession session) {
 		cleanSession(session);
+		session.setAttribute("sizesession", size);
+		session.setAttribute("pagesession", page);
 		List<IdentityMapping> identityMappingEntrys = paginate(
 				IdentityMapping.findIdentityMappingsByExternalApp(ea), 
 				IdentityMapping.countIdentityMappingsByExternalApp(ea),
@@ -153,13 +155,14 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(MAPPING_ID_REQUEST_PARAM) IdentityMapping entry,
 			@RequestParam(RMD_ID_REQUEST_PARAM) String  rmdid,
-			Model model) {
+			Model model,HttpSession session) {
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		IdentityMappingsModel identityMappingsModel= modelFor(entry, tfUrl);
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("identitymappingsmodel", identityMappingsModel);
 		model.addAttribute("idmappingversion",identityMappingsModel.getIdentityMappingEntry().getVersion());
 		model.addAttribute("idmappingid",identityMappingsModel.getIdentityMappingEntry().getId());
+		populatePageandSizeInModel(model, session);
 		return PROJECT_IDENTITY_MAPPINGS_NAME + "/details";
 	}
 
@@ -169,7 +172,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 			@RequestParam(RMD_ID_REQUEST_PARAM) String  rmdid,
 			@RequestParam(SOURCE_FILTER_ARTIFACT_ID) String  source_filter_artifact_id,
 			@RequestParam(TARGET_FILTER_ARTIFACT_ID) String  target_filter_artifact_id,
-			@RequestParam(MAPPING_ID_REQUEST_PARAM) IdentityMapping[] entries,HttpSession session) {
+			@RequestParam(MAPPING_ID_REQUEST_PARAM) IdentityMapping[] entries,Model model,HttpSession session) {
 		try {
 			Iterable<IdentityMapping> validEntries = Iterables.filter(Arrays.asList(entries), isValidIdentityMappingEntry(ea));
 			for (IdentityMapping entry : validEntries) {
@@ -179,6 +182,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.IDENTITY_DELETE_FAILURE_MESSAGE, e.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		return getNextView(rmdid, source_filter_artifact_id,
 				target_filter_artifact_id, session);
 	}
@@ -212,7 +216,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 			@RequestParam(RMD_ID_REQUEST_PARAM) String  rmdid,
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			IdentityMappingsModel identityMappingsModel,
-			Model model,HttpServletRequest request) {
+			Model model,HttpServletRequest request,HttpSession session) {
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		try{
 			mergeIdentitymappingdetails(identityMappingId,identityMappingsModel);
@@ -226,6 +230,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		populateIdentityMappingModel(model, identitymappingsmodel);
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("mappingid", identityMappingId);
+		populatePageandSizeInModel(model, session);
 		//model.asMap().clear();
 		return "redirect:" +PROJECT_IDENTITY_MAPPINGS_PATH + "/details";
 	}
@@ -321,4 +326,10 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		return filterIdentityMappingEntrys;
 	}
 
+
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	}
+	
 }

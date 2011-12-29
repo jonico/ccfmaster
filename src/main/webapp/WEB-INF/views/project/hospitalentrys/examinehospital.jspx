@@ -34,15 +34,15 @@
 						<spring:url value="/project/hospitalentrys?rmdid={rmdid}" var="hospital_url">
 							<spring:param name="rmdid" value="${rmid}" />
 						</spring:url>
-						<a href="${fn:escapeXml(hospital_url)}&amp;direction=${direction}">${return_button}</a>
+						<a href="${fn:escapeXml(hospital_url)}&amp;direction=${direction}&amp;page=${page}&amp;size=${size}">${return_button}</a>
 				</c:if>
 				<c:if test="${not empty sessionScope.sourceFilterArtifactId or not empty sessionScope.targetFilterArtifactId}">
-						<spring:url value="/project/hospitalentrys/applyfilter?direction=${direction}" var="apply_filter_hospital_url"/>
+						<spring:url value="/project/hospitalentrys/applyfilter?direction=${direction}&amp;page=${page}&amp;size=${size}" var="apply_filter_hospital_url"/>
 						<c:set scope="session" var="fromExternalFunction" value="true"></c:set>
 						<a href="${apply_filter_hospital_url}">${return_button}</a>
 				</c:if>
 				<c:if test="${empty rmid and empty sessionScope.sourceFilterArtifactId and empty sessionScope.targetFilterArtifactId}">
-			     			<a href="${return_url}?direction=${direction}">${return_button}</a>
+			     			<a href="${return_url}?direction=${direction}&amp;page=${page}&amp;size=${size}">${return_button}</a>
 		     	</c:if>
 				   	
 					</div>

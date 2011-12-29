@@ -65,6 +65,8 @@ public class ProjectHospitalController extends AbstractProjectController {
 				HospitalEntry.findHospitalEntrysByExternalAppAndDirection(ea, direction),
 				HospitalEntry.countHospitalEntrysByExternalAppAndDirection(ea, direction),
 				page, size, model).getResultList();
+		session.setAttribute("sizesession", size);
+		session.setAttribute("pagesession", page);
 		return doList(hospitalEntrys, direction, model);
 	}
 	
@@ -108,13 +110,14 @@ public class ProjectHospitalController extends AbstractProjectController {
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(HOSPITAL_ID_REQUEST_PARAM) HospitalEntry entry,
 			@RequestParam(RMD_ID_REQUEST_PARAM) String rmdid,
-			Model model) {
+			Model model,HttpSession session) {
 		verifyHospitalEntry(ea, entry);
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		HospitalModel hospitalModel = LandscapeHospitalController.modelFor(entry, tfUrl,entry.getRepositoryMappingDirection().getDirection());
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("direction", entry.getRepositoryMappingDirection().getDirection());
 		model.addAttribute("hospitalist", hospitalModel);
+		populatePageandSizeInModel(model, session);
 		return PROJECT_HOSPITAL_NAME + "/details";
 	}
 	
@@ -123,7 +126,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(HOSPITAL_ID_REQUEST_PARAM) HospitalEntry entry,
 			@RequestParam(RM_ID_REQUEST_PARAM) String rmid,
-			Model model) {
+			Model model,HttpSession session) {
 		verifyHospitalEntry(ea, entry);
 		String genericArtifact = "";
 		try {
@@ -137,6 +140,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 		model.addAttribute("rmid", rmid);
 		model.addAttribute("direction", entry.getRepositoryMappingDirection().getDirection());
 		model.addAttribute("genericArtifact", genericArtifact);
+		populatePageandSizeInModel(model, session);
 		return PROJECT_HOSPITAL_NAME + "/payload";
 	}
 	
@@ -147,7 +151,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 			@RequestParam(RM_ID_REQUEST_PARAM) String rmid,
 			@RequestParam(SOURCE_FILTER_ARTIFACT_ID) String  source_filter_artifact_id,
 			@RequestParam(TARGET_FILTER_ARTIFACT_ID) String  target_filter_artifact_id,
-			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions direction,HttpSession session) {
+			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions direction,Model model,HttpSession session) {
 		try {
 			Iterable<HospitalEntry> validEntries = Iterables.filter(Arrays.asList(entries), isValidHospitalEntry(direction, ea));
 			for (HospitalEntry entry : validEntries) {
@@ -158,6 +162,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALREPLAYFAILUREMESSAGE, e.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		return getNextView(rmid, source_filter_artifact_id,
 				target_filter_artifact_id, direction, session);
 		
@@ -184,7 +189,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 			@RequestParam(RM_ID_REQUEST_PARAM) String rmid,
 			@RequestParam(SOURCE_FILTER_ARTIFACT_ID) String  source_filter_artifact_id,
 			@RequestParam(TARGET_FILTER_ARTIFACT_ID) String  target_filter_artifact_id,
-			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions direction,HttpSession session) {
+			@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions direction,Model model,HttpSession session) {
 		try {
 			Iterable<HospitalEntry> validEntries = Iterables.filter(Arrays.asList(entries), isValidHospitalEntry(direction, ea));
 			for (HospitalEntry entry : validEntries) {
@@ -194,6 +199,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALDELETEFAILUREMESSAGE, e.getMessage());
 		}
+		populatePageandSizeInModel(model, session);
 		return getNextView(rmid, source_filter_artifact_id,
 				target_filter_artifact_id, direction, session);
 		
@@ -299,4 +305,10 @@ public class ProjectHospitalController extends AbstractProjectController {
 		}
 		return filterHospitalEntrys;
 	}
+	
+	private void populatePageandSizeInModel(Model model, HttpSession session) {
+		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
+		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	}
+	
 }

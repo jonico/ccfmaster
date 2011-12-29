@@ -173,15 +173,15 @@
 					<spring:url value="/project/identitymappings?rmdid={rmdid}" var="identity_url">
 						<spring:param name="rmdid" value="${rmdid}" />
 					</spring:url>
-					<a href="${identity_url}">${return_button}</a>
+					<a href="${identity_url}&amp;page=${page}&amp;size=${size}">${return_button}</a>
 				</c:if>
 				<c:if test="${not empty sessionScope.sourceFilterArtifactId or not empty sessionScope.targetFilterArtifactId}">
 				<spring:url value="/project/identitymappings/applyfilter" var="apply_filteridentity_url"/>
 				<c:set scope="session" var="externalLink" value="true"></c:set>
-				<a href="${apply_filteridentity_url}">${return_button}</a>
+				<a href="${apply_filteridentity_url}&amp;page=${page}&amp;size=${size}">${return_button}</a>
 				</c:if>
 				<c:if test="${empty rmdid and empty sessionScope.sourceFilterArtifactId and empty sessionScope.targetFilterArtifactId}">
-			     	<a href="${return_url}">${return_button}</a>
+			     	<a href="${return_url}?page=${page}&amp;size=${size}">${return_button}</a>
 		     	</c:if>
 				</div>
 				</div>
