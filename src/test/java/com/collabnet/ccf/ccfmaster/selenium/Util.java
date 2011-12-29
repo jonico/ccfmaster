@@ -90,6 +90,8 @@ public final class Util {
 			selenium.click("//input[@id='systemKind' and @value='QC']");
 			selenium.click("link=Next");
 			selenium.waitForPageToLoad("30000");
+			selenium.click("link=Save");
+			selenium.waitForPageToLoad("30000");
 			selenium.type("landscape.name", "QC Landscape");
 			selenium.type("participantUrlParticipantConfig.val", "http://example.org/qcbin/");
 			selenium.type("participantUserNameLandscapeConfig.val", "invalid");
@@ -123,6 +125,8 @@ public final class Util {
 			selenium.open("/CCFMaster/admin/ccfmaster");
 			selenium.click("//input[@id='systemKind' and @value='SWP']");
 			selenium.click("link=Next");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=Save");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("landscape.name", "SWP Landscape");
 			selenium.type("participantUrlParticipantConfig.val", "http://example.org");
@@ -335,4 +339,11 @@ public final class Util {
 		selenium.waitForPageToLoad("30000");
 	}
 	
+	
+	public static void applyParticipantSaveAndRestartOptions(Selenium selenium){
+		selenium.open("/CCFMaster/admin/ccfmaster");
+		selenium.click("id=save");
+		selenium.click("//button[@type='button']");
+		selenium.waitForPageToLoad("30000");
+	}
 }

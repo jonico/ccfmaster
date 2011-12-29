@@ -51,7 +51,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isElementPresent("css=div.greenText"));
-		
+		Util.applyParticipantSaveAndRestartOptions(selenium);
 		validateQcUserCredentials();
 	}
 	
@@ -90,6 +90,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	
 	@Test
 	public void repositoryMappings() {
+		navigateRespositoryMappingTabs();
 		Util.testRepositoryMappings(selenium);
 		Util.testFailedShipmentCount(selenium);
 		
@@ -159,6 +160,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	
 	@Test
 	public void failedShipments(){
+		navigateFailedShipmentTabs();
 		Util.testFailedShipments(selenium);
 		Util.testDeleteRepositoryMappings(selenium);
 		
@@ -214,5 +216,25 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 			Util.logScreenshot(msg, selenium);
 			throw e;
 		}
+	}
+	
+	private void navigateRespositoryMappingTabs(){
+		selenium.click("link=Repository Mappings");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Repository Mappings QC to TF");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Repository Mappings TF to QC");
+		selenium.waitForPageToLoad("30000");
+	}
+	
+	private void navigateFailedShipmentTabs(){
+		selenium.click("link=Failed Shipments");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Failed Shipments");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Failed Shipment QC to TF");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Failed Shipment TF to QC");
+		selenium.waitForPageToLoad("30000");
 	}
 }

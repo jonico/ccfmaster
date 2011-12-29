@@ -57,6 +57,7 @@ public class ProjectRepositoryMappingsPage extends ProjectScopeTestBase {
 	@Test
 	public void testRepositoryMappingOperation(){
 		Util.testRepositoryMappings(selenium);
+		Util.testFailedShipmentCount(selenium);
 		Util.testDeleteRepositoryMappings(selenium);// only for admin roles
 	}
 

@@ -53,8 +53,11 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isElementPresent("css=div.greenText"));
 		
+
+		Util.applyParticipantSaveAndRestartOptions(selenium);
 		validateCcfUserCredentials();
 		validateCcfResyncUserCredentials();
+		validateInvalidSwpSettings();
 	}
 	
 	@Test
@@ -96,6 +99,7 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 
 	@Test
 	public void failedShipments() {
+		navigateSwpFailedShipmentTab();
 		Util.testFailedShipments(selenium);
 		Util.testDeleteRepositoryMappings(selenium);
 		
@@ -218,6 +222,34 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Repository Mappings SWP to TF");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=Repository Mappings TF to SWP");
+		selenium.waitForPageToLoad("30000");
+	}
+	
+	private void navigateSwpFailedShipmentTab(){
+		selenium.click("link=Failed Shipments");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Failed Shipments");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Failed Shipment SWP to TF");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Failed Shipment TF to SWP");
+		selenium.waitForPageToLoad("30000");
+	}
+	
+	private void validateInvalidSwpSettings(){
+		selenium.type("id=participantUrlParticipantConfig", "");
+		selenium.type("id=participantUserNameLandscapeConfig", "");
+		selenium.type("id=participantPasswordLandscapeConfig", "");
+		selenium.type("id=participantResyncUserNameLandscapeConfig", "");
+		selenium.type("id=participantResyncPasswordLandscapeConfig", "");
+		selenium.click("id=save");
+		selenium.click("//button[2]");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("id=participantUrlParticipantConfig", "test");
+		selenium.type("id=participantResyncUserNameLandscapeConfig", "test");
+		selenium.type("id=participantResyncPasswordLandscapeConfig", "test");
+		selenium.click("id=save");
+		selenium.click("//button[2]");
 		selenium.waitForPageToLoad("30000");
 	}
 

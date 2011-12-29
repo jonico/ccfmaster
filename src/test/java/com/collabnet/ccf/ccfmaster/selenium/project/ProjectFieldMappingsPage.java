@@ -51,14 +51,15 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
 		verifyTrue(selenium.isElementPresent("Updated Successfully"));	
 	} 
 	
-	/*@Test
+	
+	@Test
 	public void exportFieldMappingTemplates(){
 		selenium.click("link=Field Mapping Templates");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("name=fmtid");
 		selenium.chooseOkOnNextConfirmation();
 		selenium.click("link=Export");
-	}*/
+	}
 	
 	@Test
 	public void displayAndDeleteFieldMappingTemplate(){
