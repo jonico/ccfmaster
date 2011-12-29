@@ -11,22 +11,22 @@
   <spring:url value="/images/icons/connector-admin.png" var="siteadmin_image_url" />
   <sec:authorize access="hasRole('ROLE_ADMIN')">
   <span>
-    <img src="${fn:escapeXml(siteadmin_image_url)}" title="${siteadminlabel}" alt="${siteadminlabel}"  border="0" width="18" height="18"  style="margin-left: 5px" /><a href="${adminUrl}">
+    <img src="${fn:escapeXml(siteadmin_image_url)}"  title="${siteadminlabel}" alt="${siteadminlabel}"  border="0" width="18" height="18"  style="margin-left: 5px" /><a href="${adminUrl}">
      ${siteadminlabel}
     </a>
      <c:out value=" | "/>
     
-     <img src="${fn:escapeXml(tf_image_url)}" title="${teamforgeinstancelabel}" alt="${teamforgeinstancelabel}" border="0" />&#160;<a href="${tfUrl}/sf">
+     <img src="${fn:escapeXml(tf_image_url)}" style="vertical-align:-3px" width="18" height="18" title="${teamforgeinstancelabel}" alt="${teamforgeinstancelabel}" border="0" /><a href="${tfUrl}/sf">
     ${teamforgeinstancelabel}
     </a>
-     <c:out value=" | "/>
+     <c:out value=" | "/> 
   </span>
   </sec:authorize>
   
   <c:if test="${pageContext['request'].userPrincipal != null}">
    <span>
       <spring:url value="/resources/j_spring_security_logout" var="logout"/>
-      <img src="${fn:escapeXml(logout_image_url)}" title="Logout" alt="Logout" border="0" />&#160;
+      <img src="${fn:escapeXml(logout_image_url)}"  title="Logout" alt="Logout" border="0" />&#160;
       <a href="${logout}">
         <spring:message code="security_logout"/>
       </a>
