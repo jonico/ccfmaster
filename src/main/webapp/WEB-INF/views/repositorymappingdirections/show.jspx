@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection" object="${repositorymappingdirection}" path="/repositorymappingdirections" z="RTDga3QeDNbdH4/DezpKv6df9ac=">
+        <field:display field="direction" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_direction" object="${repositorymappingdirection}" z="bNcjxxMmseVrfbXuOydgnRz7yzg="/>
+        <field:display field="repositoryMapping" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_repositoryMapping" object="${repositorymappingdirection}" z="0kg7kHKV8Hhc1v82YJnDixEx81o="/>
+        
+        
+        <field:display date="true" dateTimePattern="${repositoryMappingDirection_lastsourceartifactmodificationdate_date_format}" field="lastSourceArtifactModificationDate" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactModificationDate" object="${repositorymappingdirection}" z="X2a13kv8lzJ9AzlqMHLkl/BrvA8="/>
+        <field:display field="lastSourceArtifactVersion" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactVersion" object="${repositorymappingdirection}" z="Ex4tReOOiXfd59symVVebjpaj5w="/>
+        <field:display field="lastSourceArtifactId" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactId" object="${repositorymappingdirection}" z="eQ8n+fRB4Af85cGVWQgQ+jEHl/0="/>
+        
+    <field:display field="status" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_status" object="${repositorymappingdirection}" z="CIQFqnn5RUAYvnw9TfTdf6fcRvc="/>
+    <field:display field="conflictResolutionPolicy" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_conflictResolutionPolicy" object="${repositorymappingdirection}" z="hIz2AQC0+VMODTKuCBxJtVC5pnA="/>
+    
+    
+    <field:display field="activeFieldMapping" id="s_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_activeFieldMapping" object="${repositorymappingdirection}" z="duqjY9CgKvN4dnP5+t40PKLxgQk="/>
+    </page:show>
+</div>

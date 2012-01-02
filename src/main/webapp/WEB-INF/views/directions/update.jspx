@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_Direction" modelAttribute="direction" path="/directions" versionField="Version" z="2tz39Y2JKaKM0oH2UrUJnW+rX5A=">
+        <field:input field="description" id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_description" required="true" z="gwNHtA3ihuiIoxOOvnEwaKN/9C8="/>
+        <field:select field="direction" id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_direction" items="${directionses}" path="directionses" required="true" z="xvXn0QB950hVotOYyg8ZmjiZamw="/>
+        <field:select field="landscape" id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_landscape" itemValue="id" items="${landscapes}" path="/landscapes" required="true" z="Qnr0wgOtJ+8vgPeyTtES6qc29v4="/>
+        
+    <field:checkbox field="shouldStartAutomatically" id="c_com_collabnet_ccf_ccfmaster_server_domain_Direction_shouldStartAutomatically" z="BKdESVQIufnazwaW00qjMww7DAs="/>
+    </form:update>
+</div>

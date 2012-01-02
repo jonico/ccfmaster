@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+	<definition name="project/hospitalentrys" extends="ccfproject">
+		<put-attribute name="activeMenuItem" value="hospitalentrys" cascade="true"/>
+		<put-list-attribute name="tabs" cascade="true">
+			<item link="/project/hospitalentrys?direction=FORWARD" value="Forward" tooltip="TF &#8658; PARTICIPANT"/>
+			<item link="/project/hospitalentrys?direction=REVERSE" value="Reverse" tooltip="PARTICIPANT &#8658; TF"/>
+		</put-list-attribute>
+	</definition>
+     
+	<definition name="project/hospitalentrys/FORWARD" extends="project/hospitalentrys">
+		<put-attribute name="activeTab" value="Forward" cascade="true" />
+		<put-attribute name="tabBody" value="/WEB-INF/views/project/hospitalentrys/hospitaltftopart.jspx" cascade="true" />
+	</definition>    
+
+	<definition name="project/hospitalentrys/REVERSE" extends="project/hospitalentrys">
+		<put-attribute name="activeTab" value="Reverse" cascade="true" />
+		<put-attribute name="tabBody" value="/WEB-INF/views/project/hospitalentrys/hospitalparttotf.jspx" cascade="true" />
+	</definition>
+	
+	<definition name="project/hospitalentrys/details" extends="project/hospitalentrys">
+		<put-attribute name="body" value="/WEB-INF/views/project/hospitalentrys/hospitalentrydetail.jspx" />
+	</definition>
+
+	<definition name="project/hospitalentrys/payload" extends="project/hospitalentrys">
+		<put-attribute name="body" value="/WEB-INF/views/project/hospitalentrys/examinehospital.jspx"/>
+	</definition>
+</tiles-definitions>

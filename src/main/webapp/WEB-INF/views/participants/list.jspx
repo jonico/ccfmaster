@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_Participant" items="${participants}" z="SAgBAPeO+1+CZyxEIgKm8akQcUc=">
+        <table:table data="${participants}" id="l_com_collabnet_ccf_ccfmaster_server_domain_Participant" path="/participants" z="fi+b7tSDzZmYEyp1N12ji+YCf6I=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_description" property="description" z="jZZ0wRH7dqjS3DCrXmZRBCECnBM="/>
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemId" maxLength="-1" property="systemId" z="user-managed"/>
+        
+        
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_encoding" property="encoding" z="2xs9hCrfKbFtP+1eQaxYe+UWaYM="/>
+        
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_timezone" maxLength="-1" property="timezone" z="user-managed"/>
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemKind" property="systemKind" z="jw6ADgmAMY+X0zAAwdLQ+eY1aNU="/>
+        </table:table>
+    </page:list>
+</div>

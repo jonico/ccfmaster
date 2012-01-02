@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection" modelAttribute="repositoryMappingDirection" path="/repositorymappingdirections" versionField="Version" z="kL13NKQ5iczF57Rh7Z52of1bj/w=">
+        <field:select field="direction" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_direction" items="${directionses}" path="directionses" required="true" z="vAFKR+Yn5s3keCwDduBoLkjFAlc="/>
+        <field:select field="repositoryMapping" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_repositoryMapping" itemValue="id" items="${repositorymappings}" path="/repositorymappings" required="true" z="z4TlnQY5eZJ6yMy+sBb9CVa1eio="/>
+        <field:select field="status" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_status" items="${repositorymappingdirectionstatuses}" path="repositorymappingdirectionstatuses" required="true" z="0Lsq7wotZ90veF9S5lxXlG87RbA="/>
+        
+        
+        <field:datetime dateTimePattern="${repositoryMappingDirection_lastsourceartifactmodificationdate_date_format}" field="lastSourceArtifactModificationDate" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactModificationDate" z="98xn6dUv0PCqBRRAjN/BZfYFtuI="/>
+        <field:textarea field="lastSourceArtifactVersion" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactVersion" z="oSN7l+9VJDCQbiXv1c8Cq8uwJz4="/>
+        <field:textarea field="lastSourceArtifactId" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_lastSourceArtifactId" z="YiQIxR9fr5boJRCMvrCKckx0Neo="/>
+        <field:select field="conflictResolutionPolicy" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_conflictResolutionPolicy" items="${conflictresolutionpolicys}" path="conflictresolutionpolicys" required="true" z="lazci3gm3ccPQ/Uc4PPy0uVqN2c="/>
+        
+    
+    <field:select field="activeFieldMapping" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirection_activeFieldMapping" itemValue="id" items="${fieldmappings}" path="/fieldmappings" z="IAozHq5TKqNXfVCa27KRJZ2Otws="/>
+    </form:update>
+</div>

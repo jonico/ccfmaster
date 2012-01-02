@@ -1,0 +1,231 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:headerrow="urn:jsptagdir:/WEB-INF/tags/util/header-row" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:output omit-xml-declaration="yes" />
+<spring:message code="button_delete" var="delete_button"/>
+<spring:message code="identitymappingmenulabel" var="identitymappingmenulabel" htmlEscape="false"/>
+<spring:message code="sourcetimestamplabel" var="sourcetimestamplabel" htmlEscape="false"/>
+<spring:message code="targettimestamplabel" var="targettimestamplabel" htmlEscape="false"/>
+<spring:message code="sourceartifactversionlabel" var="sourceartifactversionlabel" htmlEscape="false"/>
+<spring:message code="targetartifactversionlabel" var="targetartifactversionlabel" htmlEscape="false"/>
+<spring:message code="sourceartifactidlabel" var="sourceartifactidlabel" htmlEscape="false"/>
+<spring:message code="targetartifactidlabel" var="targetartifactidlabel" htmlEscape="false"/>
+<spring:message code="detaillabel" var="detaillabel" htmlEscape="false"/>
+<spring:message code="qcdomainlabel" var="qcdomainlabel" htmlEscape="false"/>
+<spring:message code="swpdomainlabel" var="swpdomainlabel" htmlEscape="false"/>
+<spring:message code="noidentitymessagelabel" var="noidentitymessagelabel" htmlEscape="false"/>
+<spring:url value="/project/identitymappings/delete" var="delete_url" />
+<spring:url value="/project/identitymappings/details" var="details_url" />
+<spring:url value="/images/icons/identityMappingView.gif" var="idmapping_image_url" />
+<spring:url value="/project/identitymappings/applyfilter" var="applyfilter_url" />       
+<spring:url value="/project/identitymappings" var="removefilter_url" />
+<spring:url value="/images/icons/qc-bug.png" var="qc_bug_image_url" />
+<spring:url value="/images/icons/qc-rqt.png" var="qc_rqt_image_url" />
+<spring:url value="/images/icons/swp_metadata.gif" var="swp_metadata_image_url" />
+<spring:url value="/images/icons/swp_pbi.png" var="swp_pbi_image_url" />
+<spring:url value="/images/icons/swp_product.gif" var="swp_product_image_url" />
+<spring:url value="/images/icons/swp_release.gif" var="swp_release_image_url" />
+<spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
+<spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
+
+<spring:url value="/js/ccf-functions.js" var="ccfscript_url" />
+<script src="${fn:escapeXml(ccfscript_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+ 	
+ 	
+<form:form id="identitymappingForm"  name="identitymappingForm" method="POST" action="${fn:escapeXml(applyfilter_url)}" commandName="identitymappingsmodel" modelAttribute="identitymappingsmodel">
+  <table class="Container" >
+		<tbody>
+		<tr><td colspan="4">
+		
+		
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+		
+		<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				<tr class="ContainerHeader">
+				<td colspan="4">
+				${identitymappingmenulabel}
+				</td>
+				<util:header-row  
+				formname="identitymappingForm"
+				applylink="${applyfilter_url}"
+				removelink="${removefilter_url}"
+				rmdid="${rmdid}">
+				</util:header-row>
+				</tr>
+				<c:if test="${fn:length(identitymappingsmodel) > 0}">
+				<tr class="ItemListHeader">
+				 <td width="1"><input type="checkbox" id="selectall"   name="selectall"></input></td><td>${sourceartifactidlabel}</td><td>${targetartifactidlabel}</td><td>${sourcetimestamplabel}</td><td>${targettimestamplabel}</td><td>${detaillabel}</td>
+				  <c:if test="${not empty rmdid}">
+     		 	 <tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td  width="200px"><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}" readonly="readonly" size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td width="200px"><strong>${targetartifactidlabel}:</strong><input type="text" readonly="readonly" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td><td></td></tr>
+     		 	 </c:if>
+     		 	 <c:if test="${empty rmdid}">
+     		 	 <tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td width="200px"><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}"  size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td width="200px"><strong>${targetartifactidlabel}:</strong><input type="text" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td><td></td></tr>
+     		 	 </c:if>
+				 
+     		 	 <c:forEach items="${identitymappingsmodel}" var="idmappinglist" varStatus="status">
+     		 	 	<c:set var="identityMappingentry" value="${idmappinglist.identityMappingEntry}" />
+     		  	    <tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
+					<td><input type="checkbox" class="mappingid" name="mappingid" value="${identityMappingentry.id}" onClick='javascript:toggleButton()'/></td>
+					<c:if test="${idmappinglist.artifactIcon ne 'null'}">
+					<spring:url value="/images/tracker/icons/${idmappinglist.artifactIcon}" var="artifact_image_url" />
+						<td nowrap="nowrap"><img src="${fn:escapeXml(artifact_image_url)}" title="${idmappinglist.repositoryData}"  alt="${idmappinglist.repositoryData}" border="0" class="trackerIcon" />&#160;${identityMappingentry.sourceArtifactId}&#160; : &#160;<a href="${idmappinglist.tfUrl}/sf/go/${identityMappingentry.sourceArtifactId}">${idmappinglist.artifactData}</a></td>
+					</c:if>
+					<c:if test="${idmappinglist.artifactIcon eq 'null'}">
+						<td nowrap="nowrap">${identityMappingentry.sourceArtifactId}</td>
+					</c:if>
+					<c:if test="${participant.systemKind eq 'QC'}">
+							<c:set var="qc_image_url" value="${qc_bug_image_url}"/>
+						   <c:if test="${fn:length(fn:split(identityMappingentry.repositoryMapping.participantRepositoryId, '-')) == 2}">
+						  	<c:set var="qc_image_url" value="${qc_bug_image_url}"/>
+						   </c:if>
+						   <c:if test="${fn:length(fn:split(identityMappingentry.repositoryMapping.participantRepositoryId, '-')) == 3}">
+						  	<c:set var="qc_image_url" value="${qc_rqt_image_url}"/>
+						   </c:if>
+						<td nowrap="nowrap"><img src="${fn:escapeXml(qc_image_url)}"   alt="${qcdomainlabel}" title="${qcdomainlabel}"/>&#160;${identityMappingentry.repositoryMapping.participantRepositoryId} -${identityMappingentry.targetArtifactId}</td>
+					</c:if>
+					
+			 		<c:if test="${participant.systemKind eq 'SWP'}">
+			 			 	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'PBI')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'Product')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'Release')}">
+							  	<c:set var="swp_image_url" value="${swp_release_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'MetaData')}">
+							  	<c:set var="swp_image_url" value="${swp_metadata_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'Theme')}">
+							  	<c:set var="swp_image_url" value="${swp_theme_image_url}"/>
+							   </c:if>
+				 		<td nowrap="nowrap"><img src="${fn:escapeXml(swp_image_url)}"  alt="${swpdomainlabel}" title="${swpdomainlabel}"/>&#160;${identityMappingentry.repositoryMapping.participantRepositoryId} -${identityMappingentry.targetArtifactId}</td>
+			 		</c:if>
+					<td nowrap="nowrap">${identityMappingentry.sourceLastModificationTime}</td>
+					<td nowrap="nowrap">${identityMappingentry.targetLastModificationTime}</td>
+					<td><a href="${details_url}?mappingid=${identityMappingentry.id}&amp;rmdid=${rmdid}"><img src="${fn:escapeXml(idmapping_image_url)}" title="${detaillabel}" alt="${detaillabel}" border="0" /></a></td>
+					</tr> 		
+				  </c:forEach>
+				</tr>
+			</c:if>
+			
+	 		<c:if test="${fn:length(identitymappingsmodel) == 0}">
+	 			<tr class="ItemListHeader">
+	 			<td></td><td> ${sourceartifactidlabel}</td><td>${targetartifactidlabel}</td><td>${sourcetimestamplabel}</td><td>${targettimestamplabel}</td><td>${detaillabel}</td>
+	 			<tr id="filter"  class="OddRow" ><td><strong>Filter:</strong></td><td><strong>${sourceartifactidlabel}:</strong><input type="text" id="sourcefilterartifactid" name="sourcefilterartifactid" value="${sourceFilterArtifactId}"  size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td><strong>${targetartifactidlabel}:</strong><input type="text" id="targetfilterartifactid" name="targetfilterartifactid" value="${targetFilterArtifactId}" size="12" class="inputfield" onKeyPress="return submitenter(this,event)"/></td><td></td><td></td><td></td></tr>
+	 			</tr>
+	 			<tr class="ItemListNoData">
+     		 	<td colspan="8"><center>${noidentitymessagelabel}</center></td>
+      			</tr>
+			</c:if>
+			</tbody>
+			</table>
+				<br/>
+				<br/>
+				<c:if test="${fn:length(identitymappingsmodel) > 0}">
+				<tr class="ContainerFooter">
+				<td>  
+					<util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}"
+						rmdid="${param.rmdid}"
+					/>
+				</td>
+				<td>
+				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<div class="Button">
+				<div class="Middle">
+						<input type="hidden" name="rmdid" value="${rmdid}"/>
+				     	<a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a>
+				</div>
+				</div>
+				</div>
+				</td>
+				
+				<td>
+				<div id="disablebutton" class="AlignRight">
+				<div class="Button">
+				<div class="MiddleDisabled">
+				     	${delete_button}
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				</c:if> 
+				</td>
+				</tr>
+				
+				
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+ 
+	<script language="JavaScript">
+		function deleteForm(url){
+			var result = confirm ("Do you want to delete the selected identity mapping(s)?")
+			if (result){
+	  			document.getElementById("identitymappingForm").action=url;
+		  		document.getElementById("identitymappingForm").submit();
+			}
+		}
+	
+		
+		function toggleButton(){
+			var checkSelected = false;
+			for (i = 0; i &lt; document.getElementById("identitymappingForm").elements.length; i++)
+			{
+				if (document.getElementById("identitymappingForm").elements[i].checked) {
+					checkSelected=true;
+				}
+			}	
+			if(checkSelected){
+				document.getElementById("enablebutton").style.display = "inline";
+				document.getElementById("disablebutton").style.display = "none";
+			}	
+			if (!checkSelected) {
+				document.getElementById("enablebutton").style.display = "none";
+				document.getElementById("disablebutton").style.display = "inline";
+			}	
+		}
+		
+		$(function(){
+		    $("#selectall").click(function () {
+		          $('.mappingid').attr('checked', this.checked);
+		          if($('#selectall').is(':checked')){
+		       	   		$("#enablebutton").css('display', 'inline');
+		        	  	$("#disablebutton").css('display', 'none');
+		        	  	
+		          }
+		          else{
+		        		$("#disablebutton").css('display', 'inline');
+		        		$("#enablebutton").css('display', 'none');
+		          }		
+		        	
+		    });
+		 
+		    // if all checkbox are selected, check the selectall checkbox
+		    // and viceversa
+		    $(".mappingid").click(function(){
+		 		if($(".mappingid").length == $(".mappingid:checked").length) {
+		            $("#selectall").attr("checked", "checked");
+		        } else {
+		            $("#selectall").removeAttr("checked");
+		          }
+			    });
+		});
+		
+
+		
+		
+	</script>		
+</div>

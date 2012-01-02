@@ -1,0 +1,332 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_delete" var="delete_button"/>
+<spring:message code="button_resume" var="resume_button"/>
+<spring:message code="button_pause" var="pause_button"/>
+<spring:message code="status" var="label_status"/>  
+<spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
+<spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:message code="status" var="statuslabel" htmlEscape="false"/>  
+<spring:message code="sourceRepository" var="sourceRepositorylabel" htmlEscape="false"/>
+<spring:message code="targetRepository" var="targetRepositorylabel" htmlEscape="false"/>
+<spring:message code="hospital" var="hospitallabel" htmlEscape="false"/>
+<spring:message code="pausedlabel" var="pausedlabel" htmlEscape="false"/>
+<spring:message code="resumelabel" var="resumelabel" htmlEscape="false"/>
+<spring:message code="qcdomainlabel" var="qcdomainlabel" htmlEscape="false"/>
+<spring:message code="swpdomainlabel" var="swpdomainlabel" htmlEscape="false"/>
+<spring:message code="lastsyncartifactidlabel" var="lastsyncartifactidlabel" htmlEscape="false"/>
+<spring:message code="lastartifactversionlabel" var="lastartifactversionlabel" htmlEscape="false"/>
+<spring:message code="lastmodificationdatelabel" var="lastmodificationdatelabel" htmlEscape="false"/>
+<spring:message code="identitylabel" var="identitylabel" htmlEscape="false"/>
+<spring:message code="norepositorymappingsmessagelabel" var="norepositorymappingsmessagelabel" htmlEscape="false"/>
+<spring:url value="/project/repositorymappings/delete?direction=FORWARD" var="delete_url" />
+<spring:url value="/project/repositorymappings/resume?direction=FORWARD" var="resume_url" />
+<spring:url value="/project/repositorymappings/pause?direction=FORWARD" var="pause_url" />
+<spring:url value="/images/icons/repo_pause.png" var="paused_image_url" />
+<spring:url value="/images/icons/repo_resume.png" var="running_image_url" />
+<spring:url value="/images/icons/qc-bug.png" var="qc_bug_image_url" />
+<spring:url value="/images/icons/qc-rqt.png" var="qc_rqt_image_url" />	 
+<spring:url value="/images/icons/swp_metadata.gif" var="swp_metadata_image_url" />
+<spring:url value="/images/icons/swp_pbi.png" var="swp_pbi_image_url" />
+<spring:url value="/images/icons/swp_product.gif" var="swp_product_image_url" />
+<spring:url value="/images/icons/swp_release.gif" var="swp_release_image_url" />
+<spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
+<spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+ 	 
+<form:form id="repositoryForm"  name="repositoryForm" method="POST" commandName="repositoryMappingsModel" modelAttribute="repositoryMappingsModel">
+  <table class="Container" >
+		<tbody>
+		<tr>
+		<td colspan="9">
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+		<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				<tr class="ContainerHeader">
+				<td colspan="9">
+				<c:if test="${participant.systemKind eq 'QC'}">
+				<strong><c:out value="${tftoqclabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'SWP'}">
+				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				</td>
+				</tr>
+				<tr class="ItemListHeader">
+    			<c:if test="${fn:length(repositoryMappingsModel) > 0}">
+				 <td width="1"><input type="checkbox" id="selectall"  name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>
+				 <c:forEach items="${repositoryMappingsModel}" var="rmm" varStatus="status">
+				 	<c:set var="rmd" value="${rmm.repositoryMappingDirection}" />
+				 	<tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
+				 	<td><input type="checkbox" class="rmdid" name="rmdid" value="${rmd.id}"  onClick="javascript:toggleButton()" /></td>
+					<td width="1">
+					<sec:authorize access="hasRole('ROLE_PAUSE_SYNCHRONIZATION')">
+						<c:if test="${rmd.status eq 'PAUSED'}">
+				  			<a href="javascript: resumeForm('${fn:escapeXml(resume_url)}&amp;rmdid=${rmd.id}');"><img src="${fn:escapeXml(paused_image_url)}" border="0" title="${pausedlabel}" alt="${pausedlabel}"/></a>
+	              		</c:if>
+	              		<c:if test="${rmd.status eq 'RUNNING'}">
+				   		   	<a href="javascript: pauseForm('${fn:escapeXml(pause_url)}&amp;rmdid=${rmd.id}');"><img src="${fn:escapeXml(running_image_url)}" border="0" title="${resumelabel}" alt="${resumelabel}"/></a>
+	              		</c:if>
+              		</sec:authorize>
+					<sec:authorize access="!hasRole('ROLE_PAUSE_SYNCHRONIZATION')">
+						<c:if test="${rmd.status eq 'PAUSED'}">
+				  			<img src="${fn:escapeXml(paused_image_url)}" border="0" title="${pausedlabel}" alt="${pausedlabel}"/>
+	              		</c:if>
+	              		<c:if test="${rmd.status eq 'RUNNING'}">
+				   		   	<img src="${fn:escapeXml(running_image_url)}" border="0" title="${resumelabel}" alt="${resumelabel}"/>
+	              		</c:if>
+              		</sec:authorize>
+					</td>
+		 			<td nowrap="nowrap">
+			 			<c:if test="${rmm.repositoryIcon ne 'null'}">
+							<img src="../images/tracker/icons/${rmm.repositoryIcon}" title="${rmm.repositoryData}" class="trackerIcon" />&#160;<a href="${rmm.tfUrl}"><c:out value= "${rmm.repositoryData}" /> : <c:out value= "${rmm.repositoryId}" /></a>
+						</c:if>
+						<c:if test="${rmm.repositoryIcon eq 'null'}">
+							<c:out value= "${rmm.repositoryId}" />
+						</c:if>
+		 			</td>
+				 	<td nowrap="nowrap">
+				 		
+					   
+						<c:if test="${participant.systemKind eq 'QC'}">
+								<c:set var="qc_image_url" value="${qc_bug_image_url}"/>
+							   <c:if test="${fn:length(fn:split(rmd.repositoryMapping.participantRepositoryId, '-')) == 2}">
+							  	<c:set var="qc_image_url" value="${qc_bug_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:length(fn:split(rmd.repositoryMapping.participantRepositoryId, '-')) == 3}">
+							  	<c:set var="qc_image_url" value="${qc_rqt_image_url}"/>
+							   </c:if>
+				 				<img src="${fn:escapeXml(qc_image_url)}" border="0"  alt="${qcdomainlabel}" title="${qcdomainlabel}"/>&#160;<c:out value= "${rmd.repositoryMapping.participantRepositoryId}" />
+			 			</c:if>
+			 			<c:if test="${participant.systemKind eq 'SWP'}">
+			 					<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'PBI')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Product')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Release')}">
+							  	<c:set var="swp_image_url" value="${swp_release_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'MetaData')}">
+							  	<c:set var="swp_image_url" value="${swp_metadata_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Theme')}">
+							  	<c:set var="swp_image_url" value="${swp_theme_image_url}"/>
+							   </c:if>
+				 				<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${rmd.repositoryMapping.participantRepositoryId}" />
+			 			</c:if>
+		 			</td>
+					<td>
+					<sec:authorize access="hasRole('ROLE_HOSPITAL')">
+						<spring:url value="/project/hospitalentrys?rmdid={rmdid}" var="hospital_url">
+							<spring:param name="rmdid" value="${rmd.id}" />
+						</spring:url>
+						<a href="${hospital_url}"><c:out value= "${rmm.hospitalCount}" /></a>
+					</sec:authorize>
+					<sec:authorize access="!hasRole('ROLE_HOSPITAL')">?</sec:authorize>
+					</td>
+					<td>
+					<sec:authorize access="hasRole('ROLE_IDENTITY_MAPPINGS')">
+						<spring:url value="/project/identitymappings?rmdid={rmdid}" var="identity_url">
+							<spring:param name="rmdid" value="${rmd.id}" />
+						</spring:url>
+						<a href="${identity_url}"><c:out value= "${rmm.identityMappingCount}" /></a>
+					</sec:authorize>
+					<sec:authorize access="!hasRole('ROLE_IDENTITY_MAPPINGS')">?</sec:authorize>
+					</td>
+					<c:if test="${rmm.artifactIcon ne 'null'}">
+					<td><img src="../images/tracker/icons/${rmm.artifactIcon}" title="${rmm.repositoryData}"  alt="${rmm.repositoryData}" border="0" class="trackerIcon" />&#160;${rmd.lastSourceArtifactId}&#160;:&#160;<a href="${rmm.artifatTFUrl}/sf/go/${rmd.lastSourceArtifactId}" title="${lastartifactversionlabel} :${rmd.lastSourceArtifactVersion} | ${lastmodificationdatelabel} :${rmd.lastSourceArtifactModificationDate}" class="poptip">${rmm.artifactData}</a></td>
+					</c:if>
+					<c:if test="${rmm.artifactIcon eq 'null'}">
+					<td nowrap="nowrap"><a title="${lastartifactversionlabel} :${rmd.lastSourceArtifactVersion} | ${lastmodificationdatelabel} :${rmd.lastSourceArtifactModificationDate}" class="poptip">${rmd.lastSourceArtifactId}</a></td>
+					</c:if>
+					</tr> 		
+				  </c:forEach>
+			</c:if>
+			</tr>
+	 		<c:if test="${fn:length(repositoryMappingsModel) == 0}">
+	 			<tr class="ItemListHeader">
+	 			<td>${statuslabel}</td> <td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>
+	 			</tr>
+	 			<tr class="ItemListNoData">
+     		 	<td colspan="9"><center>${norepositorymappingsmessagelabel}</center></td>
+      			</tr>
+			</c:if>
+			</tbody>
+			</table>
+				<br/>
+				<br/>
+				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
+							
+				<tr class="ContainerFooter">
+				<td>
+				 <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" direction="FORWARD"/>
+				</td>
+				<td>
+				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<sec:authorize access="hasRole('ROLE_RESET_SYNCHRONIZATION_STATUS') and hasRole('ROLE_PAUSE_SYNCHRONIZATION') and hasRole('ROLE_MAPPING_RULES')">
+					<div class="Button">
+					<div class="Middle">
+					     	<a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a>
+					</div>
+					</div>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_PAUSE_SYNCHRONIZATION')">
+					<div class="ButtonSpace"></div>
+					<div class="Button">
+					<div class="Middle">
+							<a href="javascript: resumeForm('${fn:escapeXml(resume_url)}');">${resume_button}</a>
+					</div>
+					</div>
+					<div class="ButtonSpace"></div>
+					<div class="Button">
+					<div class="Middle">
+						<a href="javascript: pauseForm('${fn:escapeXml(pause_url)}');">${pause_button}</a>
+					</div>
+					</div>
+				</sec:authorize>
+				</div>
+				</td>
+				<td>
+				<div class="AlignRight" id="disablebutton">
+				<sec:authorize access="hasRole('ROLE_RESET_SYNCHRONIZATION_STATUS') and hasRole('ROLE_PAUSE_SYNCHRONIZATION') and hasRole('ROLE_MAPPING_RULES')">
+					<div class="Button">
+					<div class="MiddleDisabled">
+					     	${delete_button}
+					</div>
+					</div>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_PAUSE_SYNCHRONIZATION')">
+					<div class="ButtonSpace"></div>
+					<div class="Button">
+					<div class="MiddleDisabled">
+							${resume_button}
+					</div>
+					</div>
+					<div class="ButtonSpace"></div>
+					<div class="Button">
+					<div class="MiddleDisabled">
+						${pause_button}
+					</div>
+					</div>
+				</sec:authorize>
+				</div>
+				
+				</td>
+				</tr>
+				
+				</c:if>
+				</td>
+				</tr>
+	</tbody>
+  	</table>
+</form:form>   
+ 	
+ 
+	<script language="JavaScript">
+		function resumeForm(url){
+			document.getElementById("repositoryForm").action=url;
+	  		document.getElementById("repositoryForm").submit();
+			
+		}
+		function pauseForm(url){
+			
+	  		document.getElementById("repositoryForm").action=url;
+	  		document.getElementById("repositoryForm").submit();
+		
+		}
+		function deleteForm(url){
+			var result = confirm ("Do you want to delete the selected repository mapping(s)?")
+			if (result){
+	  		document.getElementById("repositoryForm").action=url;
+	  		document.getElementById("repositoryForm").submit();
+			}
+			
+		}
+
+		
+		function toggleButton(){
+			var checkSelected = false;
+			for (i = 0; i &lt; document.getElementById("repositoryForm").elements.length; i++)
+			{
+				if (document.getElementById("repositoryForm").elements[i].checked) {
+					checkSelected=true;
+				}
+			}	
+			if(checkSelected){
+				document.getElementById("enablebutton").style.display = "inline";
+				document.getElementById("disablebutton").style.display = "none";
+			}	
+			if (!checkSelected) {
+				document.getElementById("enablebutton").style.display = "none";
+				document.getElementById("disablebutton").style.display = "inline";
+			}
+		}
+		
+		$(function(){
+		    $("#selectall").click(function () {
+		          $('.rmdid').attr('checked', this.checked);
+		          if($('#selectall').is(':checked')){
+		       	   		$("#enablebutton").css('display', 'inline');
+		        	  	$("#disablebutton").css('display', 'none');
+		          }
+		          else{
+		        		$("#disablebutton").css('display', 'inline');
+		        		$("#enablebutton").css('display', 'none');
+		          }  
+		    });
+		 
+		    // if all checkbox are selected, check the selectall checkbox
+		    // and viceversa
+		    $(".rmdid").click(function(){
+		 		if($(".rmdid").length == $(".rmdid:checked").length) {
+		            $("#selectall").attr("checked", "checked");
+		        } else {
+		            $("#selectall").removeAttr("checked");
+		          }
+		 
+		    });
+		});
+		
+		
+		$(document).ready(function(){
+			$('.poptip').mouseenter(function(){
+				var text = $(this).attr('title');
+				var posi = $(this).position();
+				var top  = posi.top-25;
+				var left = posi;
+				var wid	 = $(this).width();
+				$(this).attr('title','');
+				$(this).parent().append('<div class="poptext">'+text.replace('|','<br />')+'</div>');
+				$('.poptext').css({'left':(left+wid)+'px',
+							'top':(top-$('.poptext').height())+'px',
+							'background':'#fffeee',
+							'border':'1px solid #f7a229',
+							'display':'none',
+							'position':'absolute',
+							'z-index':'1000',
+							'padding':'8px',
+							'font-size':'1em'
+				});
+				$('.poptext').fadeIn('slow');
+			});
+			$('.poptip').mouseleave(function(){
+				var title = $(this).parent().find('.poptext').html();
+				$(this).attr('title',title.replace('<br />','|'));
+				$(this).parent().find('.poptext').fadeOut('slow');
+				$(this).parent().find('.poptext').remove();
+			});
+			});
+	</script>		
+</div>

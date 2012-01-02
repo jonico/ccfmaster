@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition extends="default" name="repositorymappingdirections/list">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/list.jspx"/>
+    </definition>
+<definition extends="default" name="repositorymappingdirections/show">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/show.jspx"/>
+    </definition>
+<definition extends="default" name="repositorymappingdirections/create">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/create.jspx"/>
+    </definition>
+<definition extends="default" name="repositorymappingdirections/update">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/update.jspx"/>
+    </definition>
+<definition extends="default" name="repositorymappingdirections/findRepositoryMappingDirectionsByRepositoryMappingAndDirection">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/findRepositoryMappingDirectionsByRepositoryMappingAndDirection.jspx"/>
+    </definition>
+<definition extends="default" name="repositorymappingdirections/findRepositoryMappingDirectionsByDirection">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/findRepositoryMappingDirectionsByDirection.jspx"/>
+    </definition>
+<definition extends="default" name="repositorymappingdirections/findRepositoryMappingDirectionsByRepositoryMapping">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappingdirections/findRepositoryMappingDirectionsByRepositoryMapping.jspx"/>
+    </definition>
+</tiles-definitions>

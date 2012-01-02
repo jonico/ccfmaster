@@ -1,0 +1,888 @@
+
+/* Font style and size */
+
+body, div.contentArea, .mastHeadLinks, .mastHeadBackground, input, select, textarea {
+  font-family: Tahoma, "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+body {
+  font-size: 0.69em;
+  line-height: 1.125em;
+}
+
+div.contentArea, .mastHeadLinks, .mastHeadBackground, input, select, textarea {
+  font-size: 1em;
+}
+
+body, div.contentArea, .mastHeadLinks, .mastHeadBackground {
+  color: #000;
+}
+
+/* Background colors, margins, padding */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+} 
+
+div.contentArea {
+  padding: 4px 8px 0px 8px;
+}
+
+/* IE Hack IE6 and earlier  */
+/* These ones are to get rid of the horizontal scrollbars */
+* html div.contentArea  {
+  padding: 8px 0 80px 0;
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+* html div#main {
+  width: 100%;
+}
+
+/* End IE hack */
+
+form {
+  margin: 0;
+}
+
+/* Link styles for the application */
+a:link {
+  color: #05d;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #75479e;
+  text-decoration: none;
+}
+
+/*Navigational elements which don't have visited links indication*/
+.mainnavHeader a:visited, .ImageListParentSelectedNoTop a:visited, .ImageListChild a:visited, .ImageListParent a:visited, .ImageListParentSelected a:visited, .ImageListChildSelected a:visited, .ObjectTree a:visited, .LeftNavigation a:visited, .PageNavTable a:visited, div.breadcrumbs a:visited  {
+  color: #05d;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+table {
+  padding-top: 0;
+}
+
+/* Container Tables */
+
+table.Container {
+  padding: 0;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #d4d2d0;
+  border-top: none;
+  border-right:1px solid #d4d2d0;
+}
+
+
+
+
+/* Top level container headers */
+tr.ContainerHeader td {
+  border-collapse: collapse;   
+  background: #ace url("../images/misc/containerheader_bg.gif") repeat-x;
+  border: 1px solid #ace;
+  border-top: 1px solid #69c;  
+  padding: 3px 5px; 
+  font-size: 1.27em;
+  font-weight: bold;
+   background-position:center center;
+}
+
+/*Second level container headers - headers which are inside other components */
+table table.ItemListTable tr.ContainerHeader td, table table.ItemDetailContainer tr.ContainerHeader td, tr.FieldLayout td, table table.Container tr.ContainerHeader td {
+  background: #c4c2c0;
+  border: 1px solid #c4c2c0;
+  border-top: 1px solid #a4a2a0;
+  padding: 3px 5px; 
+  font-size: 1.09em;
+  font-weight: bold;
+}
+
+
+/*Container Body */
+
+td.ContainerBody, td.ContainerBodyWithBorder, td.ContainerBodyWithPaddedBorder {
+  border-spacing: 0;
+  padding: 0;
+}
+
+td.ContainerBodyWithPaddedBorder {
+  padding: 4px;
+}
+
+td.ContainerBodyWithBorder, td.ContainerBodyWithPaddedBorder {
+  margin: 0;
+  border: 1px solid #d4d2d0;
+  border-top: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+
+/* Used for item detail tables */
+table.ItemDetailContainer {
+  background-color: #fff;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td.ItemDetailContainerCell {
+  border: 1px solid #d4d2d0;
+  border-collapse: collapse;
+  padding: 5px;
+}
+
+td.ItemDetailName, td.ItemDetailValue {
+  border-style: none;
+  padding: 3px;
+}
+
+td.ItemDetailName {
+  white-space: nowrap;
+}
+
+td.ItemDetailValue {
+  width: 95%;
+}
+
+/*
+*********************
+ * TABLE STYLES *
+*********************
+*/
+
+table, td, tr {
+ font-size: 1em;
+}
+
+table td input, table td textarea, table td select {
+ font-size: 100%;
+}
+
+table, tr, td, th {
+  border-spacing: 0;
+  line-height: 95%;
+}
+
+th, td {
+  vertical-align: top;
+}
+
+th {
+  text-align: left;
+}
+
+
+/*Container Footers */
+
+tr.ContainerFooter td {
+  padding: 3px 0 3px 2px;
+  background-color: #d4d2d0;
+  border: 1px solid #d4d2d0;
+}
+
+
+tr.ContainerFooter TD{
+  border-collapse: collapse !important;
+}
+
+
+/* Used for div layout (align left or align right) */
+div.AlignLeft {
+  float: left;
+  position: relative;
+}
+
+div.AlignRight {
+  float: right;
+  position: relative;
+
+}
+
+
+
+/*
+***********************************
+ * FORM SUBMIT BUTTON STYLES *
+ ***********************************
+ */
+
+/* Basic font, positioning, borders, padding, styles */
+div.Button, div.Left, div.Right, div.DropDownRight, div.Button div.ButtonSelection,
+div.Middle, div.MiddleDisabled, div.LeftDisabled, div.RightDisabled {
+  font-weight: normal;
+  text-decoration: none; 
+  white-space: nowrap;
+  float: left;
+  border: none;  
+}
+
+.ButtonSpace, .ButtonSpaceSeparator {
+  float: left;
+}
+
+div.Button div.MiddleDisabled, div.Button div.ButtonSelection { 
+  padding: 4px 8px;
+}
+
+div.Button {
+  float: left;
+  background: #edebca url('../images/button/button_background_gold.gif') repeat-x bottom;
+  border: 1px solid #888;
+  margin-right: 6px;
+}
+
+div.ButtonSpaceSeparator {
+  float:left;
+  margin-right: 6px;
+}
+
+/* Active Button styles */
+div.Button div.Left, div.Button div.Right, div.Button div.LeftDisabled, div.Button div.RightDisabled {
+  display: none;
+}
+
+div.Button div.DropDownRight {
+  background: transparent url('../images/button/dropdown_button_rightcap_hover.gif') center no-repeat;
+  border: none;
+  border-left:1px solid #888;
+  padding: 2px 7px; 
+}
+
+div.Button div.Middle, div.Button div.Middle a:link, div.Button div.Middle a:visited {
+  color:#000;
+}
+
+div.Button div.Middle a {
+  text-decoration: none;
+  padding: 6px 16px 6px 16px;
+  display: inline-block;
+  margin: -2px -8px;
+  color:#222;
+}
+
+div.Button div.ButtonSelection {
+  border-left:1px solid #888;
+  color: #000;
+  background-color: #edebca;
+}
+
+div.Button:hover {
+ background: #f6ebd0 url('../images/button/button_background_hover.gif') repeat-x bottom;
+ display: block;
+ 
+}
+
+div.Button div.DropDownRight:hover {
+  border: none;
+  border-left:1px solid #888; 
+}
+
+div.Button div.DropDownRight, div.Button div.Middle {
+  cursor: pointer;
+}
+
+/* Disabled Button styles */
+div.Button div.MiddleDisabled {
+  background-color: #edebe2; 
+  border: none;
+  
+}
+
+div.Button div.MiddleDisabled {
+  color:#6e6e6e;
+ 
+}
+
+div.Button div.MiddleDisabled a {
+  text-decoration: none;
+  color:#6e6e6e; 
+  cursor: default;
+  
+  
+}
+
+div.Button div.Middle img{
+  margin-top: -5px;
+}
+ 
+#form errors
+.errors {
+	color: red;
+	font-weight: bold;
+	display: block;
+	margin-left: 105px;
+}
+
+/* This is for the required text form fields */
+span.TextRequired {
+  color: #900;
+}
+
+/* Text colors for errors and success messages */
+font.errorMessage, FONT.TextRequired {
+  color:#D53808 !important;
+}
+
+/* Form element properties */
+input.inputfield, select.inputfield, textarea.inputfield{
+  border: #9B9B9B 1px solid;
+  color: #333;
+  background-color: #f2f2f2;
+  padding: 0;
+}
+
+input.inputfield[disabled] {
+  border: #9B9B9B 1px solid;
+  color: #333;
+  background-color: #D7D7D7;
+  padding: 0;
+}
+
+select.inputfield[disabled] {
+  border: #9B9B9B 1px solid;
+  padding: 0;
+  color:#6e6e6e;
+}
+
+input.titleDesc, textarea.titleDesc {
+    width: 630px;
+}
+
+/* Form field errors*/
+.errors {
+  font-weight:  bold;
+  background: #ffefe7  url(../images/icons/up_arrow_alert.gif)  0.4em 0.5em no-repeat ;
+  display: block;
+  padding: 3px 1em 6px 5px;
+  font-size: 110%;
+  text-indent: 3ex;
+  margin: 3px 0 6px 0; 
+  width: 50%;
+}
+
+/* Footer */
+#footer {
+  padding-top: 10px;
+}
+#poweredbylogo {
+  float: left;
+  padding: 0 22px 15px 0;
+  margin-top: -17px;
+}
+
+
+
+/* for NAv menu*/
+td.CategoryListBody{
+  padding: 0;
+  background-color: #f2f5f9;
+  border-spacing: 0;
+  border: 1px solid #d4d2d0;
+  border-top: none;
+  white-space: nowrap;
+  vertical-align: top;
+  width: 15%;
+}
+
+td.CategoryListBody table{
+  padding: 0;
+  width: 100%;
+}
+
+td.CategoryListBody td{
+  padding: 0;
+}
+
+
+
+/* Basic classes for lists that use images as their 'bullets' */
+div.ImageListParentSelectedNoTop,
+div.ImageListParent{
+  list-style-position: inside;
+  list-style-type: none;
+  padding-right: 5px;
+  margin-right: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: nowrap;
+}
+
+div.ImageListParentSelectedNoTop IMG,
+div.ImageListParent IMG,{
+  padding-right: 4px;
+}
+/* Standard properties for a row that is currently selected */
+div.ImageListParentSelectedNoTop {
+  background-color: #f3e9b9;
+  margin-left: 0;
+}
+
+/* The actual list items and their indentation */
+div.ImageListParent, div.ImageListParentSelectedNoTop {
+  padding-left: 10px;
+}
+
+
+/* Used for folder lists (usually the left side of a item list navigation table */
+table.CategoryListTable {
+  width: 100%;
+  border-spacing: 0;
+  border: 1px solid #d4d2d0;
+  border-collapse: collapse;
+  border-right-style: none;
+  vertical-align: top;
+  padding: 0;
+  background-color: #fff;
+}
+
+
+div.errorMessage, div.greenText {
+  font-weight:  normal;
+  background: #f8fff4  url(../images/icons/icon_success_sml.gif) 0.4em 0.5em no-repeat;
+  padding: 6px 2em;
+  font-size: 110%;
+  margin: 3px 0 6px 0;
+  border-top: 2px solid #090;
+  border-left: 1px solid #090;
+} 
+
+
+div.errorMessage {
+  font-weight: bold;
+  background: #fff5f1  url(../images/icons/icon_error_sml.gif)  0.4em 0.5em no-repeat;
+  border-color: #900;
+}
+
+font.errorMessage, FONT.TextRequired {
+  color:#D53808 !important;
+}
+ 
+ 
+
+/*
+******************
+ * TABS STYLES *
+******************
+*/
+
+/* Basic tag block classes */
+table.TabTable {
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* IE6 and below hack */
+* html table.TabTable {
+  border-collapse: collapse;
+}
+
+table.TabTable td, table.TabTable th {
+  vertical-align: middle;
+}
+
+tr.TabHeader td {
+  background-color: #9bd;
+}
+
+tr.SubTabHeader td {
+  background-color: #d4d2d0;
+}
+
+.SubTabHeader td div {
+  padding-right: 0.69em;
+}
+
+tr.TabHeader TD, tr.SubTabHeader td {
+  padding: 3px 3px 3px 10px;
+  border: 1px solid #d4d2d0;
+  border-bottom: none;
+  border-top: none;
+  vertical-align: middle !important;
+}
+
+/* IE6 and below hack */
+* html tr.TabHeader TD, tr.SubTabHeader td {
+  padding-bottom: -1px;
+}
+
+/* The body of a tab */
+td.TabBody, td.TabBody a {
+  font-weight: bold;
+  text-decoration:none;
+  color: #333 !important;
+  white-space: nowrap;
+  width: auto;
+}
+
+/* IE Hack IE6 and earlier  */
+/* Button hover corrections */
+* html div.AppButton div.Middle a:hover {
+  border:none;
+  background: #ececec url('../images/button/button_background_gray.gif') repeat-x bottom left;
+  padding: 2px 9px;
+  margin: -2px -9px;
+  display: block;  
+}
+
+/*added for tables*/
+/* Making table labels more prominent */
+tr.ItemListHeader td, tr.ItemListHeaderNoTopBorder td {
+  font-weight: bold;
+}
+
+
+tr.ItemListHeader td, tr.ItemListHeaderNoTopBorder td, th {
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #c4c2c0;
+  padding: 2px;
+}
+
+
+tr.ItemListHeader, tr.ItemListHeaderNoTopBorder {
+  color: #333;
+  background-color: #e5e5e5;
+  padding: 2px;
+}
+
+tr.ItemListHeader img, tr.ItemListHeaderNoTopBorder img {
+  float: right;
+  margin: 2px;
+}
+
+
+
+tr.ItemListTableRow td, tr.OddRow td, tr.EvenRow td, tr.ItemListNoData td {
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #d4d2d0;
+  padding: 2px;
+}
+
+/* Alternating Row color styles */
+tr.EvenRow {
+ background-color: #fefefe; 
+}
+
+tr.OddRow {
+ background-color: #f2f2f2;
+}
+
+tr.OddRow:hover, tr.EvenRow:hover, tr.OddRow:hover td, tr.EvenRow:hover td {
+  background-color: #d8eeff;
+}
+
+/* This is the "No data found" message on empty tables and portlet windows*/
+tr.ItemListNoData td {  
+  font-size: 1.18em;
+  padding: 15px 0 15px 30px;
+  background: url(../images/icons/icon_info_sml.gif) 10px 1.2em no-repeat center;
+  font-style: italic;
+}
+
+/* Style for "pre"-formatted text */
+pre {
+  font-family: 'Andale Mono', Courier, monospace;
+  font-size: 1.15em;
+}
+
+pre.text {
+  font-family: Tahoma, "Lucida Grande", Verdana, Arial, sans-serif; 
+  font-size: 1em;
+  margin: 0;
+}
+
+.spinner {
+    float: left;
+    padding: 2px;
+}
+
+.trackerIcon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right:4px;
+}
+
+input.UserPickerInput, input.inputfield, select.inputfield, textarea.inputfield, select.FilterInput, input.FilterInput {
+  border: #9B9B9B 1px solid;
+  color: #333;
+  background-color: #f2f2f2;
+  padding: 0;
+}
+
+input.inputfield[disabled] {
+  border: #9B9B9B 1px solid;
+  color: #333;
+  background-color: #D7D7D7;
+  padding: 0;
+  font-size:1em;
+}
+
+select.inputfield[disabled] {
+  border: #9B9B9B 1px solid;
+  padding: 0;
+  color:#6e6e6e;
+}
+
+
+.tooltiplogin {
+	padding: 5px;
+	background: #fffeee;
+	border: 1px solid #f7a229;
+	
+}
+
+
+
+/*
+********************************************
+*  filter bar buttons for tables       *
+********************************************
+*/
+ 
+ div.FilterAppButton {
+  float: left;
+  background: #ececec url('../images/button/button_background_gray.gif') repeat-x bottom left; 
+  border: 1px solid #888;
+  border-left: none;
+  border-collapse: collapse !important;
+  margin-right: 0;
+  cursor: pointer;
+  padding-right: 2px !important;
+}
+
+div.FirstButton {
+  border-left: 1px solid #888;
+}
+
+table.AppButtonTable table.AppButtonTableDisabled{
+  font-size: 1.09em;
+  padding: 0;
+}
+
+table.AppButtonTable:hover {
+  background: #f6ebd0 url('../images/button/button_background_hover.gif') repeat-x bottom;
+}
+
+table.AppButtonTableDisabled {
+  background-color: #edebe2; 
+  border: none;
+  text-decoration: none;
+  color:#6e6e6e; 
+  cursor: default;
+}
+
+div.FilterAppButton td {
+  background: transparent !important;
+  border-width: 0 !important;
+  font-weight: normal;
+  padding: 2px 0 !important;
+}
+
+div.FilterAppButton:hover {
+  background: #f6ebd0 url('../images/button/button_background_hover.gif') repeat-x bottom;
+}
+
+tr.TabHeader table.AppButtonTable table.AppButtonTableDisbaled td.AppButtonPadding img {
+  margin-left: 2px;
+}
+
+.AppButtonPaddingLeft {
+  padding: 0 1px;
+  float: left;
+}
+
+.AppButtonPaddingRight {
+  padding: 0 1px;
+  border-width:0 !important;
+  float: right;
+}
+
+.AppButtonPadding {
+  border-width: 0;
+}
+  
+.AppButtonPadding img {
+  padding-right: 2px;
+  padding-left: 1px;
+}
+
+#removefilterbutton img {
+  padding-right: 3px;
+}
+
+table.AppButtonTable .AppButtonText table.AppButtonTableDisabled .AppButtonText {
+  font-weight:normal !important;
+  vertical-align: middle;
+  white-space: nowrap;
+  font-size: 0.83em !important;
+}
+
+tr.TabHeader .AppButtonText, tr.SubTabHeader .AppButtonText {
+  font-size: 0.92em !important;
+}
+
+tr.ContainerHeader .AppButtonText {
+   font-size: 0.71em !important;
+}
+
+table table.ItemListTable tr.ContainerHeader .AppButtonText {
+   font-size: 0.83em !important;
+}
+
+
+/* IE Hack IE6 and earlier  */
+/* Button hover corrections */
+* html div.AppButton div.Middle a:hover {
+  border:none;
+  background: #ececec url('../images/button/button_background_gray.gif') repeat-x bottom left;
+  padding: 2px 9px;
+  margin: -2px -9px;
+  display: block;  
+}
+
+.FilterAppButton a, .FilterAppButton a:visited {
+  text-decoration:none;
+  color: #000;
+}
+
+.HeaderRowBar {
+  padding-top: 3px;
+}
+
+.TabHeader td div {
+  padding-right:0.69em;
+}
+
+
+/*
+***************************
+ * MISC STYLES *
+***************************
+*/
+
+.floatleft {
+  float: left;
+}
+
+.floatright {
+  float: right;
+}
+
+.selectiongroup { 
+  padding: 2px 0 6px 2em;
+}
+
+img#filtericon {
+  padding: 0 3px;
+  margin-right: 3px;
+}
+
+tr#filter {
+  background-color: #cde;
+}
+
+tr#filter td {
+   border: 1px solid #c4c2c0;
+}
+
+tr#filter:hover td {
+  background-color: #cde;
+}
+
+#image {
+	border: none;
+	height: auto;
+}
+
+/*
+*****************
+ * LAYOUT STYLES *
+*****************
+*/  
+
+
+/* Style classes for the menu bar */
+
+.mastHeadLink, .mastHeadLinkSelected {
+  border-left:15px #ebebeb;
+  color: #fff;
+}
+
+.mastHeadBackground {
+  background: #6d92b5 url('../images/header/banner_bgSlice.gif') repeat-y;
+  width: 100%;
+}
+
+.mastHeadBackground td {
+  padding-bottom: 0;
+}
+
+.mastHeadBackground tr.sitelogo td {
+  padding: 8px 10px;
+}
+
+.PaddedTable tr.sitelogo td {
+  padding: 8px 6px;
+}
+
+.logonMenu {
+  margin: 8px 6px 6px 6px;
+}
+
+.mastHeadLink a, .mastHeadLink a:visited, .mastHeadLinkSelected {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.mastHeadLink a:hover{
+  color: #F69124;
+}
+
+.mastHeadLinkSelected {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.mastHeadLinkSpacing {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+/*
+* TF styles for input type Buttons
+*
+*/
+
+input.Button {
+  float: right;
+  background: #edebca url('../images/button/button_background_gold.gif') repeat-x bottom;
+  border: 1px solid #888;
+  margin-right: 6px;
+}
+
+
+input.Button:hover {
+ background: #f6ebd0 url('../images/button/button_background_hover.gif') repeat-x bottom;
+ display: block;
+ 
+}
+
+input.Button{
+  cursor: pointer;
+}
+
+ 

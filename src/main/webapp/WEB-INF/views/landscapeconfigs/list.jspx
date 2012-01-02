@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_LandscapeConfig" items="${landscapeconfigs}" z="opoxA6ULSJ6S4I+saQ+VMlYqtVk=">
+        <table:table data="${landscapeconfigs}" id="l_com_collabnet_ccf_ccfmaster_server_domain_LandscapeConfig" path="/landscapeconfigs" z="MIGPt8qqULH4Wcos/ZtrntzxBIc=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_LandscapeConfig_landscape" property="landscape" z="zky3BeOfMv3VE1Ib/lcMfUw+9FE="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_LandscapeConfig_name" property="name" z="tqytWQZvCbR+jolTcnmZ5zWjvCQ="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_LandscapeConfig_val" property="val" z="1usKsxTjVDV9BbEXtNy617HXygk="/>
+        </table:table>
+    </page:list>
+</div>

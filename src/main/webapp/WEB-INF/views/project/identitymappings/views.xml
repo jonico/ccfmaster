@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+	 <definition name="identitymappingsTabs" extends="ccfproject">
+	 <put-attribute name="activeMenuItem" value="identitymappings" cascade="true"/>
+     <put-list-attribute name="tabs" cascade="true">
+      <item link="/project/identitymappings" tooltip="Identity Mappings" value="Page1"/>
+      </put-list-attribute>
+    </definition>
+  
+   <definition name="project/identitymappings" extends="identitymappingsTabs">
+    <put-attribute name="body" value="/WEB-INF/views/project/identitymappings/listidentitymappings.jspx"/>
+  </definition>
+  
+ 
+  <definition name="project/identitymappings/details" extends="project/identitymappings">
+		<put-attribute name="body" value="/WEB-INF/views/project/identitymappings/identitymappingdetail.jspx" />
+  </definition>
+</tiles-definitions>

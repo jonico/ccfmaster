@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry" items="${hospitalentrys}" z="+RdVCo0sSTFtWY3P2Qsi/p1Cmf0=">
+        <table:table data="${hospitalentrys}" id="l_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry" path="/hospitalentrys" z="heOE5wYj793CSfudhbDxCfJ6ObI=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_description" property="description" z="vRhXSi+eaCMg/1l0Xdf6Ho5AYbM="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_exceptionClassName" property="exceptionClassName" z="E0rmIKScISgwG3Cce5or3y3dKks="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_exceptionMessage" property="exceptionMessage" z="L66ztcuvxOaxlPRy0g0mUqknzb0="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_causeExceptionClassName" property="causeExceptionClassName" z="1bhsBirhjNGYuzyG5tSQ2VdG9TI="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_repositoryMappingDirection" property="repositoryMappingDirection" z="IWlxyMSF0oXjlSUhS4gnvQdGO6o="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_HospitalEntry_timestamp" property="timestamp" z="yRLpHlu/ZXyHn0e950/QslNQ9Xk="/>
+        </table:table>
+    </page:list>
+</div>

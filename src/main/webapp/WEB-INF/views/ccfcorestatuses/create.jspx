@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus" modelAttribute="ccfCoreStatus" path="/ccfcorestatuses" render="${empty dependencies}" z="UcbdfWzqQcfH3NwV9o9O7ubT3ZU=">
+        <field:select field="direction" id="c_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_direction" itemValue="id" items="${directions}" path="/directions" required="true" z="AfquvpVRppxHP6gLZVQ0jH//dfE="/>
+        
+        <field:input field="executedCommand" id="c_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_executedCommand" required="true" z="M0kp+BJvsLlcCpdaggUCTDTLDjw="/>
+    <field:input field="currentStatus" id="c_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus_currentStatus" required="true" z="yoVpGq4fYB4sX/mGn1WlNwr1F+g="/>
+    
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_collabnet_ccf_ccfmaster_server_domain_CcfCoreStatus" render="${not empty dependencies}" z="S2jyG4ZgTxiWXeOf5jdG+bAXIwk="/>
+</div>

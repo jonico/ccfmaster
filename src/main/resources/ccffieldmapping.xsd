@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 (http://www.altova.com) by Victor Madrigal (Collab.net) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ccffieldmapping="http://ccf.open.collab.net/CCFFieldMappingV1.0" xmlns:ccf="http://ccf.open.collab.net/GenericArtifactV1.0" targetNamespace="http://ccf.open.collab.net/CCFFieldMappingV1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="CCFFieldMapping">
+    <xs:annotation>
+      <xs:documentation>This element contains all information needed to describe the field mappings necessary to transform an artifact of artifact type source into an artifact of artifact type target. It consists of the repository layout information of artifact type a, artifact type b and all mapping rules necessary for the transformation.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SourceRepositoryLayout">
+          <xs:annotation>
+            <xs:documentation>Describes the layout of the source repository, namely the available fields, their types, cardinality and possible values.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="ccffieldmapping:RepositoryLayoutAttributes"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TargetRepositoryInfo">
+          <xs:annotation>
+            <xs:documentation>Describes the layout of the source repository, namely the available fields, their types, cardinality and possible values.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="ccffieldmapping:RepositoryLayoutAttributes"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element name="PatternBasedMappingRules">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="FieldMapping" minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                    <xs:documentation>Used to map an input field to an output field if an (optional) user defined condition based on the input field’s value is met. Example: Map TF assigned user to QC assigned user if TF assigned user is set.
+                    </xs:documentation>
+                  </xs:annotation>
+                  <xs:complexType>
+                    <xs:attributeGroup ref="ccffieldmapping:BasicMappingRuleAttributes"/>
+                    <xs:attributeGroup ref="ccffieldmapping:PatternBasedMappingRuleAttributes"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="ConstantMapping" minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                    <xs:documentation>Used to map a constant to a field if an (optional) user defined condition based on an input field’s value is met. Example: Set artifact action to “ignore” if QC category field was set to “Internal”. The value of the source attribute will be ignored as long as there is no condition.</xs:documentation>
+                  </xs:annotation>
+                  <xs:complexType>
+                    <xs:attribute name="constantValue" use="required">
+                      <xs:annotation>
+                        <xs:documentation>The value of the constant.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attributeGroup ref="ccffieldmapping:BasicMappingRuleAttributes"/>
+                    <xs:attributeGroup ref="ccffieldmapping:PatternBasedMappingRuleAttributes"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="ValueMapMapping" minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                    <xs:documentation>Used to transform the field values of an input field using a value map and transport the result into an output field if an (optional) user defined condition based on the input field’s value is met. Example: Only apply the value map for a small subset of QC users that are contractors, use the original field value in all other cases (requires second rule).
+
+                    </xs:documentation>
+                  </xs:annotation>
+                  <xs:complexType>
+                    <xs:attributeGroup ref="ccffieldmapping:BasicMappingRuleAttributes"/>
+                    <xs:attributeGroup ref="ccffieldmapping:PatternBasedMappingRuleAttributes"/>
+                    <xs:attribute name="valueMapName" type="xs:IDREF" use="required">
+                      <xs:annotation>
+                        <xs:documentation>Name of the value map to be used.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="ValueMap" minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                    <xs:documentation>Value maps that can be referenced by pattern based rules for field value transformations.</xs:documentation>
+                  </xs:annotation>
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="Entry" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                          <xs:documentation>Entries of the value map.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required">
+                            <xs:annotation>
+                              <xs:documentation>Input that should be mapped to value.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                          <xs:attribute name="value" type="xs:string" use="required">
+                            <xs:annotation>
+                              <xs:documentation>Output that is used if key is matched by input value.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="Otherwise" minOccurs="0">
+                        <xs:annotation>
+                          <xs:documentation>Used if input value is not the key of any entry element.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                          <xs:attribute name="value" type="xs:string">
+                            <xs:annotation>
+                              <xs:documentation>Output value that should be used if input value could not be found in map.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                          <xs:attribute name="useKeyAsValue" type="xs:boolean" use="required">
+                            <xs:annotation>
+                              <xs:documentation>If true, original input value will be used as output value if input value does not match any of the map's keys.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:ID" use="required">
+                      <xs:annotation>
+                        <xs:documentation>Name of the value map, has to be unique.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="description" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Description of the value map.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="CustomMappings" minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                    <xs:documentation>Customer specific XSLT snippet that can do everything the customer wants it to do. The snippet has to either output target artifact field elements or target artifact top level attributes.
+                    </xs:documentation>
+                  </xs:annotation>
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:any minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:attributeGroup ref="ccffieldmapping:BasicMappingRuleAttributes"/>
+                    <xs:attribute name="outputIsTopLevelAttribute" type="xs:string" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="CustomXSLT">
+            <xs:annotation>
+              <xs:documentation>This element may contain arbitrary XSLT transformations. If CCF generates the XSLT file, it will just copy the content of this element to the new file.</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="usePatternBasedMappingRules" type="xs:boolean" use="required">
+        <xs:annotation>
+          <xs:documentation>Defines whether pattern based field mapping rules should be applied or custom XSLT is used (the latter is typical the case for migrations from Mapforce)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PatternBasedMappingRules"/>
+  <xs:attributeGroup name="BasicMappingRuleAttributes">
+    <xs:attribute name="name" type="xs:ID" use="required">
+      <xs:annotation>
+        <xs:documentation>Name of the mapping rule, must be unique.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="description" type="xs:string">
+      <xs:annotation>
+        <xs:documentation>Description of the mapping rule.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="PatternBasedMappingRuleAttributes">
+    <xs:attribute name="source" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>Source element or top level attribute</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="target" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>Target element or top level attribute.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sourceIsTopLevelAttribute" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation>Defines whether value of source attribute refers to a toplevel attribute of the GAF.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="targetIsTopLevelAttribute" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation>Defines whether value of target attribute refers to a toplevel attribute of the GAF.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="condition" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>Condition which has to be met if mapping rule should apply.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="RepositoryLayoutAttributes">
+    <xs:attribute name="repositoryLayoutDescriptionFormat" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>Describes the format used to represent the artifact repository's layout.  Typical values are "GenericArtifactFormat", "XMLSchema" and "unknown".</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+</xs:schema>
