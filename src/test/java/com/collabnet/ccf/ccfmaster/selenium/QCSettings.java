@@ -237,4 +237,39 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Failed Shipment TF to QC");
 		selenium.waitForPageToLoad("30000");
 	}
+	
+	@Test
+	public void connectorUpgrade(){
+		selenium.click("link=Status");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Connector Upgrade");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("name=file", "C:\\Selenium automated\\bad.zip");
+		selenium.click("name=_eventId_upload");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Bad Zip File."));
+		selenium.type("name=file", "C:\\Selenium automated\\invalid.zip");
+		selenium.click("name=_eventId_upload");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Bad Zip File."));
+		selenium.type("name=file", "C:\\Selenium automated\\valid.zip");
+		selenium.click("name=_eventId_upload");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("uploaded core (version 2.0.0 ($Revision$)) was not newer than existing landscape"));
+		selenium.type("name=file", "C:\\Selenium automated\\valid-higherVersion.zip");
+		selenium.click("name=_eventId_upload");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("name=_eventId_cancel");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("You canceled the core update."));
+		selenium.click("link=Connector Upgrade");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("name=file", "C:\\Selenium automated\\valid-higherVersion.zip");
+		selenium.click("name=_eventId_upload");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Are you sure you want to proceed update to the uploaded core?"));
+		selenium.click("name=_eventId_submit");
+		Util.waitUntilTextPresent(selenium, "Core update succeeded");
+		verifyTrue(selenium.isTextPresent("Core update succeeded"));
+	}
 }
