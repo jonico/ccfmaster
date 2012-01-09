@@ -54,7 +54,7 @@
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
 
-<form:form id="hospitalTeamForgeForm"  name="hospitalTeamForgeForm" action="${fn:escapeXml(applyhospitalfilter_url)}" method="POST" commandName="hospitalmodel" modelAttribute="hospitalmodel">
+<form:form id="hospitalTeamForgeForm"  name="hospitalTeamForgeForm" action="${fn:escapeXml(applyhospitalfilter_url)}&amp;page=${param.page}&amp;size=${param.size}" method="POST" commandName="hospitalmodel" modelAttribute="hospitalmodel">
   <table class="Container" >
 		<tbody>
 		<tr>
@@ -77,7 +77,7 @@
 				</td>
 				<util:header-row  
 				formname="hospitalTeamForgeForm"
-				applylink="${applyhospitalfilter_url}"
+				applylink="${applyhospitalfilter_url}&amp;page=${param.page}&amp;size=${param.size}"
 				removelink="${removehospitalfilter_url}"
 				rmdid="${rmdid}">
 				</util:header-row>

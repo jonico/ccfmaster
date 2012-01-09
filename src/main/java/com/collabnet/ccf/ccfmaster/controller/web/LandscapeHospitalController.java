@@ -61,9 +61,10 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
 			Model model, HttpServletRequest request,HttpSession session) {
 			cleanSession(session);
-			session.setAttribute("sizesession", size);
-			session.setAttribute("pagesession", page);
-			populateHospitalPagedModel(model,Directions.FORWARD,request,null,page,size);
+			session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+			session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
+	//		populatePageSizetoModel(Directions.FORWARD,model, session);
+			populateHospitalPagedModel(model,Directions.FORWARD,request,null,page,size,session);
 			return UIPathConstants.LANDSCAPESETTINGS_DISPLAYHOSPITALTFTOPART;
 	}
 
@@ -127,12 +128,12 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	/** Helper method to populate Hospital Model   
 	 * 
 	 */	
-	public void populateHospitalPagedModel(Model model, Directions directions,HttpServletRequest request,String hospitalId,Integer page, Integer size){
+	public void populateHospitalPagedModel(Model model, Directions directions,HttpServletRequest request,String hospitalId,Integer page, Integer size,HttpSession session){
 		Landscape landscape=ControllerHelper.findLandscape(model);
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		List<HospitalEntry> hospitalEntry = new ArrayList<HospitalEntry>();
 		if (hospitalId == null) {
-				 hospitalEntry = pageHospitalEntries(model, directions, page,size);
+				 hospitalEntry = pageHospitalEntries(model, directions, page,size,session);
 		} else {
 			HospitalEntry hospitalEntryWithId = HospitalEntry.findHospitalEntry(new Long(hospitalId));
 			hospitalEntry.add(hospitalEntryWithId);
@@ -154,7 +155,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	 * @return
 	 */
 	private List<HospitalEntry> pageHospitalEntries(Model model,
-			Directions directions, Integer page, Integer size) {
+			Directions directions, Integer page, Integer size,HttpSession session) {
 		List<HospitalEntry> hospitalEntry;
 		int sizeNo = size == null ? ControllerConstants.PAGINATION_SIZE : size.intValue();
 		hospitalEntry = HospitalEntry.findHospitalEntrysByDirection(directions).setFirstResult(page == null ? 0 : (page.intValue() - 1) * sizeNo).setMaxResults(sizeNo).getResultList();
@@ -208,7 +209,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		catch(Exception exception){
 			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.VIEWHOSPITALFAILUREMESSAGE)+ exception.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(directions,model, session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYHOSPITALINDETAIL;
 
 	}
@@ -233,9 +234,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			result=XmlWebHelper.xmlToString(element);
 		} 
 		catch(Exception exception){
-			//FlashMap.setErrorMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE, exception.getMessage());
 			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE)+ exception.getMessage());
-
 		}
 		response.setContentType("text/xml; charset=utf-8");
 		model.addAttribute("rmdid", rmdid);
@@ -244,7 +243,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		model.addAttribute("landscape",landscape);
 		model.addAttribute("direction",directions.name());
 		model.addAttribute("selectedLink", "hospital");
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(directions,model, session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYEXAMINEHOSPITAL;
 	}
 
@@ -270,11 +269,14 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALDELETEFAILUREMESSAGE, exception.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		model.asMap().clear();
+		populatePageSizetoModel(directions, model,session);
 		populateHospitalModel(model,directions,request,null);
 		return getNextView(directions, source_filter_artifact_id,
 				target_filter_artifact_id, rmdid, session);
 	}
+
+	
 
 	/**
 	 * @param directions
@@ -327,7 +329,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALREPLAYFAILUREMESSAGE, exception.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(directions,model, session);
 		populateHospitalModel(model,directions,request,null);
 		return getNextView(directions, source_filter_artifact_id,
 				target_filter_artifact_id, rmdid, session);	
@@ -370,7 +372,10 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
 			Model model, HttpServletRequest request,HttpSession session) {
 		cleanSession(session);
-		populateHospitalPagedModel(model,Directions.REVERSE,request,null,page,size);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
+	//	populatePageSizetoModel(Directions.REVERSE,model, session);
+		populateHospitalPagedModel(model,Directions.REVERSE,request,null,page,size,session);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYHOSPITALPARTTOTF;
 	}
 
@@ -383,17 +388,31 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		String fromExternalFunction=(String)session.getAttribute(FROM_EXTERNAL_FUNCTION);
 		String sourceFilterArtifactId=null;
 		String targetFilterArtifactId=null;
-		if("true".equals(fromExternalFunction)|| page != null || size != null){
+		// from other function other than apply filter button get filterids from session
+		if("true".equals(fromExternalFunction)){
+			sourceFilterArtifactId=(String)session.getAttribute("sourceFilterArtifactId");
+			targetFilterArtifactId=(String)session.getAttribute("targetFilterArtifactId");	
+		}
+		//if filter got applied with paging get the filter ids from request, page and size from session
+		else if(page !=null && size !=null && request.getParameter(SOURCE_FILTER_ARTIFACT_ID)!=null && request.getParameter(TARGET_FILTER_ARTIFACT_ID)!=null){
+			sourceFilterArtifactId=request.getParameter(SOURCE_FILTER_ARTIFACT_ID);
+			targetFilterArtifactId=request.getParameter(TARGET_FILTER_ARTIFACT_ID);
+			page=(Integer)session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+			size=(Integer)session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		}
+		//if filter got applied with paging and while navigating thru pages get the old filter ids from the session
+		else if(page !=null && size !=null && session.getAttribute("sourceFilterArtifactId")!=null && session.getAttribute("targetFilterArtifactId")!=null){
 			sourceFilterArtifactId=(String)session.getAttribute("sourceFilterArtifactId");
 			targetFilterArtifactId=(String)session.getAttribute("targetFilterArtifactId");
 		}
+		//Default search filter get filterids from the request
 		else{
 			sourceFilterArtifactId=request.getParameter(SOURCE_FILTER_ARTIFACT_ID);
 			targetFilterArtifactId=request.getParameter(TARGET_FILTER_ARTIFACT_ID);
 		}
 		List<HospitalEntry> hospitalEntry =new ArrayList<HospitalEntry>();
 		//if no input entered for source and target artifactid, and if filter is applied.display the default entries
-		if("".equals(sourceFilterArtifactId)&&"".equals(targetFilterArtifactId)){
+		if("".equals(sourceFilterArtifactId) && "".equals(targetFilterArtifactId)){
 			hospitalEntry = paginate(
 					HospitalEntry.findHospitalEntrysByDirection(directions),
 					HospitalEntry.countHospitalEntrysByDirection(directions),
@@ -425,8 +444,28 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 		session.removeAttribute(FROM_EXTERNAL_FUNCTION);
 	}
 	
-	private void populatePageandSizeInModel(Model model, HttpSession session) {
-		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
-		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	public static void populatePageSizetoModel(Directions directions, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float) HospitalEntry.countHospitalEntrysByDirection(directions) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
+	
+	
 }

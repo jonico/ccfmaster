@@ -62,8 +62,8 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 			Model model,
 			HttpSession session) {
 		cleanSession(session);
-		session.setAttribute("sizesession", size);
-		session.setAttribute("pagesession", page);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
 		List<IdentityMapping> identityMappingEntrys = paginate(
 				IdentityMapping.findIdentityMappingsByExternalApp(ea), 
 				IdentityMapping.countIdentityMappingsByExternalApp(ea),
@@ -162,7 +162,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		model.addAttribute("identitymappingsmodel", identityMappingsModel);
 		model.addAttribute("idmappingversion",identityMappingsModel.getIdentityMappingEntry().getVersion());
 		model.addAttribute("idmappingid",identityMappingsModel.getIdentityMappingEntry().getId());
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(ea,model, session);
 		return PROJECT_IDENTITY_MAPPINGS_NAME + "/details";
 	}
 
@@ -182,7 +182,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.IDENTITY_DELETE_FAILURE_MESSAGE, e.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(ea,model, session);
 		return getNextView(rmdid, source_filter_artifact_id,
 				target_filter_artifact_id, session);
 	}
@@ -230,7 +230,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		populateIdentityMappingModel(model, identitymappingsmodel);
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("mappingid", identityMappingId);
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(ea,model, session);
 		//model.asMap().clear();
 		return "redirect:" +PROJECT_IDENTITY_MAPPINGS_PATH + "/details";
 	}
@@ -276,13 +276,22 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 		String fromExternalLink=(String)session.getAttribute(EXTERNAL_LINK);
 		String sourceFilterArtifactId=null;
 		String targetFilterArtifactId=null;
-		//to check the request is after deleting identity mapping or from return from identity mapping details screen.get the artifactids to repopulate
-		if("true".equals(fromExternalLink)|| page != null || size != null){
+		//to check the request is after deleting identity mapping or  return from identity mapping details screen.get the artifactids to repopulate
+		if("true".equals(fromExternalLink)){
+			sourceFilterArtifactId=(String)session.getAttribute("sourceFilterArtifactId");
+			targetFilterArtifactId=(String)session.getAttribute("targetFilterArtifactId");
+		}
+		else if(page !=null && size !=null && request.getParameter(SOURCE_FILTER_ARTIFACT_ID)!=null && request.getParameter(TARGET_FILTER_ARTIFACT_ID)!=null){
+			sourceFilterArtifactId=request.getParameter(SOURCE_FILTER_ARTIFACT_ID);
+			targetFilterArtifactId=request.getParameter(TARGET_FILTER_ARTIFACT_ID);
+			page=(Integer)session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+			size=(Integer)session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		}
+		else if(page !=null && size !=null && session.getAttribute("sourceFilterArtifactId")!=null && session.getAttribute("targetFilterArtifactId")!=null){
 			sourceFilterArtifactId=(String)session.getAttribute("sourceFilterArtifactId");
 			targetFilterArtifactId=(String)session.getAttribute("targetFilterArtifactId");
 		}
 		else{
-			//While applying filter
 			sourceFilterArtifactId=request.getParameter(SOURCE_FILTER_ARTIFACT_ID);
 			targetFilterArtifactId=request.getParameter(TARGET_FILTER_ARTIFACT_ID);
 		}
@@ -327,9 +336,28 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 	}
 
 
-	private void populatePageandSizeInModel(Model model, HttpSession session) {
-		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
-		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	public static void populatePageSizetoModel(ExternalApp ea, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)IdentityMapping.countIdentityMappingsByExternalApp(ea) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
+	
 	
 }

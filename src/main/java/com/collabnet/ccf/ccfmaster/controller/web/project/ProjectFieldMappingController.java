@@ -73,8 +73,8 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 				FieldMappingExternalAppTemplate.countFieldMappingExternalAppTemplatesByParentAndDirection(ea, direction),
 				page, size, model)
 				.getResultList();
-		session.setAttribute("sizesession", size);
-		session.setAttribute("pagesession", page);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
 		model.addAttribute("fieldMappingLandscapeTemplate",	fieldMappingExternalAppTemplates);
 		return PROJECT_FIELD_MAPPING_TEMPLATES_NAME + "/" + direction;
 	}
@@ -124,7 +124,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			FlashMap.setErrorMessage(ControllerConstants.FMTDELETEFAILUREMESSAGE,exception.getMessage());
 		}
 		model.asMap().clear();
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(directions,ea,model, session);
 		return "redirect:" + PROJECT_FIELD_MAPPING_TEMPLATES_PATH + "?direction=" + directions;
 	}
 	
@@ -142,7 +142,6 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 		model.addAttribute("landscape", landscape);
 		model.addAttribute("direction", directions.name());
 		model.addAttribute("selectedLink", "fieldmappingtemplates");
-		populatePageandSizeInModel(model, session);
 		return PROJECT_FIELD_MAPPING_TEMPLATES_NAME + "/upload";
 	}
 
@@ -170,7 +169,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			log.debug("Error unmarshalling field mapping template: " + exception.getMessage(), exception);
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
-			populatePageandSizeInModel(model, session);
+			populatePageSizetoModel(directions,ea,model, session);
 			return "redirect:" + PROJECT_FIELD_MAPPING_TEMPLATES_PATH + "/upload?direction="+directions.name();
 		}
 		try {
@@ -191,13 +190,13 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			model.addAttribute("direction", directions.name());
 			populateFieldMappingExternalAppTemplatesModel(model,directions,ea);
 			session.setAttribute(FROMSESSION, fieldMappingExternalAppTemplateList);
-			populatePageandSizeInModel(model, session);
+			populatePageSizetoModel(directions,ea,model, session);
 			return PROJECT_FIELD_MAPPING_TEMPLATES_NAME + "/bulkimport";
 		
 		} catch (Exception exception) {
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
-			populatePageandSizeInModel(model, session);
+			populatePageSizetoModel(directions,ea,model, session);
 			return "redirect:" + PROJECT_FIELD_MAPPING_TEMPLATES_PATH + "/upload?direction="+directions.name();
 		}
 	}
@@ -237,7 +236,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 		}
 		model.addAttribute("status",importStatus);
 		model.addAttribute("directions",directions.name());
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(directions,ea,model, session);
 		populateFieldMappingExternalAppTemplatesModel(model,directions,ea);
 		return PROJECT_FIELD_MAPPING_TEMPLATES_NAME +  "/status";
 
@@ -361,9 +360,28 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			
 		};
 	}
-
-	private void populatePageandSizeInModel(Model model, HttpSession session) {
-		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
-		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	
+	public static void populatePageSizetoModel(Directions direction,ExternalApp ea, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)FieldMappingExternalAppTemplate.countFieldMappingExternalAppTemplatesByParentAndDirection(ea, direction) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
+	
 }

@@ -53,8 +53,8 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 				page, size, model)
 				.getResultList();
 		List<RepositoryMappingsModel> rmmList = LandscapeRepositoryMappingsController.makeRepositoryMappingsModel(rmds, tfUrl);
-		session.setAttribute("sizesession", size);
-		session.setAttribute("pagesession", page);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
 		model.addAttribute("repositoryMappingsModel", rmmList);
 		return PROJECT_REPOSITORY_MAPPING_NAME + "/" + direction;
 	}
@@ -67,7 +67,7 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 		RepositoryMappingDirectionStatus status = RepositoryMappingDirectionStatus.PAUSED;
 		Iterable<RepositoryMappingDirection> validRmds = filter(Arrays.asList(rmds), isValidRmd(ea, direction));
 		setStatusForRmds(validRmds, status);
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(direction,ea,model, session);
 		return redirectUrl(direction);
 	}
 
@@ -79,7 +79,7 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 		RepositoryMappingDirectionStatus status = RepositoryMappingDirectionStatus.RUNNING;
 		Iterable<RepositoryMappingDirection> validRmds = filter(Arrays.asList(rmds), isValidRmd(ea, direction));
 		setStatusForRmds(validRmds, status);
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(direction,ea,model, session);
 		return redirectUrl(direction);
 	}
 	
@@ -97,7 +97,7 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.RMDDELETEFAILUREMESSAGE, e.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(direction,ea,model, session);
 		return redirectUrl(direction);
 	}
 
@@ -132,9 +132,27 @@ public class ProjectRepositoryMappingController extends AbstractProjectControlle
 		};
 	}
 	
-	
-	private void populatePageandSizeInModel(Model model, HttpSession session) {
-		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
-		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	public static void populatePageSizetoModel(Directions direction,ExternalApp ea, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)RepositoryMappingDirection.countRepositoryMappingDirectionsByExternalAppAndDirection(ea, direction) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
+	
 }

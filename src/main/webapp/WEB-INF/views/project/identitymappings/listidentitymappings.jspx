@@ -32,7 +32,7 @@
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
  	
  	
-<form:form id="identitymappingForm"  name="identitymappingForm" method="POST" action="${fn:escapeXml(applyfilter_url)}" commandName="identitymappingsmodel" modelAttribute="identitymappingsmodel">
+<form:form id="identitymappingForm"  name="identitymappingForm" method="POST" action="${fn:escapeXml(applyfilter_url)}?page=${param.page}&amp;size=${param.size}" commandName="identitymappingsmodel" modelAttribute="identitymappingsmodel">
   <table class="Container" >
 		<tbody>
 		<tr><td colspan="4">
@@ -52,7 +52,7 @@
 				</td>
 				<util:header-row  
 				formname="identitymappingForm"
-				applylink="${applyfilter_url}"
+				applylink="${applyfilter_url}?page=${param.page}&amp;size=${param.size}"
 				removelink="${removefilter_url}"
 				rmdid="${rmdid}">
 				</util:header-row>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.RequestContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -65,8 +66,8 @@ public class ProjectHospitalController extends AbstractProjectController {
 				HospitalEntry.findHospitalEntrysByExternalAppAndDirection(ea, direction),
 				HospitalEntry.countHospitalEntrysByExternalAppAndDirection(ea, direction),
 				page, size, model).getResultList();
-		session.setAttribute("sizesession", size);
-		session.setAttribute("pagesession", page);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
 		return doList(hospitalEntrys, direction, model);
 	}
 	
@@ -117,7 +118,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 		model.addAttribute("rmdid", rmdid);
 		model.addAttribute("direction", entry.getRepositoryMappingDirection().getDirection());
 		model.addAttribute("hospitalist", hospitalModel);
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(entry.getRepositoryMappingDirection().getDirection(),ea,model, session);
 		return PROJECT_HOSPITAL_NAME + "/details";
 	}
 	
@@ -126,7 +127,8 @@ public class ProjectHospitalController extends AbstractProjectController {
 			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(HOSPITAL_ID_REQUEST_PARAM) HospitalEntry entry,
 			@RequestParam(RM_ID_REQUEST_PARAM) String rmid,
-			Model model,HttpSession session) {
+			Model model, HttpServletRequest request,HttpSession session) {
+		RequestContext ctx = new RequestContext(request);
 		verifyHospitalEntry(ea, entry);
 		String genericArtifact = "";
 		try {
@@ -135,12 +137,13 @@ public class ProjectHospitalController extends AbstractProjectController {
 			Element element = document.getDocumentElement();
 			genericArtifact = XmlWebHelper.xmlToString(element);
 		} catch (Exception e) {
-			FlashMap.setErrorMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE, e.getMessage());
+			//FlashMap.setErrorMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE, e.getMessage());
+			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.EXAMINEHOSPITALFAILUREMESSAGE)+ e.getMessage());
 		}
 		model.addAttribute("rmid", rmid);
 		model.addAttribute("direction", entry.getRepositoryMappingDirection().getDirection());
 		model.addAttribute("genericArtifact", genericArtifact);
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(entry.getRepositoryMappingDirection().getDirection(),ea,model, session);
 		return PROJECT_HOSPITAL_NAME + "/payload";
 	}
 	
@@ -162,7 +165,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALREPLAYFAILUREMESSAGE, e.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(direction,ea,model, session);
 		return getNextView(rmid, source_filter_artifact_id,
 				target_filter_artifact_id, direction, session);
 		
@@ -199,7 +202,7 @@ public class ProjectHospitalController extends AbstractProjectController {
 		} catch (Exception e) {
 			FlashMap.setErrorMessage(ControllerConstants.HOSPITALDELETEFAILUREMESSAGE, e.getMessage());
 		}
-		populatePageandSizeInModel(model, session);
+		populatePageSizetoModel(direction,ea,model, session);
 		return getNextView(rmid, source_filter_artifact_id,
 				target_filter_artifact_id, direction, session);
 		
@@ -260,7 +263,17 @@ public class ProjectHospitalController extends AbstractProjectController {
 		String fromExternalFunction=(String)session.getAttribute(FROM_EXTERNAL_FUNCTION);
 		String sourceFilterArtifactId=null;
 		String targetFilterArtifactId=null;
-		if("true".equals(fromExternalFunction)|| page != null || size != null){
+		if("true".equals(fromExternalFunction)){
+			sourceFilterArtifactId=(String)session.getAttribute("sourceFilterArtifactId");
+			targetFilterArtifactId=(String)session.getAttribute("targetFilterArtifactId");
+		}
+		else if(page !=null && size !=null && request.getParameter(SOURCE_FILTER_ARTIFACT_ID)!=null && request.getParameter(TARGET_FILTER_ARTIFACT_ID)!=null){
+			sourceFilterArtifactId=request.getParameter(SOURCE_FILTER_ARTIFACT_ID);
+			targetFilterArtifactId=request.getParameter(TARGET_FILTER_ARTIFACT_ID);
+			page=(Integer)session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+			size=(Integer)session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		}
+		else if(page !=null && size !=null && session.getAttribute("sourceFilterArtifactId")!=null && session.getAttribute("targetFilterArtifactId")!=null){
 			sourceFilterArtifactId=(String)session.getAttribute("sourceFilterArtifactId");
 			targetFilterArtifactId=(String)session.getAttribute("targetFilterArtifactId");
 		}
@@ -306,9 +319,28 @@ public class ProjectHospitalController extends AbstractProjectController {
 		return filterHospitalEntrys;
 	}
 	
-	private void populatePageandSizeInModel(Model model, HttpSession session) {
-		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
-		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	public static void populatePageSizetoModel(Directions direction,ExternalApp ea, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)HospitalEntry.countHospitalEntrysByExternalAppAndDirection(ea, direction) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
+	
 	
 }

@@ -51,7 +51,7 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
     		@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
     		Model model, HttpServletRequest request,HttpSession session) {
-		doList(Directions.FORWARD, page, size, model,session);
+		doList(Directions.FORWARD, page, size, model,session,request);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 	 }
     
@@ -64,7 +64,8 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
     public String  resumeSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request,HttpSession session) {
 		 setStatusForRMDs(RepositoryMappingDirectionStatus.RUNNING, paramdirection, model, request);
 		 model.asMap().clear();
-		 populatePageandSizeInModel(model, session);
+		 Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
+		 populatePageSizetoModel(directions,model, session);
 		 if(paramdirection.equals(FORWARD)){
 			 return "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 		 }
@@ -116,7 +117,8 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
     public String  pauseSynchronization(@RequestParam(ControllerConstants.DIRECTION) String paramdirection, Model model, HttpServletRequest request,HttpSession session) {
 		setStatusForRMDs(RepositoryMappingDirectionStatus.PAUSED, paramdirection, model, request);
 		model.asMap().clear();
-		populatePageandSizeInModel(model, session);
+		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
+		populatePageSizetoModel(directions,model, session);
 		if (paramdirection.equals(FORWARD)) {
 			return "redirect:/" + UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 		} else {
@@ -145,11 +147,8 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 			FlashMap.setErrorMessage(ControllerConstants.RMDDELETEFAILUREMESSAGE, exception.getMessage());
 		}
 		 model.asMap().clear();
-		 populatePageandSizeInModel(model, session);
-		 //List<RepositoryMappingDirection> rmds = RepositoryMappingDirection.findRepositoryMappingDirectionsByDirection(directions).getResultList();
-		//populateModel(model, rmds);
-		
-		if(paramdirection.equals(FORWARD)){
+		 populatePageSizetoModel(directions,model, session);
+		 if(paramdirection.equals(FORWARD)){
 			return "redirect:/" +UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART;
 		} else {
 			return "redirect:/" +UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGPARTTOTF;
@@ -165,7 +164,7 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
     		@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
     		Model model, HttpServletRequest request,HttpSession session) {
-		doList(Directions.REVERSE, page, size, model,session);
+		doList(Directions.REVERSE, page, size, model,session,request);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGPARTTOTF;
 	}
 
@@ -176,14 +175,14 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	 * @param size
 	 * @param model
 	 */
-	private void doList(Directions direction, Integer page, Integer size, Model model,HttpSession session) {
-		List<RepositoryMappingDirection> rmds = paginate(
+	private void doList(Directions direction, Integer page, Integer size, Model model,HttpSession session,HttpServletRequest request) {
+		List<RepositoryMappingDirection> rmds =paginate(
 				RepositoryMappingDirection.findRepositoryMappingDirectionsByDirection(direction),
 				RepositoryMappingDirection.countRepositoryMappingDirectionsByDirection(direction),
 				page, size, model)
 			.getResultList();
-		session.setAttribute("sizesession", size);
-		session.setAttribute("pagesession", page);
+		session.setAttribute(ControllerConstants.SIZE_IN_SESSION, size);
+		session.setAttribute(ControllerConstants.PAGE_IN_SESSION, page);
 		populateModel(model, rmds);
 	}
 
@@ -196,7 +195,6 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	private void populateModel(Model model, List<RepositoryMappingDirection> rmds) {
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		List<RepositoryMappingsModel> rmmList = makeRepositoryMappingsModel(rmds, tfUrl);
-		
 		Landscape landscape=ControllerHelper.findLandscape(model);
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);
@@ -208,7 +206,6 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 			List<RepositoryMappingDirection> repositoryMappingDirectionList,
 			String tfUrl) {
 		List<RepositoryMappingsModel> rmmList = new ArrayList<RepositoryMappingsModel>(repositoryMappingDirectionList.size());
-
 		for (RepositoryMappingDirection rmd: repositoryMappingDirectionList){
 			RepositoryMappingsModel rmm = new RepositoryMappingsModel();
 			rmm.setRepositoryMappingDirection(rmd);
@@ -222,16 +219,33 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 			ArtifactDetail artifactDetail=RepositoryConnections.detailsForArtifact(rmd.getLastSourceArtifactId());
 			rmm.setArtifactDetail(artifactDetail);
 			rmm.setRepositoryDetail(repositoryDetail);
-
 			rmmList.add(rmm);
-		
 		}
 		return rmmList;
 	}	
 	
-	private void populatePageandSizeInModel(Model model, HttpSession session) {
-		model.addAttribute("page", (session.getAttribute(ControllerConstants.PAGE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE : session.getAttribute(ControllerConstants.PAGE_IN_SESSION));
-		model.addAttribute("size", (session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null) ? ControllerConstants.DEFAULT_PAGE_SIZE : session.getAttribute(ControllerConstants.SIZE_IN_SESSION));
+	
+	public static void populatePageSizetoModel(Directions directions, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)RepositoryMappingDirection.countRepositoryMappingDirectionsByDirection(directions) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
 	
 }

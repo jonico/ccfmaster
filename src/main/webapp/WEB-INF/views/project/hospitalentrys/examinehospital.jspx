@@ -12,6 +12,9 @@
 		<c:if test="${!empty message}">
 			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
 		</c:if>
+		<c:if test="${!empty connectionerror}"> 
+	  		<div class="errorMessage"><strong>${connectionerror}</strong></div>
+		</c:if>
 		<tr class="ContainerHeader">
      	 <td>${payloadlabel}</td>
     	</tr>
