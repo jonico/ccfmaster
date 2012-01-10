@@ -3,7 +3,18 @@
 
 <spring:message code="button_next" var="next_button"/>
 <spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="updatecoreheaderlabel" var="updatecoreheaderlabel"/>
+<spring:message code="welcomemsg" var="welcomemsg"/>
+<spring:message code="servicedisplaylabel" var="servicedisplaylabel"/>
+<spring:message code="descriptionlabel" var="descriptionlabel"/>
+<spring:message code="versionlabel" var="versionlabel"/>
+<spring:message code="coreoptiondisplaylabel" var="coreoptiondisplaylabel"/>
+<spring:message code="defaultoptionlabel" var="defaultoptionlabel"/>
+<spring:message code="selectcorezipfileoptionlabel" var="selectcorezipfileoptionlabel"/>
+<spring:message code="saasmodedisplaymsg" var="saasmodedisplaymsg"/>
 
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
 <form:form modelAttribute="fileUploadHandler" enctype="multipart/form-data" method="post">
 <table class="Container" >
@@ -30,7 +41,7 @@
 		<tbody>
 			<tr class="ContainerHeader">
 			<td colspan="5">
-			Core Update
+			${updatecoreheaderlabel}
 			</td>
 			</tr>
 			<br/>
@@ -41,16 +52,16 @@
 		<c:if test="${'false' eq saasMode}">
 				<tr>
 				<td colspan="8">
-				<h3>Welcome to the core update wizard</h3>
-				<p>You are currently using the following core:</p>
+				<h3>${welcomemsg}</h3>
+				<p>${servicedisplaylabel}</p>
 				</td>
 				</tr>
 				
 				<tr>
-				<td class="ItemDetailName"><strong>Description:</strong></td>
+				<td class="ItemDetailName"><strong>${descriptionlabel}</strong></td>
 				<td class="ItemDetailValue">${currentDescription}</td>
 				</tr> 	
-				<tr><td class="ItemDetailName"><strong>Version:</strong></td>
+				<tr><td class="ItemDetailName"><strong>${versionlabel}</strong></td>
 				<td class="ItemDetailValue">${currentVersion}
 				<br/>
 				<br/>
@@ -58,14 +69,17 @@
 				</tr>
 				<tr>
 				<td class="ItemDetailName">
-				Please choose the File you want to use.
+				${coreoptiondisplaylabel}
 				<br/>
 				<br/>
 				</td>
 				</tr>
 				<tr>
-				<td class="ItemDetailName">	Select file:</td>
-				<td class="ItemDetailValue"><input type="file" name="file"/></td>	
+				<td class="ItemDetailName"><input id="defaultUpgradeOption" type="radio" name="needDefaultCoreToRun" value="true"/>${defaultoptionlabel}</td>	
+				</tr>
+				<tr>
+				<td class="ItemDetailName"><input id="fileSelectUpgradeOption" type="radio" name="needDefaultCoreToRun" value="false"/>${selectcorezipfileoptionlabel}</td>
+				<td id="updatecore" class="ItemDetailName"><input id="coreFileUploader" type="file" name="file"/></td>		
 				</tr>
 				<tr>
 				<td>
@@ -79,20 +93,31 @@
 				<input type="submit" name="_eventId_cancel" value="${cancel_button}" class="Button"/>
 				</td>
 				</tr>
-				</c:if>	
+				</c:if>
 		</tbody>
 		</table>
-	
+	 
 
 
 
 <c:if test="${'true' eq saasMode}">
-<p>Core update wizard is not supported in SAAS Mode.</p>
+<p>${saasmodedisplaymsg}</p>
 </c:if>
 
 </td>
 </tr>
 </tbody>
 </table>
-</form:form>	
+</form:form>
+<script type="text/javascript">
+$(function(){
+	$("#coreFileUploader").hide();
+    $("#defaultUpgradeOption").click(function () {
+   		$("#coreFileUploader").hide();
+    });
+    $("#fileSelectUpgradeOption").click(function () {
+   		$("#coreFileUploader").show();
+    });
+});
+</script>	
 </div>

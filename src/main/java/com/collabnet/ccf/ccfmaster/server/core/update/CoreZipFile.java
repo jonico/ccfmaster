@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.zip.ZipException;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +30,8 @@ public final class CoreZipFile implements Closeable, Serializable {
 	transient CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
 	public static CoreZipFile fromMultipartFile(MultipartFile upload) throws ZipException, IOException {
-		if (upload.isEmpty()) 
-			return null;
-		File tempFile = null;
-		try {
-			tempFile = File.createTempFile("core", "zip");
-			upload.transferTo(tempFile);
-			return new CoreZipFile(tempFile);
-		} catch (IOException e) {
-			// avoid having invalid uploaded files lying around
-			if (tempFile != null && !tempFile.delete()) 
-				tempFile.deleteOnExit();
-			throw e;
-		}
+		if (upload.isEmpty()) return null;
+		return getCoreZipFile(upload);
 	}
 	
 	public CoreZipFile() {
@@ -127,5 +117,30 @@ public final class CoreZipFile implements Closeable, Serializable {
 	public void close() throws IOException {
 		if (file != null)
 			file.delete();
+	}
+	
+	public static CoreZipFile fromServerInstance(String filePath) throws ZipException, IOException {
+		if (filePath.isEmpty()) return null;
+		return getCoreZipFile(filePath);
+	}
+	
+	public static CoreZipFile getCoreZipFile(Object obj) throws ZipException,IOException {
+		File tempFile = null;
+		try {
+			tempFile = File.createTempFile("core", "zip");
+			if (obj instanceof MultipartFile){
+				((MultipartFile)obj).transferTo(tempFile);
+			}else if (obj instanceof String){
+				FileUtils.copyFile(new File((String)obj), tempFile);
+			}else if(obj instanceof File){
+				FileUtils.copyFile((File)obj,tempFile);
+			}
+			return new CoreZipFile(tempFile);
+		} catch (IOException e) {
+			// avoid having invalid uploaded files lying around
+			if (tempFile != null && !tempFile.delete())
+				tempFile.deleteOnExit();
+			throw e;
+		}
 	}
 }

@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 public class FileUploadHandler extends MultiAction implements Serializable {
+
+	private static final String CCFCORE_ZIP_FILENAME = "WEB-INF/ccfcore/ccfcore.zip";
 
 	private static final String DATE_FORMAT_STRING = "%1$tY%1$tm%1$td-%1$tH%1$tM%1$tS";
 
@@ -60,6 +64,7 @@ public class FileUploadHandler extends MultiAction implements Serializable {
 	 * anyway.
 	 */
 	private transient MultipartFile file;
+	private boolean needDefaultCoreToRun;
 	private List<Long> runningCoreIds = ImmutableList.of();
 
 	@Override
@@ -73,12 +78,16 @@ public class FileUploadHandler extends MultiAction implements Serializable {
 		landscapeDirectory = new File(ccfHome(), "landscape" + landscape.getId());
 		coreProperties = CoreProperties.ofDirectory(landscapeDirectory);
 	}
-
 	
 	public Event coreZipFile(RequestContext context) {
 		czf = null;
 		try {
-			czf = CoreZipFile.fromMultipartFile(file);
+			if(needDefaultCoreToRun && file.isEmpty()){
+				ServletContext webappContext = (ServletContext)context.getExternalContext().getNativeContext();
+				czf = CoreZipFile.fromServerInstance(webappContext.getRealPath(CCFCORE_ZIP_FILENAME));
+			}else{
+				czf = CoreZipFile.fromMultipartFile(file);
+			}
 		} catch (IOException ignored) {
 		}
 		if (czf != null && czf.validate()) {
@@ -245,6 +254,20 @@ public class FileUploadHandler extends MultiAction implements Serializable {
 	
 	public String getSaasMode(){
 		return  ccfRuntimePropertyHolder.getSaasMode().toString();
+	}
+
+	/**
+	 * @return the needDefaultCoreToRun
+	 */
+	public boolean getNeedDefaultCoreToRun() {
+		return needDefaultCoreToRun;
+	}
+
+	/**
+	 * @param needDefaultCoreToRun the needDefaultCoreToRun to set
+	 */
+	public void setNeedDefaultCoreToRun(boolean needDefaultCoreToRun) {
+		this.needDefaultCoreToRun = needDefaultCoreToRun;
 	}
 	
 }
