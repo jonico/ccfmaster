@@ -21,6 +21,7 @@ import org.springframework.webflow.execution.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.config.Version;
+import com.collabnet.ccf.ccfmaster.server.core.SingleLandscapeCCFCoreInteractionStrategy;
 import com.collabnet.ccf.ccfmaster.server.core.StartCoresOnBootBean;
 import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus;
 import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus.CoreState;
@@ -34,8 +35,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 public class FileUploadHandler extends MultiAction implements Serializable {
-
-	private static final String CCFCORE_ZIP_FILENAME = "WEB-INF/ccfcore/ccfcore.zip";
 
 	private static final String DATE_FORMAT_STRING = "%1$tY%1$tm%1$td-%1$tH%1$tM%1$tS";
 
@@ -84,7 +83,10 @@ public class FileUploadHandler extends MultiAction implements Serializable {
 		try {
 			if(needDefaultCoreToRun && file.isEmpty()){
 				ServletContext webappContext = (ServletContext)context.getExternalContext().getNativeContext();
-				czf = CoreZipFile.fromServerInstance(webappContext.getRealPath(CCFCORE_ZIP_FILENAME));
+				String filePath =webappContext.getRealPath(SingleLandscapeCCFCoreInteractionStrategy.CCFCORE_ZIP);
+				if(!filePath.isEmpty()){
+					czf = CoreZipFile.fromServerInstance(new File(filePath));
+				}
 			}else{
 				czf = CoreZipFile.fromMultipartFile(file);
 			}

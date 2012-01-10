@@ -30,10 +30,37 @@ public final class CoreZipFile implements Closeable, Serializable {
 	transient CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
 	public static CoreZipFile fromMultipartFile(MultipartFile upload) throws ZipException, IOException {
-		if (upload.isEmpty()) return null;
-		return getCoreZipFile(upload);
+		if (upload.isEmpty()) 
+			return null;
+		File tempFile = null;
+		try {
+			tempFile = File.createTempFile("core", "zip");
+			upload.transferTo(tempFile);
+			return new CoreZipFile(tempFile);
+		} catch (IOException e) {
+			cleanupTempFile(tempFile);
+			throw e;
+		}
 	}
-	
+
+	public static CoreZipFile fromServerInstance(File resourceFile) throws ZipException, IOException {
+		File tempFile = null;
+		try {
+			tempFile = File.createTempFile("core", "zip");
+			FileUtils.copyFile(resourceFile, tempFile);
+			return new CoreZipFile(tempFile);
+		} catch (IOException e) {
+			cleanupTempFile(tempFile);
+			throw e;
+		}
+	}
+
+	private static void cleanupTempFile(File tempFile) {
+		// avoid having invalid uploaded files lying around
+		if (tempFile != null && !tempFile.delete()) 
+			tempFile.deleteOnExit();
+	}
+
 	public CoreZipFile() {
 		// for spring compatibility, serialization
 	}
@@ -117,30 +144,5 @@ public final class CoreZipFile implements Closeable, Serializable {
 	public void close() throws IOException {
 		if (file != null)
 			file.delete();
-	}
-	
-	public static CoreZipFile fromServerInstance(String filePath) throws ZipException, IOException {
-		if (filePath.isEmpty()) return null;
-		return getCoreZipFile(filePath);
-	}
-	
-	public static CoreZipFile getCoreZipFile(Object obj) throws ZipException,IOException {
-		File tempFile = null;
-		try {
-			tempFile = File.createTempFile("core", "zip");
-			if (obj instanceof MultipartFile){
-				((MultipartFile)obj).transferTo(tempFile);
-			}else if (obj instanceof String){
-				FileUtils.copyFile(new File((String)obj), tempFile);
-			}else if(obj instanceof File){
-				FileUtils.copyFile((File)obj,tempFile);
-			}
-			return new CoreZipFile(tempFile);
-		} catch (IOException e) {
-			// avoid having invalid uploaded files lying around
-			if (tempFile != null && !tempFile.delete())
-				tempFile.deleteOnExit();
-			throw e;
-		}
 	}
 }
