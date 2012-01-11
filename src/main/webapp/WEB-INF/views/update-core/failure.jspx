@@ -3,6 +3,12 @@
 
 <spring:message code="button_next" var="next_button"/>
 <spring:message code="button_return" var="return_button"/>
+<spring:message code="updatecoreheaderlabel" var="updatecoreheaderlabel"/>
+<spring:message code="failurestatuslabel" var="failurestatuslabel"/>
+<spring:message code="failuredisplaymsg1" var="failuredisplaymsg1"/>
+<spring:message code="failuredisplaymsg2" var="failuredisplaymsg2"/>
+<spring:message code="failuredisplaymsg3" var="failuredisplaymsg3"/>
+<spring:message code="failuredisplaymsg4" var="failuredisplaymsg4"/>
 
 <c:if test="${not empty exception}">
 <div class="errorMessage">${exception.message}</div>
@@ -12,7 +18,7 @@
 	<tbody>
 			<tr class="ContainerHeader">
 			<td colspan="5">
-			Core Update
+			${updatecoreheaderlabel}
 			</td>
 			</tr>
 			<br/>
@@ -22,7 +28,7 @@
 			</tr>
 			<tr>
 			<td colspan="8">
-			<h3>Core update failed.</h3>
+			<h3>${failurestatuslabel}</h3>
 			</td>
 			</tr>
 
@@ -30,8 +36,8 @@
 <spring:url value="/update-core" var="update_url" />
 <tr>
 <td colspan="8">
-An error has occurred during the upgrade process. Please <a href="${logs_url}">review the log files</a>
-to determine possible causes and <a href="${update_url}">try again</a>.
+${failuredisplaymsg1}<a href="${logs_url}">${failuredisplaymsg2}</a>
+${failuredisplaymsg3}<a href="${update_url}">${failuredisplaymsg4}</a>.
 </td>
 </tr>
 </tbody>

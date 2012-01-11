@@ -10,6 +10,12 @@
 
 	<spring:message code="button_next" var="next_button" />
 	<spring:message code="button_cancel" var="cancel_button" />
+	<spring:message code="updatecoreheaderlabel" var="updatecoreheaderlabel" />
+	<spring:message code="validatequestionmsg" var="validatequestionmsg" />
+	<spring:message code="uploadedcoredescriptionlabel" var="uploadedcoredescriptionlabel" />
+	<spring:message code="uploadedcoreversionlabel" var="uploadedcoreversionlabel" />
+	<spring:message code="validatestatusdisplaymsg" var="validatestatusdisplaymsg" />
+	<spring:message code="saasmodedisplaymsg" var="saasmodedisplaymsg" />
 <form:form modelAttribute="fileUploadHandler" method="post">
 <table class="Container" >
 <tbody>
@@ -31,7 +37,7 @@
 		<tbody>
 			<tr class="ContainerHeader">
 			<td colspan="5">
-			Core Update
+			${updatecoreheaderlabel}
 			</td>
 			</tr>
 			<br/>
@@ -42,14 +48,14 @@
 	<c:if test="${'false' eq coreZipFile.saasMode}">
 				<tr>
 				<td colspan="8">
-				<h3>Are you sure you want to proceed update to the uploaded core?</h3>
+				<h3>${validatequestionmsg}</h3>
 				</td>
 				</tr>
 				<tr>
-				<td class="ItemDetailName"><strong>Uploaded core description:</strong></td>
+				<td class="ItemDetailName"><strong>${uploadedcoredescriptionlabel}</strong></td>
 				<td class="ItemDetailValue">${coreZipFile.description}</td>
 				</tr> 	
-				<tr><td class="ItemDetailName"><strong>Version:</strong></td>
+				<tr><td class="ItemDetailName"><strong>${uploadedcoreversionlabel}</strong></td>
 				<td class="ItemDetailValue">${coreZipFile.version}
 				<br/>
 				<br/>
@@ -57,11 +63,7 @@
 				</tr>
 				<tr>
 				<td colspan="5">
-		<p>Please note that the update may take a couple of minutes. Before
-		the update, all running ccf cores will be stopped and a backup will be
-		created. After the upgrade, the cores that were stopped will be
-		started again. Should anything go wrong, you will be returned to this
-		page, so you can retry the update.</p>
+		<p>${validatestatusdisplaymsg}</p>
 		</td>
 		</tr>
 		<tr class="ContainerFooter" >
@@ -75,7 +77,7 @@
 	</table>
 	
 	<c:if test="${'true' eq coreZipFile.saasMode}">
-	<p>Core update wizard is not supported in SAAS Mode.</p>
+	<p>${saasmodedisplaymsg}</p>
 	</c:if>
 	</td>
 </tr>

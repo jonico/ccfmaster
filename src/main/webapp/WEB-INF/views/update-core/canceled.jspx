@@ -3,6 +3,9 @@
 
 <spring:message code="button_next" var="next_button"/>
 <spring:message code="button_return" var="return_button"/>
+<spring:message code="updatecoreheaderlabel" var="updatecoreheaderlabel"/>
+<spring:message code="cancelcoredisplaylabel" var="cancelcoredisplaylabel"/>
+<spring:message code="cancelcoreextramsg" var="cancelcoreextramsg"/>
 
 <c:if test="${not empty exception}">
 <div class="errorMessage">${exception.message}</div>
@@ -11,7 +14,7 @@
 	<tbody>
 			<tr class="ContainerHeader">
 			<td colspan="5">
-			Core Update
+			${updatecoreheaderlabel}
 			</td>
 			</tr>
 			<br/>
@@ -21,13 +24,13 @@
 			</tr>
 			<tr>
 			<td colspan="8">
-			<h3>You canceled the core update.</h3>
+			<h3>${cancelcoredisplaylabel}</h3>
 			</td>
 			</tr>
 
 <tr>
 <td colspan="8">
-If you change your mind, you can always run the update later.
+${cancelcoreextramsg}
 </td>
 </tr>
 </tbody>
