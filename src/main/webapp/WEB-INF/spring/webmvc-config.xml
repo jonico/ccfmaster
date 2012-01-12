@@ -85,6 +85,7 @@
 				<prop key="badRequest">401</prop>
 				<prop key="dataAccessFailure">500</prop>
 				<prop key="teamForgeSessionTimeout">401</prop>
+				<prop key="uncaughtException">500</prop>
 			</props>
 		</property>
 		<property name="defaultErrorView" value="uncaughtException"/>
