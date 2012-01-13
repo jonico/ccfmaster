@@ -14,6 +14,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,7 +181,9 @@ public class ConversionResult {
 			constantTopLevelAttributes = constantTlaXml.build();
 		}
 
-		@SafeXslt
+		//TODO: For now below line is commented out to make FieldMapping instance to create using REST post and put request
+		//Needs to uncomment the below line once FieldMappingRuleConvertor and its related core implementation is done
+		//@SafeXslt
 		public Element getXml() {
 			try {
 				final SAXReader saxReader = new SAXReader();
@@ -190,22 +193,26 @@ public class ConversionResult {
 
 				final Element tla = (Element) result.selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
 				for (Element e : topLevelAttributes) {
-					tla.add(e);
+					Node n = (Node)e.clone();
+					tla.add(n.detach());
 				}
 
 				final Element fld = (Element) result.selectSingleNode(XPATH_ELEMENT);
 				for (Element e : fields) {
-					fld.add(e);
+					Node n = (Node)e.clone();
+					fld.add(n.detach());
 				}
 				
 				final Element constantTla = (Element) result.selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
 				for (Element e : constantTopLevelAttributes) {
-					constantTla.add(e);
+					Node n = (Node)e.clone();
+					constantTla.add(n.detach());
 				}
 
 				final Element constantFld = (Element) result.selectSingleNode(XPATH_CONSTANT_ELEMENT);
 				for (Element e : constantFields) {
-					constantFld.add(e);
+					Node n = (Node)e.clone();
+					constantFld.add(n.detach());
 				}
 				if (log.isDebugEnabled())
 					log.debug(result.asXML());
