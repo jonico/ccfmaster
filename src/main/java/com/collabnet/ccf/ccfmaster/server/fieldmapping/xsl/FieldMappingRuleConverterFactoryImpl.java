@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
+import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRuleType;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMap;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMapEntry;
 import com.collabnet.ccf.ccfmaster.util.Maybe;
@@ -49,6 +50,13 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			break;
 		case CUSTOM_XSLT_SNIPPET:
 			converter = new CustomXsltSnippetConverter(rule);
+			break;
+		case SOURCE_REPOSITORY_LAYOUT:
+			converter = new SourceRepositoryMappingLayoutConverter(rule);
+			break;
+		case TARGET_REPOSITORY_LAYOUT:
+			converter = new TargetRepositoryMappingLayoutConverter(rule);
+			break;
 		default:
 			throw new IllegalArgumentException(rule.getType() + " not supported.");
 		}
@@ -103,6 +111,58 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 	static class CustomXsltSnippetConverter extends AbstractFieldMappingRuleConverter {
 
 		protected CustomXsltSnippetConverter(FieldMappingRule rule) {
+			super(rule);
+		}
+
+		@Override
+		public Element asElement() {
+			Reader reader = new StringReader(rule.getXmlContent());
+			SAXReader saxReader = new SAXReader();
+			try {
+				Document document = saxReader.read(reader);
+				return document.getRootElement();
+			} catch (DocumentException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		public Element asTopLevelAttribute() {
+			return asElement();
+		}
+
+		
+	}
+	
+	static class SourceRepositoryMappingLayoutConverter extends AbstractFieldMappingRuleConverter {
+
+		protected SourceRepositoryMappingLayoutConverter(FieldMappingRule rule) {
+			super(rule);
+		}
+
+		@Override
+		public Element asElement() {
+			Reader reader = new StringReader(rule.getXmlContent());
+			SAXReader saxReader = new SAXReader();
+			try {
+				Document document = saxReader.read(reader);
+				return document.getRootElement();
+			} catch (DocumentException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		public Element asTopLevelAttribute() {
+			return asElement();
+		}
+
+		
+	}
+	
+	static class TargetRepositoryMappingLayoutConverter extends AbstractFieldMappingRuleConverter {
+
+		protected TargetRepositoryMappingLayoutConverter(FieldMappingRule rule) {
 			super(rule);
 		}
 
