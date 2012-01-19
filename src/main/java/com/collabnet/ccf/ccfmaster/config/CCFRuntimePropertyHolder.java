@@ -1,7 +1,16 @@
 package com.collabnet.ccf.ccfmaster.config;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 
 public class CCFRuntimePropertyHolder {
@@ -27,6 +36,34 @@ public class CCFRuntimePropertyHolder {
 	private String saasMode;
 	
 	private String isArchiveRequired;
+	
+	private Properties defaultRuntimePropvalues;
+	
+	/**
+	 * {@link RuntimePropertyNameEnum} holds collection of the ccfRuntime property key names
+	 *
+	 */
+	public enum RuntimePropertyNameEnum {
+		CCF_HOME("ccf.home"),
+		CCF_BASE_URL("ccf.baseUrl"),
+		CCF_DB_PORTNO("ccf.db.port"),
+		CCF_IAF_SERVICE_ENDPOINT("ccf.iafServiceEndpoint"),
+		CCF_FORWARD_JMXPORT("ccf.forward.jmxport"),
+		CCF_REVERSE_JMXPORT("ccf.reverse.jmxport"),
+		TF_URL("ccf.tf.url"),
+		CCF_SAASMODE("ccf.saasmode"),
+		CCF_ISARCHIVEREQUIRED("ccf.isArchiveRequired") ;
+		
+		private String propertyName;
+
+		public String getPropertyName() {
+			return propertyName;
+		}
+
+		RuntimePropertyNameEnum(String propertyName) {
+			this.propertyName = propertyName;
+		}
+	}
 	
 	public String getTfUrl() {
 		return tfUrl;
@@ -133,6 +170,149 @@ public class CCFRuntimePropertyHolder {
 	public void setIsArchiveRequired(String isArchiveRequired) {
 		this.isArchiveRequired = isArchiveRequired;
 		log.info("CCF Runtime Property isArchiveRequired set to " + isArchiveRequired);
+	}
+
+	public Properties getDefaultRuntimePropvalues() {
+		return defaultRuntimePropvalues;
+	}
+
+	public void setDefaultRuntimePropvalues(Properties defaultRuntimePropvalues) {
+		this.defaultRuntimePropvalues = defaultRuntimePropvalues;
+		log.info("CCF Runtime Property defaultRuntimePropvalues set to " + defaultRuntimePropvalues);
+	}
+	
+	/**
+	 * Init method for {@link CCFRuntimePropertyHolder} .
+	 * This method loads the properties which are configured as system/environment variable.
+	 * If system/environment variable is not configured,looks up for fallback ccfhome/ccf.conf file to load
+	 * the properties.If file not found loads default properties.
+	 */
+	public void initializeRuntimeProperties(){
+		for(RuntimePropertyNameEnum propEnum:RuntimePropertyNameEnum.values()){
+			String propertyName = propEnum.getPropertyName();
+			String runtimeValue = getConfiguredPropertyValue(propertyName);
+			if(runtimeValue!= null){
+				setPropertyValues(RuntimePropertyNameEnum.valueOf(propEnum.name()), runtimeValue);
+			}
+		}
+		if(getCcfHome() == null){
+			setCcfHome(getFallBackCcfHomePath());
+		}
+
+		loadCcfConfProperties();
+	}
+
+	/*
+	 * Loads properties available in ccfhome/ccf.conf file,if file not found.
+	 * Default properties are configured
+	 * 
+	 */
+	private void loadCcfConfProperties() {
+		Properties props = null;
+		String ccfConfFilePath = String.format("%s/ccf.conf", getCcfHome());
+		Resource resource = new FileSystemResource(ccfConfFilePath);
+		if(resource.exists()){
+			try {
+				props = PropertiesLoaderUtils.loadProperties(resource);
+			} catch (IOException e) {
+				log.error("Couldn't find ccf.conf file");
+			}
+		}else{
+			props = getDefaultRuntimePropvalues();
+		}
+		if(props!= null){
+			Set<String> keyset = props.stringPropertyNames();
+			for(String value: keyset){
+				setPropertyValues(getEnum(value), props.getProperty(value));
+			}
+		}
+	}
+	
+	private RuntimePropertyNameEnum getEnum(String propertykeyValue){
+		for(RuntimePropertyNameEnum propEnum:RuntimePropertyNameEnum.values()){
+			if(propEnum.getPropertyName().equalsIgnoreCase(propertykeyValue)){
+				return propEnum;
+			}
+		}
+		return null;	
+	}
+
+	private String getFallBackCcfHomePath() {
+		String ccfhomePath = null;
+		String[] fallbackDir = {String.format("%s/ccfhome",FileUtils.getUserDirectoryPath()), String.format("%sccfhome",FileUtils.getTempDirectoryPath())
+									,String.format("%s",getDefaultRuntimePropvalues().getProperty(RuntimePropertyNameEnum.CCF_HOME.getPropertyName()))};
+		for(String path: fallbackDir){
+			boolean isDefaultDirExist = new File(path).isDirectory();
+			if(isDefaultDirExist){
+				ccfhomePath = path;
+				break;
+			}
+		}
+		return ccfhomePath;		
+	}
+
+
+	private String getConfiguredPropertyValue(String propertyName){
+		String envValue = System.getenv(propertyName);
+		return (envValue!= null) ? envValue : System.getProperty(propertyName);
+	}
+	
+	/*
+	 * SetPropertyValues method assigns new property value only if it is null.
+	 * 
+	 * @param propName
+	 * @param value
+	 */
+	private void setPropertyValues(RuntimePropertyNameEnum propName,String value) {
+		if (propName == null)
+			return;
+		switch (propName) {
+		case CCF_HOME:
+			if (ccfHome == null) {
+				setCcfHome(value);
+			}
+			break;
+		case CCF_BASE_URL:
+			if (ccfBaseUrl == null) {
+				setCcfBaseUrl(value);
+			}
+			break;
+		case CCF_DB_PORTNO:
+			if (ccfDBPort == null) {
+				setCcfDBPort(value);
+			}
+			break;
+		case TF_URL:
+			if(tfUrl == null){
+				setTfUrl(value);
+			}
+			break;
+		case CCF_IAF_SERVICE_ENDPOINT:
+			if (iafServiceEndpoint == null) {
+				setIafServiceEndpoint(value);
+			}
+			break;
+		case CCF_FORWARD_JMXPORT:
+			if (jmxForwardPort == null) {
+				setJmxForwardPort(value);
+			}
+			break;
+		case CCF_REVERSE_JMXPORT:
+			if (jmxReversePort == null) {
+				setJmxReversePort(value);
+			}
+			break;
+		case CCF_SAASMODE:
+			if (saasMode == null) {
+				setSaasMode(value);
+			}
+			break;
+		case CCF_ISARCHIVEREQUIRED:
+			if (isArchiveRequired == null) {
+				setIsArchiveRequired(value);
+			}
+			break;
+		}
 	}
 
 }
