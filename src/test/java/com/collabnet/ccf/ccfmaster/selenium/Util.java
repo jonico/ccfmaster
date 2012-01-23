@@ -48,11 +48,6 @@ public final class Util {
 	public static void login(Selenium selenium, String username, String password) {
 		try {
 			selenium.open("/CCFMaster/login");
-			if(selenium.getLocation().endsWith("/sessionTimeout")){
-				selenium.click("id=proceed");
-				selenium.waitForPageToLoad("30000");
-			}
-			log.info("Login page is accessed "+selenium.getLocation());
 			// selenium.click("j_username");
 			selenium.type("j_username", username);
 			selenium.type("j_password", password);
