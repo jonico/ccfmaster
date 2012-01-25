@@ -15,7 +15,7 @@ import com.collabnet.ccf.ccfmaster.config.Version;
 public class Capabilities {
 	
 	private final ParticipantSystemKinds participantSystemKinds = new ParticipantSystemKinds();
-	private final Version version = new Version(1, 0, 0, "$Revision$");
+	private final Version version = new Version(1, 0, 1, "$Revision$");
 	
 	@XmlElement
 	public ParticipantSystemKinds getParticipantSystemKinds() {
