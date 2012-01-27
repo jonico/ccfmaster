@@ -42,7 +42,9 @@ public final class Util {
 		// not interested in path.
 		URI uri = URI.create(baseUrl);
 		String port = uri.getPort() == -1 ? "" : ":" + uri.getPort();
-		return String.format("%s://%s%s", uri.getScheme(), uri.getHost(), port);
+		baseUrl = String.format("%s://%s%s", uri.getScheme(), uri.getHost(), port);
+		log.info("Configured base url: "+ baseUrl);
+		return baseUrl;
 	}
 
 	public static void login(Selenium selenium, String username, String password) {

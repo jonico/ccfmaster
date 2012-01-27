@@ -13,11 +13,11 @@
 	<bean id="CCFRunTimeProperties"
 		class="com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder"
 		init-method="initializeRuntimeProperties">
-		<property name="maxAttachmentSize" value="10485760" />
 		<property name="defaultRuntimePropvalues" ref="defaultCcfRuntimeProperties" />
 	</bean>
 
 	<util:properties id="defaultCcfRuntimeProperties">
+		<prop key="ccf.maxAttachment.size">10485760</prop>
 		<prop key="ccf.baseUrl">http://ccfmaster:8080/CCFMaster</prop>
 		<prop key="ccf.db.port">9002</prop>
 		<prop key="ccf.home">/tmp</prop>

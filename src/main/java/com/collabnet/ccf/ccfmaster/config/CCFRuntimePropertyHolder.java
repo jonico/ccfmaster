@@ -46,13 +46,14 @@ public class CCFRuntimePropertyHolder {
 	public enum RuntimePropertyNameEnum {
 		CCF_HOME("ccf.home"),
 		CCF_BASE_URL("ccf.baseUrl"),
-		CCF_DB_PORTNO("ccf.db.port"),
+		CCF_DB_PORT("ccf.db.port"),
 		CCF_IAF_SERVICE_ENDPOINT("ccf.iafServiceEndpoint"),
 		CCF_FORWARD_JMXPORT("ccf.forward.jmxport"),
 		CCF_REVERSE_JMXPORT("ccf.reverse.jmxport"),
-		TF_URL("ccf.tf.url"),
+		CCF_TF_URL("ccf.tf.url"),
 		CCF_SAASMODE("ccf.saasmode"),
-		CCF_ISARCHIVEREQUIRED("ccf.isArchiveRequired") ;
+		CCF_IS_ARCHIVE_REQUIRED("ccf.isArchiveRequired"),
+		CCF_MAX_ATTACHMENT_SIZE("ccf.maxAttachment.size");
 		
 		private String propertyName;
 
@@ -192,7 +193,7 @@ public class CCFRuntimePropertyHolder {
 			String propertyName = propEnum.getPropertyName();
 			String runtimeValue = getConfiguredPropertyValue(propertyName);
 			if(runtimeValue!= null){
-				setPropertyValues(RuntimePropertyNameEnum.valueOf(propEnum.name()), runtimeValue);
+				setPropertyValues(propEnum, runtimeValue);
 			}
 		}
 		if(getCcfHome() == null){
@@ -209,7 +210,7 @@ public class CCFRuntimePropertyHolder {
 	 */
 	private void loadCcfConfProperties() {
 		Properties props = null;
-		String ccfConfFilePath = String.format("%s/ccf.conf", getCcfHome());
+		String ccfConfFilePath = String.format("%s%sccf.conf",getCcfHome(), File.separator);
 		Resource resource = new FileSystemResource(ccfConfFilePath);
 		if(resource.exists()){
 			try {
@@ -221,6 +222,7 @@ public class CCFRuntimePropertyHolder {
 			props = getDefaultRuntimePropvalues();
 		}
 		if(props!= null){
+			log.info("CCF runtime properties loaded: " + props.toString());
 			Set<String> keyset = props.stringPropertyNames();
 			for(String value: keyset){
 				setPropertyValues(getEnum(value), props.getProperty(value));
@@ -239,8 +241,8 @@ public class CCFRuntimePropertyHolder {
 
 	private String getFallBackCcfHomePath() {
 		String ccfhomePath = null;
-		String[] fallbackDir = {String.format("%s/ccfhome",FileUtils.getUserDirectoryPath()), String.format("%sccfhome",FileUtils.getTempDirectoryPath())
-									,String.format("%s",getDefaultRuntimePropvalues().getProperty(RuntimePropertyNameEnum.CCF_HOME.getPropertyName()))};
+		String[] fallbackDir = {String.format("%s%sccfhome",FileUtils.getUserDirectoryPath(), File.separator), String.format("%sccfhome",FileUtils.getTempDirectoryPath())
+									,getDefaultRuntimePropvalues().getProperty(RuntimePropertyNameEnum.CCF_HOME.getPropertyName())};
 		for(String path: fallbackDir){
 			boolean isDefaultDirExist = new File(path).isDirectory();
 			if(isDefaultDirExist){
@@ -277,12 +279,12 @@ public class CCFRuntimePropertyHolder {
 				setCcfBaseUrl(value);
 			}
 			break;
-		case CCF_DB_PORTNO:
+		case CCF_DB_PORT:
 			if (ccfDBPort == null) {
 				setCcfDBPort(value);
 			}
 			break;
-		case TF_URL:
+		case CCF_TF_URL:
 			if(tfUrl == null){
 				setTfUrl(value);
 			}
@@ -307,11 +309,15 @@ public class CCFRuntimePropertyHolder {
 				setSaasMode(value);
 			}
 			break;
-		case CCF_ISARCHIVEREQUIRED:
+		case CCF_IS_ARCHIVE_REQUIRED:
 			if (isArchiveRequired == null) {
 				setIsArchiveRequired(value);
 			}
 			break;
+		case CCF_MAX_ATTACHMENT_SIZE:
+			if(maxAttachmentSize == null){
+				setMaxAttachmentSize(value);
+			}
 		}
 	}
 
