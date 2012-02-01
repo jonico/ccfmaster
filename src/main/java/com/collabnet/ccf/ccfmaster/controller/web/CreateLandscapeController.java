@@ -121,23 +121,22 @@ public class CreateLandscapeController{
 			//model.addAttribute("connectionerror", errormessages);
 			Participant particpantHidden = getParticipant(participantparam);
 			createLandscapeHelper.populateCreateLandscapeModel(model,particpantHidden);		
-			model.addAttribute("participant",particpantHidden);
+			model.addAttribute("participant", particpantHidden);
 			model.addAttribute("landscapemodel", landscapemodel);
 			return UIPathConstants.CREATELANDSCAPE_CREATELANDSCAPE;
 		}  
-		try{
+		try {
 			log.debug("before persistModel");
 			createLandscapeHelper.persistModel(landscapemodel);
 			log.debug("persistModel succeeded");
-		}
-		catch(Exception exception){
-			log.debug("persistModel failed");
+		} catch(Exception exception) {
+			log.error("persistModel failed", exception);
 			//model.addAttribute("errormessage",exception.getMessage());
 			model.addAttribute("connectionerror", exception.getMessage());
 			return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;
 		}
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
-		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
+		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel, model);
 		log.debug("saveLandscape ended");
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS; 
 	}
