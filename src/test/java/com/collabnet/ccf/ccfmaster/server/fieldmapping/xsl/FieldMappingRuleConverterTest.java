@@ -1,5 +1,6 @@
 package com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -166,6 +167,28 @@ public class FieldMappingRuleConverterTest {
 		valueMap.setDefaultValue(null);
 		hasDefaultTrueDefaultNull(converter.asElement());
 		hasDefaultTrueDefaultNull(converter.asTopLevelAttribute());
+	}
+	
+	@Test
+	public void testSourceRepositoryLayoutConverter() {
+		rule.setType(FieldMappingRuleType.SOURCE_REPOSITORY_LAYOUT);
+		rule.setXmlContent(ConversionResultMappingRulesTest.genericArtifactXml());
+		FieldMappingRuleConverter converter = converterFactory.get(rule, new ArrayList<FieldMappingValueMap>(), String.format("%sxslt%sTF2QC",File.separator,File.separator));
+
+		final Element result = converter.asElement();
+		final String xpath = "//actualHours/xslo:value-of";
+		assertFalse(result.selectNodes(xpath).isEmpty());
+	}
+	
+	@Test
+	public void testTargetRepositoryLayoutConverter(){
+		rule.setType(FieldMappingRuleType.TARGET_REPOSITORY_LAYOUT);
+		rule.setXmlContent(ConversionResultMappingRulesTest.genericArtifactXml());
+		FieldMappingRuleConverter converter = converterFactory.get(rule, new ArrayList<FieldMappingValueMap>(), String.format("%sxslt%sTF2QC",File.separator,File.separator));
+		
+		final Element result = converter.asElement();
+		final String xpath = "//xslo:attribute[@name='fieldName']";
+		assertFalse(result.selectNodes(xpath).isEmpty());
 	}
 
 

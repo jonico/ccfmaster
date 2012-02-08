@@ -1,5 +1,12 @@
 package com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl;
 
+import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_CONSTANT_ELEMENT;
+import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE;
+import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_ELEMENT;
+import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_TOP_LEVEL_ATTRIBUTE;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.dom4j.Element;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +19,6 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingKind;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRuleType;
 import com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules;
-
-import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.*;
-import static org.junit.Assert.*;
 
 @ContextConfiguration
 public class ConversionResultMappingRulesTest extends
@@ -194,5 +198,44 @@ public class ConversionResultMappingRulesTest extends
 		assertFalse(
 				"couldn't find rule in result",
 				xsl.selectNodes(xpath).isEmpty());
+	}
+	
+	@Test
+	public void testSourceRepositoryMappingRule() {
+		String xmlContent = genericArtifactXml();
+		final FieldMapping fm = getMappingRulesFieldMapping();
+		FieldMappingRule rule = getRule(FieldMappingRuleType.SOURCE_REPOSITORY_LAYOUT, true);
+		rule.setXmlContent(xmlContent);
+		fm.getRules().add(rule);
+		ConversionResult res = resultFactory.get(fm);
+		final Element prexml = res.mappingRules().get().getPreXml();
+		final String xpath = "//actualHours/xslo:value-of";
+		assertTrue(prexml !=null);
+		assertFalse(prexml.selectNodes(xpath).isEmpty());
+	}
+	
+	@Test
+	public void testTargetRepositoryMappingRule(){
+		String xmlContent = genericArtifactXml();
+		final FieldMapping fm = getMappingRulesFieldMapping();
+		FieldMappingRule rule = getRule(FieldMappingRuleType.TARGET_REPOSITORY_LAYOUT, true);
+		rule.setXmlContent(xmlContent);
+		fm.getRules().add(rule);
+		ConversionResult res = resultFactory.get(fm);
+		final Element postxml = res.mappingRules().get().getPostXml();
+		final String xpath = "//xslo:attribute[@name='fieldName']";
+		assertTrue(postxml !=null);
+		assertFalse(postxml.selectNodes(xpath).isEmpty());
+	}
+	
+	public static String genericArtifactXml(){
+		StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<artifact xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
+		sb.append(" xmlns=\"http://ccf.open.collab.net/GenericArtifactV1.0\"");
+		sb.append(" xsi:schemaLocation=\"http://ccf.open.collab.net/GenericArtifactV1.0 http://ccf.open.collab.net/files/documents/177/1972/genericartifactschema.xsd\">");
+		sb.append("<field fieldAction=\"replace\" fieldName=\"actualHours\" fieldType=\"mandatoryField\" fieldValueHasChanged=\"true\" minOccurs=\"0\" maxOccurs=\"1\" ");
+		sb.append("nullValueSupported=\"false\" alternativeFieldName=\"actualHours\" fieldValueType=\"Integer\" fieldValueIsNull=\"false\">actualHours(mandatoryField/ INTEGER)");
+		sb.append("</field></artifact>");
+		return sb.toString();
 	}
 }

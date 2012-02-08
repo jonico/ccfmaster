@@ -25,6 +25,8 @@ import com.google.common.collect.Iterables;
 
 public abstract class AbstractPersister<T extends Mapping<?>> {
 	public static final String FILENAME_RULES = "rules.xsl";
+	public static final String FILENAME_PREXML_RULES = "preprocessingrules.xsl";
+	public static final String FILENAME_POSTXML_RULES = "postprocessingrules.xsl";
 	public static final String FILENAME_MAPFORCE_PRE = "GenericArtifactFormatToMapForce.xsl";
 	public static final String FILENAME_MAPFORCE_MAIN = "MapForceMain.xsl";
 	public static final String FILENAME_MAPFORCE_POST = "MapForceToGenericArtifactFormat.xsl";
@@ -64,8 +66,9 @@ public abstract class AbstractPersister<T extends Mapping<?>> {
 			return;
 		}
 		for (MappingRules mappingRules : result.mappingRules()) {
-			File outFile = new File(directory, FILENAME_RULES);
-			writeXml(mappingRules.getXml(), outFile);
+			writeXml(mappingRules.getXml(), new File(directory, FILENAME_RULES));
+			writeXml(mappingRules.getPreXml(), new File(directory, FILENAME_PREXML_RULES));
+			writeXml(mappingRules.getPostXml(), new File(directory, FILENAME_POSTXML_RULES));
 			return;
 		}
 		throw new UnsupportedOperationException();
@@ -98,6 +101,8 @@ public abstract class AbstractPersister<T extends Mapping<?>> {
 	}
 
 	static void writeXml(Element xml, File file) throws IOException {
+		if (xml == null)
+			return;
 		XMLWriter writer = null;
 		try {
 			writer = new XMLWriter(new FileWriter(file));

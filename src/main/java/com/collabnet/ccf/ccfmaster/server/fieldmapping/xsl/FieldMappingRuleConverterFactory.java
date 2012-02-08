@@ -9,4 +9,6 @@ public interface FieldMappingRuleConverterFactory {
 	// public FieldMappingRuleConverter get(FieldMappingRule rule);
 	/** ugly hack to allow rules to access their parent's valueMaps by name */
 	public FieldMappingRuleConverter get(FieldMappingRule rule, List<FieldMappingValueMap> valueMaps);
+	
+	public FieldMappingRuleConverter get(FieldMappingRule rule, List<FieldMappingValueMap> valueMaps,String dir) ;
 }

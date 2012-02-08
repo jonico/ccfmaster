@@ -4,7 +4,9 @@ import static com.collabnet.ccf.ccfmaster.util.Maybe.maybe;
 import static com.collabnet.ccf.ccfmaster.util.Maybe.none;
 import static com.collabnet.ccf.ccfmaster.util.Maybe.some;
 
+import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,15 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
+import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingKind;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRuleType;
 import com.collabnet.ccf.ccfmaster.server.domain.Mapping;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
 import com.collabnet.ccf.ccfmaster.util.Maybe;
 import com.collabnet.ccf.ccfmaster.util.Transformer;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 
 public class ConversionResult {
 	private static final Logger log = LoggerFactory.getLogger(ConversionResult.class);
@@ -145,40 +147,68 @@ public class ConversionResult {
 		static final String MAPPING_RULE_TEMPLATE_XSL = "/mapping-rule-template.xsl";
 		@Autowired
 		FieldMappingRuleConverterFactory converterFactory = new FieldMappingRuleConverterFactoryImpl();
-		final List<Element> fields;
-		final List<Element> topLevelAttributes;
-		private List<Element> constantFields;
-		private List<Element> constantTopLevelAttributes;
+		private List<Element> fields = new ArrayList<Element>();
+		private List<Element> topLevelAttributes = new ArrayList<Element>();
+		private List<Element> constantFields = new ArrayList<Element>();
+		private List<Element> constantTopLevelAttributes = new ArrayList<Element>();
+		private Element preXml;
+		private Element postXml;
 
 		public MappingRules(final Mapping<?> mapping) {
-			Assert.isTrue(
-					mapping.getKind() == FieldMappingKind.MAPPING_RULES,
-					"bad mapping kind: " + mapping.getKind());
-			List<FieldMappingRuleType> constantTypes = Arrays.asList(FieldMappingRuleType.DIRECT_CONSTANT, FieldMappingRuleType.CONDITIONAL_CONSTANT);
-			Builder<Element> fieldXml = ImmutableList.builder();
-			Builder<Element> tlaXml = ImmutableList.builder();
-			Builder<Element> constantFieldXml = ImmutableList.builder();
-			Builder<Element> constantTlaXml = ImmutableList.builder();
+			Assert.isTrue(mapping.getKind() == FieldMappingKind.MAPPING_RULES,"bad mapping kind: " + mapping.getKind());
+			mappingRuleXsltHandler(mapping);
+		}
+
+		private void mappingRuleXsltHandler(final Mapping<?> mapping) {
 			for (FieldMappingRule rule : mapping.getRules()) {
-				FieldMappingRuleConverter converter = converterFactory.get(rule, mapping.getValueMaps());
-				if (rule.isTargetIsTopLevelAttribute()) {
-					final Element tla = converter.asTopLevelAttribute();
-					if (constantTypes.contains(rule.getType()))
-						constantTlaXml.add(tla);
-					else
-						tlaXml.add(tla);
-				} else {
-					final Element elem = converter.asElement();
-					if (constantTypes.contains(rule.getType()))
-						constantFieldXml.add(elem);
-					else
-						fieldXml.add(elem);
+				FieldMappingRuleConverter converter;
+				switch(rule.getType()){
+					case SOURCE_REPOSITORY_LAYOUT:
+						//Expected FieldMapping instance as Mapping, since currently directions value is got from RespositoryMappingDirection- parent of FieldMapping
+						converter = converterFactory.get(rule, mapping.getValueMaps(),getXsltDir(((RepositoryMappingDirection)mapping.getParent()).getDirection()));
+						this.preXml = converter.asElement();
+						break;
+					case TARGET_REPOSITORY_LAYOUT:
+						//Expected FieldMapping instance as Mapping, since currently directions value is got from RespositoryMappingDirection- parent of FieldMapping
+						converter = converterFactory.get(rule, mapping.getValueMaps(),getXsltDir(((RepositoryMappingDirection)mapping.getParent()).getDirection()));
+						this.postXml = converter.asElement();
+						break;
+					default:
+						converter = converterFactory.get(rule, mapping.getValueMaps());
+						buildMainXsltAttribute( rule, converter);
+						break;
 				}
 			}
-			fields = fieldXml.build();
-			constantFields = constantFieldXml.build();
-			topLevelAttributes = tlaXml.build();
-			constantTopLevelAttributes = constantTlaXml.build();
+		}
+
+		private void buildMainXsltAttribute(FieldMappingRule rule,FieldMappingRuleConverter converter) {
+			List<FieldMappingRuleType> constantTypes = Arrays.asList(FieldMappingRuleType.DIRECT_CONSTANT, FieldMappingRuleType.CONDITIONAL_CONSTANT);
+			if (rule.isTargetIsTopLevelAttribute()) {
+				final Element tla = converter.asTopLevelAttribute();
+				if (constantTypes.contains(rule.getType()))
+					this.constantTopLevelAttributes.add(tla);
+				else
+					this.topLevelAttributes.add(tla);
+			} else {
+				final Element elem = converter.asElement();
+				if (constantTypes.contains(rule.getType()))
+					this.constantFields.add(elem);
+				else
+					this.fields.add(elem);
+			}
+		}
+		
+		public static String getXsltDir(Directions direction){
+			String dir = "";
+			switch(direction){
+				case FORWARD:
+					dir= String.format("%sxslt%sTF2QC",File.separator,File.separator);
+					break;
+				case REVERSE:
+					dir= String.format("%sxslt%sQC2TF",File.separator,File.separator);
+					break;
+			}
+			return dir;
 		}
 
 		//TODO: For now below line is commented out to make FieldMapping instance to create using REST post and put request
@@ -220,6 +250,16 @@ public class ConversionResult {
 			} catch (DocumentException e) {
 				throw new CoreConfigurationException(e);
 			}
+		}
+		
+//		@SafeXslt
+		public Element getPreXml() {
+			return preXml;
+		}
+		
+//		@SafeXslt
+		public Element getPostXml() {
+			return postXml;
 		}
 		
 	}

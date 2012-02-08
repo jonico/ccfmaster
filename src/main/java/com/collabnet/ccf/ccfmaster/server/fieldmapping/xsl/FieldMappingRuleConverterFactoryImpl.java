@@ -5,6 +5,9 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.TransformerException;
+
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -13,8 +16,8 @@ import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
-import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRuleType;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMap;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMapEntry;
 import com.collabnet.ccf.ccfmaster.util.Maybe;
@@ -28,6 +31,10 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 	}
 	
 	public AbstractFieldMappingRuleConverter get(FieldMappingRule rule, List<FieldMappingValueMap> valueMaps) {
+		return get(rule, valueMaps, StringUtils.EMPTY);
+	}
+	
+	public AbstractFieldMappingRuleConverter get(FieldMappingRule rule, List<FieldMappingValueMap> valueMaps,String dir) {
 		AbstractFieldMappingRuleConverter converter = null;
 		switch (rule.getType()) {
 		case DIRECT_FIELD:
@@ -52,10 +59,10 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			converter = new CustomXsltSnippetConverter(rule);
 			break;
 		case SOURCE_REPOSITORY_LAYOUT:
-			converter = new SourceRepositoryMappingLayoutConverter(rule);
+			converter = new SourceRepositoryMappingLayoutConverter(rule, dir);
 			break;
 		case TARGET_REPOSITORY_LAYOUT:
-			converter = new TargetRepositoryMappingLayoutConverter(rule);
+			converter = new TargetRepositoryMappingLayoutConverter(rule, dir);
 			break;
 		default:
 			throw new IllegalArgumentException(rule.getType() + " not supported.");
@@ -135,21 +142,27 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 	}
 	
 	static class SourceRepositoryMappingLayoutConverter extends AbstractFieldMappingRuleConverter {
+		
+		private String directory;
 
-		protected SourceRepositoryMappingLayoutConverter(FieldMappingRule rule) {
+		protected SourceRepositoryMappingLayoutConverter(FieldMappingRule rule, String dir) {
 			super(rule);
+			this.directory=dir;
 		}
 
 		@Override
 		public Element asElement() {
-			Reader reader = new StringReader(rule.getXmlContent());
-			SAXReader saxReader = new SAXReader();
+			Element preXmlElem = null;
 			try {
-				Document document = saxReader.read(reader);
-				return document.getRootElement();
+				Document genericArtifact = DocumentHelper.parseText(rule.getXmlContent());
+				Document preXmlDom = new CcfXsltTransformerImpl(directory).getGenericArtifactToRepositoryXSLTFile(genericArtifact);
+				preXmlElem = preXmlDom.getRootElement();
 			} catch (DocumentException e) {
-				throw new RuntimeException(e);
+				throw new CoreConfigurationException("unable to parse XML", e);
+			} catch (TransformerException e) {
+				throw new CoreConfigurationException("unable to transform given XML", e);
 			}
+			return preXmlElem;
 		}
 
 		@Override
@@ -161,21 +174,27 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 	}
 	
 	static class TargetRepositoryMappingLayoutConverter extends AbstractFieldMappingRuleConverter {
+		
+		private String directory;
 
-		protected TargetRepositoryMappingLayoutConverter(FieldMappingRule rule) {
+		protected TargetRepositoryMappingLayoutConverter(FieldMappingRule rule, String dir) {
 			super(rule);
+			this.directory=dir;
 		}
 
 		@Override
 		public Element asElement() {
-			Reader reader = new StringReader(rule.getXmlContent());
-			SAXReader saxReader = new SAXReader();
+			Element postXmlElem = null;
 			try {
-				Document document = saxReader.read(reader);
-				return document.getRootElement();
+				Document genericArtifact = DocumentHelper.parseText(rule.getXmlContent());
+				Document postXmlDom = new CcfXsltTransformerImpl(directory).getRepositoryToGenericArtifactXSLTFile(genericArtifact);
+				postXmlElem = postXmlDom.getRootElement();
 			} catch (DocumentException e) {
-				throw new RuntimeException(e);
+				throw new CoreConfigurationException("unable to parse XML", e);
+			} catch (TransformerException e) {
+				throw new CoreConfigurationException("unable to  transform given XML", e);
 			}
+			return postXmlElem;
 		}
 
 		@Override
