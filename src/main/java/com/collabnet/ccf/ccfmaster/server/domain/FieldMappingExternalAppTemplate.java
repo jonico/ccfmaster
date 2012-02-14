@@ -71,6 +71,11 @@ public class FieldMappingExternalAppTemplate implements Template<ExternalApp> {
 		return dir;
     }
     
+    @Override
+    public Directions getMappingDirection() {
+    	return getDirection();
+    }
+    
     public static long countFieldMappingExternalAppTemplatesByParent(ExternalApp externalApp) {
         if (externalApp == null) throw new IllegalArgumentException("The externalApp argument is required");
         EntityManager em = entityManager();

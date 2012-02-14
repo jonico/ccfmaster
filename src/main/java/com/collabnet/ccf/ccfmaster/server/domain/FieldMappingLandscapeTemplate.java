@@ -63,6 +63,11 @@ public class FieldMappingLandscapeTemplate implements Template<Landscape> {
         return dir;
     }
     
+    @Override
+    public Directions getMappingDirection() {
+    	return getDirection();
+    }
+    
     public static long countFieldMappingLandscapeTemplatesByDirection(Directions direction) {
     	if (direction == null) throw new IllegalArgumentException("The direction argument is required");
     	TypedQuery<Long> q = entityManager().createQuery("SELECT COUNT(o) FROM FieldMappingLandscapeTemplate o WHERE o.direction = :direction", Long.class);

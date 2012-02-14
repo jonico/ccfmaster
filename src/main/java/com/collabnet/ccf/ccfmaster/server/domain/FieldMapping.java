@@ -69,6 +69,11 @@ public class FieldMapping implements Mapping<RepositoryMappingDirection> {
         		getName()));
         return dir;
     }
+    
+    @Override
+    public Directions getMappingDirection() {
+    	return getParent().getDirection();
+    }
 
     public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, FieldMapping> {
 
@@ -98,4 +103,5 @@ public class FieldMapping implements Mapping<RepositoryMappingDirection> {
     public static long countFieldMappingsByParent(RepositoryMappingDirection rmd) {
         return entityManager().createQuery("select count(o) from FieldMapping o where o.parent = :parent", Long.class).setParameter("parent", rmd).getSingleResult();
     }
+
 }

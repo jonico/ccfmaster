@@ -164,13 +164,11 @@ public class ConversionResult {
 				FieldMappingRuleConverter converter;
 				switch(rule.getType()){
 					case SOURCE_REPOSITORY_LAYOUT:
-						//Expected FieldMapping instance as Mapping, since currently directions value is got from RespositoryMappingDirection- parent of FieldMapping
-						converter = converterFactory.get(rule, mapping.getValueMaps(),getXsltDir(((RepositoryMappingDirection)mapping.getParent()).getDirection()));
+						converter = converterFactory.get(rule, mapping.getValueMaps(),getXsltDir((mapping.getMappingDirection())));
 						this.preXml = converter.asElement();
 						break;
 					case TARGET_REPOSITORY_LAYOUT:
-						//Expected FieldMapping instance as Mapping, since currently directions value is got from RespositoryMappingDirection- parent of FieldMapping
-						converter = converterFactory.get(rule, mapping.getValueMaps(),getXsltDir(((RepositoryMappingDirection)mapping.getParent()).getDirection()));
+						converter = converterFactory.get(rule, mapping.getValueMaps(),getXsltDir((mapping.getMappingDirection())));
 						this.postXml = converter.asElement();
 						break;
 					default:

@@ -10,4 +10,5 @@ public interface Mapping<ParentType> {
 	public List<FieldMappingRule> getRules();
 	public List<FieldMappingValueMap> getValueMaps();
 	public File getStorageDirectory(File baseDir);
+	public Directions getMappingDirection();
 }
