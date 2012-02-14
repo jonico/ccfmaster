@@ -155,7 +155,7 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			Element preXmlElem = null;
 			try {
 				Document genericArtifact = DocumentHelper.parseText(rule.getXmlContent());
-				Document preXmlDom = new CcfXsltTransformerImpl(directory).getGenericArtifactToRepositoryXSLTFile(genericArtifact);
+				Document preXmlDom = new CCFXsltTransformer(directory).getGenericArtifactToRepositoryXSLTFile(genericArtifact);
 				preXmlElem = preXmlDom.getRootElement();
 			} catch (DocumentException e) {
 				throw new CoreConfigurationException("unable to parse XML", e);
@@ -187,7 +187,7 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			Element postXmlElem = null;
 			try {
 				Document genericArtifact = DocumentHelper.parseText(rule.getXmlContent());
-				Document postXmlDom = new CcfXsltTransformerImpl(directory).getRepositoryToGenericArtifactXSLTFile(genericArtifact);
+				Document postXmlDom = new CCFXsltTransformer(directory).getRepositoryToGenericArtifactXSLTFile(genericArtifact);
 				postXmlElem = postXmlDom.getRootElement();
 			} catch (DocumentException e) {
 				throw new CoreConfigurationException("unable to parse XML", e);

@@ -17,24 +17,17 @@ import org.springframework.core.io.Resource;
 
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 
-public class CcfXsltTransformerImpl implements XsltTransformer{
+public class CCFXsltTransformer {
 
-	public final static String GENERIC_ARTIFACT_TO_REPOSITORY_SCHEMA_XSLT_FILE = "GenericArtifact2RepositorySchema.xsl"; //$NON-NLS-1$
 	public final static String REPOSITORY_TO_GENERIC_ARTIFACT_XSLT_FILE = "Repository2GenericArtifact.xsl"; //$NON-NLS-1$
 	public final static String GENERIC_ARTIFACT_TO_REPOSITORY_XSLT_FILE = "GenericArtifact2Repository.xsl"; //$NON-NLS-1$
 
 	private Transformer genericArtifactToRepositoryTransformer = null;
-	private Transformer genericArtifactToRepositorySchemaTransformer = null;
 	private Transformer repositoryToGenericArtifactTransformer = null;
 
-	public CcfXsltTransformerImpl(String dir) {
-		setGenericArtifactToRepositorySchemaTransformer(dir);
+	public CCFXsltTransformer(String dir) {
 		setGenericArtifactToRepositoryTransformer(dir);
 		setRepositoryToGenericArtifactTransformer(dir);
-	}
-	
-	public Document getRepositorySpecificLayout(Document ga) throws TransformerException {
-		return transform(genericArtifactToRepositorySchemaTransformer, ga);
 	}
 
 	public Document getGenericArtifactToRepositoryXSLTFile(Document ga)	throws TransformerException {
@@ -48,11 +41,6 @@ public class CcfXsltTransformerImpl implements XsltTransformer{
 	private void setGenericArtifactToRepositoryTransformer(String dir) {
 		String filePath = String.format("%s%s%s",dir,File.separator,GENERIC_ARTIFACT_TO_REPOSITORY_XSLT_FILE);
 		this.genericArtifactToRepositoryTransformer = processXslResource(new ClassPathResource(filePath));
-	}
-
-	private void setGenericArtifactToRepositorySchemaTransformer(String dir) {
-		String filePath = String.format("%s%s%s",dir,File.separator,GENERIC_ARTIFACT_TO_REPOSITORY_SCHEMA_XSLT_FILE);
-		this.genericArtifactToRepositorySchemaTransformer = processXslResource(new ClassPathResource(filePath));
 	}
 
 
