@@ -216,7 +216,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			List<FieldMappingRule> rules=new ArrayList<FieldMappingRule>();
 			for(FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate:fieldMappingExternalAppTemplateSession){
 				rules = fieldMappingExternalAppTemplate.getRules();
-				List<FieldMappingRule> newrules = LandscapeFieldMappingTemplatesController.createFieldMappingRule(rules);
+				List<FieldMappingRule> newrules = new ArrayList<FieldMappingRule>(rules);
 				for (String fmtName:items) {
 					if(fieldMappingExternalAppTemplate.getName().equals(fmtName)){
 						if (isTemplateExists(model,idNameMap.get(fmtName).toString(), directions,ea)) { 

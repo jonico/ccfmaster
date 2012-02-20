@@ -257,28 +257,6 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	}
 
 
-
-	/**
-	 * @param fieldMappingRule
-	 * @param rules
-	 * @param fieldMappingLandscapeTemplatelist
-	 * @return
-	 */
-	public static List<FieldMappingRule> createFieldMappingRule(List<FieldMappingRule> rules) {
-		List<FieldMappingRule> newrules = new ArrayList<FieldMappingRule>();
-		for (FieldMappingRule fmrules : rules) {
-			FieldMappingRule fieldMappingRule=new FieldMappingRule();
-			fieldMappingRule.setName(fmrules.getName());
-			fieldMappingRule.setDescription(fmrules.getDescription());
-			fieldMappingRule.setType(fmrules.getType());
-			fieldMappingRule.setXmlContent(fmrules.getXmlContent());
-			newrules.add(fieldMappingRule);		
-		}
-
-		return newrules;
-	}
-
-
 	/**
 	 * Controller method to import bulk field mapping templates
 	 * 
@@ -298,7 +276,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			Landscape parent = ControllerHelper.findLandscape(model);
 			for(FieldMappingLandscapeTemplate fieldMappingTemplate:fieldMappingLandscapeTemplateSession){
 				rules = fieldMappingTemplate.getRules();
-				List<FieldMappingRule> newrules = createFieldMappingRule(rules);
+				List<FieldMappingRule> newrules = new ArrayList<FieldMappingRule>(rules);
 				for (String fmtName:items) {
 					if(fieldMappingTemplate.getName().equals(fmtName)){
 						if (isTemplateExists(model,idNameMap.get(fmtName).toString(), directions)) { 
