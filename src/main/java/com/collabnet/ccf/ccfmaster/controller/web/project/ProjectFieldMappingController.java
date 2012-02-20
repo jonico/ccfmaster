@@ -33,9 +33,11 @@ import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplateList;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
+import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMap;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.model.FileUpload;
+import com.collabnet.ccf.core.utils.FieldMappingUtil;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -211,20 +213,22 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 		String[] items = request.getParameterValues(FMTNAME);
 		Map<String,String> idNameMap =LandscapeFieldMappingTemplatesController.mapIdandName(request, items);
 		Map<String,String> importStatus=new HashMap<String,String>();
+		String nameFromMap=null;
 		try {
 			List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplateSession =getFMEATFromSession(session);
-			List<FieldMappingRule> rules=new ArrayList<FieldMappingRule>();
+			
 			for(FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate:fieldMappingExternalAppTemplateSession){
-				rules = fieldMappingExternalAppTemplate.getRules();
-				List<FieldMappingRule> newrules = new ArrayList<FieldMappingRule>(rules);
+				List<FieldMappingRule> newrules = FieldMappingUtil.createFieldMappingRule(fieldMappingExternalAppTemplate.getRules());
+				List<FieldMappingValueMap> newValuemaps=FieldMappingUtil.createFieldMappingValueMap(fieldMappingExternalAppTemplate.getValueMaps());
 				for (String fmtName:items) {
+					nameFromMap=idNameMap.get(fmtName);
 					if(fieldMappingExternalAppTemplate.getName().equals(fmtName)){
-						if (isTemplateExists(model,idNameMap.get(fmtName).toString(), directions,ea)) { 
-							FieldMappingExternalAppTemplate fieldMappingExternalAppTemplatemerge=FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParentAndNameAndDirection(ea, idNameMap.get(fmtName).toString(), directions).getSingleResult();
-							mergeFieldMappingTemplate(ea,fieldMappingExternalAppTemplate,fieldMappingExternalAppTemplatemerge,newrules,importStatus,idNameMap,model,directions);
+						if (isTemplateExists(model,nameFromMap, directions,ea)) { 
+							FieldMappingExternalAppTemplate fieldMappingExternalAppTemplatemerge=FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParentAndNameAndDirection(ea, nameFromMap, directions).getSingleResult();
+							mergeFieldMappingTemplate(ea,fieldMappingExternalAppTemplate,fieldMappingExternalAppTemplatemerge,newrules,newValuemaps,importStatus,nameFromMap,model,directions);
 						}
 						else{
-							persistFieldMappingExternalAppTemplate(ea,idNameMap,fieldMappingExternalAppTemplate,newrules,fmtName,importStatus,model,directions);
+							persistFieldMappingExternalAppTemplate(ea,nameFromMap,fieldMappingExternalAppTemplate,newrules,newValuemaps,importStatus);
 						}
 					}
 				}
@@ -253,24 +257,25 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 	 * @param model
 	 * @param directions
 	 */
-	private void persistFieldMappingExternalAppTemplate(ExternalApp eapp, Map<String,String> idNameMap, 
+	private void persistFieldMappingExternalAppTemplate(ExternalApp eapp, String nameFromMap, 
 			FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate,
-			List<FieldMappingRule> newrules, String fmtName,Map<String,String> importStatus,Model model,Directions directions) {
+			List<FieldMappingRule> newrules,List<FieldMappingValueMap> newValueMap,Map<String,String> importStatus) {
 		FieldMappingExternalAppTemplate fieldMappingExternalAppTemplatenew = new FieldMappingExternalAppTemplate();
 		try{
 			fieldMappingExternalAppTemplatenew.setDirection(fieldMappingExternalAppTemplate.getDirection());
-			fieldMappingExternalAppTemplatenew.setName(idNameMap.get(fmtName).toString());
+			fieldMappingExternalAppTemplatenew.setName(nameFromMap);
 			fieldMappingExternalAppTemplatenew.setParent(eapp);
 			fieldMappingExternalAppTemplatenew.getRules().clear();
 			fieldMappingExternalAppTemplatenew.getRules().addAll(newrules);
 			fieldMappingExternalAppTemplatenew.setKind(fieldMappingExternalAppTemplate.getKind());
-			fieldMappingExternalAppTemplatenew.setValueMaps(fieldMappingExternalAppTemplate.getValueMaps());
+			fieldMappingExternalAppTemplatenew.getValueMaps().clear();
+			fieldMappingExternalAppTemplatenew.getValueMaps().addAll(newValueMap);
 			fieldMappingExternalAppTemplatenew.persist();
-			importStatus.put(idNameMap.get(fmtName).toString(), IMPORTED_SUCCESSFULLY);
+			importStatus.put(nameFromMap, IMPORTED_SUCCESSFULLY);
 		
 		} catch (Exception exception){
 			log.debug("Error saving field mapping external app template: " + exception.getMessage(), exception);
-			importStatus.put(idNameMap.get(fmtName).toString(), IMPORTED_FAILED);
+			importStatus.put(nameFromMap, IMPORTED_FAILED);
 		}
 	}
 
@@ -286,7 +291,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 	 * @param directions
 	 */
 	private void mergeFieldMappingTemplate(ExternalApp eapp,FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate,
-			FieldMappingExternalAppTemplate fieldMappingExternalAppTemplatemerge,List<FieldMappingRule> newrules,Map<String,String> importStatus ,Map<String,String> idNameMap,Model model,Directions directions) {
+			FieldMappingExternalAppTemplate fieldMappingExternalAppTemplatemerge,List<FieldMappingRule> newrules,List<FieldMappingValueMap> newValueMap,Map<String,String> importStatus ,String nameFromMap,Model model,Directions directions) {
 		FieldMappingExternalAppTemplate fieldMappingExternalAppTemplatenew = new FieldMappingExternalAppTemplate();
 		try{
 			fieldMappingExternalAppTemplatenew.setDirection(fieldMappingExternalAppTemplate.getDirection());
@@ -297,16 +302,18 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			fieldMappingExternalAppTemplatenew.getRules().clear();
 			fieldMappingExternalAppTemplatenew.getRules().addAll(newrules);
 			fieldMappingExternalAppTemplatenew.setKind(fieldMappingExternalAppTemplate.getKind());
+			fieldMappingExternalAppTemplatenew.getValueMaps().clear();
+			fieldMappingExternalAppTemplatenew.getValueMaps().addAll(newValueMap);
 			fieldMappingExternalAppTemplatenew.merge();
 			importStatus.put(fieldMappingExternalAppTemplate.getName(), UPDATED_SUCCESSFULLY);
 
 		} catch(Exception exception) {
 			log.debug("Error updating field mapping external app template: " + exception.getMessage(), exception);
 			if (isTemplateExists(model,fieldMappingExternalAppTemplate.getName().toString(), directions,eapp)) {
-				importStatus.put(idNameMap.get(fieldMappingExternalAppTemplate.getName()), UPDATED_FAILED + FIELD_MAPPING_EXTERNAL_APP_TEMPLATE_NAME_ALREADY_EXISTS);
+				importStatus.put(nameFromMap, UPDATED_FAILED + FIELD_MAPPING_EXTERNAL_APP_TEMPLATE_NAME_ALREADY_EXISTS);
 			}
 			else{
-				importStatus.put(idNameMap.get(fieldMappingExternalAppTemplate.getName()), UPDATED_FAILED);
+				importStatus.put(nameFromMap, UPDATED_FAILED);
 			}
 		}
 	}

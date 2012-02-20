@@ -30,10 +30,12 @@ import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplateList;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
+import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMap;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.XmlWebHelper;
 import com.collabnet.ccf.ccfmaster.web.model.FileUpload;
+import com.collabnet.ccf.core.utils.FieldMappingUtil;
 import com.collabnet.ccf.core.utils.SerializationUtil;
 
 @RequestMapping("/admin/**")
@@ -256,7 +258,9 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		}
 	}
 
-
+	
+	
+	
 	/**
 	 * Controller method to import bulk field mapping templates
 	 * 
@@ -270,21 +274,22 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
 		Map<String,String> idNameMap = mapIdandName(request, items);
 		Map<String,String> importStatus=new HashMap<String,String>();
+		String nameFromMap=null;
 		try {
 			List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplateSession = getFMTFromSession(session);
-			List<FieldMappingRule> rules=new ArrayList<FieldMappingRule>();
 			Landscape parent = ControllerHelper.findLandscape(model);
 			for(FieldMappingLandscapeTemplate fieldMappingTemplate:fieldMappingLandscapeTemplateSession){
-				rules = fieldMappingTemplate.getRules();
-				List<FieldMappingRule> newrules = new ArrayList<FieldMappingRule>(rules);
+				List<FieldMappingRule> newrules = FieldMappingUtil.createFieldMappingRule(fieldMappingTemplate.getRules());
+				List<FieldMappingValueMap> newValuemaps=FieldMappingUtil.createFieldMappingValueMap(fieldMappingTemplate.getValueMaps());
 				for (String fmtName:items) {
+					nameFromMap=idNameMap.get(fmtName);
 					if(fieldMappingTemplate.getName().equals(fmtName)){
-						if (isTemplateExists(model,idNameMap.get(fmtName).toString(), directions)) { 
-							FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatemerge=FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndNameAndDirection(parent, idNameMap.get(fmtName).toString(), directions).getSingleResult();
-							mergeFieldMappingTemplate(parent,fieldMappingTemplate,fieldMappingLandscapeTemplatemerge,newrules,importStatus,idNameMap,model,directions);
+						if (isTemplateExists(model,nameFromMap, directions)) { 
+							FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatemerge=FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndNameAndDirection(parent, nameFromMap, directions).getSingleResult();
+							mergeFieldMappingTemplate(parent,fieldMappingTemplate,fieldMappingLandscapeTemplatemerge,newrules,newValuemaps,importStatus,nameFromMap,model,directions);
 						}
 						else{
-							persistFieldMappingTemplate(parent,idNameMap,fieldMappingTemplate,newrules,fmtName,importStatus,model,directions);
+							persistFieldMappingTemplate(parent,nameFromMap,fieldMappingTemplate,newrules,newValuemaps,importStatus);
 						}
 					}
 				}
@@ -309,25 +314,26 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 * @param newrules
 	 * @param fmtName
 	 */
-	private void persistFieldMappingTemplate(Landscape parent,Map<String,String> idNameMap, 
+	private void persistFieldMappingTemplate(Landscape parent,String nameFromMap, 
 			FieldMappingLandscapeTemplate fieldMappingTemplate,
-			List<FieldMappingRule> newrules, String fmtName,Map<String,String> importStatus,Model model,Directions directions) {
+			List<FieldMappingRule> newrules,List<FieldMappingValueMap> newValueMap,Map<String,String> importStatus) {
 		FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatenew = new FieldMappingLandscapeTemplate();
 		try{
 			fieldMappingLandscapeTemplatenew.setDirection(fieldMappingTemplate.getDirection());
-			fieldMappingLandscapeTemplatenew.setName(idNameMap.get(fmtName).toString());
+			fieldMappingLandscapeTemplatenew.setName(nameFromMap);
 			fieldMappingLandscapeTemplatenew.setParent(parent);
 			fieldMappingLandscapeTemplatenew.getRules().clear();
 			fieldMappingLandscapeTemplatenew.getRules().addAll(newrules);
 			fieldMappingLandscapeTemplatenew.setKind(fieldMappingTemplate.getKind());
-			fieldMappingLandscapeTemplatenew.setValueMaps(fieldMappingTemplate.getValueMaps());
+			fieldMappingLandscapeTemplatenew.getValueMaps().clear();
+			fieldMappingLandscapeTemplatenew.setValueMaps(newValueMap);
 			fieldMappingLandscapeTemplatenew.persist();
-			importStatus.put(idNameMap.get(fmtName).toString(), IMPORTED_SUCCESSFULLY);
+			importStatus.put(nameFromMap, IMPORTED_SUCCESSFULLY);
 
 		}
 		catch (Exception exception){
 			log.debug("Error saving field mapping template: " + exception.getMessage(), exception);
-			importStatus.put(idNameMap.get(fmtName).toString(), IMPORTED_FAILED);
+			importStatus.put(nameFromMap, IMPORTED_FAILED);
 		}
 	}
 
@@ -339,16 +345,18 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 * @param fieldMappingLandscapeTemplatemerge
 	 */
 	private void mergeFieldMappingTemplate(Landscape parent,FieldMappingLandscapeTemplate fieldMappingTemplate,
-			FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatemerge,List<FieldMappingRule> newrules,Map<String,String> importStatus ,Map<String,String> idNameMap,Model model,Directions directions) {
+			FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatemerge,List<FieldMappingRule> newrules,List<FieldMappingValueMap> newValueMap,Map<String,String> importStatus ,String nameFromMap,Model model,Directions directions) {
 		FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatenew = new FieldMappingLandscapeTemplate();
 		try{
 			fieldMappingLandscapeTemplatenew.setDirection(fieldMappingTemplate.getDirection());
-			fieldMappingLandscapeTemplatenew.setName(fieldMappingTemplate.getName());
+			fieldMappingLandscapeTemplatenew.setName(nameFromMap);
 			fieldMappingLandscapeTemplatenew.setId(fieldMappingLandscapeTemplatemerge.getId());
 			fieldMappingLandscapeTemplatenew.setVersion(fieldMappingLandscapeTemplatemerge.getVersion());
 			fieldMappingLandscapeTemplatenew.setParent(parent);
 			fieldMappingLandscapeTemplatenew.getRules().clear();
 			fieldMappingLandscapeTemplatenew.getRules().addAll(newrules);
+			fieldMappingLandscapeTemplatenew.getValueMaps().clear();
+			fieldMappingLandscapeTemplatenew.setValueMaps(newValueMap);
 			fieldMappingLandscapeTemplatenew.setKind(fieldMappingTemplate.getKind());
 			fieldMappingLandscapeTemplatenew.merge();
 			importStatus.put(fieldMappingTemplate.getName(), UPDATED_SUCCESSFULLY);
@@ -357,10 +365,10 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		catch(Exception exception){
 			log.debug("Error updating field mapping template: " + exception.getMessage(), exception);
 			if (isTemplateExists(model,fieldMappingTemplate.getName().toString(), directions)) {
-				importStatus.put(idNameMap.get(fieldMappingTemplate.getName()), UPDATED_FAILED + FIELD_MAPPING_TEMPLATE_NAME_ALREADY_EXISTS);
+				importStatus.put(nameFromMap, UPDATED_FAILED + FIELD_MAPPING_TEMPLATE_NAME_ALREADY_EXISTS);
 			}
 			else{
-				importStatus.put(idNameMap.get(fieldMappingTemplate.getName()), UPDATED_FAILED);
+				importStatus.put(nameFromMap, UPDATED_FAILED);
 			}
 		}
 	}
