@@ -320,6 +320,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			fieldMappingLandscapeTemplatenew.getRules().clear();
 			fieldMappingLandscapeTemplatenew.getRules().addAll(newrules);
 			fieldMappingLandscapeTemplatenew.setKind(fieldMappingTemplate.getKind());
+			fieldMappingLandscapeTemplatenew.setValueMaps(fieldMappingTemplate.getValueMaps());
 			fieldMappingLandscapeTemplatenew.persist();
 			importStatus.put(idNameMap.get(fmtName).toString(), IMPORTED_SUCCESSFULLY);
 

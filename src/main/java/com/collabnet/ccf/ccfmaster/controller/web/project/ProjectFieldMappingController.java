@@ -264,6 +264,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 			fieldMappingExternalAppTemplatenew.getRules().clear();
 			fieldMappingExternalAppTemplatenew.getRules().addAll(newrules);
 			fieldMappingExternalAppTemplatenew.setKind(fieldMappingExternalAppTemplate.getKind());
+			fieldMappingExternalAppTemplatenew.setValueMaps(fieldMappingExternalAppTemplate.getValueMaps());
 			fieldMappingExternalAppTemplatenew.persist();
 			importStatus.put(idNameMap.get(fmtName).toString(), IMPORTED_SUCCESSFULLY);
 		
