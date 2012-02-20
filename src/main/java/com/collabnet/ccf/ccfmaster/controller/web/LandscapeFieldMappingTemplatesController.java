@@ -11,9 +11,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +34,7 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.XmlWebHelper;
 import com.collabnet.ccf.ccfmaster.web.model.FileUpload;
+import com.collabnet.ccf.core.utils.SerializationUtil;
 
 @RequestMapping("/admin/**")
 @Controller
@@ -217,11 +216,9 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		byte[] xmlContent = commonsmultipartFile.getFileItem().get();
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlContent);
 		FieldMappingLandscapeTemplateList fieldMappingLandscapeTemplateList = null;
-		//un-marshal JAXB object
 		try {
-			JAXBContext xmlContext = JAXBContext.newInstance(FieldMappingLandscapeTemplateList.class);
-			Unmarshaller unmarshaller = xmlContext.createUnmarshaller();
-			fieldMappingLandscapeTemplateList = (FieldMappingLandscapeTemplateList) unmarshaller.unmarshal(inputStream);
+			//un-marshal JAXB object
+			fieldMappingLandscapeTemplateList = SerializationUtil.deSerialize(inputStream, FieldMappingLandscapeTemplateList.class);
 		} catch (JAXBException exception) {
 			log.debug("Error importing field mapping template: " + exception.getMessage(), exception);
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
@@ -251,6 +248,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			return  UIPathConstants.LANDSCAPESETTINGS_LISTFIELDMAPPINGTEMPLATES;
 
 		} catch (Exception exception) {
+			log.debug("Import failed due to following exception "+exception.getMessage());
 			FlashMap.setErrorMessage(ControllerConstants.FMTIMPORTFAILUREMESSAGE,exception.getMessage());
 			model.asMap().clear();
 			populatePageSizetoModel(directions,model, session);

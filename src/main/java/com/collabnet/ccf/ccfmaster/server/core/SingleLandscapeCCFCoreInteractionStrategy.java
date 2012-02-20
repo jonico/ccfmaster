@@ -5,8 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -19,11 +22,13 @@ import org.springframework.core.io.Resource;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingKind;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
+import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplateList;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRuleType;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.AbstractPersister;
+import com.collabnet.ccf.core.utils.SerializationUtil;
 import com.google.common.io.Closeables;
 
 /**
@@ -52,6 +57,7 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 	public static final String CCFCORE_ZIP = "WEB-INF/ccfcore/ccfcore.zip";
 	public static final String CCF_LANDSCAPE_PLUG_ID = "ccf.landscapeplugid";
 	public static final String CCF_LANDSCAPE_ID = "ccf.landscapeid";
+	public static final String MAPPING_RULE_TEMPLATE_NAME = "mappingrules.xml";
 
 	public static void unzip(File zipfile, File outputfolder)
 			throws IOException {
@@ -127,11 +133,15 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 			throw new CoreConfigurationException(
 					"Could not properly extract core for landscape "
 							+ context.getName() + ": " + e.getMessage(), e);
+		} catch (JAXBException e) {
+			throw new CoreConfigurationException(
+					"Could not parse Mapping Rule template for given landscape "
+							+ context.getName() + ": " + e.getMessage(), e);
 		}
 	}
 
 	private void createFieldMappingLandscapeTemplates(Landscape context,
-			File parentDirectory) throws IOException {
+			File parentDirectory) throws IOException, JAXBException {
 		createFieldMappingLandscapeTemplatesForDirection(context, new File(
 				parentDirectory, Directions.FORWARD.toString()), Directions.FORWARD);
 		createFieldMappingLandscapeTemplatesForDirection(context, new File(
@@ -140,7 +150,7 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 	}
 
 	private void createFieldMappingLandscapeTemplatesForDirection(
-			Landscape context, File parentDirectory, Directions direction) throws IOException {
+			Landscape context, File parentDirectory, Directions direction) throws IOException, JAXBException {
 		// figure out whether templates directory exist
 		File fieldMappingTemplatesDirectory = new File(parentDirectory, FIELD_MAPPING_LANDSCAPE_TEMPLATE_DIRECTORY_NAME);
 		if (fieldMappingTemplatesDirectory.isDirectory()) {
@@ -155,7 +165,7 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 	}
 
 	private void createFieldMappingLandscapeTemplate(Landscape context,
-			File parentDirectory, Directions direction) throws IOException {
+			File parentDirectory, Directions direction) throws IOException, JAXBException {
 		String landscapeTemplateName = parentDirectory.getName();
 		// check whether this is a custom mapping
 		File customMapping = new File(parentDirectory,
@@ -165,16 +175,12 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 					landscapeTemplateName,
 					FileUtils.readFileToString(customMapping));
 		}
-
-//		
-//		File ruleBasedMapping = new File(childDirectory,
-//				AbstractPersister.FILENAME_RULES);
-//		if (ruleBasedMapping.isFile()) {
-//			createRuleBasedFieldMappingLandscapeTemplate(context, direction,
-//					landscapeTemplateName,
-//					FileUtils.readFileToString(ruleBasedMapping));
-//		}
-
+		
+		//Checks for Mapping rules template xml file
+		File MappingRuleFile = new File(parentDirectory, MAPPING_RULE_TEMPLATE_NAME);
+		if(MappingRuleFile.isFile()){
+			createRuleBasedFieldMappingLandscapeTemplate(context, MappingRuleFile);
+		}
 		// it is a MapForceMapping
 		File mapForceMFD = new File(parentDirectory,
 				AbstractPersister.FILENAME_MAPFORCE_MFD);
@@ -235,11 +241,20 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 		template.persist();
 	}
 
-//	private void createRuleBasedFieldMappingLandscapeTemplate(
-//			Landscape context, Directions direction, String rules, String string) {
-//		// TODO Auto-generated method stub
-//
-//	}
+	private void createRuleBasedFieldMappingLandscapeTemplate(
+			Landscape context, File mappingRuleTemplateFile)
+			throws JAXBException, IOException {
+		FieldMappingLandscapeTemplateList templateList = SerializationUtil
+				.deSerialize(mappingRuleTemplateFile,
+						FieldMappingLandscapeTemplateList.class);
+		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeList = templateList
+				.getFieldMappingTemplate();
+		for (FieldMappingLandscapeTemplate template : fieldMappingLandscapeList) {
+			template.setParent(context);
+			template.persist();
+		}
+
+	}
 
 	private void createCustomFieldMappingLandscapeTemplate(Landscape context,
 			Directions direction, String templateName, String custom) {

@@ -29,7 +29,6 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingKind;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRuleType;
 import com.collabnet.ccf.ccfmaster.server.domain.Mapping;
-import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
 import com.collabnet.ccf.ccfmaster.util.Maybe;
 import com.collabnet.ccf.ccfmaster.util.Transformer;
 import com.google.common.annotations.VisibleForTesting;
