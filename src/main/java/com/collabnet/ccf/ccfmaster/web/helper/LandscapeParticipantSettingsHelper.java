@@ -24,7 +24,7 @@ public class LandscapeParticipantSettingsHelper {
 	 * 
 	 */
 	public void populateParticipantSettingsModel(ParticipantSettingsModel participantSettingsModel,Model model){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Participant participant=landscape.getParticipant();
 		makeParticipantSettingsModel(participantSettingsModel, landscape,participant);
 		makeModel(model, participantSettingsModel, landscape, participant);		
@@ -122,7 +122,7 @@ public class LandscapeParticipantSettingsHelper {
 	 */
 	public  void updateParticipantSettings(ParticipantSettingsModel participantSettingsModel, Model model,
 			HttpServletRequest request) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		// merge swp participant settings 
 		if(landscape.getParticipant().getSystemKind().equals(SystemKind.SWP)){
 			mergeSWPParticipantSettings(participantSettingsModel, request,model,landscape);

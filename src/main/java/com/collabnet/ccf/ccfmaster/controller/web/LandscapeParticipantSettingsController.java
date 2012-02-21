@@ -63,7 +63,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS, method = RequestMethod.GET)
 	public String displayParticipantSettings(Model model, HttpServletRequest request) {
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Participant participant=landscape.getParticipant();
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
 		landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
@@ -84,7 +84,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 		participantSettingsValidator.validate(participantSettingsModel, bindingResult);
 		if (bindingResult.hasErrors()) {
 			landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
-			Landscape landscape=ControllerHelper.findLandscape(model);
+			Landscape landscape=ControllerHelper.findLandscape();
 			Participant participant=landscape.getParticipant();
 			landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
 			return  UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
@@ -109,10 +109,10 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_QC_TEST_CONNECTION, method = RequestMethod.POST)
-	public @ResponseBody String  testQCConnection(@RequestParam("url") String url,@RequestParam("username") String username,@RequestParam("password") String password , Model model, HttpServletRequest request) {
+	public @ResponseBody String  testQCConnection(@RequestParam("url") String url,@RequestParam("username") String username,@RequestParam("password") String password , HttpServletRequest request) {
 		RequestContext ctx = new RequestContext(request);
 		String returnText;
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		String connectionResult=qcMetaDataProvider.showVisibleDomains(landscape, url, username,
 					password);
 		if(connectionResult.contains("<success>")){

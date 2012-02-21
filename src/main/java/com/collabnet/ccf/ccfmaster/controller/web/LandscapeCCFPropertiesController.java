@@ -55,7 +55,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 			@ModelAttribute("directionConfig") @Valid DirectionConfig directionConfig,
 			BindingResult bindingResult,
 			Model model, HttpServletRequest request) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
 		try{
 			updateCCFPropertiesLogTemplate(direction_Config_Id,
@@ -114,7 +114,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	 * 
 	 */	
 	public static void populateDirectionConfigModel(Model model, Directions directions){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, directions).getSingleResult();
 		DirectionConfig directionConfig=DirectionConfig.findDirectionConfigsByDirectionAndName(direction,ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE).getSingleResult();
 		model.addAttribute("participant",landscape.getParticipant());
@@ -147,7 +147,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 			@RequestParam(PARAM_DIRECTION) String paramdirection,
 			@ModelAttribute("syncDirection") Direction direction,
 			Model model, HttpServletRequest request) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		try{
 			direction.setId(Long.valueOf(direction_Id));
 			direction.setVersion(Integer.parseInt(direction_Version));
@@ -213,7 +213,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	 * 
 	 */	
 	public static void populateDirectionModel(Model model, Directions directions){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, directions).getSingleResult();
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("directionversion",direction.getVersion());

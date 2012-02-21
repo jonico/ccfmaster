@@ -195,7 +195,7 @@ public class LandscapeRepositoryMappingsController extends AbstractLandscapeCont
 	private void populateModel(Model model, List<RepositoryMappingDirection> rmds) {
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		List<RepositoryMappingsModel> rmmList = makeRepositoryMappingsModel(rmds, tfUrl);
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);
 		model.addAttribute("selectedLink", "repositorymappings");

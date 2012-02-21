@@ -22,8 +22,8 @@ public class TFSettingsHelper {
 	 * Helper method to populate TFsettings
 	 * 
 	 */
-	public void populateTFSettingsModel(TFSettingsModel tfSettingsModel,Model model){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+	public void populateTFSettingsModel(TFSettingsModel tfSettingsModel){
+		Landscape landscape=ControllerHelper.findLandscape();
 		Participant teamforge=landscape.getTeamForge();
 		makeTFSettingsModel(tfSettingsModel, landscape, teamforge);
 	}
@@ -56,7 +56,7 @@ public class TFSettingsHelper {
 	 * @param teamforge
 	 */
 	public void makeModel(TFSettingsModel tfSettingsModel, Model model) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Participant teamforge=landscape.getTeamForge();
 		model.addAttribute("tfsystemid",teamforge.getSystemId());
 		model.addAttribute("tfdescription",teamforge.getDescription());
@@ -83,7 +83,7 @@ public class TFSettingsHelper {
 	 */
 	public void updateTFSettings(TFSettingsModel tfSettingsModel,
 			Model model, HttpServletRequest request) {
-		Landscape landscape=ControllerHelper.findLandscape(model); 
+		Landscape landscape=ControllerHelper.findLandscape(); 
 		mergeTFSettings(tfSettingsModel, request, landscape);
 		model.addAttribute("tfsettingsmodel",tfSettingsModel);
 		model.addAttribute("selectedLink", ControllerConstants.TFSETTINGS);

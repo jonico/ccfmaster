@@ -112,7 +112,7 @@ public class LandscapeStatusController extends AbstractLandscapeController{
 	*/  
 	@Transactional
 	public  void mergeCCFCoreStatus(Model model,CcfCoreStatus ccfCoreStatusModel,HttpServletRequest request,Directions directions,ExecutedCommand eCommand)throws CoreConfigurationException{
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, directions).getSingleResult();
 		ccfCoreStatusModel.setExecutedCommand(eCommand);
 		ccfCoreStatusModel.setDirection(direction);
@@ -128,7 +128,7 @@ public class LandscapeStatusController extends AbstractLandscapeController{
 	 * 
 	 */	
 	public void populateCCFCoreStatusModel(Model model,Directions directions){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, directions).getSingleResult();
 		CcfCoreStatus ccfCoreStatusModel=CcfCoreStatus.findCcfCoreStatusesByDirection(direction).getSingleResult();
 		model.addAttribute("ccfCoreStatusModel", ccfCoreStatusModel);

@@ -118,7 +118,7 @@ public class ProjectIdentityMappingsController extends AbstractProjectController
 	 */
 	private void populateIdentityMappingModel(Model model,
 			List<IdentityMappingsModel> identitymappingsmodel) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		model.addAttribute("participant", landscape.getParticipant());
 		model.addAttribute("landscape", landscape);
 		model.addAttribute("selectedLink", "identitymappings");

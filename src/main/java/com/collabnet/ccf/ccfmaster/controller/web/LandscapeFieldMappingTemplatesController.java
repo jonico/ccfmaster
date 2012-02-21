@@ -76,7 +76,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 * @param model
 	 */
 	private void doList(Directions directions, Integer page, Integer size, Model model,HttpSession session) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 
 		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate = paginate(
 				FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndDirection(landscape, directions),
@@ -108,7 +108,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 * 
 	 */
 	public void  populateFieldMappingTemplatesModel(Model model) {
-		Landscape landscape = ControllerHelper.findLandscape(model);
+		Landscape landscape = ControllerHelper.findLandscape();
 		model.addAttribute("participant", landscape.getParticipant());
 		model.addAttribute("landscape", landscape);
 		model.addAttribute("selectedLink", "fieldmappingtemplates");
@@ -191,7 +191,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 	 */
 	@RequestMapping(value = "/"+ UIPathConstants.LANDSCAPESETTINGS_UPLOADFIELDMAPPINGTEMPLATES)
 	public String uploadFieldMappingTemplate(@RequestParam(ControllerConstants.DIRECTION) String paramdirection,Model model, HttpSession session) {
-		Landscape landscape = ControllerHelper.findLandscape(model);
+		Landscape landscape = ControllerHelper.findLandscape();
 		FileUpload fileUpload = new FileUpload();
 		model.addAttribute("fileUpload", fileUpload);
 		model.addAttribute("participant", landscape.getParticipant());
@@ -232,7 +232,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 			List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplatelist=fieldMappingLandscapeTemplateList.getFieldMappingTemplate();
 			List<String> alreadyExists=new ArrayList<String>();
 			for(FieldMappingLandscapeTemplate fieldMappingTemplate : fieldMappingLandscapeTemplatelist){
-				if (isTemplateExists(model,fieldMappingTemplate.getName(), directions)) {
+				if (isTemplateExists(fieldMappingTemplate.getName(), directions)) {
 					fieldMappingTemplate.setName(fieldMappingTemplate.getName());
 					alreadyExists.add(TEMPLATE_NAME_ALREADY_EXISTS_OVERRIDDEN);
 				}
@@ -277,14 +277,14 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		String nameFromMap=null;
 		try {
 			List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplateSession = getFMTFromSession(session);
-			Landscape parent = ControllerHelper.findLandscape(model);
+			Landscape parent = ControllerHelper.findLandscape();
 			for(FieldMappingLandscapeTemplate fieldMappingTemplate:fieldMappingLandscapeTemplateSession){
 				List<FieldMappingRule> newrules = FieldMappingUtil.createFieldMappingRule(fieldMappingTemplate.getRules());
 				List<FieldMappingValueMap> newValuemaps=FieldMappingUtil.createFieldMappingValueMap(fieldMappingTemplate.getValueMaps());
 				for (String fmtName:items) {
 					nameFromMap=idNameMap.get(fmtName);
 					if(fieldMappingTemplate.getName().equals(fmtName)){
-						if (isTemplateExists(model,nameFromMap, directions)) { 
+						if (isTemplateExists(nameFromMap, directions)) { 
 							FieldMappingLandscapeTemplate fieldMappingLandscapeTemplatemerge=FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndNameAndDirection(parent, nameFromMap, directions).getSingleResult();
 							mergeFieldMappingTemplate(parent,fieldMappingTemplate,fieldMappingLandscapeTemplatemerge,newrules,newValuemaps,importStatus,nameFromMap,model,directions);
 						}
@@ -364,7 +364,7 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 		}
 		catch(Exception exception){
 			log.debug("Error updating field mapping template: " + exception.getMessage(), exception);
-			if (isTemplateExists(model,fieldMappingTemplate.getName().toString(), directions)) {
+			if (isTemplateExists(fieldMappingTemplate.getName().toString(), directions)) {
 				importStatus.put(nameFromMap, UPDATED_FAILED + FIELD_MAPPING_TEMPLATE_NAME_ALREADY_EXISTS);
 			}
 			else{
@@ -405,8 +405,8 @@ public class LandscapeFieldMappingTemplatesController extends AbstractLandscapeC
 
 
 
-	private boolean isTemplateExists(Model model,String templateName, Directions directions) {
-		Landscape landscape = ControllerHelper.findLandscape(model);
+	private boolean isTemplateExists(String templateName, Directions directions) {
+		Landscape landscape = ControllerHelper.findLandscape();
 		boolean templateexists = false;
 		if(FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndNameAndDirection(landscape, templateName, directions).getResultList().size()!=0){
 			templateexists = true;

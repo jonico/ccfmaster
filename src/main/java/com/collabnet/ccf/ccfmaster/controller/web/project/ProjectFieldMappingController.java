@@ -137,7 +137,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 	 */
 	@RequestMapping("/upload")
 	public String uploadFieldMappingTemplate(@RequestParam(value=DIRECTION_REQUEST_PARAM, defaultValue="FORWARD") Directions directions,Model model, HttpSession session) {
-		Landscape landscape = ControllerHelper.findLandscape(model);
+		Landscape landscape = ControllerHelper.findLandscape();
 		FileUpload fileUpload = new FileUpload();
 		model.addAttribute("fileUpload", fileUpload);
 		model.addAttribute("participant", landscape.getParticipant());
@@ -324,7 +324,7 @@ public class ProjectFieldMappingController extends AbstractProjectController {
 	 * 
 	 */
 	public void  populateFieldMappingExternalAppTemplatesModel(Model model, Directions directions,ExternalApp eapp) {
-		Landscape landscape = ControllerHelper.findLandscape(model);
+		Landscape landscape = ControllerHelper.findLandscape();
 		List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate = FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParentAndDirection(eapp, directions).getResultList();
 		model.addAttribute("fieldMappingLandscapeTemplate",	fieldMappingExternalAppTemplate);
 		model.addAttribute("participant", landscape.getParticipant());

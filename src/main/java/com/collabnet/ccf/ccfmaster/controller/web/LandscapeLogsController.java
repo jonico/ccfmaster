@@ -57,7 +57,7 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 	 */
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYTFTOPARTICIPANTLOGS, method = RequestMethod.GET)
 	public String displayTFtoParticipantLogs(Model model, HttpServletRequest request) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		List<LogFile> logFileList=new ArrayList<LogFile>();
 		Direction forwardDirection=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.FORWARD).getSingleResult();
 		try{
@@ -78,7 +78,7 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 	 */
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTTOTFLOGS, method = RequestMethod.GET)
 	public String displayParticipanttoTFLogs(Model model, HttpServletRequest request) {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		List<LogFile> logFileList=null;
 		Direction reverseDirection=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.REVERSE).getSingleResult();
 		try{
@@ -98,11 +98,11 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 	 * 
 	 */
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DOWNLOADLOGFILE, method = RequestMethod.GET)
-	public void downloadLogs(@RequestParam(ControllerConstants.DIRECTION) String paramdirection , @RequestParam("filename") String logName,Model model, HttpServletResponse response)throws IOException{
+	public void downloadLogs(@RequestParam(ControllerConstants.DIRECTION) String paramdirection , @RequestParam("filename") String logName, HttpServletResponse response)throws IOException{
 		OutputStream out=null;
 		FileInputStream fi=null;
 		try{
-			LogFile log = getLogFile(paramdirection, logName, model);
+			LogFile log = getLogFile(paramdirection, logName);
 			File file=log.logFile();
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName()+"\"");
 			out = response.getOutputStream();
@@ -131,9 +131,9 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 	 * @return
 	 * @throws IOException
 	 */
-	private LogFile getLogFile(String paramdirection, String logName, Model model)
+	private LogFile getLogFile(String paramdirection, String logName)
 	throws IOException {
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		Directions directions = FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
 		Direction 	direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, directions).getSingleResult();
 		LogFile log=LogFile.findLogFile(direction,logName);
@@ -148,7 +148,7 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_SHOWLOGFILE, method = RequestMethod.GET)
 	public String viewLog(@RequestParam(ControllerConstants.DIRECTION) String paramDirection , @RequestParam("filename") String logName,Model model,HttpServletRequest request, HttpServletResponse response) throws Exception{
-		LogFile log = getLogFile(paramDirection, logName, model);
+		LogFile log = getLogFile(paramDirection, logName);
 		StringBuffer linebuffer=readFiletoString(log);
 		model.addAttribute("fileobject", linebuffer.toString());
 		return UIPathConstants.LANDSCAPESETTINGS_SHOWLOGS;
@@ -181,7 +181,7 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 	throws Exception {
 		long startIndex= Long.valueOf(request.getParameter(START_INDEX));
 		try {
-			LogFile log = getLogFile(paramDirection, logName, model);
+			LogFile log = getLogFile(paramDirection, logName);
 			File file = log.logFile();
 			Date logModifiedTime = log.getLastModifiedDate();
 			StringBuffer buffer = getFileContent(startIndex, file);
@@ -263,7 +263,7 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 			@RequestParam("filename") String fileName , Model model,
 			HttpServletRequest request, HttpServletResponse response)
 	throws Exception {
-		LogFile log = getLogFile(paramDirection, fileName, model);
+		LogFile log = getLogFile(paramDirection, fileName);
 		int skippedKiloBytes=0;
 		long filesize=log.logFile().length();
 		if(filesize > MAX_FILE_SIZE){
@@ -369,7 +369,7 @@ public class LandscapeLogsController extends AbstractLandscapeController {
 	 * 
 	 */
 	public void populateLogModel(Model model){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		model.addAttribute("selectedLink", "logs");
 		model.addAttribute("landscape",landscape);
 		model.addAttribute("participant",landscape.getParticipant());

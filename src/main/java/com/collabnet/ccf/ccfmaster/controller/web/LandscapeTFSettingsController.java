@@ -48,8 +48,8 @@ public class LandscapeTFSettingsController extends AbstractLandscapeController{
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYTFSETTINGS, method = RequestMethod.GET)
 	public String displayTFSettings(Model model, HttpServletRequest request) {
 		TFSettingsModel tfSettingsModel=new TFSettingsModel();
-		tfSettingsHelper.populateTFSettingsModel(tfSettingsModel,model);
-		tfSettingsHelper.makeModel(tfSettingsModel, model);
+		tfSettingsHelper.populateTFSettingsModel(tfSettingsModel);
+		tfSettingsHelper.makeModel(tfSettingsModel, model); 
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYTFSETTINGS;
 
 	}
@@ -65,7 +65,7 @@ public class LandscapeTFSettingsController extends AbstractLandscapeController{
 		TFSettingsValidator tfSettingsValidator=new TFSettingsValidator();	
 		tfSettingsValidator.validate(tfSettingsModel, bindingResult);
 		if (bindingResult.hasErrors()) {
-			tfSettingsHelper.populateTFSettingsModel(tfSettingsModel,model);
+			tfSettingsHelper.populateTFSettingsModel(tfSettingsModel);
 			tfSettingsHelper.makeModel(tfSettingsModel, model);
 			return UIPathConstants.LANDSCAPESETTINGS_DISPLAYTFSETTINGS;
 		} 

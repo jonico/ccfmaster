@@ -72,7 +72,7 @@ public class CreateLandscapeController{
 		}
 		// Else show landscape settings screen
 		else{
-			Landscape landscape=ControllerHelper.findLandscape(model);
+			Landscape landscape=ControllerHelper.findLandscape();
 			// if required entities are not available display error message
 			if(createLandscapeHelper.verifyEntities(landscape,model,ctx)){
 				return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;

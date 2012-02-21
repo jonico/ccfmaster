@@ -89,7 +89,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	String doList(List<HospitalEntry> hospitalEntrys, Directions direction, Model model) {
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		List<HospitalModel> hospitalModels = makeHospitalModel(hospitalEntrys, tfUrl, direction);
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);
 		model.addAttribute("selectedLink", "hospital");
@@ -106,7 +106,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	 * 
 	 */	
 	public void populateHospitalModel(Model model, Directions directions,HttpServletRequest request,String hospitalId){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		List<HospitalEntry> hospitalEntry = new ArrayList<HospitalEntry>();
 		if (hospitalId == null) {
@@ -129,7 +129,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 	 * 
 	 */	
 	public void populateHospitalPagedModel(Model model, Directions directions,HttpServletRequest request,String hospitalId,Integer page, Integer size,HttpSession session){
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		String tfUrl = ccfRuntimePropertyHolder.getTfUrl();
 		List<HospitalEntry> hospitalEntry = new ArrayList<HospitalEntry>();
 		if (hospitalId == null) {
@@ -223,7 +223,7 @@ public class LandscapeHospitalController extends AbstractLandscapeController {
 			@RequestParam(RMD_ID_REQUEST_PARAM) String rmdid,
 			Model model, HttpServletRequest request,HttpServletResponse response,HttpSession session) {
 		RequestContext ctx = new RequestContext(request);
-		Landscape landscape=ControllerHelper.findLandscape(model);
+		Landscape landscape=ControllerHelper.findLandscape();
 		String hospitalId= request.getParameter(HOSPITALID);
 		HospitalEntry hospitalEntryWithId=HospitalEntry.findHospitalEntry(new Long(hospitalId));
 		String genericArtifact=hospitalEntryWithId.getGenericArtifact();
