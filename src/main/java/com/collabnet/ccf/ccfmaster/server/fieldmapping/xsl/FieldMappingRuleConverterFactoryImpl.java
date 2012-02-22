@@ -220,7 +220,7 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 		@Override
 		public Element asTopLevelAttribute() {
 			final Element ret = xslElement(rule.getTarget());
-			ret.add(xslValueOf("string(.)"));
+			ret.add(xslValueOf("$input"));
 			return ret;
 		}
 	}
@@ -253,7 +253,7 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 
 		@Override
 		public Element asElement() {
-			return xslElement(rule.getTarget()).addText(rule.getSource());
+			return xslElement(rule.getTarget()).addText(rule.getXmlContent());
 		}
 
 		@Override
