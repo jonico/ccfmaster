@@ -287,14 +287,17 @@ public class ConversionResult {
 		// Needs to uncomment the below line once FieldMappingRuleConvertor and
 		// its related core implementation is done
 		// @SafeXslt
-		private Element createTemplateNode(Source source) {
+		private Element createTemplateNode(Source source, Boolean isTargetIsTopLevelAttribute) {
 			Element template = DocumentHelper
 					.createElement(FieldMappingRuleConverter.XSL_TEMPLATE);
-			if (source.isTopLevelAttribute) {
+			if (source.isTopLevelAttribute){
+				template.addAttribute("match", source.source);
+			} else {
 				template.addAttribute("match", "topLevelAttributes/@" + source.source);
+			}
+			if (isTargetIsTopLevelAttribute) {
 				template.addAttribute("mode", "topLevelAttribute");
 			} else{
-				template.addAttribute("match", source.source);
 				template.addAttribute("mode", "element");
 			}
 			Element variable = DocumentHelper
@@ -340,7 +343,7 @@ public class ConversionResult {
 						.selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
 				
 				for (Source source : topLevelAttributes.keySet()) {
-					Element templateNode = createTemplateNode(source);
+					Element templateNode = createTemplateNode(source, true);
 					for (FieldMappingRule r : topLevelAttributes.get(source)) {
 						templateNode = addRuleToTemplateNode(templateNode, r, source);
 					}
@@ -351,7 +354,7 @@ public class ConversionResult {
 						.selectSingleNode(XPATH_ELEMENT);
 				
 				for (Source source : fields.keySet()) {
-					Element templateNode = createTemplateNode(source);
+					Element templateNode = createTemplateNode(source, false);
 					for (FieldMappingRule r : fields.get(source)) {
 						templateNode = addRuleToTemplateNode(templateNode, r, source);
 					}
