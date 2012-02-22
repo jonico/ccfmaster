@@ -15,17 +15,23 @@
           <xsl:variable name="v"><xsl:value-of select="string(.)"/></xsl:variable>
           <xsl:attribute name="{$n}"><xsl:value-of select="$v" /></xsl:attribute>
         </xsl:for-each>
+        <!-- This one is for rules that produce top level attributes based on fields -->
         <xsl:apply-templates mode="topLevelAttribute" />
+        <!-- This one is for snippets that produce top level attributes based on top level attributes -->
         <xsl:apply-templates mode="topLevelAttribute" select="topLevelAttributes/@*" />
-        <!-- {constantTopLevelAttributeMappings}  -->
+        <!-- {unconditional constant top level attribute mappings and custom xslt snippets that produce top level attributes}  -->
       </topLevelAttributes>
+      <!-- This one is for rules that produce fields based on fields-->
       <xsl:apply-templates mode="element" />
-      <!-- {constantElementMappings} -->
+      <!-- This one is for rules that produce fields based on top level attributes -->
+      <xsl:apply-templates mode="element" select="topLevelAttributes/@*" />
+      <!-- { unconditional constant element mappings and custom xslt snippets that produce fields} -->
     </artifact>
   </xsl:template>
-  <!-- {topLevelAttributeMappings}  -->
-  <!-- {elementMappings}  -->
+  <!-- {topLevelAttributeMappings grouped by source}  -->
+  <!-- {elementMappings grouped by source}  -->
   <xsl:template match="@*" mode="topLevelAttribute"/>
+  <xsl:template match="@*" mode="element"/>
   <xsl:template match="text()" mode="topLevelAttribute"/>
   <xsl:template match="text()" mode="element"/>
 </xsl:stylesheet>
