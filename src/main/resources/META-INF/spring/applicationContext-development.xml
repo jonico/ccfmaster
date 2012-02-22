@@ -7,7 +7,7 @@
 		then be used within application context files in the form of
 		${propertyKey}.
 	-->
-    <context:property-placeholder location="classpath*:META-INF/spring/*-development.properties"/>
+    <context:property-placeholder location="classpath*:META-INF/spring/*-development.properties,classpath*:ccfmasterversion.properties"/>
     <!--
 		Turn on AspectJ @Configurable support. As a result, any time you
 		instantiate an object, Spring will attempt to perform dependency
@@ -186,5 +186,13 @@
 	 <bean class="com.collabnet.ccf.ccfmaster.server.core.VBSQCMetaDataProvider">
 	 	<property name="ccfHome" value="#{CCFRunTimeProperties.ccfHome}" />
 	 	<property name="executor" ref="CCFThreadPool" />
-	 </bean>    
+	 </bean>
+
+	<bean id="ccfMasterVersion" class="com.collabnet.ccf.ccfmaster.config.Version" >
+		<constructor-arg name="major" value="${ccfmaster.major.version}" />
+		<constructor-arg name="minor" value="${ccfmaster.minor.version}" />
+		<constructor-arg name="patch" value="${ccfmaster.patch.version}" />
+		<constructor-arg name="revision" value="${ccfmaster.revisionstring}" />
+	</bean>
+  
 </beans>

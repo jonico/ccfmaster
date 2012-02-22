@@ -6,16 +6,22 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.collabnet.ccf.ccfmaster.config.Version;
 
-
-
+@Component
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Capabilities {
+
+	
+	private Version ccfMasterVersion;
+	
+	private Version coreVersion;
 	
 	private final ParticipantSystemKinds participantSystemKinds = new ParticipantSystemKinds();
-	private final Version version = new Version(1, 0, 1, "$Revision$");
 	
 	@XmlElement
 	public ParticipantSystemKinds getParticipantSystemKinds() {
@@ -24,7 +30,21 @@ public class Capabilities {
 
 	@XmlElement(name="version")
 	public Version getVersion() {
-		return version;
+		return ccfMasterVersion;
+	}
+	
+	@Autowired(required=true)
+	public void setVersion(Version version) {
+		this.ccfMasterVersion = version;
+	}
+
+	@XmlElement(name="coreversion")
+	public Version getCoreVersion() {
+		return coreVersion;
+	}
+
+	public void setCoreVersion(Version coreVersion) {
+		this.coreVersion = coreVersion;
 	}
 
 }

@@ -14,7 +14,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 
-final class CoreProperties implements Supplier<Properties>, Serializable {
+public final class CoreProperties implements Supplier<Properties>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	static final String META_INFORMATION_FILENAME = "ccfcoreversion.properties";

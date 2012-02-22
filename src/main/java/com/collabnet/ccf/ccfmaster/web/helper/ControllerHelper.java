@@ -12,4 +12,8 @@ public class ControllerHelper {
 	}
 
 	
+	public static String landscapeDirName(String ccfHome){
+		return String.format("%s/landscape%d",ccfHome,findLandscape().getId());
+	}
+	
 }
