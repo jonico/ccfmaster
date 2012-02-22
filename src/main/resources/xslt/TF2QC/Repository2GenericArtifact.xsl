@@ -12,6 +12,7 @@
 	-->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ccf="http://ccf.open.collab.net/GenericArtifactV1.0" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xslo="alias">
 	<xsl:namespace-alias stylesheet-prefix="xslo" result-prefix="xsl"/>
+	<xsl:variable name="localName">{local-name(.)}</xsl:variable>
 	<xsl:template match="/node()" priority="2">
 		<xslo:stylesheet version="2.0" xmlns:ccf="http://ccf.open.collab.net/GenericArtifactV1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns="" xmlns:stringutil="xalan://com.collabnet.ccf.core.utils.GATransformerUtil" exclude-result-prefixes="stringutil xsl xs fn ccf">
 			<xsl:comment>
@@ -21,6 +22,9 @@
 			<xslo:template match="/{local-name()}" priority="2">
 				<artifact xmlns="http://ccf.open.collab.net/GenericArtifactV1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ccf.open.collab.net/GenericArtifactV1.0 http://ccf.open.collab.net/files/documents/177/1972/genericartifactschema.xsd">
 					<xslo:copy-of select="topLevelAttributes/@*"/>
+					<xslo:for-each select="topLevelAttributes/*">
+        				<xslo:attribute name="{$localName}"><xslo:value-of select="string(.)"/></xslo:attribute>
+      				</xslo:for-each>
 					<xslo:apply-templates/>
 				</artifact>
 			</xslo:template>
