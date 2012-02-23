@@ -132,12 +132,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 				throw new RuntimeException(e);
 			}
 		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			return asElement();
-		}
-
 		
 	}
 	
@@ -164,12 +158,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			}
 			return preXmlElem;
 		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			return asElement();
-		}
-
 		
 	}
 	
@@ -196,12 +184,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			}
 			return postXmlElem;
 		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			return asElement();
-		}
-
 		
 	}
 	
@@ -217,12 +199,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			return ret;
 		}
 
-		@Override
-		public Element asTopLevelAttribute() {
-			final Element ret = xslElement(rule.getTarget());
-			ret.add(xslValueOf("$input"));
-			return ret;
-		}
 	}
 
 	static class ConditionalFieldConverter extends DirectFieldConverter {
@@ -236,14 +212,7 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			ret.add(super.asElement());
 			return ret;
 		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			Element ret = xslIf(rule.getCondition());
-			// FIXME: shouldn't this be super.asTopLevelAttribute? Scala code says no!?
-			ret.add(super.asElement());
-			return ret;
-		}
+		
 	}
 
 	static class DirectConstantConverter extends AbstractFieldMappingRuleConverter {
@@ -254,11 +223,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 		@Override
 		public Element asElement() {
 			return xslElement(rule.getTarget()).addText(rule.getXmlContent());
-		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			return asElement();
 		}
 	}
 
@@ -272,11 +236,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			Element ret = xslIf(rule.getCondition());
 			ret.add(super.asElement());
 			return ret;
-		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			return asElement();
 		}
 
 	}
@@ -293,15 +252,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 
 		@Override
 		public Element asElement() {
-			Element ret = xslElement(rule.getTarget());
-			for (Element e : valueMap2Xsl()) {
-				ret.add(e);
-			}
-			return ret;
-		}
-
-		@Override
-		public Element asTopLevelAttribute() {
 			Element ret = xslElement(rule.getTarget());
 			for (Element e : valueMap2Xsl()) {
 				ret.add(e);
@@ -353,13 +303,6 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 		public Element asElement() {
 			Element ret = xslIf(rule.getCondition());
 			ret.add(super.asElement());
-			return ret;
-		}
-
-		@Override
-		public Element asTopLevelAttribute() {
-			Element ret = xslIf(rule.getCondition());
-			ret.add(super.asTopLevelAttribute());
 			return ret;
 		}
 	}

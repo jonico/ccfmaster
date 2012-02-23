@@ -321,14 +321,7 @@ public class ConversionResult {
 		}
 
 		private Element getElementForRule(FieldMappingRule rule) {
-			FieldMappingRuleConverter converter = converterFactory.get(rule, mapping.getValueMaps());
-			final Element e;
-			if (rule.isTargetIsTopLevelAttribute()){
-				e = converter.asTopLevelAttribute();
-			} else { 
-				e = converter.asElement();
-			}
-			return e;
+			return converterFactory.get(rule, mapping.getValueMaps()).asElement();
 		}
 		
 		public Element getXml() {

@@ -17,5 +17,4 @@ public interface FieldMappingRuleConverter {
 	public static final QName XSL_TEMPLATE = new QName("template", XSL_NS);
 	
 	public Element asElement();
-	public Element asTopLevelAttribute();
 }

@@ -63,11 +63,6 @@ public class FieldMappingRuleConverterTest {
 		assertEquals(target, result.attribute("name").getValue());
 		assertEquals("$input", result.element(XSL_VALUE_OF).attribute("select").getValue());
 
-		final Element tlaResult = converter.asTopLevelAttribute();
-		log.debug(tlaResult.asXML());
-		assertEquals(XSL_ELEMENT, tlaResult.getQName());
-		assertEquals(target, tlaResult.attribute("name").getValue());
-		assertEquals("string(.)", tlaResult.element(XSL_VALUE_OF).attribute("select").getValue());
 	}
 
 	@Test
@@ -81,7 +76,7 @@ public class FieldMappingRuleConverterTest {
 		assertEquals(target, result.attribute("name").getValue());
 		assertEquals("$input", result.element(XSL_VALUE_OF).attribute("select").getValue());
 
-		final Element tlaResult = extractIfResult(converter.asTopLevelAttribute());
+		final Element tlaResult = extractIfResult(converter.asElement());
 		log.debug(tlaResult.asXML());
 		assertEquals(XSL_ELEMENT, tlaResult.getQName());
 		assertEquals(target, tlaResult.attribute("name").getValue());
@@ -108,11 +103,6 @@ public class FieldMappingRuleConverterTest {
 		assertEquals(target, result.attribute("name").getValue());
 		assertEquals(source, result.getText());
 
-		final Element tlaResult = converter.asTopLevelAttribute();
-		log.debug(tlaResult.asXML());
-		assertEquals(XSL_ELEMENT, tlaResult.getQName());
-		assertEquals(target, tlaResult.attribute("name").getValue());
-		assertEquals(source, tlaResult.getText());
 	}
 
 	@Test
@@ -125,12 +115,6 @@ public class FieldMappingRuleConverterTest {
 		assertEquals(XSL_ELEMENT, result.getQName());
 		assertEquals(target, result.attribute("name").getValue());
 		assertEquals(source, result.getText());
-
-		final Element tlaResult = extractIfResult(converter.asTopLevelAttribute());
-		log.debug(tlaResult.asXML());
-		assertEquals(XSL_ELEMENT, tlaResult.getQName());
-		assertEquals(target, tlaResult.attribute("name").getValue());
-		assertEquals(source, tlaResult.getText());
 	}
 
 	
@@ -156,17 +140,14 @@ public class FieldMappingRuleConverterTest {
 		valueMap.setDefaultValue(defaultValue);
 		result = converter.asElement();
 		hasEqualsFalseDefaultNonNull(converter.asElement());
-		hasEqualsFalseDefaultNonNull(converter.asTopLevelAttribute());
 		
 		valueMap.setHasDefault(true);
 		valueMap.setDefaultValue(defaultValue);
 		hasEqualsTrueDefaultNonNull(converter.asElement());
-		hasEqualsTrueDefaultNonNull(converter.asTopLevelAttribute());
 		
 		valueMap.setHasDefault(true);
 		valueMap.setDefaultValue(null);
 		hasDefaultTrueDefaultNull(converter.asElement());
-		hasDefaultTrueDefaultNull(converter.asTopLevelAttribute());
 	}
 	
 	@Test
