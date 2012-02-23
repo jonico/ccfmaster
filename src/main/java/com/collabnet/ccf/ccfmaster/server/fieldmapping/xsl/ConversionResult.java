@@ -291,9 +291,9 @@ public class ConversionResult {
 			Element template = DocumentHelper
 					.createElement(FieldMappingRuleConverter.XSL_TEMPLATE);
 			if (source.isTopLevelAttribute){
-				template.addAttribute("match", source.source);
-			} else {
 				template.addAttribute("match", "topLevelAttributes/@" + source.source);
+			} else {
+				template.addAttribute("match", source.source);
 			}
 			if (isTargetIsTopLevelAttribute) {
 				template.addAttribute("mode", "topLevelAttribute");
