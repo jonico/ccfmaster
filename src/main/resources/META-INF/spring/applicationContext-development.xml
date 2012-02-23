@@ -194,5 +194,9 @@
 		<constructor-arg name="patch" value="${ccfmaster.patch.version}" />
 		<constructor-arg name="revision" value="${ccfmaster.revisionstring}" />
 	</bean>
+
+	<bean id="capabilities" class="com.collabnet.ccf.ccfmaster.server.domain.Capabilities">
+		<property name="version" ref="ccfMasterVersion" />
+	</bean>
   
 </beans>

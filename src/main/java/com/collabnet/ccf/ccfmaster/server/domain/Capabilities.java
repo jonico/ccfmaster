@@ -6,12 +6,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.collabnet.ccf.ccfmaster.config.Version;
 
-@Component
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Capabilities {
@@ -23,6 +19,12 @@ public class Capabilities {
 	
 	private final ParticipantSystemKinds participantSystemKinds = new ParticipantSystemKinds();
 	
+	public Capabilities(){	} //Default constructor required for Jaxb
+	
+	public Capabilities(Version ccfMasterVersion){
+		this.ccfMasterVersion = ccfMasterVersion;
+	}
+	
 	@XmlElement
 	public ParticipantSystemKinds getParticipantSystemKinds() {
 		return participantSystemKinds;
@@ -33,7 +35,6 @@ public class Capabilities {
 		return ccfMasterVersion;
 	}
 	
-	@Autowired(required=true)
 	public void setVersion(Version version) {
 		this.ccfMasterVersion = version;
 	}

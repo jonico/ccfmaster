@@ -5,7 +5,6 @@
 	<context:component-scan base-package="com.collabnet.ccf.ccfmaster" use-default-filters="false">
         <!-- <context:exclude-filter expression=".*_Roo_.*" type="regex"/> -->
 		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
-		<context:exclude-filter expression="com.collabnet.ccf.ccfmaster.controller.api.ApiCapabilitiesController" type="assignable"/>
 	</context:component-scan>
 	
 	<bean class="com.collabnet.ccf.ccfmaster.server.core.MockQCMetaDataProvider" />
@@ -19,6 +18,17 @@
 		<property name="jmxReversePort" value="${ccf.reverse.jmxport:8002}" />
 		<property name="tfUrl" value="${ccf.tf.url:http://pebblevm}"/>
 		<property name="maxAttachmentSize" value="10485760"/>
+	</bean>
+	
+	<bean id="version" class="com.collabnet.ccf.ccfmaster.config.Version">
+		<constructor-arg name="major" type="int" value="1" />
+		<constructor-arg name="minor" type="int" value="0" />
+		<constructor-arg name="patch" type="int" value="1" />
+		<constructor-arg name="revision" type="java.lang.String" value="test" />
+	</bean>
+
+	<bean id="capabilities" class="com.collabnet.ccf.ccfmaster.server.domain.Capabilities">
+		<property name="version" ref="version" />
 	</bean> 
 
 	<!-- Turns on support for mapping requests to Spring MVC @Controller methods
@@ -87,14 +97,7 @@
         <value>/WEB-INF/views/**/views.xml</value>
       </list>
     </property>
-  </bean>
-	<bean id="ccfMasterVersion" class="com.collabnet.ccf.ccfmaster.config.Version">
-		<constructor-arg name="major" index="1" value="1" />
-		<constructor-arg name="minor" index="2" value="0" />
-		<constructor-arg name="patch" index="3" value="1" />
-		<constructor-arg name="revision" index="4" value="revision1" />
-	</bean>
-	
+  </bean>	
  -->
 
 </beans>

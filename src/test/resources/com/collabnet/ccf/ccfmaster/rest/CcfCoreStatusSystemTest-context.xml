@@ -17,6 +17,7 @@
 			<list>
 				<value>classpath*:META-INF/spring/database-test.properties</value>
 				<value>classpath*:META-INF/spring/systemtest.properties</value>
+				<value>classpath*:META-INF/spring/ccfmasterversion-test.properties</value>
 			</list>
 		</property>
 	</bean>
