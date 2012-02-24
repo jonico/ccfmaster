@@ -18,9 +18,8 @@ public class Capabilities {
 	private Version coreVersion;
 	
 	private final ParticipantSystemKinds participantSystemKinds = new ParticipantSystemKinds();
-	
-	@SuppressWarnings("unused")
-	private Capabilities(){	} //Default constructor required for Jaxb
+		
+	public Capabilities(){	} //Default constructor required for Jaxb
 	
 	public Capabilities(Version ccfMasterVersion, Version coreVersion){
 		this.ccfMasterVersion = ccfMasterVersion;
