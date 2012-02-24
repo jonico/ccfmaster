@@ -179,7 +179,7 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 		//Checks for Mapping rules template xml file
 		File MappingRuleFile = new File(parentDirectory, MAPPING_RULE_TEMPLATE_NAME);
 		if(MappingRuleFile.isFile()){
-			createRuleBasedFieldMappingLandscapeTemplate(context, MappingRuleFile);
+			createRuleBasedFieldMappingLandscapeTemplate(context, MappingRuleFile,landscapeTemplateName);
 		}
 		// it is a MapForceMapping
 		File mapForceMFD = new File(parentDirectory,
@@ -242,7 +242,7 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 	}
 
 	private void createRuleBasedFieldMappingLandscapeTemplate(
-			Landscape context, File mappingRuleTemplateFile)
+			Landscape context, File mappingRuleTemplateFile,String templateName)
 			throws JAXBException, IOException {
 		FieldMappingLandscapeTemplateList templateList = SerializationUtil
 				.deSerialize(mappingRuleTemplateFile,
@@ -250,6 +250,7 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeList = templateList
 				.getFieldMappingTemplate();
 		for (FieldMappingLandscapeTemplate template : fieldMappingLandscapeList) {
+			template.setName(templateName);
 			template.setParent(context);
 			template.persist();
 		}
