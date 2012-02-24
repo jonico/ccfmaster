@@ -37,9 +37,8 @@ public class ApiCapabilitiesController {
 		String ccfhome = runtimeProperties.getCcfHome();
 		String landscapeDir = ControllerHelper.landscapeDirName(ccfhome);
 		Version coreVersion = CoreProperties.ofDirectory(new File(landscapeDir)).getVersion();
-		Capabilities newCapabilities = new Capabilities(capabilities.getVersion());
-		newCapabilities.setCoreVersion(coreVersion);
-		return newCapabilities;
+		//To avoid race Conditions new instance of Capabilities initialized and returned.
+		return new Capabilities(capabilities.getVersion(),coreVersion);
 	}
 	
 }

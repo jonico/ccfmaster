@@ -19,10 +19,12 @@ public class Capabilities {
 	
 	private final ParticipantSystemKinds participantSystemKinds = new ParticipantSystemKinds();
 	
-	public Capabilities(){	} //Default constructor required for Jaxb
+	@SuppressWarnings("unused")
+	private Capabilities(){	} //Default constructor required for Jaxb
 	
-	public Capabilities(Version ccfMasterVersion){
+	public Capabilities(Version ccfMasterVersion, Version coreVersion){
 		this.ccfMasterVersion = ccfMasterVersion;
+		this.coreVersion = coreVersion;
 	}
 	
 	@XmlElement
