@@ -195,8 +195,6 @@ public class ConversionResult {
 		static final String XPATH_CONSTANT_ELEMENT = "//artifact";
 		static final String XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
 		static final String MAPPING_RULE_TEMPLATE_XSL = "/mapping-rule-template.xsl";
-		//FIXME: Autowired and instantiated?
-		@Autowired
 		FieldMappingRuleConverterFactory converterFactory = new FieldMappingRuleConverterFactoryImpl();
 	
 		private ArrayListMultimap<Source,FieldMappingRule> fields = ArrayListMultimap.create();
