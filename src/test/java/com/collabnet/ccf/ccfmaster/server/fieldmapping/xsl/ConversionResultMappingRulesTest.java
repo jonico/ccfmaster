@@ -3,6 +3,7 @@ package com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl;
 import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_CONSTANT_ELEMENT;
 import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE;
 import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_ELEMENT;
+import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_CONDITIONAL_CONSTANT_ELEMENT;
 import static com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules.XPATH_TOP_LEVEL_ATTRIBUTE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,6 +32,8 @@ public class ConversionResultMappingRulesTest extends
 
 	private static final String SOURCE = "SOURCE";
 
+	private static final String XMLCONTENT = "XMLCONTENT";
+
 	private final ConversionResultFactory resultFactory = new ConversionResultFactory();
 	@Autowired FieldMappingDataOnDemand dod;
 	
@@ -54,7 +57,7 @@ public class ConversionResultMappingRulesTest extends
 		assertTrue(res.mappingRules().isSome());
 		final Element xsl = res.mappingRules().get().getXml();
 		final String xpath = String.format(
-				"%s/xsl:element[@name='%s']",
+				"%s//xsl:element[@name='%s']",
 				XPATH_ELEMENT, TARGET);
 		assertFalse(
 				"couldn't find rule in result",
@@ -88,7 +91,7 @@ public class ConversionResultMappingRulesTest extends
 		assertTrue(res.mappingRules().isSome());
 		final Element xsl = res.mappingRules().get().getXml();
 		final String xpath = String.format(
-				"%s/xsl:if[@test='%s']/xsl:element[@name='%s']", 
+				"%s/xsl:template/xsl:if[@test='%s']/xsl:element[@name='%s']", 
 				XPATH_ELEMENT, CONDITION, TARGET);
 		assertFalse(
 				"couldn't find rule in result",
@@ -105,8 +108,8 @@ public class ConversionResultMappingRulesTest extends
 		assertTrue(res.mappingRules().isSome());
 		final Element xsl = res.mappingRules().get().getXml();
 		final String xpath = String.format(
-				"%s/xsl:if[@test='%s']/xsl:element[@name='%s']", 
-				XPATH_CONSTANT_ELEMENT, CONDITION, TARGET);
+				"%s/xsl:template/xsl:if[@test='%s']/xsl:element[@name='%s']", 
+				XPATH_CONDITIONAL_CONSTANT_ELEMENT, CONDITION, TARGET);
 		assertFalse(
 				"couldn't find rule in result",
 				xsl.selectNodes(xpath).isEmpty());
@@ -120,6 +123,7 @@ public class ConversionResultMappingRulesTest extends
 		rule.setSource(SOURCE);
 		rule.setTarget(TARGET);
 		rule.setCondition(CONDITION);
+		rule.setXmlContent(XMLCONTENT);
 		rule.setTargetIsTopLevelAttribute(targetIsTlaAttribute);
 		return rule;
 	}
@@ -142,7 +146,7 @@ public class ConversionResultMappingRulesTest extends
 		assertTrue(res.mappingRules().isSome());
 		final Element xsl = res.mappingRules().get().getXml();
 		final String xpath = String.format(
-				"%s/xsl:element[@name='%s']",
+				"%s/xsl:template/xsl:element[@name='%s']",
 				XPATH_TOP_LEVEL_ATTRIBUTE, TARGET);
 		assertFalse(
 				"couldn't find rule in result",
@@ -176,7 +180,7 @@ public class ConversionResultMappingRulesTest extends
 		assertTrue(res.mappingRules().isSome());
 		final Element xsl = res.mappingRules().get().getXml();
 		final String xpath = String.format(
-				"%s/xsl:if[@test='%s']/xsl:element[@name='%s']", 
+				"%s/xsl:template/xsl:if[@test='%s']/xsl:element[@name='%s']", 
 				XPATH_TOP_LEVEL_ATTRIBUTE, CONDITION, TARGET);
 		assertFalse(
 				"couldn't find rule in result",
@@ -193,8 +197,8 @@ public class ConversionResultMappingRulesTest extends
 		assertTrue(res.mappingRules().isSome());
 		final Element xsl = res.mappingRules().get().getXml();
 		final String xpath = String.format(
-				"%s/xsl:if[@test='%s']/xsl:element[@name='%s']", 
-				XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE, CONDITION, TARGET);
+				"%s/xsl:template/xsl:if[@test='%s']/xsl:element[@name='%s']", 
+				XPATH_CONDITIONAL_CONSTANT_ELEMENT, CONDITION, TARGET);
 		assertFalse(
 				"couldn't find rule in result",
 				xsl.selectNodes(xpath).isEmpty());

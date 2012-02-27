@@ -9,11 +9,12 @@ import org.junit.Test;
 
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
+import com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.ConversionResult.MappingRules;
 
 public class ConversionResultTest {
 	@Mocked ConversionResult.CustomXsl customXsl;
 	@Mocked ConversionResult.MapForce mapForce;
-	@Mocked ConversionResult.MappingRules mappingRules;
+	@Mocked MappingRules mappingRules;
 	
 	@Test(expected=CoreConfigurationException.class)
 	public void badXmlThrows() {

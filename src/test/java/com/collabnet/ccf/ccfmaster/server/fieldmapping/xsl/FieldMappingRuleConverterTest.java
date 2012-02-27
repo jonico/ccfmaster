@@ -26,23 +26,27 @@ public class FieldMappingRuleConverterTest {
 	
 	private final String source = "SOURCE";
 	private final String target = "TARGET_FIELD";
+	private final String content = "CONTENT";
 	private final String condition = "CONDITION";
 	private final String defaultValue = "DEFAULT";
 
 	private final String valueMapSource = "VM_SOURCE";
 	private final String valueMapTarget = "VM_TARGET";
-
+	
 	FieldMappingRuleConverterFactoryImpl converterFactory = new FieldMappingRuleConverterFactoryImpl();
 
 	private FieldMappingRule rule;
 	private FieldMappingValueMap valueMap;
 	private List<FieldMappingValueMapEntry> entries;
+
+	
 	
 	@Before
 	public void setUp() {
 		rule = new FieldMappingRule();
 		rule.setTarget(target);
 		rule.setSource(source);
+		rule.setXmlContent(content);
 		valueMap = new FieldMappingValueMap();
 		valueMap.setName(VALUEMAPNAME);
 		FieldMappingValueMapEntry entry = new FieldMappingValueMapEntry();
@@ -101,7 +105,7 @@ public class FieldMappingRuleConverterTest {
 		log.debug(result.asXML());
 		assertEquals(XSL_ELEMENT, result.getQName());
 		assertEquals(target, result.attribute("name").getValue());
-		assertEquals(source, result.getText());
+		assertEquals(content, result.getText());
 
 	}
 
@@ -114,7 +118,7 @@ public class FieldMappingRuleConverterTest {
 		final Element result = extractIfResult(converter.asElement());
 		assertEquals(XSL_ELEMENT, result.getQName());
 		assertEquals(target, result.attribute("name").getValue());
-		assertEquals(source, result.getText());
+		assertEquals(content, result.getText());
 	}
 
 	
