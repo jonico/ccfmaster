@@ -194,6 +194,7 @@ public class ConversionResult {
 		static final String XPATH_TOP_LEVEL_ATTRIBUTE = XPATH_ELEMENT;
 		static final String XPATH_CONSTANT_ELEMENT = "//artifact";
 		static final String XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
+		static final String XPATH_CONDITIONAL_CONSTANT_ELEMENT = "/xsl:stylesheet";
 		static final String MAPPING_RULE_TEMPLATE_XSL = "/mapping-rule-template.xsl";
 		FieldMappingRuleConverterFactory converterFactory = new FieldMappingRuleConverterFactoryImpl();
 	
