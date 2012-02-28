@@ -64,6 +64,9 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 		case TARGET_REPOSITORY_LAYOUT:
 			converter = new TargetRepositoryMappingLayoutConverter(rule, dir);
 			break;
+		case CUSTOM_XSLT_DOCUMENT:
+			converter = new CustomXSLTDocumentConverter(rule);
+			break;
 		default:
 			throw new IllegalArgumentException(rule.getType() + " not supported.");
 		}
@@ -183,6 +186,28 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 				throw new CoreConfigurationException("unable to  transform given XML", e);
 			}
 			return postXmlElem;
+		}
+		
+	}
+	
+	static class CustomXSLTDocumentConverter extends AbstractFieldMappingRuleConverter {
+		
+		
+
+		protected CustomXSLTDocumentConverter(FieldMappingRule rule) {
+			super(rule);
+		}
+
+		@Override
+		public Element asElement() {
+			Element mainXmlElem = null;
+			try {
+				Document mainXmlDom = DocumentHelper.parseText(rule.getXmlContent());
+				mainXmlElem = mainXmlDom.getRootElement();
+			} catch (DocumentException e) {
+				throw new CoreConfigurationException("unable to parse XML", e);
+			}
+			return mainXmlElem;
 		}
 		
 	}

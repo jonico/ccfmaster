@@ -19,7 +19,6 @@ import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
@@ -193,8 +192,8 @@ public class ConversionResult {
 		static final String XPATH_ELEMENT = "/xsl:stylesheet";
 		static final String XPATH_TOP_LEVEL_ATTRIBUTE = XPATH_ELEMENT;
 		static final String XPATH_CONSTANT_ELEMENT = "//artifact";
+		static final String XPATH_CONDITIONAL_CONSTANT_ELEMENT = XPATH_ELEMENT;
 		static final String XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
-		static final String XPATH_CONDITIONAL_CONSTANT_ELEMENT = "/xsl:stylesheet";
 		static final String MAPPING_RULE_TEMPLATE_XSL = "/mapping-rule-template.xsl";
 		FieldMappingRuleConverterFactory converterFactory = new FieldMappingRuleConverterFactoryImpl();
 	
@@ -205,6 +204,7 @@ public class ConversionResult {
 		private ArrayList<FieldMappingRule> constantTopLevelAttributes = new ArrayList<FieldMappingRule>();
 		private Element preXml;
 		private Element postXml;
+		private Element mainXml;
 		private Mapping<?> mapping;
 
 		public MappingRules(final Mapping<?> mapping) {
@@ -229,6 +229,12 @@ public class ConversionResult {
 							mapping.getValueMaps(),
 							getXsltDir((mapping.getMappingDirection())));
 					this.postXml = converter.asElement();
+					break;			
+				case CUSTOM_XSLT_DOCUMENT:
+					converter = converterFactory.get(rule,
+							mapping.getValueMaps(),
+							getXsltDir((mapping.getMappingDirection())));
+					this.mainXml = converter.asElement();
 					break;
 				default:
 					buildMainXsltAttribute(rule);
@@ -324,63 +330,67 @@ public class ConversionResult {
 		}
 		
 		public Element getXml() {
-			try {
-				final SAXReader saxReader = new SAXReader();
-				final InputStream in = getClass().getResourceAsStream(
-						MAPPING_RULE_TEMPLATE_XSL);
-				final Document template = saxReader.read(in);
-				final Element result = template.getRootElement();
-
-				final Element tla = (Element) result
-						.selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
-				
-				for (Source source : topLevelAttributes.keySet()) {
-					Element templateNode = createTemplateNode(source, true);
-					for (FieldMappingRule r : topLevelAttributes.get(source)) {
-						templateNode = addRuleToTemplateNode(templateNode, r, source);
+			if (this.mainXml == null){
+				try {
+					final SAXReader saxReader = new SAXReader();
+					final InputStream in = getClass().getResourceAsStream(
+							MAPPING_RULE_TEMPLATE_XSL);
+					final Document template = saxReader.read(in);
+					final Element result = template.getRootElement();
+	
+					final Element tla = (Element) result
+							.selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
+					
+					for (Source source : topLevelAttributes.keySet()) {
+						Element templateNode = createTemplateNode(source, true);
+						for (FieldMappingRule r : topLevelAttributes.get(source)) {
+							templateNode = addRuleToTemplateNode(templateNode, r, source);
+						}
+						tla.add(templateNode.detach());
 					}
-					tla.add(templateNode.detach());
-				}
-
-				final Element fld = (Element) result
-						.selectSingleNode(XPATH_ELEMENT);
-				
-				for (Source source : fields.keySet()) {
-					Element templateNode = createTemplateNode(source, false);
-					for (FieldMappingRule r : fields.get(source)) {
-						templateNode = addRuleToTemplateNode(templateNode, r, source);
+	
+					final Element fld = (Element) result
+							.selectSingleNode(XPATH_ELEMENT);
+					
+					for (Source source : fields.keySet()) {
+						Element templateNode = createTemplateNode(source, false);
+						for (FieldMappingRule r : fields.get(source)) {
+							templateNode = addRuleToTemplateNode(templateNode, r, source);
+						}
+						fld.add(templateNode.detach());
 					}
-					fld.add(templateNode.detach());
+					
+	
+					final Element constantTla = (Element) result
+							.selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
+					for (FieldMappingRule r : constantTopLevelAttributes) {
+						final Element e = getElementForRule(r);
+						Node n = (Node) e.clone();
+						constantTla.add(n.detach());
+					}
+					
+	
+					final Element constantFld = (Element) result
+							.selectSingleNode(XPATH_CONSTANT_ELEMENT);
+					
+					for (FieldMappingRule r : constantFields) {
+						final Element e = getElementForRule(r);
+						Node n = (Node) e.clone();
+						constantFld.add(n.detach());
+					}
+					
+					
+					if (log.isDebugEnabled())
+						log.debug(result.asXML());
+					
+					
+					
+					return result;
+				} catch (DocumentException e) {
+					throw new CoreConfigurationException(e);
 				}
-				
-
-				final Element constantTla = (Element) result
-						.selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
-				for (FieldMappingRule r : constantTopLevelAttributes) {
-					final Element e = getElementForRule(r);
-					Node n = (Node) e.clone();
-					constantTla.add(n.detach());
-				}
-				
-
-				final Element constantFld = (Element) result
-						.selectSingleNode(XPATH_CONSTANT_ELEMENT);
-				
-				for (FieldMappingRule r : constantFields) {
-					final Element e = getElementForRule(r);
-					Node n = (Node) e.clone();
-					constantFld.add(n.detach());
-				}
-				
-				
-				if (log.isDebugEnabled())
-					log.debug(result.asXML());
-				
-				
-				
-				return result;
-			} catch (DocumentException e) {
-				throw new CoreConfigurationException(e);
+			} else {
+				return this.mainXml;
 			}
 		}
 
