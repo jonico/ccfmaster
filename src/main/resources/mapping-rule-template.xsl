@@ -15,10 +15,6 @@
           <xsl:variable name="v"><xsl:value-of select="string(.)"/></xsl:variable>
           <xsl:attribute name="{$n}"><xsl:value-of select="$v" /></xsl:attribute>
         </xsl:for-each>
-        <!-- This one is for rules that produce top level attributes based on fields -->
-        <xsl:apply-templates mode="topLevelAttribute" />
-        <!-- This one is for rules that produce top level attributes based on top level attributes -->
-        <xsl:apply-templates mode="topLevelAttribute" select="topLevelAttributes/@*" />
         <!-- {unconditional constant top level attribute mappings and custom xslt snippets that produce top level attributes}  -->
       </topLevelAttributes>
       <!-- This one is for rules that produce fields based on fields-->

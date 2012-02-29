@@ -11,11 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
 
+import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.dom.DOMElement;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,6 +197,7 @@ public class ConversionResult {
 		static final String XPATH_CONDITIONAL_CONSTANT_ELEMENT = XPATH_ELEMENT;
 		static final String XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
 		static final String MAPPING_RULE_TEMPLATE_XSL = "/mapping-rule-template.xsl";
+		static final String XPATH_CUSTOM_SNIPPET_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
 		FieldMappingRuleConverterFactory converterFactory = new FieldMappingRuleConverterFactoryImpl();
 	
 		private ArrayListMultimap<Source,FieldMappingRule> fields = ArrayListMultimap.create();
@@ -202,10 +205,12 @@ public class ConversionResult {
 		
 		private ArrayList<FieldMappingRule> constantFields = new ArrayList<FieldMappingRule>();
 		private ArrayList<FieldMappingRule> constantTopLevelAttributes = new ArrayList<FieldMappingRule>();
+		private ArrayList<FieldMappingRule> customSnippetTopLevelAttributes = new ArrayList<FieldMappingRule>();
 		private Element preXml;
 		private Element postXml;
 		private Element mainXml;
 		private Mapping<?> mapping;
+		
 
 		public MappingRules(final Mapping<?> mapping) {
 			this.mapping = mapping;
@@ -255,20 +260,24 @@ public class ConversionResult {
 			List<FieldMappingRuleType> constantTypes = Arrays.asList(
 					FieldMappingRuleType.DIRECT_CONSTANT,
 					FieldMappingRuleType.CUSTOM_XSLT_SNIPPET);
-
-			Source source = new Source(rule.getSource(),
-					rule.isSourceIsTopLevelAttribute());
-			
-			if (rule.isTargetIsTopLevelAttribute()) {
-				if (constantTypes.contains(rule.getType())) 
-					constantTopLevelAttributes.add(rule);
-				else
-					addRuleToMap(topLevelAttributes, rule, source);
+			if (rule.getType().equals(FieldMappingRuleType.CUSTOM_XSLT_SNIPPET)
+					&& rule.isTargetIsTopLevelAttribute()){
+				customSnippetTopLevelAttributes.add(rule);
 			} else {
-				if (constantTypes.contains(rule.getType())) 
-					constantFields.add(rule);
-				else
-					addRuleToMap(fields, rule, source);
+				Source source = new Source(rule.getSource(),
+						rule.isSourceIsTopLevelAttribute());
+				
+				if (rule.isTargetIsTopLevelAttribute()) {
+					if (constantTypes.contains(rule.getType())) 
+						constantTopLevelAttributes.add(rule);
+					else
+						addRuleToMap(topLevelAttributes, rule, source);
+				} else {
+					if (constantTypes.contains(rule.getType())) 
+						constantFields.add(rule);
+					else
+						addRuleToMap(fields, rule, source);
+				}
 			}
 		}
 
@@ -334,6 +343,31 @@ public class ConversionResult {
 					final Document template = saxReader.read(in);
 					final Element result = template.getRootElement();
 	
+					final Element customSnippetTla = (Element) result.selectSingleNode(XPATH_CUSTOM_SNIPPET_TOP_LEVEL_ATTRIBUTE);
+					for (FieldMappingRule r : customSnippetTopLevelAttributes) {
+						final Element e = getElementForRule(r);
+						Node n = (Node) e.clone();
+						customSnippetTla.add(n.detach());
+					}		
+					
+					final Element constantTla = (Element) result
+							.selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
+					for (FieldMappingRule r : constantTopLevelAttributes) {
+						final Element e = getElementForRule(r);
+						Node n = (Node) e.clone();
+						constantTla.add(n.detach());
+					}
+					//<!-- This one is for rules that produce top level attributes based on fields -->
+					//<xsl:apply-templates mode="topLevelAttribute" />
+					Element applyTemplates = constantTla.addElement("xsl:apply-templates");
+					applyTemplates.addAttribute("mode","topLevelAttribute");
+					constantTla.add(applyTemplates.detach());
+					//<!-- This one is for rules that produce top level attributes based on top level attributes -->
+					//<xsl:apply-templates mode="topLevelAttribute" select="topLevelAttributes/@*" />
+					Element applyAndSelectTemplates = constantTla.addElement("xsl:apply-templates");
+					applyAndSelectTemplates.addAttribute("mode","topLevelAttribute");
+					applyAndSelectTemplates.addAttribute("select","topLevelAttributes/@*");
+					constantTla.add(applyAndSelectTemplates.detach());
 					final Element tla = (Element) result
 							.selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
 					
@@ -356,14 +390,9 @@ public class ConversionResult {
 						fld.add(templateNode.detach());
 					}
 					
-	
-					final Element constantTla = (Element) result
-							.selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
-					for (FieldMappingRule r : constantTopLevelAttributes) {
-						final Element e = getElementForRule(r);
-						Node n = (Node) e.clone();
-						constantTla.add(n.detach());
-					}
+
+				
+
 					
 	
 					final Element constantFld = (Element) result
