@@ -175,6 +175,17 @@ public class FieldMappingRuleConverterTest {
 		final String xpath = "//xslo:attribute[@name='fieldName']";
 		assertFalse(result.selectNodes(xpath).isEmpty());
 	}
+	
+	@Test
+	public void testCustomXsltSnippetConvertor(){
+		String customSnippet = "<xsl:element></xsl:element>";
+		rule.setType(FieldMappingRuleType.CUSTOM_XSLT_SNIPPET);
+		rule.setXmlContent(customSnippet);
+		FieldMappingRuleConverter converter = converterFactory.get(rule);
+		final Element result = converter.asElement();
+		assertTrue(result.getNamespacePrefix().equals("xsl"));
+		
+	}
 
 
 	private void hasDefaultTrueDefaultNull(Element result) {
