@@ -3,18 +3,22 @@ package com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.xml.sax.SAXException;
 
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingRule;
@@ -23,12 +27,14 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMapEntry;
 import com.collabnet.ccf.ccfmaster.util.Maybe;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Maps;
 
 @Service
 public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleConverterFactory {
 	public AbstractFieldMappingRuleConverter get(FieldMappingRule rule) {
 		return get(rule, new ArrayList<FieldMappingValueMap>());
 	}
+	
 	
 	public AbstractFieldMappingRuleConverter get(FieldMappingRule rule, List<FieldMappingValueMap> valueMaps) {
 		return get(rule, valueMaps, StringUtils.EMPTY);
@@ -118,19 +124,27 @@ public class FieldMappingRuleConverterFactoryImpl implements FieldMappingRuleCon
 			.addText(value);
 		}
 	}
+
 	static class CustomXsltSnippetConverter extends AbstractFieldMappingRuleConverter {
 
 		protected CustomXsltSnippetConverter(FieldMappingRule rule) {
 			super(rule);
 		}
-
 		@Override
 		public Element asElement() {
-			Reader reader = new StringReader(rule.getXmlContent());
-			SAXReader saxReader = new SAXReader();
+			SAXReader reader = new SAXReader();
+			Reader stringReader = new StringReader("<xsl:stylesheet version=\"1.0\" "
+					+"xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" "
+					+"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+					+"xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" "
+					+"xmlns:vmf=\"http://www.altova.com/MapForce/UDF/vmf\" "
+					+"exclude-result-prefixes=\"vmf xs xsi xsl\">"
+					+rule.getXmlContent()
+					+"</xsl:stylesheet>");
 			try {
-				Document document = saxReader.read(reader);
-				return document.getRootElement();
+				Document document = reader.read(stringReader);
+				Element result = (Element)document.selectSingleNode("stylesheet/*[1]");
+				return result;
 			} catch (DocumentException e) {
 				throw new RuntimeException(e);
 			}
