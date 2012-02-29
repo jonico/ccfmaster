@@ -287,11 +287,6 @@ public class ConversionResult {
 			return dir;
 		}
 
-		// TODO: For now below line is commented out to make FieldMapping
-		// instance to create using REST post and put request
-		// Needs to uncomment the below line once FieldMappingRuleConvertor and
-		// its related core implementation is done
-		// @SafeXslt
 		private Element createTemplateNode(Source source, Boolean isTargetIsTopLevelAttribute) {
 			Element template = DocumentHelper
 					.createElement(FieldMappingRuleConverter.XSL_TEMPLATE);
@@ -329,6 +324,7 @@ public class ConversionResult {
 			return converterFactory.get(rule, mapping.getValueMaps()).asElement();
 		}
 		
+		@SafeXslt
 		public Element getXml() {
 			if (this.mainXml == null){
 				try {
@@ -394,12 +390,12 @@ public class ConversionResult {
 			}
 		}
 
-		// @SafeXslt
+		@SafeXslt
 		public Element getPreXml() {
 			return preXml;
 		}
 
-		// @SafeXslt
+		@SafeXslt
 		public Element getPostXml() {
 			return postXml;
 		}
