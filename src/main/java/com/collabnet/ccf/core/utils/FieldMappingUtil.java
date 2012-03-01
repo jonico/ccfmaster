@@ -29,7 +29,7 @@ public class FieldMappingUtil {
 			fieldMappingRule.setSourceIsTopLevelAttribute(fmrules.isSourceIsTopLevelAttribute());
 			fieldMappingRule.setTargetIsTopLevelAttribute(fmrules.isTargetIsTopLevelAttribute());
 			fieldMappingRule.setValueMapName(fmrules.getValueMapName());
-			fieldMappingRule.setCondition(fieldMappingRule.getCondition());
+			fieldMappingRule.setCondition(fmrules.getCondition());
 			newrules.add(fieldMappingRule);		
 		}
 
