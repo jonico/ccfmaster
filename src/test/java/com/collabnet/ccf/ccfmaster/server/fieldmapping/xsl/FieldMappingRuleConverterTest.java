@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.dom4j.Element;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -32,6 +33,10 @@ public class FieldMappingRuleConverterTest {
 
 	private final String valueMapSource = "VM_SOURCE";
 	private final String valueMapTarget = "VM_TARGET";
+	
+	private final String validXSLTDocument = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+			+"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" exclude-result-prefixes=\"xs xsi xsl\">"
+			+"</xsl:stylesheet>";
 	
 	FieldMappingRuleConverterFactoryImpl converterFactory = new FieldMappingRuleConverterFactoryImpl();
 
@@ -69,6 +74,7 @@ public class FieldMappingRuleConverterTest {
 
 	}
 
+	
 	@Test
 	public void testConditionalFieldConverter() {
 		rule.setType(FieldMappingRuleType.CONDITIONAL_FIELD);
@@ -184,7 +190,14 @@ public class FieldMappingRuleConverterTest {
 		FieldMappingRuleConverter converter = converterFactory.get(rule);
 		final Element result = converter.asElement();
 		assertTrue(result.getNamespacePrefix().equals("xsl"));
-		
+	}
+	
+	@Test
+	public void testCustomXsltDocumentConvertor(){
+		rule.setType(FieldMappingRuleType.CUSTOM_XSLT_DOCUMENT);
+		rule.setXmlContent(validXSLTDocument);
+		FieldMappingRuleConverter converter = converterFactory.get(rule);
+		converter.asElement();
 	}
 
 
