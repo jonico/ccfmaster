@@ -250,6 +250,8 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends
 		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeList = templateList
 				.getFieldMappingTemplate();
 		for (FieldMappingLandscapeTemplate template : fieldMappingLandscapeList) {
+			//MappingRule.xml template currently not having id and version elements so we are directly
+			//persisting deserialized FieldMappingLandscapeTemplate.
 			template.setName(templateName);
 			template.setParent(context);
 			template.persist();

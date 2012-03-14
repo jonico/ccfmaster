@@ -2,11 +2,18 @@ package com.collabnet.ccf.ccfmaster.server.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import com.collabnet.ccf.ccfmaster.config.CoreConfigLoader;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
+import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 
 /**
@@ -17,10 +24,13 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
  * @author jnicolai
  * 
  */
-@Configurable
+@Configurable(autowire = Autowire.BY_TYPE, preConstruction=true)
 public class SingleLandscapeDirectionCCFCoreInteractionStrategy extends
 		DirectionCCFCoreInteractionStrategy {
-
+	
+	@Autowired
+	private CoreConfigLoader coreConfigLoader;
+	
 	@Override
 	public void create(Direction context) {
 		File ccfLandscapeDirectory = new File(getCcfHome(), "landscape"
@@ -34,6 +44,20 @@ public class SingleLandscapeDirectionCCFCoreInteractionStrategy extends
 				getImmutableDirectionWrapperFileName(context));
 
 		createProperties(context, directionWrapperFile);
+		try {
+			createDefaultCoreConfig(context);
+		} catch (JAXBException e) {
+			throw new CoreConfigurationException("Could not parse the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
+		} catch (IOException e) {
+			throw new CoreConfigurationException("Could not read the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
+		}
+	}
+
+	private void createDefaultCoreConfig(Direction context) throws JAXBException, IOException {
+		List<DirectionConfig> defaultCoreConfigList = coreConfigLoader.populateDefaultCoreConfig(context);
+		for (DirectionConfig config : defaultCoreConfigList) {
+			config.persist();
+		}
 	}
 
 	@Override
