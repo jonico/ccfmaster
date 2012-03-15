@@ -136,6 +136,9 @@ public class ControllerConstants {
 	public static final String CCF_CORE_QC_TO_TF_START_AUTOMATICALLY_MESSAGE = "ccfcoreqctotfstartautomaticallymessage";
 	public static final String CCF_CORE_TF_TO_SWP_START_AUTOMATICALLY_MESSAGE = "ccfcoretftoswpstartautomaticallymessage";
 	public static final String CCF_CORE_TF_TO_QC_START_AUTOMATICALLY_MESSAGE = "ccfcoretftoqcstartautomaticallymessage";
+	public static final String RESTORE_SUCCESS_MESSSAGE = "restoresucessmessage";
+	public static final String VALIDATION_ERROR_MESSSAGE = "validationerrormessage";
+	
 	
 	
 	
@@ -191,7 +194,6 @@ public class ControllerConstants {
 	public static final String SIZE_IN_SESSION = "sizesession";
 	public static final String DEFAULT_PAGE_SIZE = "15";
 	public static final String DEFAULT_PAGE = "1";
-
 	
 	public static final String FORWARD = "forward";
 	

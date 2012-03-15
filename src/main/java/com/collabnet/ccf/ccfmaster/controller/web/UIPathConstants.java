@@ -18,7 +18,7 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESLOGTEMPLATETFTOPART = "admin/displayccfpropertieslogtemplatetftopart";
 	public static final String LANDSCAPESETTINGS_SAVECCFPROPERTIESLOGTEMPLATE = "/admin/saveccfpropertieslogtemplate";
 	public static final String LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESLOGTEMPLATEPARTTOTF = "admin/displayccfpropertieslogtemplateparttotf";
-
+	public static final String LANDSCAPESETTINGS_RESTORE_DEFAULT_SETTINGS = "/admin/restoredefaultsettings";
 	
 	//LandscapeParticipantSettingsController
 	public static final String LANDSCAPESETTINGS_SAVEPARTICIPANTSETTINGS = "/admin/saveparticipantsettings";
@@ -56,9 +56,7 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_EXPORTHOSPITALENTRY = "/admin/exporthospitalentry";
 	public static final String LANDSCAPESETTINGS_DISPLAY_HOSPITAL_BY_RMD="/admin/displayhospitalbyrmd";
 	public static final String LANDSCAPESETTINGS_APPLY_FILTER_IN_HOSPITAL="/admin/applyhospitalfilter";
-	
-	
-	
+		
 	//LandscapeStatusController
 	public static final String LANDSCAPESETTINGS_DISPLAYTFTOPARTICIPANTSTATUS = "admin/displaytftoparticipantstatus";
 	public static final String LANDSCAPESETTINGS_DISPLAYPARTICIPANTTOTFSTATUS = "admin/displayparticipanttotfstatus";

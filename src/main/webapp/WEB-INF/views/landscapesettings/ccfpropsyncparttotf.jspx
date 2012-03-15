@@ -7,17 +7,40 @@
 
 <spring:url value="/admin/displayccfpropertiessyncparttotf" var="cancelsyncparttotf_url" />
 <spring:url value="/admin/saveccfpropertiessync?param_direction=reverse" var="savesyncparttotf_url" />
+<spring:url value="/admin/restoredefaultsettings?param_direction=reverse" var="restore_default_url" />
+
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
 <spring:message code="shouldStartAutomatically_label" var="shouldStartAutomatically_label" htmlEscape="false"/>
+<spring:message code="restorelabel" var="restorelabel" htmlEscape="false"/>
+<spring:message code="coresettingslabel" var="coresettingslabel" htmlEscape="false"/>
+<spring:message code="reposettingslabel" var="reposettingslabel" htmlEscape="false"/>
+<spring:message code="miscellaneouslabel" var="miscellaneouslabel" htmlEscape="false"/>
+<spring:message code="noconnectorbehaviorlabel" var="noconnectorbehaviorlabel" htmlEscape="false"/>
 
-<form:form id="syncParticipantForm"  name="syncParticipantForm" method="POST" commandName="syncDirection" modelAttribute="syncDirection">
+
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/js/jquery-ui-1.8.16.custom.min.js" var="jqueryui_url" />
+<script src="${fn:escapeXml(jqueryui_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/styles/jquery-ui-1.8.16.custom.css" var="jqueryui_url" />
+<link rel="stylesheet" type="text/css" href="${jqueryui_url}"><!-- Prevent self-closing --> </link>
+
+<form:form id="syncParticipantForm"  name="syncParticipantForm" method="POST" commandName="directionconfiglist" modelAttribute="directionconfiglist">
   <table class="Container" >
 		<tbody>
 		<tr>
 		<td>
 		<c:if test="${!empty message}">
 			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<c:if test="${!empty connectionmessage}"> 
+   		 <div class="greenText">${connectionmessage}</div>
+		</c:if>
+		<c:if test="${!empty connectionerror}"> 
+  		<div class="errorMessage">${connectionerror}</div>
 		</c:if>
 		<br/>
 		<br/>
@@ -39,9 +62,169 @@
 				</tr>
 				
 				<tr>
-				<td class="ItemDetailValue" >
-				<form:label path="shouldStartAutomatically">${shouldStartAutomatically_label}</form:label>&#160;
-				<form:checkbox path="shouldStartAutomatically" cssClass="inputfield"/>
+				<td>
+	<c:if test="${not empty directionconfiglist.ccfCoreProperties}">				
+				
+	<div id="accordion">
+	
+	<h3><a href="#">${coresettingslabel}</a></h3>
+	<div>
+		<p>
+		<table width="100%" >
+		<tbody>
+		<tr>
+		<td>
+		<form:label path="direction.shouldStartAutomatically">${shouldStartAutomatically_label} : </form:label>&#160;
+		</td>
+		<td style="width: 75%;">
+		<form:checkbox path="direction.shouldStartAutomatically"/><br/>
+		<form:errors path="direction.shouldStartAutomatically"></form:errors>
+		<form:hidden path="${direction}"/>
+		</td>
+		</tr>
+		</tbody>
+		</table>
+		<c:forEach items="${directionconfiglist.ccfCoreProperties}" varStatus="status" var="dirconfig">
+		<c:set var="category" value="${dirconfig.category}"> </c:set>
+		<c:set var="count" value="${status.count}"> </c:set>
+		<c:if test="${category eq 'coreSettings'}" >
+		<table width="100%" >
+		<tbody>
+			<tr>
+			<td>
+			<form:label path="ccfCoreProperties[${status.index}].value">${dirconfig.labelName} : </form:label>
+			</td>
+			<td style="width: 75%;">
+			<c:choose>
+			<c:when test="${dirconfig.value eq 'true' or dirconfig.value eq 'false'}">
+			 <spring:bind path="ccfCoreProperties[${status.index}]">  
+			 <c:if test="${dirconfig.value eq 'true'}">
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxname" value="${dirconfig.value}" checked="checked"/> 
+			 </c:if>
+			  <c:if test="${dirconfig.value eq 'false'}">
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxname" value="${dirconfig.value}"/> 
+			 </c:if>
+ 			 <input type="hidden" id="hiddencheckbox_${count}" name="${status.expression}.value" value="${dirconfig.value}"/>
+ 			 </spring:bind>  
+			</c:when>
+			<c:otherwise>
+			<form:input path="ccfCoreProperties[${status.index}].value"/><br/>
+			</c:otherwise>
+			</c:choose>
+			</td>
+			</tr>
+			</tbody>
+			</table>
+			<form:hidden path="ccfCoreProperties[${status.index}].name"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].category"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].direction"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
+			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
+		</c:if>
+		</c:forEach>	
+		</p>
+		
+	</div>
+	<h3><a href="#">${reposettingslabel}</a></h3>
+	<div>
+		<p>
+			<c:forEach items="${directionconfiglist.ccfCoreProperties}" varStatus="status" var="dirconfig" >
+			<c:set var="count" value="${status.count}"> </c:set>
+			<c:set var="category" value="${dirconfig.category}"> </c:set>
+			<c:if test="${category eq 'repoSettings'}" >
+			<table width="100%">
+			<tbody>
+			<tr>
+			<td>
+			<form:label path="ccfCoreProperties[${status.index}].value">${dirconfig.labelName} : </form:label>
+			</td>
+			<td style="width: 75%;">
+			<c:choose>
+			<c:when test="${dirconfig.value eq 'true' or dirconfig.value eq 'false'}">
+			 <spring:bind path="ccfCoreProperties[${status.index}]">  
+			 <c:if test="${dirconfig.value eq 'true'}">
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" checked="checked"/> 
+			 </c:if>
+			  <c:if test="${dirconfig.value eq 'false'}">
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}"/> 
+			 </c:if>
+ 			 <input type="hidden" id="hiddencheckbox_${count}" name="${status.expression}.value" value="${dirconfig.value}"/>
+ 			 </spring:bind>  
+			</c:when>
+			<c:otherwise>
+			<form:input path="ccfCoreProperties[${status.index}].value"/><br/>
+			</c:otherwise>
+			</c:choose>
+			</td>
+			</tr>
+			</tbody>
+			</table>
+			<form:hidden path="ccfCoreProperties[${status.index}].name"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].category"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].direction"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
+			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
+			</c:if>	
+			</c:forEach>
+		</p>
+	</div>
+	
+	<h3><a href="#">${miscellaneouslabel}</a></h3>
+	<div>
+		<p>
+		<c:forEach items="${directionconfiglist.ccfCoreProperties}" varStatus="status" var="dirconfig">
+		<c:set var="count" value="${status.count}"> </c:set>
+		<c:set var="category" value="${dirconfig.category}"> </c:set>
+			<c:if test="${empty category}" >
+			<table width="100%">
+			<tbody>
+			<tr>
+			<td>
+			<form:label path="ccfCoreProperties[${status.index}].value">${dirconfig.labelName} : </form:label>
+			</td>
+			<td style="width: 75%;">
+			<c:choose>
+			<c:when test="${dirconfig.value eq 'true' or dirconfig.value eq 'false'}">
+			 <spring:bind path="ccfCoreProperties[${status.index}]">  
+			 <c:if test="${dirconfig.value eq 'true'}">
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" checked="checked"/> 
+			 </c:if>
+			  <c:if test="${dirconfig.value eq 'false'}">
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}"/> 
+			 </c:if>
+ 			 <input type="hidden" id="hiddencheckbox_${count}" name="${status.expression}.value" value="${dirconfig.value}"/>
+ 			 </spring:bind>  
+			</c:when>
+			<c:otherwise>
+			<form:input path="ccfCoreProperties[${status.index}].value"/><br/>
+			</c:otherwise>
+			</c:choose>
+			</td>
+			</tr>
+			</tbody>
+			</table>
+			<form:hidden path="ccfCoreProperties[${status.index}].name"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].category"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].direction"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
+			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
+			</c:if>
+			
+			</c:forEach>
+		</p>
+	</div>
+</div>
+</c:if>
+
+<c:if test="${empty directionconfiglist.ccfCoreProperties}">
+
+${noconnectorbehaviorlabel}
+
+</c:if>
+				
 				</td>
 				</tr> 
 			</tbody>
@@ -50,6 +233,7 @@
 				<br/>
 				<br/>
 				<br/>
+				<c:if test="${not empty directionconfiglist.ccfCoreProperties}">
 				<tr class="ContainerFooter">
 				<td>
 				<div class="AlignRight">
@@ -61,18 +245,19 @@
 				<div class="ButtonSpace"> </div>	
 				<div class="Button">
 				<div class="Middle">
-				
-					<input type="hidden" name="direction.id" value="${directionid}"/>
-					<input type="hidden" name="direction.version" value="${directionversion}"/>
-					<input type="hidden" name="direction" value="${direction}"/>
-					<input type="hidden" name="landscape" value="${landscape}"/>
-					<input type="hidden" name="description" value="${description}"/>
-					<a href="javascript: saveForm('${fn:escapeXml(savesyncparttotf_url)}');">${save_button}</a>
+					<a href="javascript: restoreForm('${fn:escapeXml(restore_default_url)}');">${restorelabel}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"> </div>	
+				<div class="Button">
+				<div class="Middle">
+						<a href="javascript: saveForm('${fn:escapeXml(savesyncparttotf_url)}');">${save_button}</a>
 				</div>
 				</div>
 				</div>
 				</td>
 				</tr>
+				</c:if>
 				</td>
 				</tr>
 	</tbody>
@@ -86,6 +271,34 @@
 	  		document.getElementById("syncParticipantForm").action=url;
 	  		document.getElementById("syncParticipantForm").submit();
 		}
+		function restoreForm(url){
+	  		document.getElementById("syncParticipantForm").action=url;
+	  		document.getElementById("syncParticipantForm").submit();
+		}
 		
+		
+		$(function() {
+			$( "#accordion" ).accordion();
+		});
+		
+		$(":checkbox").change(function() {
+		    var num = getNum($(this), "myCheckbox_");
+		    if ($(this).is(":checked")) {
+		    	  $(this).val('true');
+		    	  $("#hiddencheckbox_"+num).val("true");
+		    	  $("#myCheckbox_"+num).attr("checked",'checked');
+		        } else {
+		        	  $(this).val('false');
+			          $("#hiddencheckbox_"+num).val("false");
+			          $("#myCheckbox_"+num).removeAttr('checked');
+		        }
+		});
+		
+		
+		function getNum(element, attrPrefix) {
+		    var prefix = attrPrefix;
+		    var num = element.attr("id").substring((prefix.length));
+		    return num;
+		}
 	</script>		 
 </div>
