@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
@@ -157,19 +158,25 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART, method = RequestMethod.GET)
 	public String displayCCFPropertiesSyncTFtoPart(Model model, HttpServletRequest request) {
 		Landscape landscape=ControllerHelper.findLandscape();
-		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,Directions.FORWARD).getSingleResult();
 		populateModel(landscape,model);
+		CCFCoreProperties ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.FORWARD);
+		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART;
+	}
+
+	private CCFCoreProperties populateCCFCoreProperties(Landscape landscape,
+			Directions directions) {
+		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
 		CCFCoreProperties ccfCoreProperties=new CCFCoreProperties();
 		try {
-			ccfCoreProperties.setCcfCoreProperties(populateUpdatedCoreConfigValues(landscape,Directions.FORWARD));
+			ccfCoreProperties.setCcfCoreProperties(populateUpdatedCoreConfigValues(landscape,directions));
 		} catch (JAXBException e) {
 			throw new CoreConfigurationException("Could not parse the config xml file: " + e.getMessage(), e);
 		} catch (IOException e) {
 			throw new CoreConfigurationException("Could not read the config xml file: " + e.getMessage(), e);
 		}
 		ccfCoreProperties.setDirection(direction);
-		model.addAttribute("directionconfiglist",ccfCoreProperties);
-		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART;
+		return ccfCoreProperties;
 	}
 
 
@@ -181,17 +188,8 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCPARTTOTF, method = RequestMethod.GET)
 	public String displayCCFPropertiesSyncParttoTF(Model model, HttpServletRequest request) {
 		Landscape landscape=ControllerHelper.findLandscape();
-		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,Directions.REVERSE).getSingleResult();
 		populateModel(landscape,model);
-		CCFCoreProperties ccfCoreProperties=new CCFCoreProperties();
-		try {
-			ccfCoreProperties.setCcfCoreProperties(populateUpdatedCoreConfigValues(landscape,Directions.REVERSE));
-		}catch (JAXBException e) {
-			throw new CoreConfigurationException("Could not parse the config xml file: " + e.getMessage(), e);
-		} catch (IOException e) {
-			throw new CoreConfigurationException("Could not read the config xml file: " + e.getMessage(), e);
-		}
-		ccfCoreProperties.setDirection(direction);
+		CCFCoreProperties ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.REVERSE);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCPARTTOTF;
 	}
@@ -279,11 +277,15 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	private void updateDirectionConfigs(CCFCoreProperties props, SystemKind systemkind,Direction direction){
 		List<DirectionConfig> configList = coreConfigLoader.populateDefaultCoreConfig(props, direction);
+		DirectionConfig currentConfig=new DirectionConfig();
 		for(DirectionConfig dc:configList){
-			DirectionConfig currentConfig = DirectionConfig.findDirectionConfigsByDirectionAndName(direction, dc.getName()).getSingleResult();
-			if(!dc.getVal().equals(currentConfig.getVal())){
-				currentConfig.setVal(dc.getVal());
-				currentConfig.merge();
+			List<DirectionConfig> resultList = DirectionConfig.findDirectionConfigsByDirectionAndName(direction, dc.getName()).getResultList();
+			if (!resultList.isEmpty()){
+				currentConfig=(DirectionConfig)resultList.get(0);
+				if(!dc.getVal().equals(currentConfig.getVal())){
+					currentConfig.setVal(dc.getVal());
+					currentConfig.merge();
+				}
 			}
 		}
 	}
@@ -307,20 +309,27 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	private List<CCFCoreProperty>  populateUpdatedCoreConfigValues(Landscape landscape,Directions directions) throws JAXBException, IOException{
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
-		List<CCFCoreProperty> defaultProperties = coreConfigLoader.loadCCFCoreProperties().getCcfCoreProperties();
 		List<CCFCoreProperty> newdefaultProperties =new ArrayList<CCFCoreProperty>();
-		for(CCFCoreProperty config: defaultProperties){
-			if(landscape.getParticipant().getSystemKind().equals(config.getSystemKind())){
-				if(config.getDirection()==null || directions.equals(config.getDirection())){
-					DirectionConfig currentConfig = DirectionConfig.findDirectionConfigsByDirectionAndName(direction, config.getName()).getSingleResult();
-					if(!config.getValue().equals(currentConfig.getVal())){
-						config.setValue(currentConfig.getVal()); 
+		CCFCoreProperties ccfCoreProperties=coreConfigLoader.loadCCFCoreProperties();
+		DirectionConfig currentConfig=new  DirectionConfig();
+		if(ccfCoreProperties!=null){
+			List<CCFCoreProperty> defaultProperties = ccfCoreProperties.getCcfCoreProperties();
+			for(CCFCoreProperty config: defaultProperties){
+				if(landscape.getParticipant().getSystemKind().equals(config.getSystemKind())){
+					if(config.getDirection()==null || directions.equals(config.getDirection())){
+						List<DirectionConfig> resultList  = DirectionConfig.findDirectionConfigsByDirectionAndName(direction, config.getName()).getResultList();
+						if (!resultList.isEmpty()){
+							currentConfig=(DirectionConfig)resultList.get(0);
+							if(!config.getValue().equals(currentConfig.getVal())){
+								config.setValue(currentConfig.getVal()); 
+							}
+						}
+						newdefaultProperties.add(config);
 					}
-					newdefaultProperties.add(config);
+
 				}
 
 			}
-
 		}
 
 		return newdefaultProperties;
@@ -329,19 +338,20 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	private List<CCFCoreProperty>  populateDefaultCoreConfigValues(Landscape landscape,Directions directions) throws JAXBException, IOException{
 		CCFCoreProperties defaultProperties = coreConfigLoader.loadCCFCoreProperties();
-		List<CCFCoreProperty> defaultProperty=defaultProperties.getCcfCoreProperties();
 		List<CCFCoreProperty> newdefaultProperties =new ArrayList<CCFCoreProperty>();
-		for(CCFCoreProperty config: defaultProperty){
-			if(landscape.getParticipant().getSystemKind().equals(config.getSystemKind())){
-				if(config.getDirection()==null || directions.equals(config.getDirection())){
-					newdefaultProperties.add(config);
+		if(defaultProperties!=null){
+			List<CCFCoreProperty> defaultProperty=defaultProperties.getCcfCoreProperties();
+			for(CCFCoreProperty config: defaultProperty){
+				if(landscape.getParticipant().getSystemKind().equals(config.getSystemKind())){
+					if(config.getDirection()==null || directions.equals(config.getDirection())){
+						newdefaultProperties.add(config);
+					}
 				}
 			}
 		}
-
 		return newdefaultProperties;
 	}
 
-	
+
 
 }

@@ -5,11 +5,10 @@
  
 <spring:message code="button_cancel" var="cancel_button"/>
 <spring:message code="button_save" var="save_button"/>
-
 <spring:url value="/admin/displayccfpropertiessynctftopart" var="cancelsynctftopart_url" />
 <spring:url value="/admin/saveccfpropertiessync?param_direction=forward" var="savesynctftopart_url" />
 <spring:url value="/admin/restoredefaultsettings?param_direction=forward" var="restore_default_url" />
-			
+
 <spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 <spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
 <spring:message code="shouldStartAutomatically_label" var="shouldStartAutomatically_label" htmlEscape="false"/>			
@@ -68,7 +67,7 @@
 				</tr>
 				<tr>
 				<td>
-  <c:if test="${not empty directionconfiglist.ccfCoreProperties}">				
+			
 				
 	<div id="accordion">
 	
@@ -89,6 +88,7 @@
 		</tr>
 		</tbody>
 		</table>
+		 <c:if test="${not empty directionconfiglist.ccfCoreProperties}">	
 		<c:forEach items="${directionconfiglist.ccfCoreProperties}" varStatus="status" var="dirconfig">
 		<c:set var="category" value="${dirconfig.category}"> </c:set>
 		<c:set var="count" value="${status.count}"> </c:set>
@@ -127,10 +127,11 @@
 			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
 			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
 		</c:if>
-		</c:forEach>	
+		</c:forEach>
+		</c:if>	
 		</p>
-		
 	</div>
+	 <c:if test="${not empty directionconfiglist.ccfCoreProperties}">	
 	<h3><a href="#">${reposettingslabel}</a></h3>
 	<div>
 		<p>
@@ -221,14 +222,9 @@
 			</c:forEach>
 		</p>
 	</div>
+	</c:if>
 </div>
-</c:if>
 
-<c:if test="${empty directionconfiglist.ccfCoreProperties}">
-
-${noconnectorbehaviorlabel}
-
-</c:if>
 
 				</td>
 				</tr> 
@@ -239,7 +235,7 @@ ${noconnectorbehaviorlabel}
 				<br/>
 				<br/>
 				<br/>
-				<c:if test="${not empty directionconfiglist.ccfCoreProperties}">
+			
 				<tr class="ContainerFooter">
 				<td>
 				<div class="AlignRight">
@@ -249,11 +245,13 @@ ${noconnectorbehaviorlabel}
 				</div>
 				</div>
 				<div class="ButtonSpace"> </div>
+				<c:if test="${not empty directionconfiglist.ccfCoreProperties}">
 				<div class="Button">
 				<div class="Middle">
 					<a href="javascript: restoreForm('${fn:escapeXml(restore_default_url)}');">${restorelabel}</a>
 				</div>
 				</div>
+				</c:if>
 				<div class="ButtonSpace"> </div>	
 				<div class="Button">
 				<div class="Middle">
@@ -265,7 +263,7 @@ ${noconnectorbehaviorlabel}
 				</div>
 				</td>
 				</tr>
-				</c:if>
+				
 				</td>
 				</tr>
 				
