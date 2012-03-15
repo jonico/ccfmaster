@@ -37,6 +37,7 @@
 	<!--Installs application converters and formatters-->
 	<bean class="com.collabnet.ccf.ccfmaster.controller.ApplicationConversionServiceFactoryBean" id="applicationConversionService" />
 
+	<bean class="com.collabnet.ccf.ccfmaster.config.CoreConfigLoader" />
 <!--
 	<mvc:resources location="/, classpath:/META-INF/web-resources/" mapping="/resources/**"/>
 	
