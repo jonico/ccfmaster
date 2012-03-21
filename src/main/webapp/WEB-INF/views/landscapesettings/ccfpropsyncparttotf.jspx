@@ -16,7 +16,9 @@
 <spring:message code="coresettingslabel" var="coresettingslabel" htmlEscape="false"/>
 <spring:message code="reposettingslabel" var="reposettingslabel" htmlEscape="false"/>
 <spring:message code="miscellaneouslabel" var="miscellaneouslabel" htmlEscape="false"/>
-<spring:message code="noconnectorbehaviorlabel" var="noconnectorbehaviorlabel" htmlEscape="false"/>
+<spring:message code="shouldstarthelplabel" var="shouldstarthelplabel" htmlEscape="false"/>
+<spring:message code="defaultlabel" var="defaultlabel" htmlEscape="false"/>
+<spring:url value="/images/icons/help.png" var="help_image_url" />
 
 
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
@@ -75,9 +77,10 @@
 		<tr>
 		<td>
 		<form:label path="direction.shouldStartAutomatically">${shouldStartAutomatically_label} : </form:label>&#160;
+		<a class="poptip" title="${shouldstarthelplabel}"><img src="${fn:escapeXml(help_image_url)}" border="0" title="help" alt="help"/></a>
 		</td>
-		<td style="width: 75%;">
-		<form:checkbox path="direction.shouldStartAutomatically"/><br/>
+		<td style="width: 71%;">
+		<form:checkbox path="direction.shouldStartAutomatically" cssClass="inputfield"/><br/>
 		<form:errors path="direction.shouldStartAutomatically"></form:errors>
 		<form:hidden path="${direction}"/>
 		</td>
@@ -94,24 +97,30 @@
 			<tr>
 			<td>
 			<form:label path="ccfCoreProperties[${status.index}].value">${dirconfig.labelName} : </form:label>
+			<c:if test="${not empty dirconfig.toolTip}">
+			<a class="poptip" title="${dirconfig.toolTip}"><img src="${fn:escapeXml(help_image_url)}" border="0" title="help" alt="help"/></a>
+			</c:if>
 			</td>
-			<td style="width: 75%;">
+			<td style="width: 10%;">
 			<c:choose>
 			<c:when test="${dirconfig.value eq 'true' or dirconfig.value eq 'false'}">
 			 <spring:bind path="ccfCoreProperties[${status.index}]">  
 			 <c:if test="${dirconfig.value eq 'true'}">
-			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxname" value="${dirconfig.value}" checked="checked"/> 
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxname" value="${dirconfig.value}" checked="checked" cssClass="inputfield"/> 
 			 </c:if>
 			  <c:if test="${dirconfig.value eq 'false'}">
-			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxname" value="${dirconfig.value}"/> 
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxname" value="${dirconfig.value}" cssClass="inputfield"/> 
 			 </c:if>
  			 <input type="hidden" id="hiddencheckbox_${count}" name="${status.expression}.value" value="${dirconfig.value}"/>
  			 </spring:bind>  
 			</c:when>
 			<c:otherwise>
-			<form:input path="ccfCoreProperties[${status.index}].value"/><br/>
+			<form:input path="ccfCoreProperties[${status.index}].value" cssClass="inputfield"/><br/>
 			</c:otherwise>
 			</c:choose>
+			</td>
+			<td style="width: 60%;">
+			(${defaultlabel} - ${defaultdirectionconfiglist[status.index].value})
 			</td>
 			</tr>
 			</tbody>
@@ -140,24 +149,30 @@
 			<tr>
 			<td>
 			<form:label path="ccfCoreProperties[${status.index}].value">${dirconfig.labelName} : </form:label>
+			<c:if test="${not empty dirconfig.toolTip}">
+			<a class="poptip" title="${dirconfig.toolTip}"><img src="${fn:escapeXml(help_image_url)}" border="0" title="help" alt="help"/></a>
+			</c:if>
 			</td>
-			<td style="width: 75%;">
+			<td style="width: 15%;">
 			<c:choose>
 			<c:when test="${dirconfig.value eq 'true' or dirconfig.value eq 'false'}">
 			 <spring:bind path="ccfCoreProperties[${status.index}]">  
 			 <c:if test="${dirconfig.value eq 'true'}">
-			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" checked="checked"/> 
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" checked="checked" cssClass="inputfield"/> 
 			 </c:if>
 			  <c:if test="${dirconfig.value eq 'false'}">
-			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}"/> 
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" cssClass="inputfield"/> 
 			 </c:if>
  			 <input type="hidden" id="hiddencheckbox_${count}" name="${status.expression}.value" value="${dirconfig.value}"/>
  			 </spring:bind>  
 			</c:when>
 			<c:otherwise>
-			<form:input path="ccfCoreProperties[${status.index}].value"/><br/>
+			<form:input path="ccfCoreProperties[${status.index}].value" cssClass="inputfield"/><br/>
 			</c:otherwise>
 			</c:choose>
+			</td>
+			<td style="width: 55%;">
+			(${defaultlabel} - ${defaultdirectionconfiglist[status.index].value})
 			</td>
 			</tr>
 			</tbody>
@@ -176,6 +191,7 @@
 	<h3><a href="#">${miscellaneouslabel}</a></h3>
 	<div>
 		<p>
+		
 		<c:forEach items="${directionconfiglist.ccfCoreProperties}" varStatus="status" var="dirconfig">
 		<c:set var="count" value="${status.count}"> </c:set>
 		<c:set var="category" value="${dirconfig.category}"> </c:set>
@@ -185,24 +201,30 @@
 			<tr>
 			<td>
 			<form:label path="ccfCoreProperties[${status.index}].value">${dirconfig.labelName} : </form:label>
+			<c:if test="${not empty dirconfig.toolTip}">
+			<a class="poptip" title="${dirconfig.toolTip}"><img src="${fn:escapeXml(help_image_url)}" border="0" title="help" alt="help"/></a>
+			</c:if>
 			</td>
-			<td style="width: 75%;">
+			<td style="width: 10%;">
 			<c:choose>
 			<c:when test="${dirconfig.value eq 'true' or dirconfig.value eq 'false'}">
 			 <spring:bind path="ccfCoreProperties[${status.index}]">  
 			 <c:if test="${dirconfig.value eq 'true'}">
-			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" checked="checked"/> 
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" checked="checked" cssClass="inputfield"/> 
 			 </c:if>
 			  <c:if test="${dirconfig.value eq 'false'}">
-			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}"/> 
+			 <input type="checkbox" id="myCheckbox_${count}" name="checkboxnamerepo" value="${dirconfig.value}" cssClass="inputfield"/> 
 			 </c:if>
  			 <input type="hidden" id="hiddencheckbox_${count}" name="${status.expression}.value" value="${dirconfig.value}"/>
  			 </spring:bind>  
 			</c:when>
 			<c:otherwise>
-			<form:input path="ccfCoreProperties[${status.index}].value"/><br/>
+			<form:input path="ccfCoreProperties[${status.index}].value" cssClass="inputfield"/><br/>
 			</c:otherwise>
 			</c:choose>
+			</td>
+			<td style="width: 60%;">
+			(${defaultlabel} - ${defaultdirectionconfiglist[status.index].value})
 			</td>
 			</tr>
 			</tbody>
@@ -300,5 +322,34 @@
 		    var num = element.attr("id").substring((prefix.length));
 		    return num;
 		}
+		
+		$(document).ready(function(){
+			$('.poptip').mouseenter(function(){
+				var text = $(this).attr('title');
+				var posi = $(this).position();
+				var top  = posi.top;
+				var left = posi.left+5;
+				var wid	 = $(this).width();
+				$(this).attr('title','');
+				$(this).parent().append('<div class="poptext">'+text.replace('|','<br />')+'</div>');
+				$('.poptext').css({'left':(left+wid)+'px',
+							'top':(top-$('.poptext').height())+'px',
+							'background':'#fffeee',
+							'border':'1px solid #f7a229',
+							'display':'none',
+							'position':'absolute',
+							'z-index':'1000',
+							'padding':'8px',
+							'font-size':'1em'
+				});
+				$('.poptext').fadeIn('slow');
+			});
+			$('.poptip').mouseleave(function(){
+				var title = $(this).parent().find('.poptext').html();
+				$(this).attr('title',title.replace('<br />','|'));
+				$(this).parent().find('.poptext').fadeOut('slow');
+				$(this).parent().find('.poptext').remove();
+			});
+			});
 	</script>		 
 </div>

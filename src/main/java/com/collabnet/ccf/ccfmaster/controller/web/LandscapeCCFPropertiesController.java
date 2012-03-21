@@ -153,23 +153,29 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	/**
 	 * Controller method to display synchronize behavior from TF to participant  
+	 * @throws IOException 
+	 * @throws JAXBException 
 	 * 
 	 */	
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART, method = RequestMethod.GET)
-	public String displayCCFPropertiesSyncTFtoPart(Model model, HttpServletRequest request) {
+	public String displayCCFPropertiesSyncTFtoPart(Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
 		populateModel(landscape,model);
 		CCFCoreProperties ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.FORWARD);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		//to display default core config values in jsp
+		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.FORWARD));
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART;
 	}
 
 	private CCFCoreProperties populateCCFCoreProperties(Landscape landscape,
 			Directions directions) {
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
+		
 		CCFCoreProperties ccfCoreProperties=new CCFCoreProperties();
 		try {
 			ccfCoreProperties.setCcfCoreProperties(populateUpdatedCoreConfigValues(landscape,directions));
+			
 		} catch (JAXBException e) {
 			throw new CoreConfigurationException("Could not parse the config xml file: " + e.getMessage(), e);
 		} catch (IOException e) {
@@ -183,14 +189,18 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	/**
 	 * Controller method to display synchronize behavior from participant to TF  
+	 * @throws IOException 
+	 * @throws JAXBException 
 	 * 
 	 */	
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCPARTTOTF, method = RequestMethod.GET)
-	public String displayCCFPropertiesSyncParttoTF(Model model, HttpServletRequest request) {
+	public String displayCCFPropertiesSyncParttoTF(Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
 		populateModel(landscape,model);
 		CCFCoreProperties ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.REVERSE);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		//to display default core config values in jsp
+		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.REVERSE));
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCPARTTOTF;
 	}
 
@@ -212,6 +222,8 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		ccfCoreProperties.setCcfCoreProperties(populateDefaultCoreConfigValues(landscape,directions));
 		ccfCoreProperties.setDirection(direction);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		//to display default core config values in jsp
+		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.FORWARD));
 		populateModel(landscape,model);
 		model.addAttribute("connectionmessage",ctx.getMessage(ControllerConstants.RESTORE_SUCCESS_MESSSAGE));
 		if(paramdirection.equals(ControllerConstants.FORWARD)){
@@ -225,12 +237,14 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	/**
 	 * Controller method to save synchronize behavior  
+	 * @throws IOException 
+	 * @throws JAXBException 
 	 * 
 	 */	
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_SAVECCFPROPERTIESSYNC, method = RequestMethod.POST)
 	public String saveCCFPropertiesSync(@RequestParam(PARAM_DIRECTION) String paramdirection,
 			@ModelAttribute("directionconfiglist") CCFCoreProperties ccfCoreProperties,BindingResult bindingResult,
-			Model model, HttpServletRequest request) {
+			Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
 		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
@@ -239,6 +253,8 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		if (bindingResult.hasErrors()) {
 			populateModel(landscape,model);
 			model.addAttribute("directionconfiglist",ccfCoreProperties);
+			//to display default core config values in jsp
+			model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape,directions));
 			RequestContext ctx = new RequestContext(request);
 			model.addAttribute("connectionerror",ctx.getMessage(ControllerConstants.VALIDATION_ERROR_MESSSAGE));
 			if(paramdirection.equals(ControllerConstants.FORWARD)){
