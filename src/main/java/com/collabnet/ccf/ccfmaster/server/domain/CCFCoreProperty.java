@@ -1,5 +1,6 @@
 package com.collabnet.ccf.ccfmaster.server.domain;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -7,21 +8,25 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CCFCoreProperty {
 	
+	@NotNull
 	@XmlAttribute(required=true)
 	private String name;
 	
+	@NotNull
 	@XmlAttribute(required=true)
 	private String value;
 	
 	@XmlAttribute
 	private Directions direction;
 	
+	@NotNull
 	@XmlAttribute(required=true)
 	private SystemKind systemKind;
 	
 	@XmlAttribute
 	private String category;
 	
+	@NotNull
 	@XmlAttribute(required= true)
 	private String labelName;
 	

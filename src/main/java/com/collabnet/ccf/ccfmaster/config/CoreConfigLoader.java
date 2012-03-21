@@ -4,7 +4,11 @@ package com.collabnet.ccf.ccfmaster.config;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,8 @@ import com.collabnet.ccf.core.utils.SerializationUtil;
 
 @Component
 public class CoreConfigLoader {
+	
+	final static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 	
 	@Autowired
 	private CCFRuntimePropertyHolder runtimePropertyHolder;
@@ -57,6 +63,7 @@ public class CoreConfigLoader {
 		Resource resource = new FileSystemResource(fileLocation);
 		if (resource.exists()) {
 			properties = SerializationUtil.deSerialize(resource.getFile(),CCFCoreProperties.class);
+			validateCCFCoreProperty(properties);
 		}
 		return properties;
 	}
@@ -67,5 +74,13 @@ public class CoreConfigLoader {
 		}
 		return null;
 	}
-
+	
+	private void validateCCFCoreProperty(CCFCoreProperties properties) throws JAXBException{
+		for(CCFCoreProperty ccfProperty: properties.getCcfCoreProperties()){
+			Set<ConstraintViolation<CCFCoreProperty>> errors = validator.validate(ccfProperty);
+			if (!errors.isEmpty()) {
+				throw new JAXBException("Required attributes for given ccfcoredefaultconfig.xml are missing");
+			}
+		}
+	}
 }
