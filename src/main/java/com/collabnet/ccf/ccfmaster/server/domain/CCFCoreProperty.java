@@ -30,6 +30,9 @@ public class CCFCoreProperty {
 	@XmlAttribute(required= true)
 	private String labelName;
 	
+	@XmlAttribute
+	private String toolTip;
+	
 	public CCFCoreProperty() {	}
 	
 	
@@ -86,6 +89,17 @@ public class CCFCoreProperty {
 		this.labelName = labelName;
 	}
 	
+	
+	public String getToolTip() {
+		return toolTip;
+	}
+
+
+	public void setToolTip(String toolTip) {
+		this.toolTip = toolTip;
+	}
+
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -101,7 +115,9 @@ public class CCFCoreProperty {
 		builder.append(category);
 		builder.append(", labelName=");
 		builder.append(labelName);
-		builder.append("]");
+		builder.append(", toolTip=");
+		builder.append(toolTip);
+		builder.append("]"); 
 		return builder.toString();
 	}
 	
