@@ -80,12 +80,43 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isElementPresent("css=div.greenText"));
+		verifyShouldStartAutomatically();
+		verifySaveCoreConfigSettings();
+		verifyRestoreDefaultSettings();
+	}
+	
+	private void verifyShouldStartAutomatically(){
 		selenium.click("link=Connector Behavior TF to QC");
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Should Start Automatically"));
-		selenium.click("link=Connector Behavior QC to TF");
+		selenium.click("id=direction.shouldStartAutomatically1");
+		selenium.click("link=Save");
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Should Start Automatically"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		selenium.click("id=direction.shouldStartAutomatically1");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+	}
+	
+	private void verifySaveCoreConfigSettings(){
+		selenium.click("link=Connector Behavior TF to QC");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("id=ccfCoreProperties0.value", "");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Values cannot be blank.Please enter a value"));
+		selenium.type("id=ccfCoreProperties0.value", "1001");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+	}
+	
+	private void verifyRestoreDefaultSettings(){
+		selenium.click("link=Connector Behavior TF to QC");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=Restore Default Settings");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent("Default Settings Restored Successfully.Click Save to update the database."));
 	}
 	
 	@Test
