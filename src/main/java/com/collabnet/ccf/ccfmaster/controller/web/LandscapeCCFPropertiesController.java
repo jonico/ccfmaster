@@ -28,7 +28,7 @@ import org.springframework.web.servlet.support.RequestContext;
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.config.CoreConfigLoader;
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperties;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
@@ -37,9 +37,6 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.validator.ConfigValidator;
-
-
-
 
 @RequestMapping("/admin/**")
 @Controller
@@ -161,18 +158,18 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	public String displayCCFPropertiesSyncTFtoPart(Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
 		populateModel(landscape,model);
-		CCFCoreProperties ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.FORWARD);
+		CCFCorePropertyList ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.FORWARD);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
 		//to display default core config values in jsp
 		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.FORWARD));
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART;
 	}
 
-	private CCFCoreProperties populateCCFCoreProperties(Landscape landscape,
+	private CCFCorePropertyList populateCCFCoreProperties(Landscape landscape,
 			Directions directions) {
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
 		
-		CCFCoreProperties ccfCoreProperties=new CCFCoreProperties();
+		CCFCorePropertyList ccfCoreProperties=new CCFCorePropertyList();
 		try {
 			ccfCoreProperties.setCcfCoreProperties(populateUpdatedCoreConfigValues(landscape,directions));
 			
@@ -197,7 +194,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	public String displayCCFPropertiesSyncParttoTF(Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
 		populateModel(landscape,model);
-		CCFCoreProperties ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.REVERSE);
+		CCFCorePropertyList ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.REVERSE);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
 		//to display default core config values in jsp
 		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.REVERSE));
@@ -218,7 +215,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		Landscape landscape=ControllerHelper.findLandscape();
 		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
-		CCFCoreProperties ccfCoreProperties=new CCFCoreProperties();
+		CCFCorePropertyList ccfCoreProperties=new CCFCorePropertyList();
 		ccfCoreProperties.setCcfCoreProperties(populateDefaultCoreConfigValues(landscape,directions));
 		ccfCoreProperties.setDirection(direction);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
@@ -243,7 +240,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	 */	
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_SAVECCFPROPERTIESSYNC, method = RequestMethod.POST)
 	public String saveCCFPropertiesSync(@RequestParam(PARAM_DIRECTION) String paramdirection,
-			@ModelAttribute("directionconfiglist") CCFCoreProperties ccfCoreProperties,BindingResult bindingResult,
+			@ModelAttribute("directionconfiglist") CCFCorePropertyList ccfCoreProperties,BindingResult bindingResult,
 			Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
 		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
@@ -283,7 +280,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		}
 	}
 
-	private void updateDirection(CCFCoreProperties ccfCoreProperties, Landscape landscape,
+	private void updateDirection(CCFCorePropertyList ccfCoreProperties, Landscape landscape,
 			Direction direction) {
 		direction.setShouldStartAutomatically(ccfCoreProperties.getDirection().getShouldStartAutomatically());
 		direction.setLandscape(landscape);
@@ -291,7 +288,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	}
 
 
-	private void updateDirectionConfigs(CCFCoreProperties props, SystemKind systemkind,Direction direction){
+	private void updateDirectionConfigs(CCFCorePropertyList props, SystemKind systemkind,Direction direction){
 		List<DirectionConfig> configList = coreConfigLoader.populateDefaultCoreConfig(props, direction);
 		DirectionConfig currentConfig=new DirectionConfig();
 		for(DirectionConfig dc:configList){
@@ -326,7 +323,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	private List<CCFCoreProperty>  populateUpdatedCoreConfigValues(Landscape landscape,Directions directions) throws JAXBException, IOException{
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
 		List<CCFCoreProperty> newdefaultProperties =new ArrayList<CCFCoreProperty>();
-		CCFCoreProperties ccfCoreProperties=coreConfigLoader.loadCCFCoreProperties();
+		CCFCorePropertyList ccfCoreProperties=coreConfigLoader.loadCCFCoreProperties();
 		DirectionConfig currentConfig=new  DirectionConfig();
 		if(ccfCoreProperties!=null){
 			List<CCFCoreProperty> defaultProperties = ccfCoreProperties.getCcfCoreProperties();
@@ -353,7 +350,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 
 	private List<CCFCoreProperty>  populateDefaultCoreConfigValues(Landscape landscape,Directions directions) throws JAXBException, IOException{
-		CCFCoreProperties defaultProperties = coreConfigLoader.loadCCFCoreProperties();
+		CCFCorePropertyList defaultProperties = coreConfigLoader.loadCCFCoreProperties();
 		List<CCFCoreProperty> newdefaultProperties =new ArrayList<CCFCoreProperty>();
 		if(defaultProperties!=null){
 			List<CCFCoreProperty> defaultProperty=defaultProperties.getCcfCoreProperties();

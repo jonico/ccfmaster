@@ -16,7 +16,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperties;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
@@ -33,36 +33,37 @@ public class CoreConfigLoader {
 	@Autowired
 	private CCFRuntimePropertyHolder runtimePropertyHolder;
 
+	public void setRuntimePropertyHolder(CCFRuntimePropertyHolder runtimePropertyHolder) {
+		this.runtimePropertyHolder = runtimePropertyHolder;
+	}
+
 	public List<DirectionConfig> populateDefaultCoreConfig(Direction direction) throws JAXBException, IOException {
 		return populateDefaultCoreConfig(loadCCFCoreProperties(),direction);
 	}
+	
+	public List<CCFCoreProperty> populateDirectionSpecificList(Direction direction) throws JAXBException, IOException {
+		return populateDirectionSpecificList(loadCCFCoreProperties(),direction);
+	}
 
-	public List<DirectionConfig> populateDefaultCoreConfig(CCFCoreProperties properties, Direction direction) {
+	public List<DirectionConfig> populateDefaultCoreConfig(	CCFCorePropertyList properties, Direction direction) {
 		List<DirectionConfig> directionConfig = new ArrayList<DirectionConfig>();
-		SystemKind systemkind = direction.getLandscape().getParticipant().getSystemKind();
-		if (properties != null) {
-			for (CCFCoreProperty prop : properties.getCcfCoreProperties()) {
-				if (systemkind.equals(prop.getSystemKind())) {
-					Direction propDirection = buildDirection(prop.getDirection(),direction);
-					if(propDirection != null){
-						DirectionConfig config = new DirectionConfig();
-						config.setName(prop.getName());
-						config.setVal(prop.getValue());
-						config.setDirection(propDirection);
-						directionConfig.add(config);
-					}
-				}
-			}
+		List<CCFCoreProperty> directionSpecificPropList =populateDirectionSpecificList(properties,direction); 
+		for (CCFCoreProperty prop : directionSpecificPropList) {
+			DirectionConfig config = new DirectionConfig();
+			config.setName(prop.getName());
+			config.setVal(prop.getValue());
+			config.setDirection(direction);
+			directionConfig.add(config);
 		}
 		return directionConfig;
 	}
 	
-	public CCFCoreProperties loadCCFCoreProperties() throws JAXBException, IOException {
-		CCFCoreProperties properties = null;
+	public CCFCorePropertyList loadCCFCoreProperties() throws JAXBException, IOException {
+		CCFCorePropertyList properties = null;
 		String fileLocation = String.format("%s/%s",ControllerHelper.landscapeDirName(runtimePropertyHolder.getCcfHome()),"ccfcoredefaultconfig.xml");
 		Resource resource = new FileSystemResource(fileLocation);
 		if (resource.exists()) {
-			properties = SerializationUtil.deSerialize(resource.getFile(),CCFCoreProperties.class);
+			properties = SerializationUtil.deSerialize(resource.getFile(),CCFCorePropertyList.class);
 			validateCCFCoreProperty(properties);
 		}
 		return properties;
@@ -75,12 +76,26 @@ public class CoreConfigLoader {
 		return null;
 	}
 	
-	private void validateCCFCoreProperty(CCFCoreProperties properties) throws JAXBException{
+	private void validateCCFCoreProperty(CCFCorePropertyList properties) throws JAXBException{
 		for(CCFCoreProperty ccfProperty: properties.getCcfCoreProperties()){
 			Set<ConstraintViolation<CCFCoreProperty>> errors = validator.validate(ccfProperty);
 			if (!errors.isEmpty()) {
 				throw new JAXBException("Required attributes for given ccfcoredefaultconfig.xml are missing");
 			}
 		}
+	}
+	
+	private List<CCFCoreProperty> populateDirectionSpecificList(CCFCorePropertyList properties, Direction direction){
+		List<CCFCoreProperty> corePropertyList = new ArrayList<CCFCoreProperty>();
+		SystemKind systemkind = direction.getLandscape().getParticipant().getSystemKind();
+		if (properties != null) {
+			for (CCFCoreProperty prop : properties.getCcfCoreProperties()) {
+					Direction propDirection = buildDirection(prop.getDirection(),direction);
+					if(propDirection != null && systemkind.equals(prop.getSystemKind())){
+						corePropertyList.add(prop);
+					}
+			}
+		}
+		return corePropertyList;
 	}
 }

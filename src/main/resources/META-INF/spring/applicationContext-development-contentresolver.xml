@@ -28,6 +28,8 @@
 	<!-- XML Marshaling -->
 	<oxm:jaxb2-marshaller id="jaxbMarshaller" >
 	<oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.Capabilities"/>
+	<oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList"/>
+	<oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty"/>
 	<oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.ParticipantSystemKinds"/>
 	<oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.config.Version"/>
 	<oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.Participant"/>

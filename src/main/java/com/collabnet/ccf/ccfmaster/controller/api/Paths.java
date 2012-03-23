@@ -35,6 +35,7 @@ public final class Paths {
 	static final String FIELD_MAPPING_LANDSCAPE_TEMPLATE    = API_PREFIX + "/fieldmappinglandscapetemplates";
 	static final String FIELD_MAPPING_EXTERNAL_APP_TEMPLATE	= API_PREFIX + "/fieldmappingexternalapptemplates";
 	static final String CCF_CORE_STATUS						= API_PREFIX + "/ccfcorestatuses";
+	static final String CCF_CORE_PROPERTIES					= API_PREFIX + "/ccfcoreproperties";
 	
 	static final String LINKID_IDENTITY_MAPPING						= LINKID_PREFIX + "/identitymappings";
 	static final String LINKID_REPOSITORY_MAPPING					= LINKID_PREFIX + "/repositorymappings";

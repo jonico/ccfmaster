@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperties;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
 
@@ -18,12 +18,12 @@ public class ConfigValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return CCFCoreProperties.class.equals(clazz);
+		return CCFCorePropertyList.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		CCFCoreProperties ccfCoreProperties=(CCFCoreProperties)target;
+		CCFCorePropertyList ccfCoreProperties=(CCFCorePropertyList)target;
 		List<CCFCoreProperty> ccfPropertyList =ccfCoreProperties.getCcfCoreProperties();
 		for (int i = 0; i < ccfPropertyList.size(); i++) {  
 			if (StringUtils.isEmpty(ccfPropertyList.get(i).getValue()))   

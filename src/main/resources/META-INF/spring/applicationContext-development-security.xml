@@ -257,6 +257,7 @@
 
 		<!-- regular user access (accept some POST requests)-->
 		<intercept-url method="GET" pattern="/api/capabilities" access="ROLE_TF_USER"/>
+		<intercept-url method="GET" pattern="/api/ccfcoreproperties/{directionId}" access="ROLE_TF_USER"/>
 		<intercept-url method="GET" pattern="/api/ccfcorestatuses/*" access="ROLE_TF_USER"/>
 		<intercept-url method="GET" pattern="/api/directions/" access="ROLE_TF_USER"/>
 		<intercept-url method="GET" pattern="/api/directions/*" access="ROLE_TF_USER"/>
