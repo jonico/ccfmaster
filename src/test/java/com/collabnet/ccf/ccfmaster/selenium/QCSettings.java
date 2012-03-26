@@ -106,9 +106,13 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("Values cannot be blank.Please enter a value"));
 		selenium.type("id=ccfCoreProperties0.value", "1001");
+		selenium.type("id=ccfCoreProperties1.value", "21601");
 		selenium.click("link=Save");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyEquals("1001", selenium.getValue("id=ccfCoreProperties0.value"));
+		verifyEquals("21601", selenium.getValue("id=ccfCoreProperties1.value"));
+		
 	}
 	
 	private void verifyRestoreDefaultSettings(){
@@ -117,6 +121,19 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Restore Default Settings");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("Default Settings Restored Successfully.Click Save to update the database."));
+		//verify default values.When you update ccfcoredefaultconfig.xml make sure that this testcase gets updated accordingly
+		verifyEquals("1000", selenium.getValue("id=ccfCoreProperties0.value"));
+		verifyEquals("21600", selenium.getValue("id=ccfCoreProperties1.value"));
+		verifyEquals("8", selenium.getValue("id=ccfCoreProperties2.value"));
+		verifyEquals("500", selenium.getValue("id=ccfCoreProperties3.value"));
+		verifyEquals("on", selenium.getValue("id=myCheckbox_5"));
+		verifyEquals(" > ", selenium.getValue("id=ccfCoreProperties5.value"));
+		verifyEquals("off", selenium.getValue("id=myCheckbox_7"));
+		verifyEquals("off", selenium.getValue("id=myCheckbox_8"));
+		verifyEquals("off", selenium.getValue("id=myCheckbox_9"));
+		verifyEquals(" > ", selenium.getValue("id=ccfCoreProperties9.value"));
+	
+		
 	}
 	
 	@Test
