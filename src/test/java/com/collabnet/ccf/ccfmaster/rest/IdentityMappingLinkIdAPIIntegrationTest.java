@@ -173,7 +173,7 @@ public class IdentityMappingLinkIdAPIIntegrationTest extends AbstractAPIIntegrat
         try {
         	obj = restTemplate.getForObject(ccfAPIUrl + linkIdPathSegment + id, IdentityMapping.class);
         } catch (HttpClientErrorException e) {
-        	Assert.assertEquals("Expected 400", 400, e.getStatusCode().value());
+        	Assert.assertEquals("Expected 404", 404, e.getStatusCode().value());
         	throw e;
         }
     }

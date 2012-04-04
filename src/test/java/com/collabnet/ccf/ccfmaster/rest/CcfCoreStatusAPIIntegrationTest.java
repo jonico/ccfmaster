@@ -90,7 +90,7 @@ public class CcfCoreStatusAPIIntegrationTest extends AbstractAPIIntegrationTest 
         try {
         	obj = restTemplate.postForObject(ccfAPIUrl + "/ccfcorestatuses/", obj, CcfCoreStatus.class);
         } catch (HttpClientErrorException e) {
-        	Assert.assertEquals(400, e.getStatusCode().value());
+        	Assert.assertEquals(401, e.getStatusCode().value());
         	throw e;
         }
         org.junit.Assert.assertNotNull("Expected 'CcfCoreStatus' identifier to no longer be null", obj.getId());
@@ -104,11 +104,10 @@ public class CcfCoreStatusAPIIntegrationTest extends AbstractAPIIntegrationTest 
         org.junit.Assert.assertNotNull("Data on demand for 'CcfCoreStatus' failed to initialize correctly", obj);
         java.lang.Long id = obj.getId();
         org.junit.Assert.assertNotNull("Data on demand for 'CcfCoreStatus' failed to provide an identifier", id);
-        restTemplate.delete(ccfAPIUrl + "/ccfcorestatuses/"+ id);
         try {
-        	restTemplate.getForObject(ccfAPIUrl + "/ccfcorestatuses/"+ id, CcfCoreStatus.class);
+            restTemplate.delete(ccfAPIUrl + "/ccfcorestatuses/"+ id);
         } catch (HttpClientErrorException e) {
-        	Assert.assertEquals(400, e.getStatusCode().value());
+        	Assert.assertEquals(401, e.getStatusCode().value());
         	throw e;
         }
     }

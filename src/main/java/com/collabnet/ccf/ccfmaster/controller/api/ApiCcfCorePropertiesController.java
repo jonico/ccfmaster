@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.collabnet.ccf.ccfmaster.config.CoreConfigLoader;
-import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
@@ -52,14 +52,14 @@ public class ApiCcfCorePropertiesController extends AbstractBaseApiController{
 		try {
 			Direction direction =getValidateDirection(id);
 			if(direction == null){ 
-				throw new BadRequestException("For given id, Direction does not exist");
+				throw new DataRetrievalFailureException("For given id, Direction does not exist");
 			}
 			List<CCFCoreProperty> propertyList  = coreConfigLoader.populateDirectionSpecificList(direction);
 			properties.setCcfCoreProperties(propertyList);
 		} catch (JAXBException e) {
-			throw new CoreConfigurationException("Could not parse the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
+			throw new DataRetrievalFailureException("Could not parse the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
 		} catch (IOException e) {
-			throw new CoreConfigurationException("Could not read the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
+			throw new DataRetrievalFailureException("Could not read the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
 		}
 		return properties;
 	}
@@ -77,7 +77,7 @@ public class ApiCcfCorePropertiesController extends AbstractBaseApiController{
 	
 	private Direction getValidateDirection(Long id) {
 		if (id == null) {
-			throw new BadRequestException("Invalid id");
+			throw new DataRetrievalFailureException("Invalid id");
 		}
 		return Direction.findDirection(id);
 	}

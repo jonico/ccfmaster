@@ -110,7 +110,7 @@ public class ExternalAppAPIIntegrationTest extends AbstractAPIIntegrationTest {
         try {
         	obj = restTemplate.getForObject(ccfAPIUrl + "/externalapps/"+ id, ExternalApp.class);
         } catch (HttpClientErrorException e) {
-        	Assert.assertEquals("Expected 400", 400, e.getStatusCode().value());
+        	Assert.assertEquals("Expected 404", 404, e.getStatusCode().value());
         	throw e;
         }
     }

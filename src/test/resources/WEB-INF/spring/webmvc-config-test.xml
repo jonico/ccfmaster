@@ -81,7 +81,7 @@
 	<bean class="org.springframework.ui.context.support.ResourceBundleThemeSource" id="themeSource"/>
 	
 	<bean class="org.springframework.web.servlet.theme.CookieThemeResolver" id="themeResolver" p:cookieName="theme" p:defaultThemeName="standard"/>
-
+ -->
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" p:defaultErrorView="uncaughtException">
 		<property name="exceptionMappings">
 			<props>
@@ -94,6 +94,7 @@
 				<prop key=".AccessDeniedException">accessDenied</prop>
 				<prop key=".BadRequestException">badRequest</prop>
 				<prop key=".IllegalArgumentException">badRequest</prop>
+				<prop key=".TFSessionExpiredException">teamForgeSessionTimeout</prop>
 			</props>
 		</property>
 		<property name="statusCodes">
@@ -102,10 +103,12 @@
 				<prop key="accessDenied">403</prop>
 				<prop key="badRequest">401</prop>
 				<prop key="dataAccessFailure">500</prop>
+				<prop key="teamForgeSessionTimeout">401</prop>
+				<prop key="uncaughtException">500</prop>
 			</props>
 		</property>
 	</bean>
-	
+<!--	
 	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver"/>
 <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" id="tilesViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
