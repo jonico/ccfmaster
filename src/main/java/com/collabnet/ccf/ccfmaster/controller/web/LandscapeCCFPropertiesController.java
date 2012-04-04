@@ -290,15 +290,24 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 	private void updateDirectionConfigs(CCFCorePropertyList props, SystemKind systemkind,Direction direction){
 		List<DirectionConfig> configList = coreConfigLoader.populateDefaultCoreConfig(props, direction);
-		DirectionConfig currentConfig=new DirectionConfig();
+		DirectionConfig currentConfig;
 		for(DirectionConfig dc:configList){
 			List<DirectionConfig> resultList = DirectionConfig.findDirectionConfigsByDirectionAndName(direction, dc.getName()).getResultList();
 			if (!resultList.isEmpty()){
+				//if the directionconfig property is found,update the value of the property 
 				currentConfig=(DirectionConfig)resultList.get(0);
 				if(!dc.getVal().equals(currentConfig.getVal())){
 					currentConfig.setVal(dc.getVal());
 					currentConfig.merge();
 				}
+			}
+			else{
+				//if the directionconfig property not found,create new object and persist the property 
+				currentConfig=new DirectionConfig();
+				currentConfig.setDirection(dc.getDirection());
+				currentConfig.setName(dc.getName());
+				currentConfig.setVal(dc.getVal());
+				currentConfig.persist();
 			}
 		}
 	}
