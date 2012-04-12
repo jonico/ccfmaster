@@ -37,6 +37,11 @@ public class XsltValidator implements ConstraintValidator<SafeXslt, Element> {
 		
 		boolean result = false;
 		
+		
+		if (xslt == null) {
+			return false;
+		}
+		
 		// we operate on a copy, so we don't change the original
 		xslt = (Element) xslt.clone();
 		for (String functionName : allowedFunctions) {

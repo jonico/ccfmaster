@@ -212,6 +212,7 @@ public class ConversionResult {
 
 		public MappingRules(final Mapping<?> mapping) {
 			this.mapping = mapping;
+			Assert.notNull(mapping);
 			Assert.isTrue(mapping.getKind() == FieldMappingKind.MAPPING_RULES,
 					"bad mapping kind: " + mapping.getKind());
 			mappingRuleXsltHandler();
