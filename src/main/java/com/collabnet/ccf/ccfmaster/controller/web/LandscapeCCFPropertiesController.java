@@ -220,7 +220,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		ccfCoreProperties.setDirection(direction);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
 		//to display default core config values in jsp
-		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.FORWARD));
+		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, directions));
 		populateModel(landscape,model);
 		model.addAttribute("connectionmessage",ctx.getMessage(ControllerConstants.RESTORE_SUCCESS_MESSSAGE));
 		if(paramdirection.equals(ControllerConstants.FORWARD)){
