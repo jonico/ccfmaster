@@ -20,6 +20,12 @@
 <spring:message code="detaillabel" var="detaillabel" htmlEscape="false"/>
 <spring:url value="/images/icons/identityMappingView.gif" var="idmapping_image_url" />
 
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<spring:url value="/js/ccf-functions.js" var="ccfscript_url" />
+<script src="${fn:escapeXml(ccfscript_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
 
 <form:form id="identitymappingdetailForm"  name="identitymappingdetailForm" method="POST" commandName="identitymappingsmodel" modelAttribute="identitymappingsmodel">
   <table class="Container" >
@@ -191,7 +197,7 @@
 				<input type="hidden" name="idmapping.version" value="${idmappingversion}"/>
 				<input type="hidden" name="idmapping.id" value="${idmappingid}"/>
 				<input type="hidden" name="rmdid" value="${rmdid}"/>
-				 <a id="save"  href="javascript: submitForm('${fn:escapeXml(save_url)}');">${save_button}</a>
+				 <a id="save"  class="submit" href="javascript: submitForm('${fn:escapeXml(save_url)}');">${save_button}</a>
 				</div>
 				</div>
 				</div>

@@ -19,6 +19,9 @@
 <spring:url value="/styles/jquery-ui-1.8.16.custom.css" var="jqueryui_url" />
 <link rel="stylesheet" type="text/css" href="${jqueryui_url}"><!-- Prevent self-closing --> </link>
 
+<spring:url value="/js/ccf-functions.js" var="ccfscript_url" />
+<script src="${fn:escapeXml(ccfscript_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
 
 <form:form id="ccfPropLogTemplateTFPart"  name="ccfPropLogTemplateTFPart" method="POST" commandName="directionConfig" modelAttribute="directionConfig">
   <table class="Container" >
@@ -60,7 +63,7 @@
 				<div class="AlignRight">
 				<div class="Button">
 				<div class="Middle">
-				     	<a href="${fn:escapeXml(cancelccfproplogtemplatetftopart_url)}">${cancel_button}</a>
+				     	<a href="${fn:escapeXml(cancelccfproplogtemplatetftopart_url)}" class="submit">${cancel_button}</a>
 				</div>
 				</div>
 				<div class="ButtonSpace"> </div>	
@@ -71,7 +74,7 @@
 					<input type="hidden" name="directionconfig.version" value="${directionConfigversion}"/>
 					<input type="hidden" name="direction" value="${direction}"/>
 					<input type="hidden"  id="restart" name="restart" value="false"/>
-					<a id="save">${save_button}</a> 
+					<a id="save" class="submit">${save_button}</a> 
 				</div>
 				</div>
 				</div>

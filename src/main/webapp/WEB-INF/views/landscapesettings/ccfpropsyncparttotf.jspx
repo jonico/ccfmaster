@@ -30,6 +30,10 @@
 <spring:url value="/styles/jquery-ui-1.8.16.custom.css" var="jqueryui_url" />
 <link rel="stylesheet" type="text/css" href="${jqueryui_url}"><!-- Prevent self-closing --> </link>
 
+<spring:url value="/js/ccf-functions.js" var="ccfscript_url" />
+<script src="${fn:escapeXml(ccfscript_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+
 <form:form id="syncParticipantForm"  name="syncParticipantForm" method="POST" commandName="directionconfiglist" modelAttribute="directionconfiglist">
   <table class="Container" >
 		<tbody>
@@ -259,21 +263,21 @@
 				<div class="AlignRight">
 				<div class="Button">
 				<div class="Middle">
-				     	<a href="${fn:escapeXml(cancelsyncparttotf_url)}">${cancel_button}</a>
+				     	<a href="${fn:escapeXml(cancelsyncparttotf_url)}" class="submit">${cancel_button}</a>
 				</div>
 				</div>
 				<div class="ButtonSpace"> </div>	
 				<c:if test="${not empty directionconfiglist.ccfCoreProperties}">
 				<div class="Button">
 				<div class="Middle">
-					<a href="javascript: restoreForm('${fn:escapeXml(restore_default_url)}');">${restorelabel}</a>
+					<a href="javascript: restoreForm('${fn:escapeXml(restore_default_url)}');" class="submit">${restorelabel}</a>
 				</div>
 				</div>
 				</c:if>
 				<div class="ButtonSpace"> </div>	
 				<div class="Button">
 				<div class="Middle">
-						<a href="javascript: saveForm('${fn:escapeXml(savesyncparttotf_url)}');">${save_button}</a>
+						<a href="javascript: saveForm('${fn:escapeXml(savesyncparttotf_url)}');" class="submit">${save_button}</a>
 				</div>
 				</div>
 				</div>
