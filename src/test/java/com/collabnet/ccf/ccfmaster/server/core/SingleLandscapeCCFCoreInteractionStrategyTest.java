@@ -122,7 +122,7 @@ public class SingleLandscapeCCFCoreInteractionStrategyTest extends
 		}
 		
 		// TODO Find a better test for field mapping landscape template creation 
-		assertEquals(89, FieldMappingRule.findAllFieldMappingRules().size());
+		assertEquals(90, FieldMappingRule.findAllFieldMappingRules().size());
 	}
 
 	@Test
