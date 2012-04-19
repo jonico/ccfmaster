@@ -149,6 +149,9 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 			selenium.click("css=input[type=\"button\"]");
 			Util.waitUntilTextPresent(selenium, text);
 			verifyTrue(selenium.isTextPresent(text));
+			selenium.click("id=save");
+			selenium.click("//button[2]");
+			selenium.waitForPageToLoad("30000");
 		}catch(WaitTimedOutException e){
 			final String msg = "Timed out exception occured while validating CCF user credentials";
 			Util.logScreenshot(msg, selenium);
@@ -166,6 +169,9 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 			selenium.click("//input[@value='Test Connection' and @value='Test Connection' and @type='button' and @onclick=\"doAjaxResyncPost('/CCFMaster/admin/swptestconnection?resync=true')\"]");
 			Util.waitUntilTextPresent(selenium, text);
 			verifyTrue(selenium.isTextPresent(text));
+			selenium.click("id=save");
+			selenium.click("//button[2]");
+			selenium.waitForPageToLoad("30000");
 		}catch(WaitTimedOutException e){
 			final String msg = "Timed out exception occured while validating CCF resync user credentials";
 			Util.logScreenshot(msg, selenium);

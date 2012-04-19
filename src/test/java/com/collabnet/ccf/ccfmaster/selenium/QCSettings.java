@@ -259,6 +259,10 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 			selenium.click("css=input[type=\"button\"]");
 			Util.waitUntilTextPresent(selenium, text);
 			verifyTrue(selenium.isTextPresent(text));
+			selenium.click("link=Save");
+			selenium.click("//button[2]");// clicks saveonly button
+			selenium.waitForPageToLoad("30000");
+			verifyTrue(selenium.isElementPresent("css=div.greenText"));
 		}catch(WaitTimedOutException e){
 			final String msg = "Timed out exception occured while validating QC user credentials";
 			Util.logScreenshot(msg, selenium);
