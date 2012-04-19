@@ -33,6 +33,9 @@ public class CCFCoreProperty {
 	@XmlAttribute
 	private String toolTip;
 	
+	@XmlAttribute
+	private String type;
+	
 	public CCFCoreProperty() {	}
 	
 	
@@ -100,6 +103,16 @@ public class CCFCoreProperty {
 	}
 
 
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -117,7 +130,9 @@ public class CCFCoreProperty {
 		builder.append(labelName);
 		builder.append(", toolTip=");
 		builder.append(toolTip);
-		builder.append("]"); 
+		builder.append(", type=");
+		builder.append(type);
+		builder.append("]");
 		return builder.toString();
 	}
 	

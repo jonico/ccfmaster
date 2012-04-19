@@ -56,7 +56,8 @@ public class CcfCorePropertyListAPIIntegrationTest extends AbstractAPIIntegratio
 		try {
 			restTemplate.delete(ccfAPIUrl + "/ccfcoreproperties/" + id);
 		} catch (HttpClientErrorException e) {
-			Assert.assertEquals(401, e.getStatusCode().value());
+			// delete operation is considered to be a bad request
+			Assert.assertEquals(401, e.getStatusCode().value()); 
 			throw e;
 		}
 	}
@@ -72,6 +73,7 @@ public class CcfCorePropertyListAPIIntegrationTest extends AbstractAPIIntegratio
 			Assert.assertNotNull("Find method for 'CCFCorePropertyList' illegally returned null for id '"+ id + "'", obj);
 			restTemplate.put(ccfAPIUrl + "/ccfcoreproperties/" + id,obj);
 		} catch (HttpClientErrorException e) {
+			// update operation is considered to be a bad request
 			Assert.assertEquals(401, e.getStatusCode().value());
 			throw e;
 		}
@@ -87,6 +89,7 @@ public class CcfCorePropertyListAPIIntegrationTest extends AbstractAPIIntegratio
 			CCFCorePropertyList obj = restTemplate.getForObject(ccfAPIUrl+ "/ccfcoreproperties/" + id, CCFCorePropertyList.class);
 			restTemplate.postForObject(ccfAPIUrl+ "/ccfcoreproperties",obj,CCFCorePropertyList.class);
 		} catch (HttpClientErrorException e) {
+			// create operation is considered to be a bad request
 			Assert.assertEquals(401, e.getStatusCode().value());
 			throw e;
 		}

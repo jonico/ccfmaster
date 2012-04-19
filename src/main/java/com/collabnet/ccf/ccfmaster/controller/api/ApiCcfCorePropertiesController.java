@@ -50,7 +50,7 @@ public class ApiCcfCorePropertiesController extends AbstractBaseApiController{
 	public @ResponseBody CCFCorePropertyList show(@PathVariable("id")Long id) {
 		CCFCorePropertyList properties = new CCFCorePropertyList();
 		try {
-			Direction direction =getValidateDirection(id);
+			Direction direction = getValidateDirection(id);
 			if(direction == null){ 
 				throw new DataRetrievalFailureException("For given id, Direction does not exist");
 			}

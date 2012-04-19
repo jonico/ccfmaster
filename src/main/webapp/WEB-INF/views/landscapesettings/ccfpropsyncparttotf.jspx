@@ -129,6 +129,7 @@
 			</tr>
 			</tbody>
 			</table>
+			<form:hidden path="ccfCoreProperties[${status.index}].type"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].name"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].category"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
@@ -181,6 +182,7 @@
 			</tr>
 			</tbody>
 			</table>
+			<form:hidden path="ccfCoreProperties[${status.index}].type"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].name"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].category"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
@@ -233,6 +235,7 @@
 			</tr>
 			</tbody>
 			</table>
+			<form:hidden path="ccfCoreProperties[${status.index}].type"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].name"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].category"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
