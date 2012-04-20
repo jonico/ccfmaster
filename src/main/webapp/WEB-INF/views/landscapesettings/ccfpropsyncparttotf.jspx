@@ -135,6 +135,7 @@
 			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].direction"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].toolTip"/>
 			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
 		</c:if>
 		</c:forEach>	
@@ -188,6 +189,7 @@
 			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].direction"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].toolTip"/>
 			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
 			</c:if>	
 			</c:forEach>
@@ -241,6 +243,7 @@
 			<form:hidden path="ccfCoreProperties[${status.index}].systemKind"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].direction"/>
 			<form:hidden path="ccfCoreProperties[${status.index}].labelName"/>
+			<form:hidden path="ccfCoreProperties[${status.index}].toolTip"/>
 			<form:errors path="ccfCoreProperties[${status.index}].value" cssClass="errors"/>
 			</c:if>
 			
