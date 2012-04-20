@@ -83,6 +83,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		verifyShouldStartAutomatically();
 		verifySaveCoreConfigSettings();
 		verifyRestoreDefaultSettings();
+		verifyConnectorBehaviorValidation();
 	}
 	
 	private void verifyShouldStartAutomatically(){
@@ -332,5 +333,64 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("name=_eventId_submit");
 //		selenium.waitForPageToLoad("95000");
 //		verifyTrue(selenium.isTextPresent("Core update succeeded"));
+	}
+	
+	private void verifyConnectorBehaviorValidation(){
+		final String pageErrorMsg = "Error saving connector properties.Please check the values entered.";
+		final String fieldErrorMsg = "Value should be numeric";
+		selenium.open("/CCFMaster/admin/displayccfpropertiessynctftopart");
+		selenium.click("link=Connector Behavior TF to QC");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("id=ccfCoreProperties0.value", "1000a");
+		selenium.type("id=ccfCoreProperties1.value", "21600b");
+		selenium.type("id=ccfCoreProperties2.value", "8b");
+		selenium.type("id=ccfCoreProperties3.value", "500b");
+		selenium.click("link=Repository Settings");
+		selenium.click("link=Core Settings");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent(pageErrorMsg));
+		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
+		selenium.click("link=Core Settings");
+		selenium.type("id=ccfCoreProperties0.value", "adf");
+		selenium.type("id=ccfCoreProperties1.value", "adfa");
+		selenium.type("id=ccfCoreProperties2.value", "afda");
+		selenium.type("id=ccfCoreProperties3.value", "afd");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent(pageErrorMsg));
+		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
+		selenium.type("id=ccfCoreProperties0.value", "adf1234qwe");
+		selenium.type("id=ccfCoreProperties1.value", "adfa1233qerw");
+		selenium.type("id=ccfCoreProperties2.value", "afda123qwe");
+		selenium.type("id=ccfCoreProperties3.value", "afd123we");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent(pageErrorMsg));
+		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
+		selenium.click("link=Connector Behavior QC to TF");
+		selenium.waitForPageToLoad("30000");
+		selenium.type("id=ccfCoreProperties0.value", "1000a");
+		selenium.type("id=ccfCoreProperties1.value", "21600b");
+		selenium.type("id=ccfCoreProperties2.value", "8aa");
+		selenium.type("id=ccfCoreProperties3.value", "500b");
+		selenium.click("link=Repository Settings");
+		selenium.type("id=ccfCoreProperties6.value", "0df");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent(pageErrorMsg));
+		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
+		selenium.click("link=Repository Settings");
+		selenium.click("link=Core Settings");
+		selenium.type("id=ccfCoreProperties0.value", "adfa");
+		selenium.type("id=ccfCoreProperties1.value", "adfa");
+		selenium.type("id=ccfCoreProperties2.value", "adfasd");
+		selenium.type("id=ccfCoreProperties3.value", "afdsa");
+		selenium.click("link=Repository Settings");
+		selenium.type("id=ccfCoreProperties6.value", "adasda");
+		selenium.click("link=Save");
+		selenium.waitForPageToLoad("30000");
+		verifyTrue(selenium.isTextPresent(pageErrorMsg));
+		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
 	}
 }
