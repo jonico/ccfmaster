@@ -146,7 +146,6 @@ public class CreateLandscapeHelper {
 		if(participant.getSystemKind().equals(SystemKind.QC)){
 			DirectionConfig directionConfigLogTemplateQCtoTF=new DirectionConfig();
 			DirectionConfig directionConfigLogTemplateTFtoQC=new DirectionConfig();
-			DirectionConfig directionConfigQCMaxSize=new DirectionConfig();
 
 			directionConfigLogTemplateTFtoQC.setDirection(forwardDirection);
 			directionConfigLogTemplateQCtoTF.setDirection(reverseDirection);
@@ -154,20 +153,15 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateTFtoQC.setName(ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE);
 			directionConfigLogTemplateQCtoTF.setVal(newval);
 			directionConfigLogTemplateTFtoQC.setVal(newval);
-			directionConfigQCMaxSize.setDirection(reverseDirection);
-			directionConfigQCMaxSize.setName(ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE);
-			directionConfigQCMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
 
 			directionConfigLogTemplateQCtoTF.persist();
 			directionConfigLogTemplateTFtoQC.persist();
-			directionConfigQCMaxSize.persist();
 		}
 
 		if(participant.getSystemKind().equals(SystemKind.SWP)){
 
 			DirectionConfig directionConfigLogTemplateSWPtoTF=new DirectionConfig();
 			DirectionConfig directionConfigLogTemplateTFtoSWP=new DirectionConfig();
-			DirectionConfig directionConfigSWPMaxSize=new DirectionConfig();
 
 			directionConfigLogTemplateTFtoSWP.setDirection(forwardDirection);
 			directionConfigLogTemplateSWPtoTF.setDirection(reverseDirection);
@@ -175,20 +169,10 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateSWPtoTF.setName(ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE);
 			directionConfigLogTemplateTFtoSWP.setVal(newval);
 			directionConfigLogTemplateSWPtoTF.setVal(newval);
-			directionConfigSWPMaxSize.setDirection(reverseDirection);
-			directionConfigSWPMaxSize.setName(ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE);
-			directionConfigSWPMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
 
 			directionConfigLogTemplateTFtoSWP.persist();
 			directionConfigLogTemplateSWPtoTF.persist();
-			directionConfigSWPMaxSize.persist();
 		}
-
-		DirectionConfig directionConfigTFMaxSize=new DirectionConfig();
-		directionConfigTFMaxSize.setDirection(forwardDirection);
-		directionConfigTFMaxSize.setName(ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE);
-		directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
-		directionConfigTFMaxSize.persist();
 	}
 
 
@@ -218,8 +202,7 @@ public class CreateLandscapeHelper {
 			Direction reverseDirection=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.REVERSE).getSingleResult();
 			Direction forwardDirection=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.FORWARD).getSingleResult();
 			if(DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE).getResultList().size()!=0&&
-					DirectionConfig.findDirectionConfigsByDirectionAndName(forwardDirection,ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE).getResultList().size()!=0&&
-					DirectionConfig.findDirectionConfigsByDirectionAndName(forwardDirection,ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE).getResultList().size()!=0){
+					DirectionConfig.findDirectionConfigsByDirectionAndName(forwardDirection,ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE).getResultList().size()!=0 ){
 				return true;
 			}
 			else{
@@ -235,8 +218,7 @@ public class CreateLandscapeHelper {
 	}
 	public boolean verifyQCEntities(Landscape landscape,Direction reverseDirection,Model model,RequestContext context){
 		if(ParticipantConfig.findParticipantConfigsByParticipantAndName(landscape.getParticipant(), ControllerConstants.CCF_PARTICIPANT_QC_URL).getResultList().size()!=0 &&
-				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_QC_USERNAME).getResultList().size()!=0&&
-				DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE).getResultList().size()!=0){
+				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_QC_USERNAME).getResultList().size()!=0){
 			return true;
 		}
 		else{
@@ -251,8 +233,7 @@ public class CreateLandscapeHelper {
 				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_SWP_USERNAME).getResultList().size()!=0 &&
 				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_PASSWORD).getResultList().size()!=0 &&
 				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_USERNAME).getResultList().size()!=0 &&
-				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_PASSWORD).getResultList().size()!=0 &&
-				DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getResultList().size()!=0){
+				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_PASSWORD).getResultList().size()!=0){
 			return true;
 		}
 		else{

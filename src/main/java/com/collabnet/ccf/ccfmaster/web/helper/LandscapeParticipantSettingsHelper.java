@@ -6,9 +6,6 @@ import org.springframework.mvc.extensions.flash.FlashMap;
 import org.springframework.ui.Model;
 
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
-import com.collabnet.ccf.ccfmaster.server.domain.Direction;
-import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
-import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -43,16 +40,12 @@ public class LandscapeParticipantSettingsHelper {
 		LandscapeConfig participantPasswordLandscapeConfig=null;
 		LandscapeConfig participantResyncUserNameLandscapeConfig=null;
 		LandscapeConfig participantResyncPasswordLandscapeConfig=null;
-		Direction reverseDirection=null;
-		DirectionConfig participantMaxAttachmentSize=null;
 
 		if(participant.getSystemKind().equals(SystemKind.QC)){
 			participantUrlParticipantConfig=(ParticipantConfig)ParticipantConfig.findParticipantConfigsByParticipantAndName(participant, ControllerConstants.CCF_PARTICIPANT_QC_URL).getSingleResult();
 			participantUserNameLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_QC_USERNAME).getSingleResult();
 			participantPasswordLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_QC_PASSWORD).getSingleResult();
 			participantPasswordLandscapeConfig.setVal(Obfuscator.decodePassword(participantPasswordLandscapeConfig.getVal()));
-			reverseDirection=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.REVERSE).getSingleResult();
-			participantMaxAttachmentSize=DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE).getSingleResult();
 		}
 
 		if(participant.getSystemKind().equals(SystemKind.SWP)){
@@ -63,8 +56,6 @@ public class LandscapeParticipantSettingsHelper {
 			participantResyncUserNameLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_USERNAME).getSingleResult();
 			participantResyncPasswordLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_PASSWORD).getSingleResult();
 			participantResyncPasswordLandscapeConfig.setVal(Obfuscator.decodePassword(participantResyncPasswordLandscapeConfig.getVal()));
-			reverseDirection=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.REVERSE).getSingleResult();
-			participantMaxAttachmentSize=DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getSingleResult();
 		}
 
 		participantSettingsModel.setParticipant(participant);
@@ -72,7 +63,6 @@ public class LandscapeParticipantSettingsHelper {
 		participantSettingsModel.setParticipantUrlParticipantConfig(participantUrlParticipantConfig);
 		participantSettingsModel.setParticipantPasswordLandscapeConfig(participantPasswordLandscapeConfig);
 		participantSettingsModel.setParticipantUserNameLandscapeConfig(participantUserNameLandscapeConfig);
-		participantSettingsModel.setParticipantMaxAttachmentSize(participantMaxAttachmentSize);
 		if(participant.getSystemKind().equals(SystemKind.SWP)){
 			participantSettingsModel.setParticipantResyncUserNameLandscapeConfig(participantResyncUserNameLandscapeConfig);
 			participantSettingsModel.setParticipantResyncPasswordLandscapeConfig(participantResyncPasswordLandscapeConfig);
@@ -111,8 +101,6 @@ public class LandscapeParticipantSettingsHelper {
 		model.addAttribute("participantid", participantSettingsModel.getParticipant().getId());
 		model.addAttribute("landscapeversion", participantSettingsModel.getLandscape().getVersion());
 		model.addAttribute("landscapeid", participantSettingsModel.getLandscape().getId());
-		model.addAttribute("maxattachmentsizeversion", participantSettingsModel.getParticipantMaxAttachmentSize().getVersion());
-		model.addAttribute("maxattachmentsizeid", participantSettingsModel.getParticipantMaxAttachmentSize().getId());
 		model.addAttribute("participant",participantSettingsModel.getParticipant());
 	}
 
@@ -168,11 +156,6 @@ public class LandscapeParticipantSettingsHelper {
 		participantPasswordLandscapeConfig.setVal(Obfuscator.encodePassword(participantSettingsModel.getParticipantPasswordLandscapeConfig().getVal()));
 		participantPasswordLandscapeConfig.merge();
 
-		//merge participantMaxAttachmentSize
-		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.REVERSE).getSingleResult();
-		DirectionConfig participantMaxAttachmentSize=DirectionConfig.findDirectionConfigsByDirectionAndName(direction, ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE).getSingleResult();
-		participantMaxAttachmentSize.setVal(participantSettingsModel.getParticipantMaxAttachmentSize().getVal());
-		participantMaxAttachmentSize.merge();
 	}
 
 	/**
@@ -205,12 +188,6 @@ public class LandscapeParticipantSettingsHelper {
 		LandscapeConfig participantPasswordLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_PASSWORD).getSingleResult();
 		participantPasswordLandscapeConfig.setVal(Obfuscator.encodePassword(participantSettingsModel.getParticipantPasswordLandscapeConfig().getVal()));
 		participantPasswordLandscapeConfig.merge();
-
-		//merge participantMaxAttachmentSize
-		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, Directions.REVERSE).getSingleResult();
-		DirectionConfig participantMaxAttachmentSize=DirectionConfig.findDirectionConfigsByDirectionAndName(direction, ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getSingleResult();
-		participantMaxAttachmentSize.setVal(participantSettingsModel.getParticipantMaxAttachmentSize().getVal());
-		participantMaxAttachmentSize.merge();
 		
 		//merge participantResyncUserNameLandscapeConfig
 		LandscapeConfig participantResyncUserNameLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_USERNAME).getSingleResult();

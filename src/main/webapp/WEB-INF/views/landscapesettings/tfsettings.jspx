@@ -3,8 +3,7 @@
 
 <spring:message code="tftimezone" var="tftimezonelabel" htmlEscape="false"/>  
 <spring:message code="tfusername" var="tfusernamelabel" htmlEscape="false"/>  
-<spring:message code="tfpassword" var="tfpasswordlabel" htmlEscape="false"/>  
-<spring:message code="participantmaxattachmentsize" var="participantmaxattachmentsizelabel" htmlEscape="false"/>
+<spring:message code="tfpassword" var="tfpasswordlabel" htmlEscape="false"/>
 <spring:message code="bytes" var="byteslabel" htmlEscape="false"/>  
 <spring:message code="button_cancel" var="cancel_button"/>
 <spring:message code="button_save" var="save_button"/>
@@ -75,17 +74,6 @@
 				<form:errors path="tfPasswordLandscapeConfig.val" cssClass="errors"/>
 				</td>
 				</tr>
-			 
-				<tr>
-				<td class="ItemDetailName">
-				<input type="hidden" name="tfMaxAttachmentSize.name" value="ccf.direction.tf.max.attachmentsize"/>
-				<form:label path="tfMaxAttachmentSize.val">${participantmaxattachmentsizelabel}:</form:label>
-				</td>
-				<td class="ItemDetailValue">
-				<form:input path="tfMaxAttachmentSize.val"  size="60" cssClass="inputfield"/>${byteslabel}
-				<form:errors path="tfMaxAttachmentSize.val" cssClass="errors"/>
-				</td>
-				</tr>
 		</tbody>
 	</table>
 				<br/>
@@ -114,8 +102,6 @@
 					<input type="hidden" name="teamforge.id" value="${teamforgeid}"/>
 					<input type="hidden" name="landscape.version" value="${landscapeversion}"/>
 					<input type="hidden" name="landscape.id" value="${landscapeid}"/>
-					<input type="hidden" name="tfmaxattachmentsize.version" value="${tfmaxattachmentsizeversion}"/>
-					<input type="hidden" name="tfmaxattachmentsize.id" value="${tfmaxattachmentsizeid}"/>
 					<input type="hidden"  id="restart" name="restart" value="false"/>
 					<a href="#" id="save" class="submit">${save_button}</a> 
 				</div>

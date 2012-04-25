@@ -1,7 +1,7 @@
 package com.collabnet.ccf.ccfmaster.web.model;
 
 import javax.validation.Valid;
-import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
+
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -20,8 +20,6 @@ public class ParticipantSettingsModel {
 	private LandscapeConfig participantUserNameLandscapeConfig = new LandscapeConfig();
 
 	private LandscapeConfig participantPasswordLandscapeConfig = new LandscapeConfig();
-
-	private DirectionConfig participantMaxAttachmentSize = new DirectionConfig();
 
 	private LandscapeConfig participantResyncUserNameLandscapeConfig = new LandscapeConfig();
 
@@ -76,15 +74,6 @@ public class ParticipantSettingsModel {
 	public void setParticipantPasswordLandscapeConfig(
 			LandscapeConfig participantPasswordLandscapeConfig) {
 		this.participantPasswordLandscapeConfig = participantPasswordLandscapeConfig;
-	}
-
-	public DirectionConfig getParticipantMaxAttachmentSize() {
-		return participantMaxAttachmentSize;
-	}
-
-	public void setParticipantMaxAttachmentSize(
-			DirectionConfig participantMaxAttachmentSize) {
-		this.participantMaxAttachmentSize = participantMaxAttachmentSize;
 	}
 
 	public LandscapeConfig getParticipantResyncUserNameLandscapeConfig() {

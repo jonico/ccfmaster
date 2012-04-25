@@ -3,7 +3,6 @@ package com.collabnet.ccf.ccfmaster.web.model;
 
 import javax.validation.Valid;
 
-import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -25,9 +24,7 @@ public class TFSettingsModel {
 	@Valid
 	private LandscapeConfig tfPasswordLandscapeConfig=new LandscapeConfig();
 
-	
-	private DirectionConfig tfMaxAttachmentSize=new DirectionConfig();
-	
+
 
 	public TFSettingsModel() {
 		tfUserNameLandscapeConfig.setLandscape(landscape);
@@ -70,11 +67,4 @@ public class TFSettingsModel {
 		this.tfPasswordLandscapeConfig = tfPasswordLandscapeConfig;
 	}
 
-	public DirectionConfig getTfMaxAttachmentSize() {
-		return tfMaxAttachmentSize;
-	}
-
-	public void setTfMaxAttachmentSize(DirectionConfig tfMaxAttachmentSize) {
-		this.tfMaxAttachmentSize = tfMaxAttachmentSize;
-	}
 }
