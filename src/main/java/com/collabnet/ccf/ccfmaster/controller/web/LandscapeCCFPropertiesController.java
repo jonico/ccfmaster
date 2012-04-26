@@ -37,11 +37,13 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.validator.ConfigValidator;
+import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isQCMaxAttachmentExist;
+import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isSWPMaxAttachmentExist;
+import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isTFMaxAttachmentExist;
 
 @RequestMapping("/admin/**")
 @Controller
 public class LandscapeCCFPropertiesController extends AbstractLandscapeController{
-
 
 	@Autowired
 	public CCFRuntimePropertyHolder runtimeProperties;
@@ -157,21 +159,26 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART, method = RequestMethod.GET)
 	public String displayCCFPropertiesSyncTFtoPart(Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
+		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,Directions.FORWARD).getSingleResult();
+		CCFCorePropertyList ccfCoreProperties = populateCCFCoreProperties(landscape,direction);
+		List<CCFCoreProperty> defaultProperty = populateDefaultCoreConfigValues(landscape, Directions.FORWARD);
+		if(defaultProperty.isEmpty()){
+			defaultProperty.add(getMaxAttachmentProperty(direction,true));
+		}
 		populateModel(landscape,model);
-		CCFCorePropertyList ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.FORWARD);
 		model.addAttribute("directionconfiglist",ccfCoreProperties);
-		//to display default core config values in jsp
-		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.FORWARD));
+		model.addAttribute("defaultdirectionconfiglist",defaultProperty);		//to display default core config values in jsp
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART;
 	}
 
-	private CCFCorePropertyList populateCCFCoreProperties(Landscape landscape,
-			Directions directions) {
-		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
-		
+	private CCFCorePropertyList populateCCFCoreProperties(Landscape landscape,Direction direction) {
 		CCFCorePropertyList ccfCoreProperties=new CCFCorePropertyList();
 		try {
-			ccfCoreProperties.setCcfCoreProperties(populateUpdatedCoreConfigValues(landscape,directions));
+			List<CCFCoreProperty> ccfcoreProperty = populateUpdatedCoreConfigValues(landscape,direction.getDirection());
+			if(ccfcoreProperty.isEmpty()){
+				ccfcoreProperty.add(getMaxAttachmentProperty(direction,false));
+			}
+			ccfCoreProperties.setCcfCoreProperties(ccfcoreProperty);
 			
 		} catch (JAXBException e) {
 			throw new CoreConfigurationException("Could not parse the config xml file: " + e.getMessage(), e);
@@ -193,11 +200,16 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCPARTTOTF, method = RequestMethod.GET)
 	public String displayCCFPropertiesSyncParttoTF(Model model, HttpServletRequest request) throws JAXBException, IOException {
 		Landscape landscape=ControllerHelper.findLandscape();
-		populateModel(landscape,model);
-		CCFCorePropertyList ccfCoreProperties = populateCCFCoreProperties(landscape, Directions.REVERSE);
-		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,Directions.REVERSE).getSingleResult();
+		CCFCorePropertyList ccfCoreProperties = populateCCFCoreProperties(landscape,direction);
 		//to display default core config values in jsp
-		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, Directions.REVERSE));
+		List<CCFCoreProperty> defaultProperty = populateDefaultCoreConfigValues(landscape, Directions.REVERSE);
+		if(defaultProperty.isEmpty()){
+			defaultProperty.add(getMaxAttachmentProperty(direction,true));
+		}
+		populateModel(landscape,model);
+		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		model.addAttribute("defaultdirectionconfiglist",defaultProperty);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCPARTTOTF;
 	}
 
@@ -216,12 +228,15 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		Directions directions = ControllerConstants.FORWARD.equals(paramdirection) ? Directions.FORWARD : Directions.REVERSE;
 		Direction direction=Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,directions).getSingleResult();
 		CCFCorePropertyList ccfCoreProperties=new CCFCorePropertyList();
-		ccfCoreProperties.setCcfCoreProperties(populateDefaultCoreConfigValues(landscape,directions));
+		List<CCFCoreProperty> defaultProperty = populateDefaultCoreConfigValues(landscape, Directions.REVERSE);
+		if(defaultProperty.isEmpty()){
+			defaultProperty.add(getMaxAttachmentProperty(direction,true));
+		}
+		ccfCoreProperties.setCcfCoreProperties(defaultProperty);
 		ccfCoreProperties.setDirection(direction);
-		model.addAttribute("directionconfiglist",ccfCoreProperties);
-		//to display default core config values in jsp
-		model.addAttribute("defaultdirectionconfiglist",populateDefaultCoreConfigValues(landscape, directions));
 		populateModel(landscape,model);
+		model.addAttribute("directionconfiglist",ccfCoreProperties);
+		model.addAttribute("defaultdirectionconfiglist",defaultProperty);//to display default core config values in jsp
 		model.addAttribute("connectionmessage",ctx.getMessage(ControllerConstants.RESTORE_SUCCESS_MESSSAGE));
 		if(paramdirection.equals(ControllerConstants.FORWARD)){
 			return UIPathConstants.LANDSCAPESETTINGS_DISPLAYCCFPROPERTIESSYNCTFTOPART;
@@ -373,7 +388,39 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		}
 		return newdefaultProperties;
 	}
-
-
+	
+	private CCFCoreProperty getMaxAttachmentProperty(Direction direction, boolean isValueDefault){
+		CCFCoreProperty property= null;
+		SystemKind systemkind = direction.getLandscape().getParticipant().getSystemKind();
+		if(isTFMaxAttachmentExist(direction) && direction.getDirection().equals(Directions.FORWARD)){
+			DirectionConfig tfMaxAttachmentConfig =DirectionConfig.findDirectionConfigsByDirectionAndName(direction,ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE).getSingleResult();
+			property = createMaxAttachmentProperty(tfMaxAttachmentConfig.getName(), tfMaxAttachmentConfig.getVal(), systemkind, direction.getDirection(),isValueDefault);
+		}else{
+			if(systemkind.equals(SystemKind.QC) && isQCMaxAttachmentExist(direction) ){
+				DirectionConfig qcMaxAttachmentConfig =DirectionConfig.findDirectionConfigsByDirectionAndName(direction,ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE).getSingleResult();
+				property = createMaxAttachmentProperty(qcMaxAttachmentConfig.getName(), qcMaxAttachmentConfig.getVal(), systemkind, direction.getDirection(),isValueDefault);				
+			}else if(systemkind.equals(SystemKind.SWP) && isSWPMaxAttachmentExist(direction)){
+				DirectionConfig swpMaxAttachmentConfig =DirectionConfig.findDirectionConfigsByDirectionAndName(direction,ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getSingleResult();
+				property = createMaxAttachmentProperty(swpMaxAttachmentConfig.getName(), swpMaxAttachmentConfig.getVal(), systemkind, direction.getDirection(),isValueDefault);				
+			}
+		}
+		return property;
+	}
+	
+	private CCFCoreProperty createMaxAttachmentProperty(String name,String value,SystemKind systemKind,Directions directions, boolean isValueDefault){
+		//<ccfcoreproperty category="coreSettings" systemKind="QC" type="Long" value="10485760" 
+		//name="ccf.direction.max.attachmentsize" labelName="Max Attachment Size" toolTip="Maximum attachment size that can be shipped for an artifact"/>
+		String newValue = isValueDefault ? ccfRuntimePropertyHolder.getMaxAttachmentSize():value;
+		CCFCoreProperty property = new CCFCoreProperty();
+		property.setName(name);
+		property.setCategory(ControllerConstants.MAX_ATTACHMENT_CATEGORY);
+		property.setType(ControllerConstants.MAX_ATTACHMENT_TYPE);
+		property.setSystemKind(systemKind);
+		property.setValue(newValue);
+		property.setLabelName(ControllerConstants.MAX_ATTACHMENT_LABEL_NAME);
+		property.setToolTip(ControllerConstants.MAX_ATTACHMENT_TOOLTIP);
+		property.setDirection(directions);
+		return property;
+	}
 
 }

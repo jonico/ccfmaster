@@ -65,6 +65,10 @@ public class ControllerConstants {
 	public static final String SWPTOTFDIRECTIONDESCRIPTION = "SWPtoTFDirectionDescription";
 	public static final String TFTOSWP_DIRECTION_DESCRIPTION = "TFtoSWPDirectionDescription";
 	public static final String CCF_PARTICIPANT_TF_URL = "ccf.participant.tf.url";
+	public static final String MAX_ATTACHMENT_CATEGORY = "coreSettings";
+	public static final String MAX_ATTACHMENT_TYPE = "Long";
+	public static final String MAX_ATTACHMENT_LABEL_NAME = "Max Attachment Size";
+	public static final String MAX_ATTACHMENT_TOOLTIP = "Maximum attachment size that can be shipped for an artifact";
 	
 	//Participant Settings Constants
 	public static final String QCSETTINGS = "qcsettings";
