@@ -7,28 +7,16 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.*;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 
 public class ConfigValidator implements Validator {
 	
 	private static final String NUMERIC_PATTERN = "^\\d*$";
 	
 	private static final String BOOLEAN_PATTERN = "^true|false$";
-	
-	public enum DataType{
-		INTEGER("Integer"),LONG("Long"),BOOLEAN("boolean"),STRING("String");
-		
-		private String type;
-
-		public String getType() {
-			return type;
-		}
-
-		DataType(String type) {
-			this.type = type;
-		}
-	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -41,33 +29,27 @@ public class ConfigValidator implements Validator {
 		List<CCFCoreProperty> ccfPropertyList =ccfCoreProperties.getCcfCoreProperties();
 		for (int i = 0; i < ccfPropertyList.size(); i++) { 
 			String value = ccfPropertyList.get(i).getValue();
-			String type = ccfPropertyList.get(i).getType();
+			CCFCorePropertyType type = ccfPropertyList.get(i).getType();
 			if (StringUtils.isEmpty(value)) {
-				errors.rejectValue("ccfCoreProperties[" + i + "].value","NotEmpty.ccfcoreproperties[0].value","Blank value not accepted");
+				errors.rejectValue("ccfCoreProperties[" + i + "].value", VALIDATE_NOT_EMPTY_CCFCOREPROPERTIES_VALUE, DEFAULT_ERRORMSG_NOT_EMPTY_VALUE);
 			} else if(!validate( value, type )){
-				errors.rejectValue("ccfCoreProperties[" + i + "].value","TypeMisMatch.ccfcoreproperties.numeric"); // Numeric validation message will always be expected
+				errors.rejectValue("ccfCoreProperties[" + i + "].value",VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC); // Numeric validation message will always be expected
 			}
 		}  
 
 	}
 	
-	private static boolean validate(String value, String type) {
+	private static boolean validate(String value, CCFCorePropertyType coreType) {
 		boolean isValid = true;
-		for (DataType coreType : DataType.values()) {
-			if (coreType.getType().equalsIgnoreCase(type)) {
-				switch (coreType) {
-					case INTEGER:
-					case LONG:
-						isValid = isValueNumeric(value);
-						break;
-					case BOOLEAN:
-						isValid = isValueBoolean(value);
-						break;
-					default:
-						isValid = true; // Assumption default type is String
-				}
+		switch (coreType) {
+			case INTEGER:
+				isValid = isValueNumeric(value);
 				break;
-			}
+			case BOOLEAN:
+				isValid = isValueBoolean(value);
+				break;
+			default:
+				isValid = true; // Assumption default type is String
 		}
 		return isValid;
 	}

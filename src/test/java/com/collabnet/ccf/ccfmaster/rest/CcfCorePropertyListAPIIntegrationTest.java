@@ -31,8 +31,8 @@ public class CcfCorePropertyListAPIIntegrationTest extends AbstractAPIIntegratio
 		Assert.assertNotNull("Data on demand for 'Direction' failed to provide an identifier",id);
 		CCFCorePropertyList obj = restTemplate.getForObject(ccfAPIUrl+ "/ccfcoreproperties/" + id, CCFCorePropertyList.class);
 		Assert.assertNotNull("Find method for 'CCFCorePropertyList' illegally returned null for id '"+ id + "'", obj);
-		Assert.assertNotNull(coreConfigLoader.populateDirectionSpecificList(dir));
-		Assert.assertEquals(obj.getCcfCoreProperties().size(), coreConfigLoader.populateDirectionSpecificList(dir).size());
+		Assert.assertNotNull(coreConfigLoader.getDefaultCCFCorePropertyList(dir));
+		Assert.assertEquals(obj.getCcfCoreProperties().size(), coreConfigLoader.getDefaultCCFCorePropertyList(dir).size());
 
 	}
 	

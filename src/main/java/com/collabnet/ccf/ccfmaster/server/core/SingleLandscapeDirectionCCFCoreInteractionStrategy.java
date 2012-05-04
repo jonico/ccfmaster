@@ -54,7 +54,7 @@ public class SingleLandscapeDirectionCCFCoreInteractionStrategy extends
 	}
 
 	private void createDefaultCoreConfig(Direction context) throws JAXBException, IOException {
-		List<DirectionConfig> defaultCoreConfigList = coreConfigLoader.populateDefaultCoreConfig(context);
+		List<DirectionConfig> defaultCoreConfigList = coreConfigLoader.getAsDirectionConfigList(context);
 		for (DirectionConfig config : defaultCoreConfigList) {
 			config.persist();
 		}

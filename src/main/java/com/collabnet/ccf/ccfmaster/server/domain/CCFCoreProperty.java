@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CCFCoreProperty {
 	
@@ -34,7 +36,7 @@ public class CCFCoreProperty {
 	private String toolTip;
 	
 	@XmlAttribute
-	private String type;
+	private  CCFCorePropertyType type;
 	
 	public CCFCoreProperty() {	}
 	
@@ -103,12 +105,12 @@ public class CCFCoreProperty {
 	}
 
 
-	public String getType() {
+	public CCFCorePropertyType getType() {
 		return type;
 	}
 
 
-	public void setType(String type) {
+	public void setType(CCFCorePropertyType type) {
 		this.type = type;
 	}
 

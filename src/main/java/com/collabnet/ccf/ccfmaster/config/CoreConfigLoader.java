@@ -37,17 +37,17 @@ public class CoreConfigLoader {
 		this.runtimePropertyHolder = runtimePropertyHolder;
 	}
 
-	public List<DirectionConfig> populateDefaultCoreConfig(Direction direction) throws JAXBException, IOException {
-		return populateDefaultCoreConfig(loadCCFCoreProperties(),direction);
+	public List<DirectionConfig> getAsDirectionConfigList(Direction direction) throws JAXBException, IOException {
+		return getAsDirectionConfigList(loadCCFCoreProperties(),direction);
 	}
 	
-	public List<CCFCoreProperty> populateDirectionSpecificList(Direction direction) throws JAXBException, IOException {
-		return populateDirectionSpecificList(loadCCFCoreProperties(),direction);
+	public List<CCFCoreProperty> getDefaultCCFCorePropertyList(Direction direction) throws JAXBException, IOException {
+		return getDefaultCCFCorePropertyList(loadCCFCoreProperties(),direction);
 	}
 
-	public List<DirectionConfig> populateDefaultCoreConfig(	CCFCorePropertyList properties, Direction direction) {
+	public List<DirectionConfig> getAsDirectionConfigList(CCFCorePropertyList properties, Direction direction) {
 		List<DirectionConfig> directionConfig = new ArrayList<DirectionConfig>();
-		List<CCFCoreProperty> directionSpecificPropList =populateDirectionSpecificList(properties,direction); 
+		List<CCFCoreProperty> directionSpecificPropList =getDefaultCCFCorePropertyList(properties,direction); 
 		for (CCFCoreProperty prop : directionSpecificPropList) {
 			DirectionConfig config = new DirectionConfig();
 			config.setName(prop.getName());
@@ -85,7 +85,7 @@ public class CoreConfigLoader {
 		}
 	}
 	
-	private List<CCFCoreProperty> populateDirectionSpecificList(CCFCorePropertyList properties, Direction direction){
+	private List<CCFCoreProperty> getDefaultCCFCorePropertyList(CCFCorePropertyList properties, Direction direction){
 		List<CCFCoreProperty> corePropertyList = new ArrayList<CCFCoreProperty>();
 		SystemKind systemkind = direction.getLandscape().getParticipant().getSystemKind();
 		if (properties != null) {

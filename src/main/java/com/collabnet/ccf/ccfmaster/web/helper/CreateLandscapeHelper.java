@@ -157,7 +157,7 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateQCtoTF.persist();
 			directionConfigLogTemplateTFtoQC.persist();
 			
-			if(!isQCMaxAttachmentExist(reverseDirection)){
+			if(!isQCMaxAttachmentExist(reverseDirection)) {
 				DirectionConfig directionConfigQCMaxSize=new DirectionConfig();
 				directionConfigQCMaxSize.setDirection(reverseDirection);
 				directionConfigQCMaxSize.setName(ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE);
@@ -181,7 +181,7 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateTFtoSWP.persist();
 			directionConfigLogTemplateSWPtoTF.persist();
 			
-			if(!isSWPMaxAttachmentExist(reverseDirection)){
+			if(!isSWPMaxAttachmentExist(reverseDirection)) {
 				DirectionConfig directionConfigSWPMaxSize=new DirectionConfig();
 				directionConfigSWPMaxSize.setDirection(reverseDirection);
 				directionConfigSWPMaxSize.setName(ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE);
@@ -190,8 +190,8 @@ public class CreateLandscapeHelper {
 			}
 		}
 		
-		if(!isTFMaxAttachmentExist(forwardDirection)){
-			DirectionConfig directionConfigTFMaxSize=new DirectionConfig();
+		if (!isTFMaxAttachmentExist(forwardDirection)) {
+			DirectionConfig directionConfigTFMaxSize = new DirectionConfig();
 			directionConfigTFMaxSize.setDirection(forwardDirection);
 			directionConfigTFMaxSize.setName(ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE);
 			directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
@@ -280,15 +280,15 @@ public class CreateLandscapeHelper {
 		}
 	}
 	
-	public static boolean isSWPMaxAttachmentExist(Direction reverseDirection){
+	public static boolean isSWPMaxAttachmentExist(Direction reverseDirection) {
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getResultList().size()!=0;
 	}
 	
-	public static boolean isQCMaxAttachmentExist(Direction reverseDirection){
+	public static boolean isQCMaxAttachmentExist(Direction reverseDirection) {
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_QC_MAX_ATTACHMENTSIZE).getResultList().size()!=0;
 	}
 	
-	public static boolean isTFMaxAttachmentExist(Direction forwardDirection){
+	public static boolean isTFMaxAttachmentExist(Direction forwardDirection) {
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(forwardDirection,ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE).getResultList().size()!=0;
 	}
 

@@ -54,7 +54,7 @@ public class ApiCcfCorePropertiesController extends AbstractBaseApiController{
 			if(direction == null){ 
 				throw new DataRetrievalFailureException("For given id, Direction does not exist");
 			}
-			List<CCFCoreProperty> propertyList  = coreConfigLoader.populateDirectionSpecificList(direction);
+			List<CCFCoreProperty> propertyList  = coreConfigLoader.getDefaultCCFCorePropertyList(direction);
 			properties.setCcfCoreProperties(propertyList);
 		} catch (JAXBException e) {
 			throw new DataRetrievalFailureException("Could not parse the ccfcoredefaultconfig xml file: " + e.getMessage(), e);

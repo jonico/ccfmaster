@@ -105,7 +105,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.type("id=ccfCoreProperties0.value", "");
 		selenium.click("link=Save");
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Values cannot be blank.Please enter a value"));
+		verifyTrue(selenium.isTextPresent("Values cannot be blank. Please enter a value"));
 		selenium.type("id=ccfCoreProperties0.value", "1001");
 		selenium.type("id=ccfCoreProperties1.value", "21601");
 		selenium.click("link=Save");
@@ -336,7 +336,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	}
 	
 	private void verifyConnectorBehaviorValidation(){
-		final String pageErrorMsg = "Error saving connector properties.Please check the values entered.";
+		final String pageErrorMsg = "Error saving connector properties. Please check the values entered.";
 		final String fieldErrorMsg = "Value should be numeric";
 		selenium.open("/CCFMaster/admin/displayccfpropertiessynctftopart");
 		selenium.click("link=Connector Behavior TF to QC");

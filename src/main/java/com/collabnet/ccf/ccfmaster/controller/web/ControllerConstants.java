@@ -66,7 +66,6 @@ public class ControllerConstants {
 	public static final String TFTOSWP_DIRECTION_DESCRIPTION = "TFtoSWPDirectionDescription";
 	public static final String CCF_PARTICIPANT_TF_URL = "ccf.participant.tf.url";
 	public static final String MAX_ATTACHMENT_CATEGORY = "coreSettings";
-	public static final String MAX_ATTACHMENT_TYPE = "Long";
 	public static final String MAX_ATTACHMENT_LABEL_NAME = "Max Attachment Size";
 	public static final String MAX_ATTACHMENT_TOOLTIP = "Maximum attachment size that can be shipped for an artifact";
 	
@@ -142,6 +141,9 @@ public class ControllerConstants {
 	public static final String CCF_CORE_TF_TO_QC_START_AUTOMATICALLY_MESSAGE = "ccfcoretftoqcstartautomaticallymessage";
 	public static final String RESTORE_SUCCESS_MESSSAGE = "restoresucessmessage";
 	public static final String VALIDATION_ERROR_MESSSAGE = "validationerrormessage";
+	public static final String VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC = "TypeMisMatch.ccfcoreproperties.numeric";
+	public static final String VALIDATE_NOT_EMPTY_CCFCOREPROPERTIES_VALUE = "NotEmpty.ccfcoreproperties.value";	
+	public static final String DEFAULT_ERRORMSG_NOT_EMPTY_VALUE = "Blank value not accepted";
 	
 	
 	
