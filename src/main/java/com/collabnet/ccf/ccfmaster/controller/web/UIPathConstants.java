@@ -62,6 +62,8 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_DISPLAYPARTICIPANTTOTFSTATUS = "admin/displayparticipanttotfstatus";
 	public static final String LANDSCAPESETTINGS_STOPCCFCORESTATUS = "/admin/stopccfcorestatus";
 	public static final String LANDSCAPESETTINGS_STARTCCFCORESTATUS = "/admin/startccfcorestatus";
+	public static final String LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP ="/admin/displayccfbackup";
+	public static final String LANDSCAPESETTINGS_CCF_BACKUP ="/admin/ccfbackup";
 	
 	
 	//LandscapeTFSettingsController

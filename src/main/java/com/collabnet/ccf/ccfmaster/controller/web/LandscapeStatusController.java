@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mvc.extensions.flash.FlashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
+import com.collabnet.ccf.core.utils.CCFMasterBackUp;
 
 
 @RequestMapping("/admin/**")
@@ -32,6 +34,9 @@ public class LandscapeStatusController extends AbstractLandscapeController{
 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeStatusController.class);
 	private static final String PARAM_DIRECTION = "param_direction";
+	
+	@Autowired
+	private CCFMasterBackUp ccfMasterBackup;
 	
 	
 	/**
@@ -156,6 +161,30 @@ public class LandscapeStatusController extends AbstractLandscapeController{
 			log.debug("Error restarting core: " + coreConfigurationException.getMessage(), coreConfigurationException);
 			FlashMap.setErrorMessage(ControllerConstants.CCF_CORE_RESTART_STATUS_MESSAGE, coreConfigurationException.getMessage());
 		}
+	}
+	
+	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP)
+	public String displayCCFBackup(Model model, HttpServletRequest request){
+		Landscape landscape=ControllerHelper.findLandscape();
+		model.addAttribute("participant",landscape.getParticipant());
+		model.addAttribute("landscape",landscape);
+		return UIPathConstants.LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP;
+	}
+	
+	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_CCF_BACKUP)
+	public String doCCFBackup(Model model, HttpServletRequest request){
+		try{
+			ccfMasterBackup.doFullBackUp();
+			FlashMap.setSuccessMessage(ControllerConstants.CCF_BACKUP_SUCCESS_MESSAGE,ccfMasterBackup.getBackupFilePath());
+		}catch(CoreConfigurationException e){
+			log.debug("Error occured while in Backup operation: " + e.getMessage(), e);
+			FlashMap.setErrorMessage(ControllerConstants.CCF_BACKUP_ERROR_MESSAGE, e.getMessage());
+		}
+		Landscape landscape=ControllerHelper.findLandscape();
+		model.asMap().clear();
+		model.addAttribute("participant",landscape.getParticipant());
+		model.addAttribute("landscape",landscape);
+		return String.format("redirect:%s", UIPathConstants.LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP);
 	}
 
 	

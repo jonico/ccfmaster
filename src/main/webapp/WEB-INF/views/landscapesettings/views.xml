@@ -97,6 +97,7 @@
       <item link="/admin/displayparticipanttotfstatus" tooltip="Status PARTICIPANT to TF" value="Page2"/>
       <!-- the views for this tab are defined in /views/update-core/views.xml -->
       <item link="/update-core" tooltip="Connector Upgrade" value="update-core"/>
+      <item link="/admin/displayccfbackup" tooltip="Connector Backup" value="Page4"/>
       </put-list-attribute>
     </definition>
   
@@ -108,6 +109,11 @@
    <definition name="admin/displayparticipanttotfstatus" extends="statusTabs">
     <put-attribute name="activeTab" value="Page2" cascade="true" />
     <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/statusparttotf.jspx" cascade="true" />
+  </definition>
+  
+  <definition name="/admin/displayccfbackup" extends="statusTabs">
+    <put-attribute name="activeTab" value="Page4" cascade="true" />
+    <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/ccfbackup.jspx" cascade="true" />
   </definition>
   
   <definition extends="statusTabs" name="admin/startccfcorestatus">

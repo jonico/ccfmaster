@@ -154,6 +154,8 @@ public class ControllerConstants {
 	public static final String CCF_CORE_STAUS_ID = "ccfCoreStaus.id";
 	public static final String CCF_CORE_STATUS_MESSAGE="ccfcorestatusmessage";
 	public static final String CCF_CORE_RESTART_STATUS_MESSAGE="ccfcorerestartmessage";
+	public static final String CCF_BACKUP_ERROR_MESSAGE="ccfbackuperrormessage";
+	public static final String CCF_BACKUP_SUCCESS_MESSAGE="ccfbackupsuccessmessage";
 	 
 	//Logs Constants
 	public static final String LOGLISTFAILMESSAGE = "loglistfailmessage";

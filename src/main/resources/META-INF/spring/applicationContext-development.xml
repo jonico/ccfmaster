@@ -59,11 +59,9 @@
     	</property>
     </bean>
     <!-- explicit configuration to shut down the database timer thread once the database is dead. -->
-    <bean 
-    	class="org.hsqldb.DatabaseManager" 
-    	factory-method="getTimer" 
-    	destroy-method="shutDown"
-    	depends-on="ccfDB"/>
+	<bean class="org.hsqldb.DatabaseManager" factory-method="getTimer"
+		destroy-method="shutDown" depends-on="ccfDB" />
+		
     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource" depends-on="ccfDB">
         <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="jdbc:hsqldb:hsql://localhost:#{CCFRunTimeProperties.ccfDBPort}/CCFDB"/>
@@ -175,13 +173,10 @@
     <bean class="com.collabnet.ccf.ccfmaster.server.domain.LogFileFactory">
     	<property name="baseDirectory" value="#{CCFRunTimeProperties.ccfHome}" />
     </bean>
-    
-	<bean 
-	 class="com.collabnet.ccf.ccfmaster.server.core.StartCoresOnBootBean"
-	 depends-on="ccfDB, CCFCoreStateMachine"  
-	 init-method="boot"
-	 destroy-method="shutdown"
-	 />
+
+	<bean id ="startCoresOnBootBean" class="com.collabnet.ccf.ccfmaster.server.core.StartCoresOnBootBean"
+		depends-on="ccfDB, CCFCoreStateMachine" init-method="boot"
+		destroy-method="shutdown" />
 	 
 	 <bean class="com.collabnet.ccf.ccfmaster.server.core.VBSQCMetaDataProvider">
 	 	<property name="ccfHome" value="#{CCFRunTimeProperties.ccfHome}" />
@@ -197,6 +192,18 @@
 
 	<bean id="capabilities" class="com.collabnet.ccf.ccfmaster.server.domain.Capabilities">
 		<property name="version" ref="ccfMasterVersion" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="ccfMasterBackup" class="com.collabnet.ccf.core.utils.CCFMasterBackUp">
+		<property name="archiveLocation" value="#{CCFRunTimeProperties.ccfHome}/archive" />
+		<property name="ccfHome" value="#{CCFRunTimeProperties.ccfHome}" />
+		<property name="dbPath" value="#{CCFRunTimeProperties.ccfHome}/CCFDB" />
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="startCoresOnBootBean" ref="startCoresOnBootBean" />
 	</bean>
   
 </beans>
