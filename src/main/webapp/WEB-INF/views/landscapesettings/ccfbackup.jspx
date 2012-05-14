@@ -10,6 +10,13 @@
 	<spring:message code="backup_button" var="backup_button" />
 	<spring:message code="backupheaderlabel" var="backupheaderlabel" />
 	<spring:message code="backupdisplaymsg" var="backupdisplaymsg" />
+	<spring:message code="backupstatusdisplaymessage" var="backupstatusdisplaymessage" />
+	
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+ 		
+	
 	<table class="Container">
 		<tbody>
 			<tr>
@@ -33,25 +40,54 @@
 							<tr>
 								<td class="ItemDetailName">
 									<p>${backupdisplaymsg}</p>
+									<p>${backupstatusdisplaymessage}</p>
 								</td>
 							</tr>
 						</tbody>
 					</table> <br /> <br /> <br /> <br />
-			<tr class="ContainerFooter">
+				
+				<div class="loading_screen" id="spinner">
+				<br/>
+				<br/>
+				<br/>
+				<br/><br/><br/><br/><br/><br/><br/><br /> <br /><br /> <br />
+				<h1>Backup In-progress... Please wait...</h1>
+				</div>	
+		
+				<tr class="ContainerFooter">
 
 				<td>
 					<div class="AlignRight">
 						<div class="ButtonSpace"></div>
 						<div class="Button">
-							<div class="Middle">
-								<a href="${fn:escapeXml(backup_url)}" class="submit">${backup_button}</a>
+							<div class="Middle" >
+								<a href="${fn:escapeXml(backup_url)}" id="click-button" class="submit">${backup_button}</a>
 							</div>
 						</div>
 					</div>
 				</td>
 			</tr>
+			
 			</td>
 			</tr>
 		</tbody>
 	</table>
+	  
+	<script language="JavaScript">
+	$(document).ready(function(){
+		$('#click-button').click(function() {
+			var result = confirm ("Are you sure you want to proceed with backup?")
+			if (result){
+				$('#spinner').show();
+				$('#click-button').hide();
+			}
+			else{
+				return false;
+			}
+			
+		});
+	});
+	
+	
+	</script>
 </div>
