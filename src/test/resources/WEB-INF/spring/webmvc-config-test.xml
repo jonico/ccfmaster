@@ -122,5 +122,14 @@
     </property>
   </bean>	
  -->
+ 
+ <!-- TODO: Need to find a way to load applicationContext.xml, in AbstractAPIIntegrationTest.java, Currently webmvc-config-test.xml gets loaded by default 
+ 		For now to fix junit test case failure adding temporarily dummyCCFMasterBackup without jdbcTemplate and StartCoresOnBootBean bean definitions-->
+
+	<bean id="dummyCCFMasterBackup" class="com.collabnet.ccf.core.utils.CCFMasterBackUp">
+		<property name="archiveLocation" value="#{CCFRunTimeProperties.ccfHome}/archive" />
+		<property name="ccfHome" value="#{CCFRunTimeProperties.ccfHome}" />
+		<property name="dbPath" value="#{CCFRunTimeProperties.ccfHome}/CCFDB" />
+	</bean>
 
 </beans>

@@ -88,4 +88,19 @@
    	</bean>
     
     <bean class="com.collabnet.ccf.ccfmaster.server.core.MockRepositoryIdBelongsToExternalAppListenerFactory" />
+    
+   	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="ccfMasterBackup" class="com.collabnet.ccf.core.utils.CCFMasterBackUp">
+		<property name="archiveLocation" value="#{CCFRunTimeProperties.ccfHome}/archive" />
+		<property name="ccfHome" value="#{CCFRunTimeProperties.ccfHome}" />
+		<property name="dbPath" value="#{CCFRunTimeProperties.ccfHome}/CCFDB" />
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="startCoresOnBootBean" ref="startCoresOnBootBean" />
+	</bean>
+	
+	<bean id ="startCoresOnBootBean" class="com.collabnet.ccf.ccfmaster.server.core.StartCoresOnBootBean"
+		 init-method="boot"	destroy-method="shutdown" />
 </beans>
