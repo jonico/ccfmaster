@@ -41,6 +41,8 @@
 								<td class="ItemDetailName">
 									<p>${backupdisplaymsg}</p>
 									<p>${backupstatusdisplaymessage}</p>
+									<!-- TODO replace the link for help.OCN link once the document is ready -->
+									<p>Please <a href="https://ctf.open.collab.net/sf/wiki/do/viewPage/projects.ccf/wiki/ConnectorBackupRestore"> click here </a>to view on how to restore the backup contents.</p>
 								</td>
 							</tr>
 						</tbody>
