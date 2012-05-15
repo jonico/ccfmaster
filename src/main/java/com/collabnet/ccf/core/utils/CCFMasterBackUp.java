@@ -23,8 +23,6 @@ import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 public class CCFMasterBackUp {
 	
 	private static final String CHECKPOINT_SQL_STRING = "CHECKPOINT";
-	
-	private static long count = 1;
 
 	private String ccfHome;
 	
@@ -70,7 +68,7 @@ public class CCFMasterBackUp {
 	}
 	
 	public synchronized void doFullBackUp(){
-		File destDir = createDestinationFolder();
+		File destDir = createBackupDir();
 		setBackupFilePath(destDir.getAbsolutePath());
 		doLandscapeBackup(destDir);
 		doDBBackup(destDir);
@@ -117,18 +115,10 @@ public class CCFMasterBackUp {
 
 	}
 	
-	private File createDestinationFolder() {
-		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-		String dirName = String.format("backup-%s", df.format(new Date()));
-		File backupDir = new File(archiveLocation,dirName);
-		if (backupDir.exists() && backupDir.isDirectory()) {
-			dirName = String.format("%s-%d", dirName, count);
-			backupDir = new File(archiveLocation,dirName);
-			count ++;
-		} else {
-			count = 1;
-		}
-		return backupDir;
+	private File createBackupDir() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hhmmssS");
+		String dirName = String.format("backup-%s",dateFormat.format(new Date())); 
+		return new File(archiveLocation,dirName);//backup dir will be named like - backup-2012-05-15 021000549
 	}
 	
 }
