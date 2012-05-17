@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.dao.DataAccessException;
@@ -69,9 +70,14 @@ public class CCFMasterBackUp {
 	
 	public synchronized void doFullBackUp(){
 		File destDir = createBackupDir();
+		List<Long> runningCoreIds = startCoresOnBootBean.getRunningCoreIds();
+		startCoresOnBootBean.shutdown();// shutdowns all the cores
 		setBackupFilePath(destDir.getAbsolutePath());
 		doLandscapeBackup(destDir);
 		doDBBackup(destDir);
+		if(!runningCoreIds.isEmpty() && startCoresOnBootBean.allCoresStopped())
+			startCoresOnBootBean.boot(runningCoreIds);// starts already started cores
+		
 	}
 
 	protected synchronized void doDBBackup(File destDir) {
@@ -91,9 +97,6 @@ public class CCFMasterBackUp {
 
 	protected synchronized void doLandscapeBackup(File destDir) {
 		try {
-			// TODO: Need to check whether cores are shutdown are not... I guess
-			// shutdown internally take cares of it
-			startCoresOnBootBean.shutdown();// shutdowns all the cores
 			String landscapeDir = ControllerHelper.landscapeDirName(ccfHome);
 			FileUtils.copyDirectoryToDirectory(new File(landscapeDir), destDir);
 		} catch (IOException e) {

@@ -23,16 +23,9 @@ import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.config.Version;
 import com.collabnet.ccf.ccfmaster.server.core.SingleLandscapeCCFCoreInteractionStrategy;
 import com.collabnet.ccf.ccfmaster.server.core.StartCoresOnBootBean;
-import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus;
-import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus.CoreState;
-import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus.ExecutedCommand;
-import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 public class FileUploadHandler extends MultiAction implements Serializable {
 
@@ -125,17 +118,9 @@ public class FileUploadHandler extends MultiAction implements Serializable {
 	}
 	
 	public Event stopCores(RequestContext context) {
-		final Iterable<CcfCoreStatus> allCores = Iterables.transform(Direction.findAllDirections(), direction2coreStatus);
-
-		// a previous run that went wrong might have stopped cores
-		// so they won't be running anymore.
-		if (runningCoreIds.isEmpty()) {
-			final Iterable<CcfCoreStatus> runningCores = Iterables.filter(allCores, isRunning);
-			runningCoreIds = ImmutableList.copyOf(Iterables.transform(runningCores, core2Id));
-		}
-		
+		runningCoreIds = startCoresOnBootBean.getRunningCoreIds();
 		startCoresOnBootBean.shutdown();
-		if (startCoresOnBootBean.allCoresStopped(allCores)) { 
+		if (startCoresOnBootBean.allCoresStopped()) { 
 			return success();
 		} else {
 			final MessageResolver msg = new MessageBuilder()
@@ -210,35 +195,9 @@ public class FileUploadHandler extends MultiAction implements Serializable {
 	
 	public Event startCores(RequestContext context) {
 		Preconditions.checkState(runningCoreIds != null, "cores were null");
-		
-		for (Long directionId : runningCoreIds) {
-			CcfCoreStatus core = CcfCoreStatus.findCcfCoreStatus(directionId);
-			core.setExecutedCommand(ExecutedCommand.START);
-			core.merge();
-		}
+		startCoresOnBootBean.boot(runningCoreIds);
 		return success();
 	}
-	
-	static Function<CcfCoreStatus, Long> core2Id = new Function<CcfCoreStatus, Long>() {
-		@Override
-		public Long apply(CcfCoreStatus input) {
-			return input.getId();
-		}
-	};
-	
-	static Function<Direction, CcfCoreStatus> direction2coreStatus = new Function<Direction, CcfCoreStatus>() {
-		@Override
-		public CcfCoreStatus apply(Direction input) {
-			return CcfCoreStatus.findCcfCoreStatus(input.getId());
-		}
-	};
-
-	static Predicate<CcfCoreStatus> isRunning = new Predicate<CcfCoreStatus>() {
-		@Override
-		public boolean apply(CcfCoreStatus ccs) {
-			return ccs.getCurrentStatus() == CoreState.STARTED;
-		}
-	};
 
 	private CoreZipFile czf;
 
