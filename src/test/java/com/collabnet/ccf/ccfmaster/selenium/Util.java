@@ -23,6 +23,8 @@ public final class Util {
 	
 	private static final String xpath_Stopped_elemLocator = "//input[@name='currentStatus' and @value='STOPPED']";
 	
+	private static final String tfBackup_SuccesMsg = "Backup is created successfully";
+	
 	// prevent instantiation.
 	private Util() {
 	}
@@ -339,13 +341,24 @@ public final class Util {
 		selenium.click("id=save");
 		selenium.click("//button[2]");
 		selenium.waitForPageToLoad("30000");
-	}
-	
+	}	
 	
 	public static void applyParticipantSaveAndRestartOptions(Selenium selenium){
 		selenium.open("/CCFMaster/admin/ccfmaster");
 		selenium.click("id=save");
 		selenium.click("//button[@type='button']");
 		selenium.waitForPageToLoad("30000");
+	}
+	
+	public static void testBackup(Selenium selenium){
+		selenium.open("/CCFMaster/admin/displayccfbackup");
+		selenium.click("link=Connector Backup");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("id=click-button");
+		selenium.chooseOkOnNextConfirmation();
+		do {
+			selenium.waitForPageToLoad("30000");
+		} while (!selenium.isTextPresent(tfBackup_SuccesMsg));
+		assertTrue(selenium.isTextPresent(tfBackup_SuccesMsg));
 	}
 }

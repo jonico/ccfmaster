@@ -117,6 +117,7 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 			if (needRerun) {
 				Util.testStatus(selenium); // need to validate the status again(i.e if STARTED -> need to check STOPPED status and Vice versa)
 			}
+			Util.testBackup(selenium);
 			testSwpLogs();
 		} catch (AssertionError e) {
 			final String msg = "testStatus failed. Base64 screenshot:\n";
