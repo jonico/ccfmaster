@@ -885,19 +885,6 @@ input.Button{
   cursor: pointer;
 }
  
-.spinnerreload {
- position: fixed;
- top: 50%;
- left: 50%;
- margin-left: -50px; /* half width of the spinner gif */
- margin-top: -50px; /* half height of the spinner gif */
- text-align:center;
- z-index:1234;
- overflow: auto;
- width: 100px; /* width of the spinner gif */
- height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
- background-color: black;
-}
 
 .loading_screen {  
   display: none;
@@ -906,13 +893,12 @@ input.Button{
   top: 0px;
   height: 100%;
   width: 100%;
-  background-color: black;
   color: white;  
   text-align: center;
   padding-top: 100px;
   opacity: 0.7;
   filter: alpha(opacity=50);
-  background: black url(../images/icons/spinner-reload.gif)  0.4em 0.5em no-repeat ;
-  background-position:440px 245px;
+  background: black url(../images/icons/spinner-reload.gif) 0.4em 0.5em no-repeat ;
+  background-position: 640px 300px;
   float: right;
 }

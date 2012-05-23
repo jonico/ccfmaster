@@ -15,8 +15,6 @@
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
- 		
-	
 	<table class="Container">
 		<tbody>
 			<tr>
@@ -33,10 +31,9 @@
 							</tr>
 
 							<tr>
-								<td><br />
+								<td><br/>
 								<br /></td>
 							</tr>
-
 							<tr>
 								<td class="ItemDetailName">
 									<p>${backupdisplaymsg}</p>
@@ -49,11 +46,8 @@
 					</table> <br /> <br /> <br /> <br />
 				
 				<div class="loading_screen" id="spinner">
-				<br/>
-				<br/>
-				<br/>
-				<br/><br/><br/><br/><br/><br/><br/><br /> <br /><br /> <br />
-				<h1>Backup In-progress... Please wait...</h1>
+				<!-- IE issue: Spinner-reload animated gif is displayed but not with animation in IE.Know issue in IE 
+				http://stackoverflow.com/questions/780560/animated-gif-in-ie-stopping -->
 				</div>	
 		
 				<tr class="ContainerFooter">
@@ -69,17 +63,29 @@
 					</div>
 				</td>
 			</tr>
-			
 			</td>
 			</tr>
 		</tbody>
 	</table>
+	
+	<style>
+
+  h1{ padding-left : 40px;
+ 	 padding-top: 140px;
+  }
+ 
+  </style>
+  
+
 	  
 	<script language="JavaScript">
 	$(document).ready(function(){
 		$('#click-button').click(function() {
 			var result = confirm ("Are you sure you want to proceed with backup?")
 			if (result){
+				$("<h1></h1>").text("Backup In-progress... Please wait...").appendTo("div#spinner");
+				$("h1").addClass('h1');
+				
 				$('#spinner').show();
 				$('#click-button').hide();
 			}
@@ -92,4 +98,5 @@
 	
 	
 	</script>
+	
 </div>
