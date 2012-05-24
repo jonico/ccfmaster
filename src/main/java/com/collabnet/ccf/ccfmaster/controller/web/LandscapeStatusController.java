@@ -166,6 +166,7 @@ public class LandscapeStatusController extends AbstractLandscapeController{
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP)
 	public String displayCCFBackup(Model model, HttpServletRequest request){
 		Landscape landscape=ControllerHelper.findLandscape();
+		model.addAttribute("selectedLink", ControllerConstants.STATUS);
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP;
@@ -182,6 +183,7 @@ public class LandscapeStatusController extends AbstractLandscapeController{
 		}
 		Landscape landscape=ControllerHelper.findLandscape();
 		model.asMap().clear();
+		model.addAttribute("selectedLink", ControllerConstants.STATUS);
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);
 		return String.format("redirect:%s", UIPathConstants.LANDSCAPESETTINGS_DISPLAY_CCF_BACKUP);

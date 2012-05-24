@@ -90,7 +90,7 @@ public class CCFMasterBackUp {
 		} catch (DataAccessException e) {
 			throw new CoreConfigurationException("Accessed denied to Backup Files", e);
 		} catch (IOException e) {
-			throw new CoreConfigurationException("Backup failed", e);
+			throw new CoreConfigurationException("Backup operation failed- "+e.getMessage(), e);
 		}
 
 	}
@@ -100,7 +100,7 @@ public class CCFMasterBackUp {
 			String landscapeDir = ControllerHelper.landscapeDirName(ccfHome);
 			FileUtils.copyDirectoryToDirectory(new File(landscapeDir), destDir);
 		} catch (IOException e) {
-			throw new CoreConfigurationException("Backup failed", e);
+			throw new CoreConfigurationException("Backup operation failed- "+e.getMessage(), e);
 		}
 
 	}
