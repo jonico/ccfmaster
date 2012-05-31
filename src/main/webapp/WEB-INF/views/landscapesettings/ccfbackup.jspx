@@ -83,7 +83,7 @@
 		$('#click-button').click(function() {
 			var result = confirm ("Are you sure you want to proceed with backup?")
 			if (result){
-				$("<h1></h1>").text("Backup In-progress... Please wait...").appendTo("div#spinner");
+				$("<h1></h1>").text("Backup Inprogress... Please wait...").appendTo("div#spinner");
 				$("h1").addClass('h1');
 				
 				$('#spinner').show();
