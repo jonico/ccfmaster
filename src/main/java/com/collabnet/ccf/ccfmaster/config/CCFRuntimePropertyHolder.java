@@ -210,7 +210,7 @@ public class CCFRuntimePropertyHolder {
 	 */
 	private void loadCcfConfProperties() {
 		Properties props = null;
-		String ccfConfFilePath = String.format("%s%sccf.conf",getCcfHome(), File.separator);
+		String ccfConfFilePath = String.format("%s%sccfhomeruntimeconfig.properties",getCcfHome(), File.separator);
 		Resource resource = new FileSystemResource(ccfConfFilePath);
 		if(resource.exists()){
 			try {
@@ -318,6 +318,7 @@ public class CCFRuntimePropertyHolder {
 			if(maxAttachmentSize == null){
 				setMaxAttachmentSize(value);
 			}
+			break;
 		}
 	}
 
