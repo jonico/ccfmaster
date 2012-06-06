@@ -284,7 +284,14 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		try{
 			updateDirectionConfigs(ccfCoreProperties, landscape.getParticipant().getSystemKind(),direction);
 			updateDirection(ccfCoreProperties,landscape, direction);
-			FlashMap.setSuccessMessage(ControllerConstants.SYNC_SAVE_SUCCESS_MESSAGE);
+			boolean hasRestart = Boolean.parseBoolean(request.getParameter(RESTART));
+			if(hasRestart){
+				LandscapeStatusController.restartCCFCoreStatus(model);
+				FlashMap.setSuccessMessage(ControllerConstants.SYNC_SAVE_RESTART_SUCCESS_MESSAGE);
+			}
+			else{
+				FlashMap.setSuccessMessage(ControllerConstants.SYNC_SAVE_SUCCESS_MESSAGE);
+			}
 		}
 		catch(Exception exception){
 			log.debug("Error saving Connector properties: " + exception.getMessage(), exception);

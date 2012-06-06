@@ -135,6 +135,7 @@ public class ControllerConstants {
 	public static final String DIRECTION_ID = "direction.id";
 	public static final String SYNC_SAVE_FAIL_MESSAGE = "syncsavefailmessage";
 	public static final String SYNC_SAVE_SUCCESS_MESSAGE = "syncsavesuccessmessage";
+	public static final String SYNC_SAVE_RESTART_SUCCESS_MESSAGE="syncsaverestartsuccessmessage";
 	public static final String CCF_CORE_SWP_TO_TF_START_AUTOMATICALLY_MESSAGE = "ccfcoreswptotfstartautomaticallymessage";
 	public static final String CCF_CORE_QC_TO_TF_START_AUTOMATICALLY_MESSAGE = "ccfcoreqctotfstartautomaticallymessage";
 	public static final String CCF_CORE_TF_TO_SWP_START_AUTOMATICALLY_MESSAGE = "ccfcoretftoswpstartautomaticallymessage";

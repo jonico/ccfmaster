@@ -283,7 +283,8 @@
 				<div class="ButtonSpace"> </div>	
 				<div class="Button">
 				<div class="Middle">
-						<a href="javascript: saveForm('${fn:escapeXml(savesyncparttotf_url)}');" class="submit">${save_button}</a>
+						<input type="hidden"  id="restart" name="restart" value="false"/>
+						<a id="save" class="submit">${save_button}</a>
 				</div>
 				</div>
 				</div>
@@ -295,14 +296,17 @@
 	</tbody>
   	</table>
 </form:form>   
- 	
+ 				<!--  Jquery Dialog Div that shows message with multiple buttons  -->
+  				<div id="dialog" title="Save Connector Behavior Settings">
+  				<p>Changes to the settings will only apply after connector restart</p>
+`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel, to close the window</p>
+				</div>
   
   
 	<script language="JavaScript">
-		function saveForm(url){
-	  		document.getElementById("syncParticipantForm").action=url;
-	  		document.getElementById("syncParticipantForm").submit();
-		}
+		
 		function restoreForm(url){
 	  		document.getElementById("syncParticipantForm").action=url;
 	  		document.getElementById("syncParticipantForm").submit();
@@ -361,5 +365,36 @@
 				$(this).parent().find('.poptext').remove();
 			});
 			});
+		
+		$(function(){
+	        // jQuery UI Dialog    
+		   $('#dialog').dialog({
+	            autoOpen: false,
+	            width: 400,
+	            modal: true,
+	            resizable: false,
+	            buttons: {
+	                "Save And Restart": function() {
+	                	document.getElementById("syncParticipantForm").action='${savesyncparttotf_url}';
+	                	document.getElementById("restart").value="true";
+	        	  		document.getElementById("syncParticipantForm").submit();
+	                },
+	                "Save Only": function() {
+	                	document.getElementById("syncParticipantForm").action='${savesyncparttotf_url}';
+	                	document.getElementById("restart").value="false";
+	        	  		document.getElementById("syncParticipantForm").submit();
+	                },
+	                "Cancel": function() {
+	                $(this).dialog("close");
+	                }
+	            }
+	        });
+
+	        $('a#save').click(function(e){
+	           e.preventDefault();
+			   $('#dialog').dialog('open');
+			  
+	        });
+	});
 	</script>		 
 </div>

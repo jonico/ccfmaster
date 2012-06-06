@@ -91,12 +91,14 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("id=direction.shouldStartAutomatically1");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 		selenium.click("id=direction.shouldStartAutomatically1");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 	}
 	
 	private void verifySaveCoreConfigSettings(){
@@ -104,13 +106,15 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.type("id=ccfCoreProperties0.value", "");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("Values cannot be blank. Please enter a value"));
 		selenium.type("id=ccfCoreProperties0.value", "1001");
 		selenium.type("id=ccfCoreProperties1.value", "21601");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 		verifyEquals("1001", selenium.getValue("id=ccfCoreProperties0.value"));
 		verifyEquals("21601", selenium.getValue("id=ccfCoreProperties1.value"));
 		
@@ -350,6 +354,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Repository Settings");
 		selenium.click("link=Core Settings");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent(pageErrorMsg));
 		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
@@ -359,6 +364,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.type("id=ccfCoreProperties2.value", "afda");
 		selenium.type("id=ccfCoreProperties3.value", "afd");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent(pageErrorMsg));
 		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
@@ -367,6 +373,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.type("id=ccfCoreProperties2.value", "afda123qwe");
 		selenium.type("id=ccfCoreProperties3.value", "afd123we");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent(pageErrorMsg));
 		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
@@ -379,6 +386,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Repository Settings");
 		selenium.type("id=ccfCoreProperties6.value", "0df");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent(pageErrorMsg));
 		verifyTrue(selenium.isTextPresent(fieldErrorMsg));
@@ -391,6 +399,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.click("link=Repository Settings");
 		selenium.type("id=ccfCoreProperties6.value", "adasda");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent(pageErrorMsg));
 		verifyTrue(selenium.isTextPresent(fieldErrorMsg));

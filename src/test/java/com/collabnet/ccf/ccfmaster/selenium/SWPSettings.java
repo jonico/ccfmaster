@@ -200,12 +200,14 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("id=direction.shouldStartAutomatically1");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 		selenium.click("id=direction.shouldStartAutomatically1");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 	}
 	
 	private void resumeConnectorSwptoTfService(){
@@ -215,12 +217,14 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("id=direction.shouldStartAutomatically1");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 		selenium.click("id=direction.shouldStartAutomatically1");
 		selenium.click("link=Save");
+		selenium.click("//button[2]");// clicks saveonly button
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("Connector Behavior status saved successfully"));
+		verifyTrue(selenium.isTextPresent("Connector Behavior settings saved successfully"));
 	}
 	
 	private void navigateSwpRespositoryMappingTab(){
