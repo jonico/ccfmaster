@@ -354,10 +354,10 @@ public final class Util {
 		selenium.open("/CCFMaster/admin/displayccfbackup");
 		selenium.click("link=Connector Backup");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("id=click-button");
 		selenium.chooseOkOnNextConfirmation();
+		selenium.click("id=click-button");
 		do {
-			selenium.waitForPageToLoad("30000");
+			waitUntilTextPresent(selenium, tfBackup_SuccesMsg);
 		} while (!selenium.isTextPresent(tfBackup_SuccesMsg));
 		assertTrue(selenium.isTextPresent(tfBackup_SuccesMsg));
 	}
