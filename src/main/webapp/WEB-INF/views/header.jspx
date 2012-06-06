@@ -23,7 +23,7 @@
 		<spring:url var="home" value="/" />
 		<spring:message code="button_home" var="home_label" />
 		<spring:message code="titleheader" var="titleheader" />
-		<spring:url value="/images/icons/ccfheadericon.png" var="ccfheadericon"/>
+		<spring:url value="/images/icons/ccfheadericon21.png" var="ccfheadericon"/>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="mastHeadBackground">
 			<tbody>
 				<tr>
