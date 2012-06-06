@@ -82,7 +82,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		verifyTrue(selenium.isElementPresent("css=div.greenText"));
 		verifyShouldStartAutomatically();
 		verifySaveCoreConfigSettings();
-//		verifyRestoreDefaultSettings();
+		verifyRestoreDefaultSettings();
 		verifyConnectorBehaviorValidation();
 	}
 	
@@ -120,7 +120,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		
 	}
 	
-	@SuppressWarnings("unused")
+
 	private void verifyRestoreDefaultSettings(){
 		selenium.click("link=Connector Behavior TF to QC");
 		selenium.waitForPageToLoad("30000");
