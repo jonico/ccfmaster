@@ -21,9 +21,9 @@ public class ControllerConstants {
 	public static final String SW_PDESCRIPTION = "ScrumWorks Pro";
 	public static final String SWP = "SWP";
 	public static final String QCDESCRIPTION = "HP Quality Center";
-	public static final String QC = "QC";
+	public static final String QC = "Quality Center";
 	public static final String TFDESCRIPTION = "TeamForge";
-	public static final String TF = "TF";
+	public static final String TF = "TeamForge";
 
 	// Landscape validator constants
 	public static final String VALIDATESWPURL = "wsdl";
