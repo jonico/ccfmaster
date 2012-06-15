@@ -3,7 +3,6 @@ package com.collabnet.ccf.ccfmaster.config;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -186,7 +185,7 @@ public class CCFRuntimePropertyHolder {
 	 * Init method for {@link CCFRuntimePropertyHolder} .
 	 * This method loads the properties which are configured as system/environment variable.
 	 * If system/environment variable is not configured,looks up for fallback ccfhome/ccf.conf file to load
-	 * the properties.If file not found loads default properties.
+	 * the properties.If any property missing from the conf file, it loads the default value for the property.
 	 */
 	public void initializeRuntimeProperties(){
 		for(RuntimePropertyNameEnum propEnum:RuntimePropertyNameEnum.values()){
@@ -210,33 +209,28 @@ public class CCFRuntimePropertyHolder {
 	 */
 	private void loadCcfConfProperties() {
 		Properties props = null;
-		String ccfConfFilePath = String.format("%s%sccfhomeruntimeconfig.properties",getCcfHome(), File.separator);
+		String ccfConfFilePath = String.format("%s%sccfhomeruntimeconfig.properties", getCcfHome(),File.separator);
 		Resource resource = new FileSystemResource(ccfConfFilePath);
-		if(resource.exists()){
+		if (resource.exists()) {
 			try {
 				props = PropertiesLoaderUtils.loadProperties(resource);
+				log.info("CCF runtime properties loaded from ccfhomeruntimeconfig.properties: " + props.toString());
 			} catch (IOException e) {
 				log.error("Couldn't find ccf.conf file");
 			}
-		}else{
-			props = getDefaultRuntimePropvalues();
 		}
-		if(props!= null){
-			log.info("CCF runtime properties loaded: " + props.toString());
-			Set<String> keyset = props.stringPropertyNames();
-			for(String value: keyset){
-				setPropertyValues(getEnum(value), props.getProperty(value));
+		for (RuntimePropertyNameEnum propEnum : RuntimePropertyNameEnum.values()) {
+			String key = propEnum.getPropertyName();
+			String newValue = null;
+			if (props != null) {
+				newValue = props.getProperty(key);
 			}
-		}
-	}
-	
-	private RuntimePropertyNameEnum getEnum(String propertykeyValue){
-		for(RuntimePropertyNameEnum propEnum:RuntimePropertyNameEnum.values()){
-			if(propEnum.getPropertyName().equalsIgnoreCase(propertykeyValue)){
-				return propEnum;
+			if (newValue == null) { //getting the default value
+				newValue = getDefaultRuntimePropvalues().getProperty(key);
+				log.debug("Default value for property- " + key + " : "	+ newValue);
 			}
+			setPropertyValues(propEnum, newValue);
 		}
-		return null;	
 	}
 
 	private String getFallBackCcfHomePath() {
