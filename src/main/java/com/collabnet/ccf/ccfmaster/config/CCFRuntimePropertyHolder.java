@@ -216,7 +216,7 @@ public class CCFRuntimePropertyHolder {
 				props = PropertiesLoaderUtils.loadProperties(resource);
 				log.info("CCF runtime properties loaded from ccfhomeruntimeconfig.properties: " + props.toString());
 			} catch (IOException e) {
-				log.error("Couldn't find ccf.conf file");
+				log.error("Couldn't find ccfhomeruntimeconfig.properties file");
 			}
 		}
 		for (RuntimePropertyNameEnum propEnum : RuntimePropertyNameEnum.values()) {
