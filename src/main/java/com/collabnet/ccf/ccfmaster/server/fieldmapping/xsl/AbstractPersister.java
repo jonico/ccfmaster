@@ -1,8 +1,9 @@
 package com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -105,7 +106,7 @@ public abstract class AbstractPersister<T extends Mapping<?>> {
 			return;
 		XMLWriter writer = null;
 		try {
-			writer = new XMLWriter(new FileWriter(file));
+			writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
 			writer.write(xml);
 		} finally {
 			if (writer != null)
