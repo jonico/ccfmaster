@@ -252,9 +252,10 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=ccf-info.log");
-		selenium.waitForPageToLoad("90000");
-		selenium.controlKeyDown(); // this will invoke ajax request to load tail log file content
-		selenium.waitForPageToLoad("1200000");
+		selenium.waitForPageToLoad("30000");
+		for(int i=0 ; i<1000 ;i++){// this will invoke ajax request to load tail log file content
+			assertTrue(selenium.isElementPresent("//*[@id='fileContentDiv']"));
+		}
 		selenium.goBack();
 		selenium.waitForPageToLoad("30000");
 	}
