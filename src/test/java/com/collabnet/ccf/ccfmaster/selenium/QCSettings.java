@@ -243,7 +243,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 	
 	
 	public void testQcLogs() {
-		selenium.click("link=Logs");
+		selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=Logs QC to TF");
 		selenium.waitForPageToLoad("30000");

@@ -128,7 +128,7 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
 	
 	
 	public void testSwpLogs() {
-		selenium.click("link=Logs");
+		selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("link=Logs SWP to TF");
 		selenium.waitForPageToLoad("30000");
