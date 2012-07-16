@@ -357,13 +357,10 @@ public final class Util {
 		selenium.waitForPageToLoad("30000");
 		selenium.chooseOkOnNextConfirmation();
 		selenium.click("id=click-button");
-		while (!selenium.isElementPresent("css=div.greenText")){
-			if(selenium.isElementPresent("css=div.greenText")){
-				assertTrue(selenium.isTextPresent(tfBackup_SuccesMsg));
-				break;
-			}
-		}
-		assertTrue(selenium.isElementPresent("css=div.greenText"));
+		do {
+			waitUntilTextPresent(selenium, tfBackup_SuccesMsg);
+		} while (!selenium.isTextPresent(tfBackup_SuccesMsg));
+		assertTrue(selenium.isTextPresent(tfBackup_SuccesMsg));
 		selenium.setTimeout("30000");
 	}
 }
