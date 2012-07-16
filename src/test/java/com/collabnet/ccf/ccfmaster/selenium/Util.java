@@ -364,6 +364,6 @@ public final class Util {
 			}
 		}
 		assertTrue(selenium.isElementPresent("css=div.greenText"));
-//		selenium.setTimeout("30000");
+		selenium.setTimeout("30000");
 	}
 }
