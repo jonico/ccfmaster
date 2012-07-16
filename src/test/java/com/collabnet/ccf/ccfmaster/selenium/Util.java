@@ -352,7 +352,7 @@ public final class Util {
 	
 	public static void testBackup(Selenium selenium){
 		selenium.open("/CCFMaster/admin/displayccfbackup");
-		selenium.setTimeout("120000");
+//		selenium.setTimeout("120000");
 		selenium.click("link=Connector Backup");
 		selenium.waitForPageToLoad("30000");
 		selenium.chooseOkOnNextConfirmation();
@@ -361,6 +361,6 @@ public final class Util {
 			waitUntilTextPresent(selenium, tfBackup_SuccesMsg);
 		} while (!selenium.isTextPresent(tfBackup_SuccesMsg));
 		assertTrue(selenium.isTextPresent(tfBackup_SuccesMsg));
-		selenium.setTimeout("30000");
+//		selenium.setTimeout("30000");
 	}
 }
