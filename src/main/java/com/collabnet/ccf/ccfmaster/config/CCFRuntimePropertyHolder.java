@@ -235,7 +235,7 @@ public class CCFRuntimePropertyHolder {
 
 	private String getFallBackCcfHomePath() {
 		String ccfhomePath = null;
-		String[] fallbackDir = {String.format("%s%sccfhome",FileUtils.getUserDirectoryPath(), File.separator), String.format("%sccfhome",FileUtils.getTempDirectoryPath())
+		String[] fallbackDir = {String.format("%s%sccfhome",FileUtils.getUserDirectoryPath(), File.separator), String.format("%s%sccfhome",FileUtils.getTempDirectoryPath(),File.separator)
 									,getDefaultRuntimePropvalues().getProperty(RuntimePropertyNameEnum.CCF_HOME.getPropertyName())};
 		for(String path: fallbackDir){
 			boolean isDefaultDirExist = new File(path).isDirectory();
