@@ -196,7 +196,9 @@ public class CCFRuntimePropertyHolder {
 			}
 		}
 		if(getCcfHome() == null){
-			setCcfHome(getFallBackCcfHomePath());
+			String fallbackDir = getFallBackCcfHomePath();
+			log.info("Set fallback directory as CCF home runtime property : " + fallbackDir);
+			setCcfHome(fallbackDir);
 		}
 
 		loadCcfConfProperties();
@@ -214,7 +216,7 @@ public class CCFRuntimePropertyHolder {
 		if (resource.exists()) {
 			try {
 				props = PropertiesLoaderUtils.loadProperties(resource);
-				log.info("CCF runtime properties loaded from ccfhomeruntimeconfig.properties: " + props.toString());
+				log.info("List of CCF runtime properties configured in the ccfhomeruntimeconfig.properties: " + props.toString());
 			} catch (IOException e) {
 				log.error("Couldn't find ccfhomeruntimeconfig.properties file");
 			}
@@ -237,6 +239,7 @@ public class CCFRuntimePropertyHolder {
 		String ccfhomePath = null;
 		String[] fallbackDir = {String.format("%s%sccfhome",FileUtils.getUserDirectoryPath(), File.separator), String.format("%s%sccfhome",FileUtils.getTempDirectoryPath(),File.separator)
 									,getDefaultRuntimePropvalues().getProperty(RuntimePropertyNameEnum.CCF_HOME.getPropertyName())};
+		log.debug("Expected fallback directory list: {" + fallbackDir[0] +", "+fallbackDir[1]+", "+fallbackDir[2]+" }");
 		for(String path: fallbackDir){
 			boolean isDefaultDirExist = new File(path).isDirectory();
 			if(isDefaultDirExist){
