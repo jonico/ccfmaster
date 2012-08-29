@@ -42,6 +42,8 @@ public class Participant {
     @Enumerated(EnumType.STRING)
     private SystemKind systemKind;
 
+    private String prefix;
+
     public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, Participant> {
 
         @Override

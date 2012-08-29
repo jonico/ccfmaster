@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.collabnet.ccf.ccfmaster.gp.model.ConfigType;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -14,7 +15,6 @@ public class CCFCoreProperty {
 	@XmlAttribute(required=true)
 	private String name;
 	
-	@NotNull
 	@XmlAttribute(required=true)
 	private String value;
 	
@@ -37,6 +37,12 @@ public class CCFCoreProperty {
 	
 	@XmlAttribute
 	private  CCFCorePropertyType type;
+	
+	@XmlAttribute
+	private boolean displayInHTML;
+	
+	@XmlAttribute(name = "configType")
+	private ConfigType configType;
 	
 	public CCFCoreProperty() {	}
 	
@@ -112,6 +118,27 @@ public class CCFCoreProperty {
 
 	public void setType(CCFCorePropertyType type) {
 		this.type = type;
+	}
+
+
+
+	public boolean isDisplayInHTML() {
+		return displayInHTML;
+	}
+
+
+	public void setDisplayInHTML(boolean displayInHTML) {
+		this.displayInHTML = displayInHTML;
+	}
+
+
+	public ConfigType getConfigType() {
+		return configType;
+	}
+
+
+	public void setConfigType(ConfigType configType) {
+		this.configType = configType;
 	}
 
 

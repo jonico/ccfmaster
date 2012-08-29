@@ -52,6 +52,17 @@
     	<div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">${label_swpsettings}</a></div>
 	</c:if>
 	
+		<c:if test="${participant.systemKind eq 'GENERIC'}"> 
+		<c:if test="${selectedLink==null || selectedLink==''}">
+  			<c:set  var="selectedLink" scope="request" value="genericsettings"/>
+		</c:if> 
+		<c:set var="itemClass" value="ImageListParent"/>
+    	<c:if test="${selectedLink == 'genericsettings'}" >
+    		<c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
+    	</c:if>
+    	<div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">GenericSettings</a></div>
+	</c:if>
+	
     <c:set var="itemClass" value="ImageListParent"/>
     <c:if test="${selectedLink == 'tfsettings'}" >
      <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
@@ -70,7 +81,7 @@
     </c:if>
     <div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(repositorymappings_url)}">${label_repositorymappings}</a></div>
 	
-	<c:if test="${participant.systemKind eq 'QC'}"> 
+	<c:if test="${participant.systemKind eq 'QC' || participant.systemKind eq 'GENERIC'}"> 
 	<c:set var="itemClass" value="ImageListParent"/>
     <c:if test="${requestScope.selectedLink == 'fieldmappingtemplates'}" >
       <c:set var="itemClass" value="ImageListParentSelectedNoTop"/>

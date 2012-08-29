@@ -10,5 +10,6 @@
     
     <field:display field="timezone" id="s_com_collabnet_ccf_ccfmaster_server_domain_Participant_timezone" object="${participant}" z="gUz4j7/UABO4tGIjcrRFWVdzaK8="/>
     <field:display field="systemKind" id="s_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemKind" object="${participant}" z="Z0qeZ96UcyhlCoxdAljVyqU7mOQ="/>
+    <field:display field="prefix" id="s_com_collabnet_ccf_ccfmaster_server_domain_Participant_prefix" object="${participant}" z="AtFDAATt4nZe8s7B4E1u8ao1Quk="/>
     </page:show>
 </div>

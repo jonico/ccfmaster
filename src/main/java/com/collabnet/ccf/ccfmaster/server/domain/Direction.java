@@ -50,6 +50,7 @@ public class Direction {
 		final Landscape landscape = getLandscape();
 		final SystemKind teamForgeSystemKind = landscape.getTeamForge().getSystemKind();
 		final SystemKind participantSystemKind = landscape.getParticipant().getSystemKind();
+		final Participant participant = landscape.getParticipant();
 		Assert.isTrue(teamForgeSystemKind == SystemKind.TF, "landscape.teamForge must be of Kind TF, was: " + teamForgeSystemKind);
 	
 		// handle inconsistent directory names
@@ -60,6 +61,9 @@ public class Direction {
 			break;
 		case SWP:
 			scenario = "TFSWP";
+			break;
+		case GENERIC:
+			scenario = String.format("%sTF", participant.getPrefix()); 
 			break;
 		default:
 			throw new IllegalArgumentException("CCF doesn't support mapping TF <-> " + participantSystemKind);
@@ -75,6 +79,12 @@ public class Direction {
 		final SystemKind teamForgeSystemKind = landscape.getTeamForge().getSystemKind();
 		final SystemKind participantSystemKind = landscape.getParticipant().getSystemKind();
 		Assert.isTrue(teamForgeSystemKind == SystemKind.TF, "landscape.teamForge must be of Kind TF, was: " + teamForgeSystemKind);
+		if(participantSystemKind.equals(SystemKind.GENERIC)){
+			return String.format(
+					getDirection() == Directions.FORWARD ? "%1$s2%2$s" : "%2$s2%1$s",
+					teamForgeSystemKind,
+					landscape.getParticipant().getPrefix());
+		}
 		return String.format(
 				getDirection() == Directions.FORWARD ? "%1$s2%2$s" : "%2$s2%1$s",
 				teamForgeSystemKind,

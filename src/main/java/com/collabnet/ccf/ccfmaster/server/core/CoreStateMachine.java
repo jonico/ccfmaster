@@ -34,6 +34,7 @@ import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus.ExecutedCommand;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
+import com.collabnet.ccf.ccfmaster.server.domain.Participant;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 
 /**
@@ -112,10 +113,16 @@ public class CoreStateMachine {
 			final SystemKind teamForgeSystemKind = landscape.getTeamForge().getSystemKind();
 			final SystemKind participantSystemKind = landscape.getParticipant().getSystemKind();
 			Assert.isTrue(teamForgeSystemKind == SystemKind.TF, "landscape.teamForge must be of Kind TF, was: " + teamForgeSystemKind);
+			if(participantSystemKind.equals(SystemKind.GENERIC)){
+					return String.format(
+							direction.getDirection() == Directions.FORWARD ? "%1$s2%2$s" : "%2$s2%1$s",
+							teamForgeSystemKind,
+							landscape.getParticipant().getPrefix());
+			}
 			return String.format(
-					direction.getDirection() == Directions.FORWARD ? "%1$s2%2$s" : "%2$s2%1$s",
-					teamForgeSystemKind,
-					participantSystemKind);
+								direction.getDirection() == Directions.FORWARD ? "%1$s2%2$s" : "%2$s2%1$s",
+								teamForgeSystemKind,
+								participantSystemKind);
 		}
 	
 		private static String determineExecutableName(Direction direction) {
@@ -134,6 +141,7 @@ public class CoreStateMachine {
 			final Landscape landscape = direction.getLandscape();
 			final SystemKind teamForgeSystemKind = landscape.getTeamForge().getSystemKind();
 			final SystemKind participantSystemKind = landscape.getParticipant().getSystemKind();
+			final Participant participant = landscape.getParticipant();
 			Assert.isTrue(teamForgeSystemKind == SystemKind.TF, "landscape.teamForge must be of Kind TF, was: " + teamForgeSystemKind);
 		
 			// handle inconsistent directory names
@@ -144,6 +152,9 @@ public class CoreStateMachine {
 				break;
 			case SWP:
 				scenario = "TFSWP";
+				break;
+			case GENERIC:
+				scenario = String.format("%sTF", participant.getPrefix()); 
 				break;
 			default:
 				throw new IllegalArgumentException("CCF doesn't support mapping TF <-> " + participantSystemKind);

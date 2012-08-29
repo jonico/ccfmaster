@@ -1,7 +1,14 @@
 package com.collabnet.ccf.ccfmaster.web.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.apache.commons.collections.FactoryUtils;
+import org.apache.commons.collections.list.LazyList;
+
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -24,6 +31,17 @@ public class ParticipantSettingsModel {
 	private LandscapeConfig participantResyncUserNameLandscapeConfig = new LandscapeConfig();
 
 	private LandscapeConfig participantResyncPasswordLandscapeConfig = new LandscapeConfig();
+	
+	
+	@SuppressWarnings("unchecked")
+	private List<CCFCoreProperty> landscapeConfigList = LazyList.decorate(
+			new ArrayList<CCFCoreProperty>(),
+			FactoryUtils.instantiateFactory(CCFCoreProperty.class));
+	
+	@SuppressWarnings("unchecked")
+	private List<CCFCoreProperty> participantConfigList = LazyList.decorate(
+			new ArrayList<CCFCoreProperty>(),
+			FactoryUtils.instantiateFactory(CCFCoreProperty.class));
 
 	public ParticipantSettingsModel() {
 		participantUrlParticipantConfig.setParticipant(participant);
@@ -92,6 +110,22 @@ public class ParticipantSettingsModel {
 	public void setParticipantResyncPasswordLandscapeConfig(
 			LandscapeConfig participantResyncPasswordLandscapeConfig) {
 		this.participantResyncPasswordLandscapeConfig = participantResyncPasswordLandscapeConfig;
+	}
+
+	public List<CCFCoreProperty> getLandscapeConfigList() {
+		return landscapeConfigList;
+	}
+
+	public void setLandscapeConfigList(List<CCFCoreProperty> landscapeConfigList) {
+		this.landscapeConfigList = landscapeConfigList;
+	}
+
+	public List<CCFCoreProperty> getParticipantConfigList() {
+		return participantConfigList;
+	}
+
+	public void setParticipantConfigList(List<CCFCoreProperty> participantConfigList) {
+		this.participantConfigList = participantConfigList;
 	}
 
 }

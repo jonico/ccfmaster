@@ -205,5 +205,12 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 		<property name="startCoresOnBootBean" ref="startCoresOnBootBean" />
 	</bean>
+	
+	<bean id="genericParticipantLoader"
+		class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader"
+		init-method="initLoader">
+		<!-- in real configFilePath can come from ccfruntimeconfig properties / also find it in the war file if it present-->
+		<property name="configLocation" value="/tmp/config" />
+	</bean>
   
 </beans>

@@ -44,6 +44,11 @@ privileged aspect ParticipantDataOnDemand_Roo_DataOnDemand {
         obj.setSystemKind(systemKind);
     }
     
+    private void ParticipantDataOnDemand.setPrefix(Participant obj, int index) {
+        java.lang.String prefix = "prefix_" + index;
+        obj.setPrefix(prefix);
+    }
+    
     public Participant ParticipantDataOnDemand.getSpecificParticipant(int index) {
         init();
         if (index < 0) index = 0;

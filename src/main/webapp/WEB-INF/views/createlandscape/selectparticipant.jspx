@@ -40,6 +40,9 @@
  						<c:if test="${systemKind eq 'SWP'}">
  						<form:radiobutton id="systemKind" path="systemKind" value="${systemKind}"  />&#160;${swpsetting_label}
  						</c:if>
+ 						<c:if test="${(systemKind eq 'GENERIC') and (genericParticipantName ne null)}">
+ 						<form:radiobutton id="systemKind" path="systemKind" value="${systemKind}"  />&#160;${genericParticipantName}
+ 						</c:if>
  					</td>
  					</tr>
 				

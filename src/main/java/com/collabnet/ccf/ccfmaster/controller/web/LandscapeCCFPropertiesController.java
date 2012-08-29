@@ -27,6 +27,7 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.config.CoreConfigLoader;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader;
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
@@ -52,6 +53,9 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	
 	@Autowired
 	private CoreConfigLoader coreConfigLoader;
+	
+	@Autowired
+	private GenericParticipantLoader genericParticipantLoader;
 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeCCFPropertiesController.class);
 	private static final String PARAM_DIRECTION = "param_direction";
@@ -399,6 +403,11 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 				DirectionConfig swpMaxAttachmentConfig = DirectionConfig
 						.findDirectionConfigsByDirectionAndName(direction, ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getSingleResult();
 				property = createMaxAttachmentProperty(	swpMaxAttachmentConfig.getName(),swpMaxAttachmentConfig.getVal(), systemkind, direction.getDirection(), isValueDefault);
+			}else{
+				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipantLoader.getGenericParticipant().getPrefix());
+				DirectionConfig genericAttachmentConfig = DirectionConfig
+						.findDirectionConfigsByDirectionAndName(direction, configName).getSingleResult();
+				property = createMaxAttachmentProperty(	genericAttachmentConfig.getName(),genericAttachmentConfig.getVal(), systemkind, direction.getDirection(), isValueDefault);
 			}
 		}
 		return property;

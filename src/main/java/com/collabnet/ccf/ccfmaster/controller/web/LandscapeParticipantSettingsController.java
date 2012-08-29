@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader;
 import com.collabnet.ccf.ccfmaster.server.core.QCMetaDataProvider;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -56,6 +58,9 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	private ScrumWorksAPIService endpoint;
 	
+	@Autowired
+	public GenericParticipantLoader genericParticipantLoader;
+	
 	/**
 	 * Controller method to display participant settings 
 	 * 
@@ -63,6 +68,9 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS, method = RequestMethod.GET)
 	public String displayParticipantSettings(Model model, HttpServletRequest request) {
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
+		GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
+		participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
+		participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
 		Landscape landscape=ControllerHelper.findLandscape();
 		Participant participant=landscape.getParticipant();
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
@@ -81,15 +89,15 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	public String saveParticipantSettings(@ModelAttribute("qcsettingsmodel") @Valid ParticipantSettingsModel participantSettingsModel,BindingResult bindingResult,Model model, HttpServletRequest request) {
 		//validate participantSettingsModel
 		ParticipantSettingsValidator participantSettingsValidator=new ParticipantSettingsValidator();	
-		participantSettingsValidator.validate(participantSettingsModel, bindingResult);
-		if (bindingResult.hasErrors()) {
-			landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
-			Landscape landscape=ControllerHelper.findLandscape();
-			Participant participant=landscape.getParticipant();
-			landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
-			return  UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
-		} 
-		else{
+//		participantSettingsValidator.validate(participantSettingsModel, bindingResult);
+//		if (bindingResult.hasErrors()) {
+//			landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
+//			Landscape landscape=ControllerHelper.findLandscape();
+//			Participant participant=landscape.getParticipant();
+//			landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
+//			return  UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
+//		} 
+//		else{
 			try{  
 				landscapeParticipantSettingsHelper.updateParticipantSettings(participantSettingsModel, model, request); 
 				boolean hasRestart = Boolean.parseBoolean(request.getParameter(RESTART));
@@ -104,7 +112,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 			}
 			model.asMap().clear();
 			return "redirect:/" +UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
-		} 
+//		} 
 	}
 	
 

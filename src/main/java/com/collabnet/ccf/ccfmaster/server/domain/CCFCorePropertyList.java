@@ -22,7 +22,7 @@ public class CCFCorePropertyList {
 	@XmlElement(name = "ccfcoreproperty")
 	private List<CCFCoreProperty> ccfCoreProperties = LazyList.decorate(
 			new ArrayList<CCFCoreProperty>(),
-			FactoryUtils.instantiateFactory(CCFCoreProperty.class));;
+			FactoryUtils.instantiateFactory(CCFCoreProperty.class));
 
 	public List<CCFCoreProperty> getCcfCoreProperties() {
 		return ccfCoreProperties;

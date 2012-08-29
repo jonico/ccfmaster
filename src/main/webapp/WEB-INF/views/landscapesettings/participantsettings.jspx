@@ -162,7 +162,50 @@
 				</td>
 				</tr>
 				</c:if>
-			 	
+			 				 	<!-- For Generic -->
+			 	<c:if test="${participant.systemKind=='GENERIC'}">			 	
+			 	<c:if test="${not empty qcsettingsmodel.participantConfigList}">	
+				<c:forEach items="${qcsettingsmodel.participantConfigList}" varStatus="status" var="participantconfig">
+				<c:if test="${participantconfig.displayInHTML}">
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="participantConfigList[${status.index}].labelName">${participantconfig.labelName}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<form:hidden path="participantConfigList[${status.index}].name"/>
+				<form:input id ="participantConfig${status.index}" path="participantConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
+				<form:errors path="participantConfigList[${status.index}].value" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+				</c:forEach>
+				</c:if>
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<field:select field="participant.timezone" id="c_hpqctimezone" items="${timezones}" path="participant.timezone"/>
+				</td>
+				</tr>		
+			 	<c:if test="${not empty qcsettingsmodel.landscapeConfigList}">	
+				<c:forEach items="${qcsettingsmodel.landscapeConfigList}" varStatus="status" var="landscapeconfig">
+				<c:if test="${landscapeconfig.displayInHTML}">
+				<tr>	
+				<td class="ItemDetailName">
+				<form:label path="landscapeConfigList[${status.index}].labelName">${landscapeconfig.labelName}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<form:hidden path="landscapeConfigList[${status.index}].name"/>
+				<form:hidden path="landscapeConfigList[${status.index}].configType"/>
+				<form:input id= "landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
+				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+				</c:forEach>
+				</c:if> 
+				</c:if>
 			
 		</tbody>
 	</table>
@@ -215,7 +258,7 @@
   				<c:if test="${participant.systemKind eq 'SWP'}"> 
   				<div id="dialog" title="Save ScrumWorks Pro Settings">
   				<p>Changes to the ScrumWorks Pro settings will only apply after connector restart</p>
-`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
 				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
 				<p>Click Cancel. to close the window</p>
 				</div>
@@ -224,7 +267,16 @@
   				<c:if test="${participant.systemKind eq 'QC'}"> 
   				<div id="dialog" title="Save Quality Center Settings">
   				<p>Changes to the Quality Center settings will only apply after connector restart</p>
-`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel. to close the window</p>
+				</div>
+				</c:if>
+				
+				<c:if test="${participant.systemKind eq 'GENERIC'}"> 
+  				<div id="dialog" title="Save Generic Center Settings">
+  				<p>Changes to the Generic Participant settings will only apply after connector restart</p>
+				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
 				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
 				<p>Click Cancel. to close the window</p>
 				</div>
@@ -240,8 +292,7 @@
 	        // get the form values
 	        var url = $('#participantUrlParticipantConfig').val();
 	        var username = $('#participantUserNameLandscapeConfig').val();
-	        var password = $('#participantPasswordLandscapeConfig').val();
-	        
+	        var password = $('#participantPasswordLandscapeConfig').val();	        
 			 $.ajax({
 				 	 beforeSend: function() {
 			  			 $('#spinner').show();

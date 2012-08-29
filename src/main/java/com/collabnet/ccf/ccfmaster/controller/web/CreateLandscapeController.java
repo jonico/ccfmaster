@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader;
 import com.collabnet.ccf.ccfmaster.server.domain.Capabilities;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -40,14 +42,23 @@ import com.collabnet.teamforge.api.Connection;
 @Controller
 public class CreateLandscapeController{
 
-	private final Capabilities capabilities = new Capabilities();
-
 	private static final Logger log = LoggerFactory.getLogger(CreateLandscapeController.class);
-	CreateLandscapeHelper createLandscapeHelper=new CreateLandscapeHelper();
-	LandscapeParticipantSettingsHelper landscapeParticipantSettingsHelper=new LandscapeParticipantSettingsHelper();
+
+	private final Capabilities capabilities = new Capabilities();
+	
+	private CreateLandscapeHelper createLandscapeHelper=new CreateLandscapeHelper();
+	
+	private LandscapeParticipantSettingsHelper landscapeParticipantSettingsHelper=new LandscapeParticipantSettingsHelper();
+	
 	private static final String TF_URL_MODEL_ATTRIBUTE = "tfUrl";
+	
 	@Autowired
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
+	
+	@Autowired
+	public GenericParticipantLoader genericParticipantLoader;
+	
+	
 	/**
 	 * Controller method used to display create landscape wizard or landscape settings screen based on landscape count 
 	 * 
@@ -59,7 +70,11 @@ public class CreateLandscapeController{
 		if (Landscape.countLandscapes() == 0) { 
 			//	if there is no participants show create landscape wizard
 			if(Participant.countParticipants()==0){
+				GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
 				Participant participant=new Participant();
+				if(genericParticipant != null){
+					model.addAttribute("genericParticipantName", genericParticipant.getName());
+				}
 				model.addAttribute("participant", participant);
 				model.addAttribute("enums", capabilities.getParticipantSystemKinds().getSystemKind());
 				return UIPathConstants.CREATELANDSCAPE_INDEX;
@@ -74,20 +89,23 @@ public class CreateLandscapeController{
 		else{
 			Landscape landscape=ControllerHelper.findLandscape();
 			// if required entities are not available display error message
-			if(createLandscapeHelper.verifyEntities(landscape,model,ctx)){
-				return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;
-			}
-			else if(createLandscapeHelper.verifyTFEntities(landscape,model,ctx)){
-				return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;
-			}
+//			if(createLandscapeHelper.verifyEntities(landscape,model,ctx)){
+//				return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;
+//			}
+//			else if(createLandscapeHelper.verifyTFEntities(landscape,model,ctx)){
+//				return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;
+//			}
 			//if all the required entities are available show landscape settings screen
-			else{
-				ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();	
+//			else{
+				ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
+				GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
+				participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
+				participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());	
 				landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
 				Participant participant=landscape.getParticipant();
 				landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
 				return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
-			}
+//			}
 		}
 
 	}
@@ -100,7 +118,15 @@ public class CreateLandscapeController{
 	public void createLandscape(@ModelAttribute Participant participant, Model model) {
 		log.debug("createLandscape started");
 		LandscapeModel landscapemodel=new LandscapeModel();
-		createLandscapeHelper.populateCreateLandscapeModel(model,participant);	
+		GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
+		if(genericParticipant.getLandscapeFieldList()!= null){
+			landscapemodel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
+		}
+		if(genericParticipant.getParticipantFieldList()!= null){
+			landscapemodel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+		}
+		createLandscapeHelper.populateCreateLandscapeModel(model,participant);
+		landscapemodel.setParticipant(participant);
 		model.addAttribute("landscapemodel",landscapemodel);
 		log.debug("createLandscape finished");
 	}
@@ -113,18 +139,19 @@ public class CreateLandscapeController{
 	public String saveLandscape(@RequestParam(ControllerConstants.PARTICIPANTHIDDEN) String participantparam,@ModelAttribute("landscapemodel") @Valid LandscapeModel landscapemodel,BindingResult bindingResult, Model model, HttpServletRequest request) {
 		log.debug("saveLandscape started");
 		LandscapeValidator landscapeValidator=new LandscapeValidator();
-		landscapemodel.normalizeParticipantUrl();
-		landscapeValidator.validate(landscapemodel, bindingResult);
-		if (bindingResult.hasErrors()) {
-			//final String errormessages = Joiner.on(", ").join(bindingResult.getAllErrors());
-			//log.debug("validation errors: {}", errormessages);
-			//model.addAttribute("connectionerror", errormessages);
+		//TODO: validator logic needs to checks will need to work on this later commented need to remove it later ... :'(
+//		landscapemodel.normalizeParticipantUrl(); 
+//		landscapeValidator.validate(landscapemodel, bindingResult);
+//		if (bindingResult.hasErrors()) {
+//			//final String errormessages = Joiner.on(", ").join(bindingResult.getAllErrors());
+//			//log.debug("validation errors: {}", errormessages);
+//			//model.addAttribute("connectionerror", errormessages);
 			Participant particpantHidden = getParticipant(participantparam);
-			createLandscapeHelper.populateCreateLandscapeModel(model,particpantHidden);		
-			model.addAttribute("participant", particpantHidden);
-			model.addAttribute("landscapemodel", landscapemodel);
-			return UIPathConstants.CREATELANDSCAPE_CREATELANDSCAPE;
-		}  
+			createLandscapeHelper.populateCreateLandscapeModel(model,particpantHidden);	
+//			model.addAttribute("participant", particpantHidden);
+//			model.addAttribute("landscapemodel", landscapemodel);
+//			return UIPathConstants.CREATELANDSCAPE_CREATELANDSCAPE;
+//		}  
 		try {
 			log.debug("before persistModel");
 			createLandscapeHelper.persistModel(landscapemodel);
@@ -136,6 +163,9 @@ public class CreateLandscapeController{
 			return UIPathConstants.CREATELANDSCAPE_DISPLAYERROR;
 		}
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
+		GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
+		participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
+		participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel, model);
 		log.debug("saveLandscape ended");
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS; 
@@ -150,8 +180,10 @@ public class CreateLandscapeController{
 		if((SystemKind.QC.toString()).equals(participantparam)){
 			particpantHidden.setSystemKind(SystemKind.QC);
 		}  
-		else{ 
+		else if(((SystemKind.SWP.toString()).equals(participantparam))){ 
 			particpantHidden.setSystemKind(SystemKind.SWP);
+		}else{
+			particpantHidden.setSystemKind(SystemKind.GENERIC); // Not sure why this method is used need to validate
 		}
 		return particpantHidden;
 	}
