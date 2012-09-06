@@ -4,24 +4,20 @@ package com.collabnet.ccf.ccfmaster.web.model;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.Valid;
 
-import org.apache.commons.collections.FactoryUtils;
-import org.apache.commons.collections.list.LazyList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.ccfmaster.gp.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
 import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.google.common.base.Strings;
 
-public class LandscapeModel {
+public class LandscapeModel extends AbstractGenericParticipantModel {
 	 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeModel.class);
 
@@ -91,7 +87,7 @@ public class LandscapeModel {
 	@Valid
 	private Landscape landscape=new Landscape();
 	
-	@Valid
+//	@Valid
 	private LandscapeConfig participantUserNameLandscapeConfig=new LandscapeConfig();
 
 	
@@ -118,16 +114,6 @@ public class LandscapeModel {
 	
 	@Valid
 	private Participant teamforge=new Participant();
-	
-	@SuppressWarnings("unchecked")
-	private List<CCFCoreProperty> landscapeConfigList = LazyList.decorate(
-			new ArrayList<CCFCoreProperty>(),
-			FactoryUtils.instantiateFactory(CCFCoreProperty.class));
-	
-	@SuppressWarnings("unchecked")
-	private List<CCFCoreProperty> participantConfigList = LazyList.decorate(
-			new ArrayList<CCFCoreProperty>(),
-			FactoryUtils.instantiateFactory(CCFCoreProperty.class));
 
 
 	public Landscape getLandscape() {
@@ -234,26 +220,6 @@ public class LandscapeModel {
 
 	public void setTeamforge(Participant teamforge) {
 		this.teamforge = teamforge;
-	}
-
-
-	public List<CCFCoreProperty> getLandscapeConfigList() {
-		return landscapeConfigList;
-	}
-
-
-	public void setLandscapeConfigList(List<CCFCoreProperty> landscapeConfigList) {
-		this.landscapeConfigList = landscapeConfigList;
-	}
-
-
-	public List<CCFCoreProperty> getParticipantConfigList() {
-		return participantConfigList;
-	}
-
-
-	public void setParticipantConfigList(List<CCFCoreProperty> participantConfigList) {
-		this.participantConfigList = participantConfigList;
 	}
 	
 }

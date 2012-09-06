@@ -32,7 +32,7 @@ public class CreateLandscapeHelper {
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
 	@Autowired
-	private GenericParticipantLoader genericParticipantLoader;
+	public GenericParticipant genericParticipant;
 
 
 	/**
@@ -58,10 +58,11 @@ public class CreateLandscapeHelper {
 			participant.setPrefix(SystemKind.SWP.toString());
 		}
 		if(participant.getSystemKind().equals(SystemKind.GENERIC)){ // need to move this code piece to switch case
-			GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
-			participant.setSystemId(genericParticipant.getPrefix());
-			participant.setDescription(genericParticipant.getDescription());
-			participant.setPrefix(genericParticipant.getPrefix());
+			if(genericParticipant != null){
+				participant.setSystemId(genericParticipant.getPrefix());
+				participant.setDescription(genericParticipant.getDescription());
+				participant.setPrefix(genericParticipant.getPrefix());
+			}
 		}		
 		model.addAttribute("plugid", ControllerConstants.PLUGID);
 		model.addAttribute("tfsystemkind", teamforge.getSystemKind());
@@ -119,8 +120,8 @@ public class CreateLandscapeHelper {
 			participantResyncPasswordLandscapeConfig.persist();
 		}
 		if(participant.getSystemKind().equals(SystemKind.GENERIC)){
-			List<LandscapeConfig> landscapeCollection = genericParticipantLoader.buildLandscapeConfig(landscapemodel.getLandscapeConfigList());
-			List<ParticipantConfig> participantCollection =  genericParticipantLoader.buildParticipantConfig(landscapemodel.getParticipantConfigList());
+			List<LandscapeConfig> landscapeCollection = GenericParticipantLoader.buildLandscapeConfig(landscapemodel.getLandscapeConfigList());
+			List<ParticipantConfig> participantCollection =  GenericParticipantLoader.buildParticipantConfig(landscapemodel.getParticipantConfigList());
 			for(LandscapeConfig config:landscapeCollection){
 				config.setLandscape(landscape);
 				config.persist();
@@ -239,17 +240,19 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateGenerictoTF.persist();
 			
 			// Creation for attachment size should be proper... that is handling genericparticipantloader(pass from contoller or have it is has instance variable)
-			DirectionConfig directionConfigTFMaxSize = new DirectionConfig(); 
-			String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipantLoader.getGenericParticipant().getPrefix());
-			directionConfigTFMaxSize.setDirection(reverseDirection);
-			directionConfigTFMaxSize.setName(configName);
-			directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
-			directionConfigTFMaxSize.persist();
-			
-			List<DirectionConfig> directionCollection = genericParticipantLoader.buildDirectionConfig(genericParticipantLoader.getGenericParticipant().getDirectionFieldList());
-			for(DirectionConfig config:directionCollection){
-				config.setDirection(reverseDirection);
-				config.persist();
+			if(genericParticipant != null){
+				DirectionConfig directionConfigTFMaxSize = new DirectionConfig(); 
+				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix());
+				directionConfigTFMaxSize.setDirection(reverseDirection);
+				directionConfigTFMaxSize.setName(configName);
+				directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
+				directionConfigTFMaxSize.persist();
+				
+				List<DirectionConfig> directionCollection = GenericParticipantLoader.buildDirectionConfig(genericParticipant.getDirectionFieldList());
+				for(DirectionConfig config:directionCollection){
+					config.setDirection(reverseDirection);
+					config.persist();
+				}
 			}
 			
 		}
@@ -279,7 +282,10 @@ public class CreateLandscapeHelper {
 				if(verifySWPEntities(landscape,reverseDirection,model,context)){
 					return false;
 				}
-			}	
+			}
+			else if(participant.getSystemKind().equals(SystemKind.GENERIC)){
+				return false; //TODO: need to handle validation for generic participant
+			}
 		}
 		return true;
 	}

@@ -20,21 +20,24 @@ public class LandscapeValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		LandscapeModel landscapeModel=(LandscapeModel)target;
-		if(Strings.isNullOrEmpty(landscapeModel.getParticipantUserNameLandscapeConfig().getVal())){
-			errors.rejectValue("participantUserNameLandscapeConfig.val",ControllerConstants.ERROR_PARTICIPANTPASSWORD_VALIDATE);
-		}	
+		SystemKind participantkind = landscapeModel.getParticipant().getSystemKind();
+		if(participantkind.equals(SystemKind.QC)||participantkind.equals(SystemKind.SWP)){
+			if(Strings.isNullOrEmpty(landscapeModel.getParticipantUserNameLandscapeConfig().getVal())){
+				errors.rejectValue("participantUserNameLandscapeConfig.val",ControllerConstants.ERROR_PARTICIPANTPASSWORD_VALIDATE);
+			}
+		}
 		if(Strings.isNullOrEmpty(landscapeModel.getTfUserNameLandscapeConfig().getVal())){
 			errors.rejectValue("tfUserNameLandscapeConfig.val",ControllerConstants.ERROR_TFUSERNAME_VALIDATE);
 		}	
 		if(Strings.isNullOrEmpty(landscapeModel.getTfUserNameLandscapeConfig().getVal())){
 			errors.rejectValue("tfPasswordLandscapeConfig.val",ControllerConstants.ERROR_TFPASSWORD_VALIDATE);
 		}	
-		if(landscapeModel.getParticipant().getSystemKind().equals(SystemKind.QC)){
+		if(participantkind.equals(SystemKind.QC)){
 			if(!landscapeModel.getParticipantUrlParticipantConfig().getVal().endsWith(ControllerConstants.VALIDATEQCURL)){
 				errors.rejectValue("participantUrlParticipantConfig.val", ControllerConstants.ERROR_QCURL_VALIDATE);
 			}
 		}
-		if(landscapeModel.getParticipant().getSystemKind().equals(SystemKind.SWP)){
+		if(participantkind.equals(SystemKind.SWP)){
 			if(Strings.isNullOrEmpty(landscapeModel.getParticipantPasswordLandscapeConfig().getVal())){
 				errors.rejectValue("participantPasswordLandscapeConfig.val",ControllerConstants.ERROR_SWPPASSWORD_VALIDATE);
 			}

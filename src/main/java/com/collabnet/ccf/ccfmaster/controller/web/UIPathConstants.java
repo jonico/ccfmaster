@@ -25,6 +25,8 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS = "admin/displayparticipantsettings";
 	public static final String LANDSCAPESETTINGS_QC_TEST_CONNECTION = "/admin/qctestconnection";
 	public static final String LANDSCAPESETTINGS_SWP_TEST_CONNECTION = "/admin/swptestconnection";
+	public static final String LANDSCAPESETTINGS_GP_TEST_CONNECTION = "/admin/gptestconnection";
+	
 	//LandscapeRepositoryMappingsController
 	public static final String LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART = "admin/displayrepositorymappingtftopart";
 	public static final String LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGPARTTOTF = "admin/displayrepositorymappingparttotf";

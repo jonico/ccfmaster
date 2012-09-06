@@ -60,7 +60,7 @@ public class GenericParticipantLoader {
 		}
 	}
 	
-	public List<LandscapeConfig> buildLandscapeConfig(List<CCFCoreProperty> landscapeConfigList) {
+	public static List<LandscapeConfig> buildLandscapeConfig(List<CCFCoreProperty> landscapeConfigList) {
 		List<LandscapeConfig> configCollection = new ArrayList<LandscapeConfig>();
 		for (CCFCoreProperty property : landscapeConfigList) {// null validation check
 			LandscapeConfig config = new LandscapeConfig();
@@ -71,7 +71,7 @@ public class GenericParticipantLoader {
 		return configCollection;
 	}
 	
-	public List<ParticipantConfig> buildParticipantConfig(List<CCFCoreProperty> participantConfigList) {
+	public static List<ParticipantConfig> buildParticipantConfig(List<CCFCoreProperty> participantConfigList) {
 		List<ParticipantConfig> configCollection = new ArrayList<ParticipantConfig>();
 		for (CCFCoreProperty property : participantConfigList) { // null validation check
 			ParticipantConfig config = new ParticipantConfig();
@@ -82,7 +82,7 @@ public class GenericParticipantLoader {
 		return configCollection;
 	}
 	
-	public List<DirectionConfig> buildDirectionConfig(List<CCFCoreProperty> directionConfigList){
+	public static List<DirectionConfig> buildDirectionConfig(List<CCFCoreProperty> directionConfigList){
 		List<DirectionConfig> configCollection = new ArrayList<DirectionConfig>();
 		for (CCFCoreProperty property : directionConfigList) { // null validation check
 			DirectionConfig config = new DirectionConfig();

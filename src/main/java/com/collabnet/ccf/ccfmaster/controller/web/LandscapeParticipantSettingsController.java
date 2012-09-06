@@ -29,10 +29,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader;
+import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.validator.GenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.server.core.QCMetaDataProvider;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
+import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.server.domain.Timezone;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.LandscapeParticipantSettingsHelper;
@@ -48,9 +50,13 @@ import com.danube.scrumworks.api2.client.ScrumWorksAPIService;
 public class LandscapeParticipantSettingsController extends AbstractLandscapeController{
 
 	private static final String SCRUM_WORKS_API_BEAN_SERVICE = "ScrumWorksAPIBeanService";
+	
 	private static final String SCRUMWORKS_NAMESPACE = "http://api2.scrumworks.danube.com/";
+	
 	private static final String RESTART = "restart";
+	
 	private static final Logger log = LoggerFactory.getLogger(LandscapeParticipantSettingsController.class);
+	
 	LandscapeParticipantSettingsHelper landscapeParticipantSettingsHelper=new LandscapeParticipantSettingsHelper();
 	
 	private @Autowired
@@ -59,7 +65,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	private ScrumWorksAPIService endpoint;
 	
 	@Autowired
-	public GenericParticipantLoader genericParticipantLoader;
+	public GenericParticipant genericParticipant;
 	
 	/**
 	 * Controller method to display participant settings 
@@ -68,9 +74,10 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	@RequestMapping(value = "/"+UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS, method = RequestMethod.GET)
 	public String displayParticipantSettings(Model model, HttpServletRequest request) {
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
-		GenericParticipant genericParticipant =  genericParticipantLoader.getGenericParticipant();
-		participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
-		participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+		if(genericParticipant != null){
+			participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
+			participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+		}
 		Landscape landscape=ControllerHelper.findLandscape();
 		Participant participant=landscape.getParticipant();
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
@@ -89,15 +96,18 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	public String saveParticipantSettings(@ModelAttribute("qcsettingsmodel") @Valid ParticipantSettingsModel participantSettingsModel,BindingResult bindingResult,Model model, HttpServletRequest request) {
 		//validate participantSettingsModel
 		ParticipantSettingsValidator participantSettingsValidator=new ParticipantSettingsValidator();	
-//		participantSettingsValidator.validate(participantSettingsModel, bindingResult);
-//		if (bindingResult.hasErrors()) {
-//			landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
-//			Landscape landscape=ControllerHelper.findLandscape();
-//			Participant participant=landscape.getParticipant();
-//			landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
-//			return  UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
-//		} 
-//		else{
+		participantSettingsValidator.validate(participantSettingsModel, bindingResult);
+		if(participantSettingsModel.getParticipant().getSystemKind().equals(SystemKind.GENERIC)){ 
+			validateGenericParticipant(participantSettingsModel, bindingResult);
+		}
+		if (bindingResult.hasErrors()) {
+			landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
+			Landscape landscape=ControllerHelper.findLandscape();
+			Participant participant=landscape.getParticipant();
+			landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
+			return  UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
+		} 
+		else{
 			try{  
 				landscapeParticipantSettingsHelper.updateParticipantSettings(participantSettingsModel, model, request); 
 				boolean hasRestart = Boolean.parseBoolean(request.getParameter(RESTART));
@@ -112,7 +122,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 			}
 			model.asMap().clear();
 			return "redirect:/" +UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
-//		} 
+		} 
 	}
 	
 
@@ -167,6 +177,24 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 		return returnText;
 	}
 	
+	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_GP_TEST_CONNECTION, method = RequestMethod.POST)
+	public @ResponseBody String testGenericParticipantConnection(@ModelAttribute("qcsettingsmodel") ParticipantSettingsModel participantSettingsModel, HttpServletRequest request){
+		RequestContext ctx = new RequestContext(request);
+		String returnText;
+		boolean isConnectionValid = true;
+		if(genericParticipant != null){
+			GenericParticipantValidator validator = genericParticipant.getCustomValidator();
+			isConnectionValid = validator.validateConnection(participantSettingsModel);
+		}
+		if(isConnectionValid){
+			returnText="<strong><font color='green'>"+ctx.getMessage(ControllerConstants.GP_CONNECTION_SUCCESS_MESSAGE)+ "</font></strong>";
+		}else{
+			returnText="<strong><font color='green'>"+ctx.getMessage(ControllerConstants.GP_CONNECTION_FAILURE_MESSAGE)+ "</font></strong>";
+		}
+		return returnText;
+		
+	}
+	
 	/**
 	 * 
 	 * @param userName
@@ -184,5 +212,20 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	public java.util.Collection<Timezone> populateTimezones() {
 		return Arrays.asList(Timezone.class.getEnumConstants());
 	}
+	
+
+	
+	private void validateGenericParticipant(ParticipantSettingsModel participantSettingsModel, BindingResult bindingResult){
+		if(genericParticipant != null){
+			GenericParticipantValidator participantValidator = genericParticipant.getCustomValidator();
+			if(genericParticipant.getCustomValidator() == null){
+				participantValidator = new DefaultGenericParticipantValidator(); 
+				participantValidator.validate(participantSettingsModel, bindingResult);
+			}else{
+				participantValidator.validate(participantSettingsModel, bindingResult);
+			}
+		}
+	}
+	
 
 }

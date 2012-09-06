@@ -17,15 +17,18 @@ public class ParticipantSettingsValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ParticipantSettingsModel participantSettingsModel=(ParticipantSettingsModel)target;
-		if(participantSettingsModel.getParticipantUserNameLandscapeConfig().getVal()==""){
-			errors.rejectValue("participantUserNameLandscapeConfig.val",ControllerConstants.ERROR_PARTICIPANTPASSWORD_VALIDATE);
-		}	
-		if(participantSettingsModel.getParticipant().getSystemKind().equals(SystemKind.QC)){
+		SystemKind participantKind = participantSettingsModel.getParticipant().getSystemKind();
+		if(participantKind.equals(SystemKind.QC)||participantKind.equals(SystemKind.SWP)){
+			if(participantSettingsModel.getParticipantUserNameLandscapeConfig().getVal()==""){
+				errors.rejectValue("participantUserNameLandscapeConfig.val",ControllerConstants.ERROR_PARTICIPANTPASSWORD_VALIDATE);
+			}	
+		}
+		if(participantKind.equals(SystemKind.QC)){
 			if(!participantSettingsModel.getParticipantUrlParticipantConfig().getVal().endsWith(ControllerConstants.VALIDATEQCURL)){
 				errors.rejectValue("participantUrlParticipantConfig.val", ControllerConstants.ERROR_QCURL_VALIDATE);
 			}
 		}
-		if(participantSettingsModel.getParticipant().getSystemKind().equals(SystemKind.SWP)){
+		if(participantKind.equals(SystemKind.SWP)){
 			if(participantSettingsModel.getParticipantPasswordLandscapeConfig().getVal()==""){
 				errors.rejectValue("participantPasswordLandscapeConfig.val",ControllerConstants.ERROR_SWPPASSWORD_VALIDATE);
 			}

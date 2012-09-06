@@ -181,6 +181,11 @@
 				</td>
 				<td class="ItemDetailValue"> 
 				<form:hidden path="participantConfigList[${status.index}].name"/>
+				<form:hidden path="participantConfigList[${status.index}].conditionalRegex"/>
+				<form:hidden path="participantConfigList[${status.index}].displayInHTML"/>
+				<form:hidden path="participantConfigList[${status.index}].type"/>
+				<form:hidden path="participantConfigList[${status.index}].labelName"/>
+				<form:hidden path="participantConfigList[${status.index}].systemKind"/>
 				<form:input path="participantConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
 				<form:errors path="participantConfigList[${status.index}].value" cssClass="errors"/>
 				</td>
@@ -205,7 +210,11 @@
 				</td>
 				<td class="ItemDetailValue"> 
 				<form:hidden path="landscapeConfigList[${status.index}].name"/>
-				<form:hidden path="landscapeConfigList[${status.index}].configType"/>
+				<form:hidden path="landscapeConfigList[${status.index}].conditionalRegex"/>
+				<form:hidden path="landscapeConfigList[${status.index}].displayInHTML"/>
+				<form:hidden path="landscapeConfigList[${status.index}].type"/>
+				<form:hidden path="landscapeConfigList[${status.index}].labelName"/>
+				<form:hidden path="landscapeConfigList[${status.index}].systemKind"/>
 				<form:input path="landscapeConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
 				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
 				</td>

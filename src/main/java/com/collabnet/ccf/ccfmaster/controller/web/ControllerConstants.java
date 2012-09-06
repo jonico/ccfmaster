@@ -81,6 +81,7 @@ public class ControllerConstants {
 	public static final String CCF_PARTICIPANT_QC_URL = "ccf.participant.qc.url";
 	public static final String PARTICIPANT_SAVE_FAIL_MESSAGE = "participantsavefailmessage";
 	public static final String PARTICIPANT_RESTART_SUCCESS_MESSAGE = "participantrestartmessage";
+	public static final String PARTICIPANT_SHOULD_MATCH_CONDITIONAL_REGEX = "participantConditionalRegexErrorMessage";
 	
 	// Persist participant constants
 	public static final String PARTICIPANT_SAVE_SUCCESS_MESSAGE = "participantsavesuccessmessage";
@@ -104,6 +105,8 @@ public class ControllerConstants {
 	public static final String QC_CONNECTION_FAILURE_MESSAGE="qcconnectionfailuremessage";
 	public static final String SWP_CONNECTION_SUCCESS_MESSAGE="swpconnectionsuccessmessage";
 	public static final String SWP_CONNECTION_FAILURE_MESSAGE="swpconnectionfailuremessage";
+	public static final String GP_CONNECTION_SUCCESS_MESSAGE="gpconnectionsuccessmessage";
+	public static final String GP_CONNECTION_FAILURE_MESSAGE="gpconnectionfailuremessage";
 	
 	
 	

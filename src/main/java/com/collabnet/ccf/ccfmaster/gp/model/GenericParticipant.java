@@ -6,7 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+import com.collabnet.ccf.ccfmaster.gp.validator.GenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
 /**
@@ -31,7 +33,10 @@ public class GenericParticipant {
 
 	@XmlElement(name = "description")
 	private String description;
-
+	
+	@XmlTransient
+	private GenericParticipantValidator customValidator;
+	
 	@XmlElement(name = "participantProperty")
 	private List<CCFCoreProperty> participantFieldList;
 
@@ -55,6 +60,10 @@ public class GenericParticipant {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public GenericParticipantValidator getCustomValidator() {
+		return customValidator;
 	}
 
 	public List<CCFCoreProperty> getParticipantFieldList() {
@@ -83,6 +92,10 @@ public class GenericParticipant {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setCustomValidator(GenericParticipantValidator customValidator) {
+		this.customValidator = customValidator;
 	}
 
 	public void setParticipantFieldList(List<CCFCoreProperty> participantFieldList) {

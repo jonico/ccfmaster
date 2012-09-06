@@ -1,10 +1,13 @@
 package com.collabnet.ccf.ccfmaster.controller.web;
 
 
+import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isQCMaxAttachmentExist;
+import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isSWPMaxAttachmentExist;
+import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isTFMaxAttachmentExist;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,10 +30,11 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.config.CoreConfigLoader;
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
@@ -38,11 +42,6 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 import com.collabnet.ccf.ccfmaster.web.validator.ConfigValidator;
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
-
-import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isQCMaxAttachmentExist;
-import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isSWPMaxAttachmentExist;
-import static com.collabnet.ccf.ccfmaster.web.helper.CreateLandscapeHelper.isTFMaxAttachmentExist;
 
 @RequestMapping("/admin/**")
 @Controller
@@ -55,10 +54,12 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	private CoreConfigLoader coreConfigLoader;
 	
 	@Autowired
-	private GenericParticipantLoader genericParticipantLoader;
+	public GenericParticipant genericParticipant;
 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeCCFPropertiesController.class);
+	
 	private static final String PARAM_DIRECTION = "param_direction";
+	
 	private static final String RESTART = "restart";
 
 	/**
@@ -404,10 +405,12 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 						.findDirectionConfigsByDirectionAndName(direction, ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getSingleResult();
 				property = createMaxAttachmentProperty(	swpMaxAttachmentConfig.getName(),swpMaxAttachmentConfig.getVal(), systemkind, direction.getDirection(), isValueDefault);
 			}else{
-				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipantLoader.getGenericParticipant().getPrefix());
-				DirectionConfig genericAttachmentConfig = DirectionConfig
-						.findDirectionConfigsByDirectionAndName(direction, configName).getSingleResult();
-				property = createMaxAttachmentProperty(	genericAttachmentConfig.getName(),genericAttachmentConfig.getVal(), systemkind, direction.getDirection(), isValueDefault);
+				if(genericParticipant != null){
+					String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix());
+					DirectionConfig genericAttachmentConfig = DirectionConfig
+							.findDirectionConfigsByDirectionAndName(direction, configName).getSingleResult();
+					property = createMaxAttachmentProperty(	genericAttachmentConfig.getName(),genericAttachmentConfig.getVal(), systemkind, direction.getDirection(), isValueDefault);
+				}
 			}
 		}
 		return property;
