@@ -53,7 +53,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	@Autowired
 	private CoreConfigLoader coreConfigLoader;
 	
-	@Autowired
+	@Autowired(required= false)
 	public GenericParticipant genericParticipant;
 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeCCFPropertiesController.class);

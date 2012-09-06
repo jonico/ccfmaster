@@ -56,7 +56,7 @@ public class CreateLandscapeController{
 	@Autowired
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
-	@Autowired
+	@Autowired(required= false)
 	public GenericParticipant genericParticipant;
 	
 	

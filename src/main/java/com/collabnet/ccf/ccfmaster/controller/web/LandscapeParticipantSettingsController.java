@@ -59,12 +59,11 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	LandscapeParticipantSettingsHelper landscapeParticipantSettingsHelper=new LandscapeParticipantSettingsHelper();
 	
-	private @Autowired
-	QCMetaDataProvider qcMetaDataProvider;
+	private @Autowired QCMetaDataProvider qcMetaDataProvider;
 	
 	private ScrumWorksAPIService endpoint;
 	
-	@Autowired
+	@Autowired(required= false)
 	public GenericParticipant genericParticipant;
 	
 	/**

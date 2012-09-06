@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.RequestContext;
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantLoader;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
@@ -24,6 +23,7 @@ import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.util.Obfuscator;
 import com.collabnet.ccf.ccfmaster.web.model.LandscapeModel;
+import com.collabnet.ccf.core.utils.GenericParticipantUtils;
 
 @Configurable
 public class CreateLandscapeHelper {
@@ -31,7 +31,7 @@ public class CreateLandscapeHelper {
 	@Autowired 
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
-	@Autowired
+	@Autowired(required= false)
 	public GenericParticipant genericParticipant;
 
 
@@ -120,8 +120,8 @@ public class CreateLandscapeHelper {
 			participantResyncPasswordLandscapeConfig.persist();
 		}
 		if(participant.getSystemKind().equals(SystemKind.GENERIC)){
-			List<LandscapeConfig> landscapeCollection = GenericParticipantLoader.buildLandscapeConfig(landscapemodel.getLandscapeConfigList());
-			List<ParticipantConfig> participantCollection =  GenericParticipantLoader.buildParticipantConfig(landscapemodel.getParticipantConfigList());
+			List<LandscapeConfig> landscapeCollection = GenericParticipantUtils.buildLandscapeConfig(landscapemodel.getLandscapeConfigList());
+			List<ParticipantConfig> participantCollection =  GenericParticipantUtils.buildParticipantConfig(landscapemodel.getParticipantConfigList());
 			for(LandscapeConfig config:landscapeCollection){
 				config.setLandscape(landscape);
 				config.persist();
@@ -248,7 +248,7 @@ public class CreateLandscapeHelper {
 				directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
 				directionConfigTFMaxSize.persist();
 				
-				List<DirectionConfig> directionCollection = GenericParticipantLoader.buildDirectionConfig(genericParticipant.getDirectionFieldList());
+				List<DirectionConfig> directionCollection = GenericParticipantUtils.buildDirectionConfig(genericParticipant.getDirectionFieldList());
 				for(DirectionConfig config:directionCollection){
 					config.setDirection(reverseDirection);
 					config.persist();
