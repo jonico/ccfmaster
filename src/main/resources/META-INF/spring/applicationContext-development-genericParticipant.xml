@@ -50,7 +50,7 @@
 		<property name="name" value="ccf.landscape.tfs.password"/>
 		<property name="labelName" value="Password"/>
 		<property name="systemKind" value="GENERIC"/>
-		<property name="type" value="STRING"/>
+		<property name="type" value="PASSWORD"/>
 		<property name="displayInHTML" value="true"/>
 	</bean>
 	
