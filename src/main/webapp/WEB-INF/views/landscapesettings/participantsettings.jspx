@@ -210,7 +210,8 @@
 				<form:hidden path="landscapeConfigList[${status.index}].labelName"/>
 				<form:hidden path="landscapeConfigList[${status.index}].systemKind"/>
 				<form:password id="landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value" showPassword="true" size="60" cssClass="inputfield"/>
-				 <input type="button" value="${testconnectionlabel}" onclick="doAjaxResyncPost('${fn:escapeXml(testconnectiongp_url)}')" />
+				 <input type="button" value="${testconnectionlabel}" onclick="doGenericAjaxPost('${fn:escapeXml(testconnectiongp_url)}')" />
+				<div id="spinner" style="display:none;"><img src="${fn:escapeXml(spinner_image_url)}" border="0" /></div><div id="info"></div>
 				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
 				</td>
 				</tr>
@@ -372,6 +373,27 @@
 	        }
 	        });
 	        }
+		
+		function doGenericAjaxPost(posturl){
+			var form = $('form');
+			  $.ajax({
+				beforeSend: function() {
+			  		$('#spinner').show();
+			    },
+			    complete: function(){
+			        $('#spinner').hide();
+			    },
+			    type: 'POST',
+			    url: posturl,
+			    data: form.serialize(),
+			    success: function( resp ) {
+			    	$('#info').html(resp);
+			    },
+		        error: function(e){
+			        alert('Error: ' + e);
+			    }
+			  });
+		}
 		
 		$(function(){
 	        // jQuery UI Dialog    
