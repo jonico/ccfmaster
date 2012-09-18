@@ -1,0 +1,62 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
+<jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_next" var="next_button"/>
+<spring:message code="button_cancel" var="cancel_button"/>
+
+<form:form modelAttribute="rmdModel" method="post">
+<table class="Container" >
+<tbody>
+<tr>
+<td>
+
+	<table class="ItemDetailContainer" width="100%" >
+		<tbody>
+			<tr class="ContainerHeader">
+			<td colspan="5">
+			Create new repository mapping direction wizard
+			</td>
+			</tr>
+			<br/>
+			<br/>
+				<tr>
+				<td> <br/></td>
+				</tr>
+		
+				<tr>
+				<td>					
+					</td>
+				<td class="ItemDetailValue"> 
+				</td>
+				</tr>
+				<tr>
+				<td>
+				In creatermdstep4 Jsp
+				
+				
+				</td>
+				</tr>
+		
+		
+		
+		
+			
+				<tr class="ContainerFooter" >
+				<td colspan="3">
+				<input type="submit" name="_eventId_finish" value="Finish" class="Button"/>
+				<input type="submit" name="_eventId_previous" value="Previous" class="Button" />
+				
+				</td>	
+				
+				</tr>
+			
+		</tbody>
+		</table>
+
+
+</td>
+</tr>
+</tbody>
+</table>
+</form:form>
+</div>

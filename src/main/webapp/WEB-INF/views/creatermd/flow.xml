@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="rmdHandler" class="com.collabnet.ccf.ccfmaster.flow.web.RepositoryMappingDirectionHandler" />
+	<var name="rmdModel" class="com.collabnet.ccf.ccfmaster.flow.web.RepositoryMappingDirectionModel" />
+	
+	<view-state id="enter" view="creatermd/creatermdstep1" model="rmdModel" >
+		<on-render>
+			<set name="requestScope.selectedLink" value="'repositorymappings'" type="java.lang.String" />
+		</on-render>
+		<transition on="next" to="showcreatermdstep2" />
+		<transition on="previous" to="cancel" />
+	</view-state>
+	
+	<view-state id="showcreatermdstep2" view="creatermd/creatermdstep2" model="rmdModel">
+		<on-render>
+			<set name="requestScope.selectedLink" value="'repositorymappings'" type="java.lang.String" />
+		</on-render>
+    	<transition on="next" to="showcreatermdstep3" />
+    	<transition on="previous" to="enter" />
+    </view-state>
+    
+    <view-state id="showcreatermdstep3" view="creatermd/creatermdstep3" model="rmdModel">
+		<on-render>
+				<set name="requestScope.selectedLink" value="'repositorymappings'" type="java.lang.String" />
+		</on-render>
+    	<transition on="next" to="showcreatermdstep4" />
+    	<transition on="previous" to="showcreatermdstep2" />
+    </view-state>
+    
+    <view-state id="showcreatermdstep4" view="creatermd/creatermdstep4" model="rmdModel">
+		<on-render>
+				<set name="requestScope.selectedLink" value="'repositorymappings'" type="java.lang.String" />
+		</on-render>
+    	<transition on="finish" to="saveRepositoryMappingDirection" />
+    	<transition on="previous" to="showcreatermdstep3" />
+    </view-state>
+	
+	<action-state id="saveRepositoryMappingDirection">
+		<evaluate expression="rmdHandler.saveRepositoryMappingDirection(rmdModel)">
+		</evaluate>
+	<transition on="success" to="success" />
+	</action-state>
+	
+	<end-state id="success" view="externalRedirect:contextRelative:/creatermd/success" />
+	
+	<end-state id="cancel" view="externalRedirect:contextRelative:/creatermd/cancel"  />
+     
+     
+     
+</flow>

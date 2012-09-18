@@ -34,6 +34,10 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_PAUSESYNCHRONIZATION = "/admin/pausesynch";
 	public static final String LANDSCAPESETTINGS_DELETESYNCHRONIZATION = "/admin/deletesynch";
 	
+	//sv
+	public static final String LANDSCAPESETTINGS_CREATE_MAPPING_RULE = "admin/createmappingrule";
+	public static final String LANDSCAPESETTINGS_DISPLAY_MAPPING_RULE = "admin/displaymappingrule";
+	
 	// LandscapeFieldMappingTemplatesController
 	public static final String LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESTFTOPART = "admin/displayfieldmappingtemplatestftopart";
 	public static final String LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESPARTTOTF = "admin/displayfieldmappingtemplatesparttotf";
@@ -83,6 +87,10 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_PROCESSRAWLOGFILE = "/admin/processrawlogfile";
 	public static final String LANDSCAPESETTINGS_VIEWRAWLOGFILE = "admin/viewrawlogfile";
 	
-	
+	//LandscapeFieldMappingController
+	public static final String ASSOCIATED_FIELD_MAPPINGS_BY_RMD="/admin/associatedfmbyrmd";
+	public static final String VIEW_ASSOCIATED_FIELD_MAPPINGS = "admin/viewassociatedfm";
+	public static final String DELETE_ASSOCIATED_FIELD_MAPPINGS = "admin/deleteassociatedfm";
+	public static final String SETAS_ACTIVE_FIELD_MAPPING = "admin/setasactivefm";
 	
 }

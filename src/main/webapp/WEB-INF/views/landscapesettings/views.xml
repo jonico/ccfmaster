@@ -162,6 +162,12 @@
     <put-attribute name="tabBody" value="/WEB-INF/views/landscapesettings/repositorymappingtftopart.jspx" cascade="true" />
   </definition>
   
+  <definition  extends="mappingsTabs" name="admin/viewassociatedfm">
+    <put-attribute name="body" value="/WEB-INF/views/landscapesettings/viewassociatedmappings.jspx"/>
+  </definition>
+  
+ 
+  
  	<definition extends="mappingsTabs" name="admin/resumesynch">
          <put-attribute name="body" value="/WEB-INF/views/landscapesettings/repositorymappingtftopart.jspx"/>
     </definition>

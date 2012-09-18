@@ -209,6 +209,13 @@ public class ControllerConstants {
 	
 	public static final String FORWARD = "forward";
 	
+	
+	//View Associated Field Mappings
+		public static final String FIELD_MAPPING_DELETE_SUCCESS_MESSAGE="fieldmappingdeletesuccessmessage";
+		public static final String FIELD_MAPPING_DELETE_FAILURE_MESSAGE="fieldmappingdeletefailuremessage";
+		public static final String FIELD_MAPPING_SETAS_ACTIVE_SUCCESS_MESSAGE="fieldmappingsetasactivesuccessmessage";
+		public static final String FIELD_MAPPING_SETAS_ACTIVE_FAILURE_MESSAGE="fieldmappingsetasactivefailuremessage";
+		public static final String FIELD_MAPPING_NODELETE_ACTIVE_FAILURE_MESSAGE="nodeleteactivemapping";
 	/**
 	 * 
 	 */

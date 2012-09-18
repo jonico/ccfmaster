@@ -140,8 +140,27 @@
 							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'Theme')}">
 							  	<c:set var="swp_image_url" value="${swp_theme_image_url}"/>
 							   </c:if>
-				 		<td ><img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}" title="${swpdomainlabel}"/>&#160;${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.targetArtifactId}</td>
+							   
+				 		<td >
+				 		<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}" title="${swpdomainlabel}"/>&#160;${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.targetArtifactId}
+				 		</td>
 			 		</c:if>
+			 		<c:if test="${participant.systemKind eq 'GENERIC'}">
+			 			 	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'Bug')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'User Story')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+							   <td>
+					 	   	 	<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.targetArtifactId}" />
+					 	   	 	</td>
+			 			</c:if>
+			 		
 					<td nowrap="nowrap" ><img src="${fn:escapeXml(errorurl)}" alt="${errortitle}" title="${errortitle}" border="0" /> ${hospitalentry.errorCode}</td>
 					<td ><a href="javascript: viewhospital('${fn:escapeXml(hospital_url)}&amp;hospitalid=${hospitalentry.id}');">${hospitalentry.causeExceptionMessage}</a></td>	
 		 			</tr> 		
@@ -230,7 +249,7 @@
 				<div class="ButtonSpace"></div>
 				<div class="Button">
 				<div class="MiddleDisabled">
-						${export_button}
+					${export_button}
 				</div>
 				</div>
 				</div>

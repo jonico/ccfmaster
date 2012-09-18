@@ -34,6 +34,13 @@
 <spring:url value="/images/icons/swp_release.gif" var="swp_release_image_url" />
 <spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
 <spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
+
+<spring:url value="/creatermd" var="create_mapping_rule_url"/>
+<spring:url value="/images/icons/xslt_active.png" var="fm_xslt_image_url" />
+<spring:url value="/images/icons/mapforce_active.png" var="fm_mf_image_url" />
+<spring:url value="/images/icons/custom_mapping_active.gif" var="fm_mr_image_url" />
+<spring:url value="/images/icons/edit.gif" var="fm_templates_image_url" />
+
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
@@ -62,7 +69,7 @@
 				</tr>
 				<tr class="ItemListHeader">
     			<c:if test="${fn:length(repositoryMappingsModel) > 0}">
-				 <td width="1"><input type="checkbox" id="selectall"  name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>				 
+				 <td width="1"><input type="checkbox" id="selectall"  name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>Active Field Mapping</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>				 
 				 <c:forEach items="${repositoryMappingsModel}" var="rmm" varStatus="status">
 				 	<c:set var="rmd" value="${rmm.repositoryMappingDirection}" />
 				 	<tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
@@ -109,6 +116,19 @@
 							   </c:if>
 			 				<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${rmd.repositoryMapping.participantRepositoryId}" />
 			 			</c:if>
+			 			<c:if test="${participant.systemKind eq 'GENERIC'}">
+			 			 	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Bug')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'User Story')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+					 	   	 	<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${rmd.repositoryMapping.participantRepositoryId}" />
+			 			</c:if>
 			 		</td>
 		 			<td>
 			 			<c:if test="${rmm.repositoryIcon ne 'null'}">
@@ -118,6 +138,22 @@
 							<c:out value= "${rmm.repositoryId}" />
 						</c:if>
 		 			</td>
+		 					<c:set var="fm_image_url" value="${fm_xslt_image_url	}"/>
+			 			 	   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'CUSTOM_XSLT'}">
+							  	<c:set var="fm_image_url" value="${fm_xslt_image_url}"/>
+							   </c:if>
+							  <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPFORCE'}">
+							  	<c:set var="fm_image_url" value="${fm_mf_image_url}"/>
+							   </c:if>
+							   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPPING_RULES'}">
+							  	<c:set var="fm_image_url" value="${fm_mr_image_url}"/>
+							   </c:if>
+						
+		 				<spring:url value="/admin/associatedfmbyrmd?rmdid={rmdid}" var="associated_fmapping_url">
+							<spring:param name="rmdid" value="${rmd.id}" />
+						</spring:url>	   
+			 			<td><a href="#" title="${rmm.repositoryMappingDirection.activeFieldMapping.name}" class="poptip" ><img src="${fn:escapeXml(fm_image_url)}" title="${rmm.repositoryMappingDirection.activeFieldMapping.kind}"  alt="${rmm.repositoryMappingDirection.activeFieldMapping.kind}" border="0" class="trackerIcon" /></a>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<a href="${associated_fmapping_url}&amp;direction=REVERSE" ><img src="${fn:escapeXml(fm_templates_image_url)}" title="Associated Field Mappings"  alt="Associated Field Mappings" border="0" class="trackerIcon" /></a></td>
+			 			
 		 			<spring:url value="/admin/displayhospitalbyrmd?rmdid={rmdid}" var="hospital_url">
 							<spring:param name="rmdid" value="${rmd.id}" />
 						</spring:url>
@@ -157,6 +193,13 @@
 				<div id="enablebutton" class="AlignRight" style="display:none;">
 				<div class="Button">
 				<div class="Middle">
+						  <a href="javascript: createMappingRuleForm('${fn:escapeXml(create_mapping_rule_url)}');">Create</a> 
+				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
 				     	<a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a>
 				</div>
 				
@@ -186,6 +229,14 @@
 				<td>
 				
 				<div class="AlignRight" id="disablebutton">
+				<div class="Button">
+				<div class="Middle">
+						  <a href="javascript: createMappingRuleForm('${fn:escapeXml(create_mapping_rule_url)}');">Create</a> 
+				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
+				</div>
+				</div>
+				
+				<div class="ButtonSpace"></div>
 				<div class="Button">
 				<div class="MiddleDisabled">
 				     	${delete_button}
@@ -217,6 +268,11 @@
   
   
 	<script language="JavaScript">
+	
+		function createMappingRuleForm(url){
+			document.getElementById("repositoryForm").action=url;
+	  		document.getElementById("repositoryForm").submit();
+		}
 		function resumeForm(url){
 			document.getElementById("repositoryForm").action=url;
 	  		document.getElementById("repositoryForm").submit();
