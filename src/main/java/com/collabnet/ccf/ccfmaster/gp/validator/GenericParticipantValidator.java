@@ -12,6 +12,6 @@ public interface GenericParticipantValidator {
 	
 	public void validate(AbstractGenericParticipantModel model, Errors errors);
 	
-	public Boolean validateConnection(AbstractGenericParticipantModel model);
+	public ConnectionResult validateConnection(AbstractGenericParticipantModel model);
 
 }

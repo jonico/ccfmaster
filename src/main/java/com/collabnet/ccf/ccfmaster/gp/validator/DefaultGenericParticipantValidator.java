@@ -26,7 +26,7 @@ public class DefaultGenericParticipantValidator implements GenericParticipantVal
 	}
 
 	@Override
-	public Boolean validateConnection(AbstractGenericParticipantModel model) {
+	public ConnectionResult validateConnection(AbstractGenericParticipantModel model) {
 		return null;
 	}
 	

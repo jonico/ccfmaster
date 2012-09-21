@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
+import com.collabnet.ccf.ccfmaster.gp.validator.ConnectionResult;
 import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.gp.validator.GenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.server.core.QCMetaDataProvider;
@@ -179,19 +180,27 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_GP_TEST_CONNECTION, method = RequestMethod.POST)
 	public @ResponseBody String testGenericParticipantConnection(@ModelAttribute("qcsettingsmodel") ParticipantSettingsModel participantSettingsModel, HttpServletRequest request){
 		RequestContext ctx = new RequestContext(request);
-		String returnText;
-		boolean isConnectionValid = true;
+		ConnectionResult connectionResult = null;
 		if(genericParticipant != null){
 			GenericParticipantValidator validator = genericParticipant.getCustomValidator();
-			isConnectionValid = validator.validateConnection(participantSettingsModel);
+			connectionResult = validator.validateConnection(participantSettingsModel);
 		}
-		if(isConnectionValid){
-			returnText="<strong><font color='green'>"+ctx.getMessage(ControllerConstants.GP_CONNECTION_SUCCESS_MESSAGE)+ "</font></strong>";
-		}else{
-			returnText="<strong><font color='green'>"+ctx.getMessage(ControllerConstants.GP_CONNECTION_FAILURE_MESSAGE)+ "</font></strong>";
-		}
-		return returnText;
 		
+		if(connectionResult != null && connectionResult.isConnectionValid()){
+			return getTestConnectionMsg(connectionResult.getMessage(),ctx.getMessage(ControllerConstants.GP_CONNECTION_SUCCESS_MESSAGE), "green");
+		}else{
+			return getTestConnectionMsg(connectionResult.getMessage(),ctx.getMessage(ControllerConstants.GP_CONNECTION_FAILURE_MESSAGE), "red");
+		}
+	}
+
+
+
+	private String getTestConnectionMsg(String message,String contextMessage,String cssColor) {
+		StringBuilder builder = new StringBuilder("<strong><font color='").append(cssColor).append("'>").append(contextMessage);
+		if(message != null){
+			builder.append(" ").append(message);
+		}
+		return builder.append("</font></strong>").toString();
 	}
 	
 	/**
