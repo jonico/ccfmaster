@@ -12,7 +12,7 @@ public class VBSQCMetaDataProvider implements QCMetaDataProvider {
 	
 	private ExecutorService executor;
 
-	private static final String TIMEOUT = "//T:30";
+	private static final String TIMEOUT = "//T:60";
 //	private static final String UNICODE = "//U";
 	private static final String BATCH_MODE = "//B";
 	private final static String GET_QC_DOMAINS = "getQCDomains.vbs";
