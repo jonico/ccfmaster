@@ -2,7 +2,8 @@ package com.collabnet.ccf.ccfmaster.gp.validator;
 
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
 
 public interface GenericParticipantValidator {
 	

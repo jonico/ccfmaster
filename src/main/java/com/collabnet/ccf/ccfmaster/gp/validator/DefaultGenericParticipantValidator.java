@@ -5,7 +5,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.core.utils.ValidatorUtils;

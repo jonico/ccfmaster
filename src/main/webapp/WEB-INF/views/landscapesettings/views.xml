@@ -166,8 +166,22 @@
     <put-attribute name="body" value="/WEB-INF/views/landscapesettings/viewassociatedmappings.jspx"/>
   </definition>
   
- 
+  <definition  extends="mappingsTabs" name="admin/creatermd">
+    <put-attribute name="body" value="/WEB-INF/views/landscapesettings/creatermdstep1.jspx"/>
+  </definition>
   
+  <definition  extends="mappingsTabs" name="admin/creatermdstep2">
+    <put-attribute name="body" value="/WEB-INF/views/landscapesettings/creatermdstep2.jspx"/>
+  </definition>
+  
+  <definition  extends="mappingsTabs" name="admin/creatermdstep3">
+    <put-attribute name="body" value="/WEB-INF/views/landscapesettings/creatermdstep3.jspx"/>
+  </definition>
+	
+	<definition  extends="mappingsTabs" name="admin/creatermdstep4">
+    <put-attribute name="body" value="/WEB-INF/views/landscapesettings/creatermdsuccess.jspx"/>
+  </definition>
+
  	<definition extends="mappingsTabs" name="admin/resumesynch">
          <put-attribute name="body" value="/WEB-INF/views/landscapesettings/repositorymappingtftopart.jspx"/>
     </definition>

@@ -93,4 +93,12 @@ public class UIPathConstants {
 	public static final String DELETE_ASSOCIATED_FIELD_MAPPINGS = "admin/deleteassociatedfm";
 	public static final String SETAS_ACTIVE_FIELD_MAPPING = "admin/setasactivefm";
 	
+	//CreateRMDController
+
+	public static final String RMD_CONFIGURE = "admin/creatermd";
+	public static final String RMD_CONFIGURE_DIRECTION = "admin/creatermdstep1";
+	public static final String RMD_CONFIGURE_TFSETTINGS = "admin/creatermdstep2";
+	public static final String RMD_CONFIGURE_PARTICIPANT_SETTINGS= "admin/creatermdstep3";
+	public static final String RMD_SAVE = "admin/creatermd/save";
+	
 }

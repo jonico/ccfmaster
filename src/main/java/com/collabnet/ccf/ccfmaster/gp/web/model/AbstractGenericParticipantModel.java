@@ -1,4 +1,4 @@
-package com.collabnet.ccf.ccfmaster.gp.model;
+package com.collabnet.ccf.ccfmaster.gp.web.model;
 
 import java.util.ArrayList;
 import java.util.List;

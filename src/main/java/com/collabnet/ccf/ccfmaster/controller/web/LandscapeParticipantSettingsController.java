@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
-import com.collabnet.ccf.ccfmaster.gp.validator.ConnectionResult;
 import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.gp.validator.GenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
 import com.collabnet.ccf.ccfmaster.server.core.QCMetaDataProvider;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;

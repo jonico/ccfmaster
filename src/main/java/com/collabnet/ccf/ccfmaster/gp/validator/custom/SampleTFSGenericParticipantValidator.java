@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.collabnet.ccf.ccfmaster.gp.model.AbstractGenericParticipantModel;
-import com.collabnet.ccf.ccfmaster.gp.validator.ConnectionResult;
 import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.microsoft.tfs.core.TFSTeamProjectCollection;
 import com.microsoft.tfs.core.exceptions.TFSUnauthorizedException;
@@ -26,6 +26,7 @@ public class SampleTFSGenericParticipantValidator extends DefaultGenericParticip
 
 	@Override
 	public ConnectionResult validateConnection(AbstractGenericParticipantModel model) {
+		TFSTeamProjectCollection configurationServer = null;
 		String userName = null, domain = null, url = null, password = null;
 		List<CCFCoreProperty> landscapeConfigList = model.getLandscapeConfigList();
 		List<CCFCoreProperty> partcipantConfigList = model.getParticipantConfigList();
@@ -53,14 +54,17 @@ public class SampleTFSGenericParticipantValidator extends DefaultGenericParticip
 			return new ConnectionResult(false, CONFIG_ERROR_MSG);
 		}else {
 			try{
-				TFSTeamProjectCollection configurationServer = new TFSTeamProjectCollection(url,  userName, domain, password);
+				configurationServer = new TFSTeamProjectCollection(url,  userName, domain, password);
 				configurationServer.authenticate();
 				return new ConnectionResult(configurationServer.hasAuthenticated());
 			} catch(TFSUnauthorizedException e){
 				return new ConnectionResult(false, e.getMessage());
 			} catch(Exception e){
 				return new ConnectionResult(false, e.getMessage());
-			}
+			}/*finally{
+				if(configurationServer != null)
+				configurationServer.close();
+			}*/
 		}
 	}
 	

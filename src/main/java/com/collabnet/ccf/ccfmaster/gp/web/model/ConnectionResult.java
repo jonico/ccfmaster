@@ -1,4 +1,4 @@
-package com.collabnet.ccf.ccfmaster.gp.validator;
+package com.collabnet.ccf.ccfmaster.gp.web.model;
 
 /**
  * ConnectionResult returns the status of connection and provides extra -(success/error) information required 

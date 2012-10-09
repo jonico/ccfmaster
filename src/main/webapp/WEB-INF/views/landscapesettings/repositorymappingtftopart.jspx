@@ -33,7 +33,7 @@
 <spring:url value="/images/icons/swp_release.gif" var="swp_release_image_url" />
 <spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
 <spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
-<spring:url value="/creatermd" var="create_rmd_url"/>
+<spring:url value="/admin/creatermd" var="create_rmd_url"/>
 <spring:url value="/images/icons/xslt_active.png" var="fm_xslt_image_url" />
 <spring:url value="/images/icons/mapforce_active.png" var="fm_mf_image_url" />
 <spring:url value="/images/icons/custom_mapping_active.gif" var="fm_mr_image_url" />
@@ -187,7 +187,6 @@
 			</table>
 				<br/>
 				<br/>
-				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
 				<tr class="ContainerFooter">
 				 <td >
 				 <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}">
@@ -259,8 +258,6 @@
 				
 				</td>
 				</tr>
-				
-				</c:if>
 				</td>
 				</tr>
 	</tbody>
