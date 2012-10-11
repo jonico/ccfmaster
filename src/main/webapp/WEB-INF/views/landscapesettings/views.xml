@@ -178,7 +178,7 @@
     <put-attribute name="body" value="/WEB-INF/views/landscapesettings/creatermdstep3.jspx"/>
   </definition>
 	
-	<definition  extends="mappingsTabs" name="admin/creatermdstep4">
+	<definition  extends="mappingsTabs" name="admin/saveRMD">
     <put-attribute name="body" value="/WEB-INF/views/landscapesettings/creatermdsuccess.jspx"/>
   </definition>
 

@@ -17,4 +17,10 @@ privileged aspect RepositoryMappingController_Roo_Controller_Finder {
         return "repositorymappings/findRepositoryMappingsByExternalApp";
     }
     
+    @RequestMapping(params = { "find=ByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId", "form" }, method = RequestMethod.GET)
+    public String RepositoryMappingController.findRepositoryMappingsByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryIdForm(Model uiModel) {
+        uiModel.addAttribute("externalapps", ExternalApp.findAllExternalApps());
+        return "repositorymappings/findRepositoryMappingsByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId";
+    }
+    
 }

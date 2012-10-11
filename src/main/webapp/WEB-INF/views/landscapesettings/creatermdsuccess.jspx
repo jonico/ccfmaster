@@ -6,58 +6,32 @@
 <tbody>
 <tr>
 <td>
-
 	<table class="ItemDetailContainer" width="100%" >
 		<tbody>
 			<tr class="ContainerHeader">
-			<td colspan="5">
-			Repository mapping direction creation status
-			</td>
+				<td colspan="5">
+					Repository mapping direction creation status
+				</td>
 			</tr>
-			
-				<tr>
-				<td>
-				
-				<br/>
-				<br/>
+			<tr>
+				<td><br/><br/></td>
+			</tr>
+			<tr>
+				<td>	
+					<p>Repository Mapping Direction created successfully as listed below.</p>
+					<p>
+					*<br/>
+					*
+					</p>
+					<p>Please <a href="${displayrmd_url}"> click here </a> to view the repository mapping directions.
+					By default the newly created repository mapping direction is paused.Resume the repository mapping direction for synchronization.
+					</p>
 				</td>
-				</tr>
-				<tr>
-				<td>
-				
-				<p>Repository Mapping Direction created successfully as listed below.</p>
-				<p>
-				*<br/>
-				*
-				</p>
-
-				<p>Please <a href="${displayrmd_url}"> click here </a> to view the repository mapping directions.
-				By default the newly created repository mapping direction is paused.Resume the repository mapping direction for synchronization.
-				</p>
-				 </td>
-				 </tr>
-				
-				<tr>
-				<td>
-				
-				
-				</td>
-				</tr>
-		
-		
-		
-		
-			
-				
-			
+			 </tr>			
 		</tbody>
 		</table>
-
-
 </td>
 </tr>
 </tbody>
 </table>
-
-
 </div>

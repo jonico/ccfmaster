@@ -10,6 +10,7 @@ privileged aspect FieldMapping_Roo_ToString {
     public String FieldMapping.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Kind: ").append(getKind()).append(", ");
+        sb.append("MappingDirection: ").append(getMappingDirection()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
         sb.append("Parent: ").append(getParent()).append(", ");
         sb.append("Rules: ").append(getRules() == null ? "null" : getRules().size()).append(", ");

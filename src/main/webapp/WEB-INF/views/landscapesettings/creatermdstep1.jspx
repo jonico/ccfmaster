@@ -45,6 +45,7 @@
 					</c:forEach>						
  				</td>
 			</tr>
+			<tr><td><br/></td></tr>	
 			<tr id="forwardconflict" style="display:none">
 				<td class="ItemDetailName">
 					<form:label  path="" name="forwardconflictlabel">Forward Direction Conflict Resolution Policy:</form:label>
@@ -53,7 +54,8 @@
 					<form:select  id="forwardconflictCombo" path="" cssClass="inputfield"> <form:options items="${conflictPolicies}"/></form:select>
 					<form:hidden path="forwardConfilictPolicies"/>
 				</td>
-			</tr>				
+			</tr>
+			<tr><td><br/></td></tr>					
 			<tr id="reverseconflict" style="display:none">			
 				<td class="ItemDetailName">
 					<form:label  path="" name="reverseconflict" >Reverse Direction Conflict Resolution Policy:</form:label>
@@ -62,7 +64,28 @@
 					<form:select  id="reversedConfilictCombo" path=""  cssClass="inputfield"> <form:options items="${conflictPolicies}"/></form:select>
 					<form:hidden path="reversedConfilictPolicies"/>
 				</td>	
-			</tr><br/><br/>
+			</tr>
+			<tr><td><br/></td></tr>	
+			<tr id="forwardTemplateName" style="display:none">
+				<td class="ItemDetailName">
+					<form:label  path="" name="forwardTemplateName">Forward Direction Field Mapping Template:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+					<form:select  id="forwardTemplateNameCombo" path="" cssClass="inputfield"> <form:options items="${forwardFieldMappingTemplateNames}"/></form:select>
+					<form:hidden path="forwardFieldMappingTemplateName"/>
+				</td>
+			</tr>
+			<tr><td><br/></td></tr>				
+			<tr id="reverseTemplateName" style="display:none">			
+				<td class="ItemDetailName">
+					<form:label  path="" name="reverseTemplateName" >Reverse Direction Conflict Resolution Policy:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+					<form:select  id="reversedTemplateNameCombo" path=""  cssClass="inputfield"> <form:options items="${reverseFieldMappingTemplateNames}"/></form:select>
+					<form:hidden path="reverseFieldMappingTemplateName"/>
+				</td>	
+			</tr>
+			<tr><td><br/></td></tr>
 			<tr class="ContainerFooter" >
 				<td colspan="5">
 					<div class="AlignRight">
@@ -115,6 +138,20 @@
 				 var value = $("#reversedConfilictCombo").val();
 				 $('#reversedConfilictPolicies').val(value);
 			 });
+		});		
+		 
+		$(document).ready(function () {			 
+			 $('#forwardTemplateNameCombo').change(function(){
+				 var value = $("#forwardTemplateNameCombo").val();
+				 $('#forwardFieldMappingTemplateName').val(value);
+			 });
+		});
+		
+		$(document).ready(function () {			 
+			 $('#reversedTemplateNameCombo').change(function(){
+				 var value = $("#reversedTemplateNameCombo").val();
+				 $('#reverseFieldMappingTemplateName').val(value);
+			 });
 		});
 
 		 
@@ -124,21 +161,21 @@
 			     var radioval=$(this).val();
 				 if(radioval=='FORWARD'){
 	               $('#reverseconflict').hide();
-	               $('#reversetemplate').hide();
+	               $('#reverseTemplateName').hide();
 	               $('#forwardconflict').show();
-	               $('#forwardtemplate').show();
+	               $('#forwardTemplateName').show();
 	              }
 	             else if(radioval=='REVERSE'){
 	               $('#forwardconflict').hide();
-	               $('#forwardtemplate').hide();
+	               $('#forwardTemplateName').hide();
 	               $('#reverseconflict').show();
-	               $('#reversetemplate').show();
+	               $('#reverseTemplateName').show();
 	             }
 	             else if(radioval=='BOTH'){
 		             $('#forwardconflict').show();
 		             $('#reverseconflict').show();
-		             $('#forwardtemplate').show();
-		             $('#reversetemplate').show();
+		             $('#forwardTemplateName').show();
+		             $('#reverseTemplateName').show();
 	             }	
         	});  
 		});		 

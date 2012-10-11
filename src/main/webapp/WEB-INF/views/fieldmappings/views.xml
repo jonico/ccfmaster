@@ -16,4 +16,7 @@
 <definition extends="default" name="fieldmappings/findFieldMappingsByParent">
         <put-attribute name="body" value="/WEB-INF/views/fieldmappings/findFieldMappingsByParent.jspx"/>
     </definition>
+<definition extends="default" name="fieldmappings/findFieldMappingsByNameAndParentAndScope">
+        <put-attribute name="body" value="/WEB-INF/views/fieldmappings/findFieldMappingsByNameAndParentAndScope.jspx"/>
+    </definition>
 </tiles-definitions>

@@ -1,5 +1,7 @@
 package com.collabnet.ccf.ccfmaster.gp.web.model;
 
+import java.util.Arrays;
+
 
 public class RMDModel {
 	
@@ -9,13 +11,17 @@ public class RMDModel {
 	
 	public String reversedConfilictPolicies;
 	
+	public String forwardFieldMappingTemplateName;
+	
+	public String reverseFieldMappingTemplateName;
+	
 	public String teamForgeMappingType; //planningfolder,tracker,metadata
 	
 	public String teamforgeProjectId;
 	
 	public String teamforgeTracker;
 	
-	public String participantMappingType;
+	public String participantMappingType; //For tfs: User Type, Bug , Task
 	
 	public String participantDomainName;
 	
@@ -75,6 +81,14 @@ public class RMDModel {
 		return participantProjectIds;
 	}
 
+	public String getForwardFieldMappingTemplateName() {
+		return forwardFieldMappingTemplateName;
+	}
+
+	public String getReverseFieldMappingTemplateName() {
+		return reverseFieldMappingTemplateName;
+	}
+
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
@@ -123,15 +137,29 @@ public class RMDModel {
 		this.participantProjectIds = participantProjectIds;
 	}
 
+	public void setForwardFieldMappingTemplateName(
+			String forwardFieldMappingTemplateName) {
+		this.forwardFieldMappingTemplateName = forwardFieldMappingTemplateName;
+	}
+
+	public void setReverseFieldMappingTemplateName(
+			String reverseFieldMappingTemplateName) {
+		this.reverseFieldMappingTemplateName = reverseFieldMappingTemplateName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("RepositoryMappingDirectionModel [direction=");
+		builder.append("RMDModel [direction=");
 		builder.append(direction);
 		builder.append(", forwardConfilictPolicies=");
 		builder.append(forwardConfilictPolicies);
 		builder.append(", reversedConfilictPolicies=");
 		builder.append(reversedConfilictPolicies);
+		builder.append(", forwardFieldMappingTemplateName=");
+		builder.append(forwardFieldMappingTemplateName);
+		builder.append(", reverseFieldMappingTemplateName=");
+		builder.append(reverseFieldMappingTemplateName);
 		builder.append(", teamForgeMappingType=");
 		builder.append(teamForgeMappingType);
 		builder.append(", teamforgeProjectId=");
@@ -144,6 +172,12 @@ public class RMDModel {
 		builder.append(participantDomainName);
 		builder.append(", participantProjectId=");
 		builder.append(participantProjectId);
+		builder.append(", participantMappingTypes=");
+		builder.append(Arrays.toString(participantMappingTypes));
+		builder.append(", participantDomainNames=");
+		builder.append(Arrays.toString(participantDomainNames));
+		builder.append(", participantProjectIds=");
+		builder.append(Arrays.toString(participantProjectIds));
 		builder.append("]");
 		return builder.toString();
 	}

@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.collabnet.teamforge.api.Connection;
+import com.collabnet.teamforge.api.main.ProjectDO;
 import com.collabnet.teamforge.api.main.ProjectList;
 import com.collabnet.teamforge.api.main.ProjectRow;
+import com.collabnet.teamforge.api.pluggable.IntegratedApplicationClient;
 import com.collabnet.teamforge.api.tracker.TrackerList;
 import com.collabnet.teamforge.api.tracker.TrackerRow;
 
@@ -49,6 +51,20 @@ public class TeamForgeMetadataHelper {
 			projectCollection.add(trackerInfoMap);
 		}
 		return projectCollection;
+	}
+	
+	public static String getTFLinkId(Connection connection,String plugId,String projectId){
+		try {
+			IntegratedApplicationClient client = connection.getIntegratedAppClient(true);
+			return client.getLinkPlugIdByPlugId(projectId, plugId);
+		} catch (RemoteException e) {
+			return null;
+		}
+	}
+	
+	public static ProjectDO getTFProjectDetails(Connection connection,String projectId) throws RemoteException{
+		ProjectDO project = connection.getTeamForgeClient().getProjectData(projectId);
+		return project;
 	}
 	
 	

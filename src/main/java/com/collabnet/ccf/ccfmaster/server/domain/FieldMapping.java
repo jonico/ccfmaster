@@ -3,7 +3,6 @@ package com.collabnet.ccf.ccfmaster.server.domain;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,7 +17,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -26,11 +24,11 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
-@RooEntity(finders = { "findFieldMappingsByParent" })
 @XmlRootElement
 @RooToString
 @XmlAccessorType(XmlAccessType.FIELD)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "PARENT", "SCOPE", "NAME" }))
+@RooEntity(finders = { "findFieldMappingsByParent", "findFieldMappingsByNameAndParentAndScope" })
 public class FieldMapping implements Mapping<RepositoryMappingDirection> {
 
     @NotNull
@@ -61,18 +59,13 @@ public class FieldMapping implements Mapping<RepositoryMappingDirection> {
     public File getStorageDirectory(File baseDir) {
         final RepositoryMappingDirection rmd = getParent();
         final Landscape landscape = rmd.getRepositoryMapping().getExternalApp().getLandscape();
-        final File dir = new File(baseDir, String.format(
-        		"landscape%d/fieldmappings/%s/%d/%s",
-        		landscape.getId(),
-        		rmd.getDirection(),
-        		rmd.getId(),
-        		getName()));
+        final File dir = new File(baseDir, String.format("landscape%d/fieldmappings/%s/%d/%s", landscape.getId(), rmd.getDirection(), rmd.getId(), getName()));
         return dir;
     }
-    
+
     @Override
     public Directions getMappingDirection() {
-    	return getParent().getDirection();
+        return getParent().getDirection();
     }
 
     public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, FieldMapping> {
@@ -103,5 +96,4 @@ public class FieldMapping implements Mapping<RepositoryMappingDirection> {
     public static long countFieldMappingsByParent(RepositoryMappingDirection rmd) {
         return entityManager().createQuery("select count(o) from FieldMapping o where o.parent = :parent", Long.class).setParameter("parent", rmd).getSingleResult();
     }
-
 }

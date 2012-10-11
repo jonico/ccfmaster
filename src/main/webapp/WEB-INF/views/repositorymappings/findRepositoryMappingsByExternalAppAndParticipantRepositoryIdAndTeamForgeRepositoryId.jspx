@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId" id="ff_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping" path="/repositorymappings" z="W5h7nJy2OmGlr8wz98HghgAWSqg=">
+        <field:select disableFormBinding="true" field="externalApp" id="f_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_externalApp" itemValue="id" items="${externalapps}" path="/externalapps" required="true" z="KdkcOhUpCDULGysVkJSqnQEsG5M="/>
+        <field:input disableFormBinding="true" field="participantRepositoryId" id="f_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_participantRepositoryId" max="128" required="true" validationRegex="^[^']+$" z="aVgxuvaYZn/auEJiB8Is6ZGYlD4="/>
+        <field:input disableFormBinding="true" field="teamForgeRepositoryId" id="f_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMapping_teamForgeRepositoryId" max="128" required="true" validationRegex="^[\\w\\-]+$" z="pcP+/ezJ4JPStoQRK045CUZphOc="/>
+    </form:find>
+</div>

@@ -3,7 +3,6 @@
 
 <spring:message code="button_next" var="next_button"/>
 <spring:message code="button_cancel" var="cancel_button"/>
-
 <spring:url value="/admin/creatermd" var="creatermdstep1_url" />
 <spring:url value="/admin/creatermdstep3" var="creatermdstep3_url" />
 <spring:url value="/admin/teamForge/trackerList" var="gettftrackerlist_url" />
@@ -61,6 +60,8 @@
 					<form:hidden path="direction"/>
 					<form:hidden path="forwardConfilictPolicies"/>
 					<form:hidden path="reversedConfilictPolicies"/>
+					<form:hidden path="forwardFieldMappingTemplateName"/>
+					<form:hidden path="reverseFieldMappingTemplateName"/>
 					<div class="AlignRight">
 					<div class="Button">
 					<div class="Middle">               
@@ -84,86 +85,73 @@
 
 <script language="JavaScript">
 
-		function submitForm(url){
-				document.getElementById("creatermdstep2").action=url;
-	  			document.getElementById("creatermdstep2").submit();
-		}
-		
-		function cancelForm(url){
-			document.getElementById("creatermdstep2").action=url;
-  			document.getElementById("creatermdstep2").submit();
+	function submitForm(url){
+		document.getElementById("creatermdstep2").action=url;
+		document.getElementById("creatermdstep2").submit();
 	}
-		
-		
-		 
-		$(document).ready(function () {			 
-			 $('#id_tfProject').change(function(){
-				 var value = $("#id_tfProject").val();
-				 $('#teamforgeProjectId').val(value);
-			 });
-		});
-		
-		$(document).ready(function () {
-			$('#submitForm').click(function() {
-			    if (!$("input[@name='workitem']:checked").val()) {
-			    	alert('Please select the TeamForge Work Item type');
-			        return false;
-			    }
-			    
-			  });
+	
+	function cancelForm(url){
+		document.getElementById("creatermdstep2").action=url;
+  		document.getElementById("creatermdstep2").submit();
+	}
+	$(document).ready(function () {			 
+		 $('#id_tfProject').change(function(){
+			 var value = $("#id_tfProject").val();
+			 $('#teamforgeProjectId').val(value);
+		 });
+	});
+	$(document).ready(function () {
+		$('#submitForm').click(function() {
+		    if (!$("input[@name='workitem']:checked").val()) {
+		    	alert('Please select the TeamForge Work Item type');
+		        return false;
+		    }    
+		 });
 			
-			 $("input[name$='workitem']").click(function(){
-		     var radioval=$(this).val();
+		 $("input[name$='workitem']").click(function(){
+			 var radioval=$(this).val();
 			 if(radioval=='tracker'){
-              $('#projectid').hide();
-               $('#trackerid').show();
-               
-      		  }
-            else if(radioval=='planningfolder'){
-              $('#trackerid').hide();
-              $('#projectid').show();
+	             $('#projectid').hide();
+	             $('#trackerid').show();
+             } else if(radioval=='planningfolder'){
+               	$('#trackerid').hide();
+              	$('#projectid').show();
             }
-          
-       });  
-		 });	
+		});  
+	 });	
+	$(document).ready(function () {			 
+		 $('#id_trackerList').change(function(){
+			 var value = $("#id_trackerList").val();
+			 $('#teamforgeTracker').val(value);
+		 });
+	});
 		
-		 
-		$(document).ready(function () {			 
-			 $('#id_trackerList').change(function(){
-				 var value = $("#id_trackerList").val();
-				 $('#teamforgeTracker').val(value);
-			 });
-		});
-		
-		function doAjaxPost(posturl) {
-			var projectid = $("#teamforgeProjectId").val();
-	       	 $.ajax({
-		       		beforeSend: function() {
-				 		 $('#spinner').show();
-				 		 $('#browseproject').show();
-			         },
-			         complete: function(){
-			        	 $('#spinner').hide();
-			        	 $('#browseproject').show();
-			         },
-	        		type:"POST",
-	        		url: posturl,
-	        		data:"projectId=" + projectid,
-	        		dataType:"json",
-	        		success: function(response){
-	        		 $("#id_trackerList").get(0).options.length = 0;
-	             	 $("#id_trackerList").get(0).options[0] = new Option("Select a Project", "-1");
-	            	 $.each(response,function(index,value) {
-	            		 $("#id_trackerList").get(0).options[$("#id_trackerList").get(0).options.length] = new Option(value.title, value.id);
+	function doAjaxPost(posturl) {
+		var projectid = $("#teamforgeProjectId").val();
+	  	 $.ajax({
+	       		beforeSend: function() {
+			 		 $('#spinner').show();
+			 		 $('#browseproject').show();
+		         },
+		         complete: function(){
+		        	 $('#spinner').hide();
+		        	 $('#browseproject').show();
+		         },
+	       		type:"POST",
+	       		url: posturl,
+	       		data:"projectId=" + projectid,
+	       		dataType:"json",
+	       		success: function(response){
+		       		 $("#id_trackerList").get(0).options.length = 0;
+		             $("#id_trackerList").get(0).options[0] = new Option("Select a Project", "-1");
+		           	 $.each(response,function(index,value) {
+		           	 $("#id_trackerList").get(0).options[$("#id_trackerList").get(0).options.length] = new Option(value.title, value.id);
 		        	 });
-		     	 },
-	        	error: function(e){
-	        	alert('Failed to load projects: ' + e);
-	        	}
-	        	});
-	        }
-	      
- 	</script>  
-
-
+	     		 },
+		       	error: function(e){
+		        	alert('Failed to load projects: ' + e);
+		        	}
+	        });
+	 }	      
+</script>
 </div>
