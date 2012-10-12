@@ -48,7 +48,7 @@ import flexjson.JSONSerializer;
 @RequestMapping("/admin/**")
 @Controller
 public class CreateRMDController {
-	
+
 	@Autowired
 	private CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
@@ -57,40 +57,46 @@ public class CreateRMDController {
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE, method=RequestMethod.POST)
 	public String intializeRMDSettings(Model model, HttpServletRequest request){
 		model.addAttribute("rmdModel", new RMDModel());
+		populateModel(model);
 		return UIPathConstants.RMD_CONFIGURE;		
-	}
-	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_DIRECTION, method=RequestMethod.POST)
-	public String intializeDirectionSettings(Model model,@ModelAttribute(value="rmdModel")RMDModel rmdmodel){
-		return UIPathConstants.RMD_CONFIGURE_DIRECTION;
 	}
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_TFSETTINGS, method=RequestMethod.POST)
 	public String intializeTFSettings(Model model,@ModelAttribute(value="rmdModel")RMDModel rmdmodel){
+		populateModel(model);
 		return UIPathConstants.RMD_CONFIGURE_TFSETTINGS;
 	}
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS, method=RequestMethod.POST)
-	public String intializeParticipantSettings(@ModelAttribute(value="rmdModel")RMDModel rmdmodel){
+	public String intializeParticipantSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel){
 		buildTFSMetadatahelper();
 		rmdmodel.setParticipantDomainNames(tfsMetadataHelper.getTFSCollectionList().toArray(new String[]{}));
 		rmdmodel.setParticipantMappingTypes(new String[]{"User Story","Task","Bug"});
+		populateModel(model);
 		return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
 	}
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_SAVE, method=RequestMethod.POST)
-	public void saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel){
+	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel, Model model){
 		String direction = rmdmodel.getDirection();
-		ConflictResolutionPolicy forwardConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getForwardConfilictPolicies());
-		ConflictResolutionPolicy reverseConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getReversedConfilictPolicies());
-		if("FORWARD".equalsIgnoreCase(direction)){
-			buildRepositoryMappingDir(rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName());
-		}else if("REVERSE".equalsIgnoreCase(direction)){
-			buildRepositoryMappingDir(rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName());	
-		}else{
-			buildRepositoryMappingDir(rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName());
-			buildRepositoryMappingDir(rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName());
+		ConflictResolutionPolicy forwardConflictPolicy = null,reverseConflictPolicy = null;
+		if(!rmdmodel.getForwardConfilictPolicies().isEmpty()){
+			forwardConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getForwardConfilictPolicies());
 		}
+		if(!rmdmodel.getReversedConfilictPolicies().isEmpty()){
+			reverseConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getReversedConfilictPolicies());
+		}
+		if("FORWARD".equalsIgnoreCase(direction)){
+			buildRepositoryMappingDir(model, rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName());
+		}else if("REVERSE".equalsIgnoreCase(direction)){
+			buildRepositoryMappingDir(model, rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName());	
+		}else{
+			buildRepositoryMappingDir(model, rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName());
+			buildRepositoryMappingDir(model, rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName());
+		}
+
+		populateModel(model);
+		return UIPathConstants.RMD_SAVE;
 		
 	}
 		
@@ -157,8 +163,15 @@ public class CreateRMDController {
 	public List<String> getReverseFieldMappingTemplateNames(){
 		return getFieldMappingTemplateNames(Directions.REVERSE);
 	}
+	
+	public void populateModel(Model model){
+		Landscape landscape = ControllerHelper.findLandscape();
+		model.addAttribute("participant",landscape.getParticipant());
+		model.addAttribute("landscape",landscape);
+		model.addAttribute("selectedLink", "repositorymappings");
+	}
 
-	private void buildRepositoryMappingDir(RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName) {
+	private void buildRepositoryMappingDir(Model model, RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName) {
 		try {
 			String teamForgeRepositoryId = getTeamForgeRepoId(rmdmodel);
 			String participantRepositoryId = String.format("%s-%s-%s", rmdmodel.getParticipantDomainName(),rmdmodel.getParticipantProjectId(),rmdmodel.getParticipantMappingType());
@@ -168,6 +181,10 @@ public class CreateRMDController {
 			//TODO: need to provide the selected fieldMappingtemplate name take the tempateName from rmdModel
 			FieldMapping fieldMapping = getFieldMapping(templateName,directions, repoMappingDirection);
 			mergeRepositoryMappingDirection(repoMappingDirection, fieldMapping);
+			
+			model.addAttribute("teamForgeRepoId", teamForgeRepositoryId);
+			model.addAttribute("participanteRepoId", participantRepositoryId);
+			
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
