@@ -20,37 +20,48 @@
 			<td colspan="5">
 			Create new repository mapping direction wizard - Step 3
 			</td>
-			</tr>			
+			</tr>
+			<tr>
+			<td>
+			<c:if test="${!empty message}">
+				<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+			</c:if>
+			<c:if test="${!empty connectionmessage}"> 
+	   		 <div class="greenText">${connectionmessage}</div>
+			</c:if>
+			<c:if test="${!empty connectionerror}"> 
+	  		<div class="errorMessage">${connectionerror}</div>
+			</c:if></td></tr>
+			<tr><td><br/></td></tr>
+		<table class="ItemDetailContainer" width="100%" >	
+		<tbody>		
 			<tr>
 			<td> <br/></td>
 			</tr>
-			<tr>
+			<c:if test="${not empty rmdModel.participantSelectorFieldList}">	
+				<c:forEach items="${rmdModel.participantSelectorFieldList}" varStatus="status" var="participantSelector">
+				<c:if test="${participantSelector.displayInHTML}">
+				<tr>
 				<td class="ItemDetailName">
-					<form:label name="domain" path="">Domain:</form:label>
+				<form:label path="participantSelectorFieldList[${status.index}].labelName">${participantSelector.labelName}:</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select id="id_ParticipantDomain" path="participantDomainName"><form:options items="${rmdModel.participantDomainNames}" /></form:select>
+				<form:hidden path="participantSelectorFieldList[${status.index}].name"/>
+				<form:hidden path="participantSelectorFieldList[${status.index}].conditionalRegex"/>
+				<form:hidden path="participantSelectorFieldList[${status.index}].displayInHTML"/>
+				<form:hidden path="participantSelectorFieldList[${status.index}].type"/>
+				<form:hidden path="participantSelectorFieldList[${status.index}].labelName"/>
+				<form:hidden path="participantSelectorFieldList[${status.index}].systemKind"/>
+				<form:input id ="participantSelector${status.index}" path="participantSelectorFieldList[${status.index}].value"  size="80" cssClass="inputfield" />
+				<form:errors path="participantSelectorFieldList[${status.index}].value" cssClass="errors"/>
 				</td>
-			</tr>
-			<tr>
-				<td class="ItemDetailName">
-					<form:label name="projectname" path="">Project Name:</form:label>
-				</td>
-				<td class="ItemDetailValue"> 
-					<select id="id_participantProjectId" name="participantProjectId"></select>
-					<input type="button" id="browseproject" value="Project..." onclick="doAjaxPost('${fn:escapeXml(gettftrackerlist_url)}')" />
-					<div id="spinner" style="display:none;"><img src="${fn:escapeXml(spinner_image_url)}" border="0" /></div> 
-				</td>
-			</tr>
-			<tr id="trackerid">
-				<td class="ItemDetailName">
-					<form:label name="trackerid" path="">Work Item:</form:label>
-				</td>
-				<td class="ItemDetailValue"> 
-					<form:select id="id_Participantworkitem" path="participantMappingType"><form:options items="${rmdModel.participantMappingTypes}" /></form:select>
-				</td>
-			</tr>				
+				</tr>
+				</c:if>
+				</c:forEach>
+			</c:if> 				
 			<tr><td><br/></td></tr>
+		</tbody>
+	</table>
 			<tr class="ContainerFooter" >
 				<td colspan="5">
 					<form:hidden path="direction"/>

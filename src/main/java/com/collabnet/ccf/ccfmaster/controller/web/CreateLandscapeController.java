@@ -22,9 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
-import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.validator.GenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
+import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantConfigValidator;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.server.domain.Capabilities;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -57,7 +58,7 @@ public class CreateLandscapeController{
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
 	@Autowired(required= false)
-	public GenericParticipant genericParticipant;
+	public GenericParticipantFacade genericParticipant;
 	
 	
 	/**
@@ -99,8 +100,8 @@ public class CreateLandscapeController{
 			else{
 				ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
 				if(genericParticipant!= null){
-					participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
-					participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+					participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigBuilder().getLandscapeFieldList());
+					participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigBuilder().getParticipantFieldList());
 				}
 				landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
 				Participant participant=landscape.getParticipant();
@@ -158,8 +159,8 @@ public class CreateLandscapeController{
 		}
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
 		if(genericParticipant != null){
-			participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
-			participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+			participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigBuilder().getLandscapeFieldList());
+			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigBuilder().getParticipantFieldList());
 		}
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel, model);
 		log.debug("saveLandscape ended");
@@ -221,20 +222,20 @@ public class CreateLandscapeController{
 
 	private void populateGenericParticipantToModel(LandscapeModel landscapemodel) {
 		if(genericParticipant != null){
-			if(genericParticipant.getLandscapeFieldList()!= null){
-				landscapemodel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
+			if(genericParticipant.getGenericParticipantConfigBuilder().getLandscapeFieldList()!= null){
+				landscapemodel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigBuilder().getLandscapeFieldList());
 			}
-			if(genericParticipant.getParticipantFieldList()!= null){
-				landscapemodel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+			if(genericParticipant.getGenericParticipantConfigBuilder().getParticipantFieldList()!= null){
+				landscapemodel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigBuilder().getParticipantFieldList());
 			}
 		}
 	}
 	
 	private void validateGenericParticipant(LandscapeModel landscapeModel, BindingResult bindingResult){
 		if(genericParticipant != null){
-			GenericParticipantValidator participantValidator = genericParticipant.getCustomValidator();
-			if(genericParticipant.getCustomValidator() == null){
-				participantValidator = new DefaultGenericParticipantValidator(); 
+			IGenericParticipantValidator<AbstractGenericParticipantModel> participantValidator = genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator();
+			if(genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator() == null){
+				participantValidator = new DefaultGenericParticipantConfigValidator(); 
 				participantValidator.validate(landscapeModel, bindingResult);
 			}else{
 				participantValidator.validate(landscapeModel, bindingResult);

@@ -5,8 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
-import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.core.utils.ValidatorUtils;
@@ -16,22 +15,13 @@ import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.VAL
 import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC;
 import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.PARTICIPANT_SHOULD_MATCH_CONDITIONAL_REGEX;
 
-public class DefaultGenericParticipantValidator implements GenericParticipantValidator{
-
-	@Override
-	public void validate(AbstractGenericParticipantModel model, Errors errors) {
-		List<CCFCoreProperty> landscapeConfigList = model.getLandscapeConfigList();
-		List<CCFCoreProperty> participantConfigList = model.getParticipantConfigList();
-		validate(landscapeConfigList, errors,LANDSCAPE_CONFIG_LIST_ELEMENT_NAME);
-		validate(participantConfigList, errors,PARTICIPANT_CONFIG_LIST_ELEMENT_NAME);
-	}
-
-	@Override
-	public ConnectionResult validateConnection(AbstractGenericParticipantModel model) {
-		return null;
-	}
+public abstract class AbstractGenericParticipantValidator<T> implements IGenericParticipantValidator<T> {
 	
-	public void validate(List<CCFCoreProperty> configProperties, Errors errors,String errorElementName){
+	public abstract ValidationResult validate(T model);
+	
+	public abstract void validate(T model, Errors errors);
+	
+	public void validateValue(List<CCFCoreProperty> configProperties, Errors errors,String errorElementName){
 		for (int i = 0; i < configProperties.size(); i++) { 
 			String value = configProperties.get(i).getValue();
 			CCFCorePropertyType type = configProperties.get(i).getType();
@@ -45,5 +35,5 @@ public class DefaultGenericParticipantValidator implements GenericParticipantVal
 			}
 		}
 	}
-
+	
 }

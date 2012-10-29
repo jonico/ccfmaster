@@ -1,4 +1,4 @@
-package com.collabnet.ccf.ccfmaster.web.helper;
+package com.collabnet.ccf.ccfmaster.gp.validator.custom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +65,8 @@ public class TFSMetadataHelper {
 			for(ProjectCollectionEntity entity :projectList){
 				tfsCollectionList.add(entity.getDisplayName());
 			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}finally{
 			if(tfsTeamProjectCollection != null) tfsTeamProjectCollection.close();
 		}
@@ -83,6 +85,8 @@ public class TFSMetadataHelper {
 			for (Project project : projects) {
 				tfsCollectionList.add(project.getName());
 			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}finally{
 			if(tfsTeamProjectCollection != null) tfsTeamProjectCollection.close();
 		}
@@ -101,6 +105,8 @@ public class TFSMetadataHelper {
 			for (WorkItemType type : workItemTypes) {
 				tfsWorkItemList.add(type.getName());
 			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}finally{
 			if(tfsTeamProjectCollection != null) tfsTeamProjectCollection.close();
 		}

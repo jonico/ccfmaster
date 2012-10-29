@@ -51,7 +51,7 @@
 					<form:label  path="" name="forwardconflictlabel">Forward Direction Conflict Resolution Policy:</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="forwardconflictCombo" path="" cssClass="inputfield"> <form:options items="${conflictPolicies}"/></form:select>
+					<form:select  id="forwardconflictCombo" path="" cssClass="inputfield"> <form:options items="${tfConflictPolicies}"/></form:select>
 					<form:hidden path="forwardConfilictPolicies"/>
 				</td>
 			</tr>
@@ -61,7 +61,7 @@
 					<form:label  path="" name="reverseconflict" >Reverse Direction Conflict Resolution Policy:</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="reversedConfilictCombo" path=""  cssClass="inputfield"> <form:options items="${conflictPolicies}"/></form:select>
+					<form:select  id="reversedConfilictCombo" path=""  cssClass="inputfield"> <form:options items="${gpConflictPolicies}"/></form:select>
 					<form:hidden path="reversedConfilictPolicies"/>
 				</td>	
 			</tr>

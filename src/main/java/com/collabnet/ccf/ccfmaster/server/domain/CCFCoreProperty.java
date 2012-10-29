@@ -67,16 +67,13 @@ public class CCFCoreProperty {
 		this.category = category;
 	}
 
-
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public String getValue() {
 		return value;
@@ -117,12 +114,9 @@ public class CCFCoreProperty {
 		this.type = type;
 	}
 
-
-
 	public boolean isDisplayInHTML() {
 		return displayInHTML;
 	}
-
 
 	public void setDisplayInHTML(boolean displayInHTML) {
 		this.displayInHTML = displayInHTML;

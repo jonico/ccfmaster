@@ -3,10 +3,11 @@ package com.collabnet.ccf.ccfmaster.gp.validator.custom;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.validator.AbstractGenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
-import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.microsoft.tfs.core.TFSTeamProjectCollection;
 import com.microsoft.tfs.core.exceptions.TFSUnauthorizedException;
@@ -17,7 +18,7 @@ import com.microsoft.tfs.core.exceptions.TFSUnauthorizedException;
  * @author kbalaji
  *
  */
-public class SampleTFSGenericParticipantValidator extends DefaultGenericParticipantValidator {
+public class TFSGenericParticipantConfigValidator extends AbstractGenericParticipantValidator<AbstractGenericParticipantModel> {
 
 	private static final String CONFIG_ERROR_MSG = "Please check the configuration again";
 	private static final String CCF_PARTICIPANT_TFS_URL = "ccf.participant.tfs.url";
@@ -25,7 +26,7 @@ public class SampleTFSGenericParticipantValidator extends DefaultGenericParticip
 	private static final String CCF_LANDSCAPE_TFS_USERNAME = "ccf.landscape.tfs.username";
 
 	@Override
-	public ConnectionResult validateConnection(AbstractGenericParticipantModel model) {
+	public ValidationResult validate(AbstractGenericParticipantModel model) {
 		TFSTeamProjectCollection configurationServer = null;
 		String userName = null, domain = null, url = null, password = null;
 		List<CCFCoreProperty> landscapeConfigList = model.getLandscapeConfigList();
@@ -51,21 +52,30 @@ public class SampleTFSGenericParticipantValidator extends DefaultGenericParticip
 		}
 		
 		if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(url)){
-			return new ConnectionResult(false, CONFIG_ERROR_MSG);
+			return new ValidationResult(false, CONFIG_ERROR_MSG);
 		}else {
 			try{
 				configurationServer = new TFSTeamProjectCollection(url,  userName, domain, password);
 				configurationServer.authenticate();
-				return new ConnectionResult(configurationServer.hasAuthenticated());
+				return new ValidationResult(configurationServer.hasAuthenticated());
 			} catch(TFSUnauthorizedException e){
-				return new ConnectionResult(false, e.getMessage());
+				return new ValidationResult(false, e.getMessage());
 			} catch(Exception e){
-				return new ConnectionResult(false, e.getMessage());
+				return new ValidationResult(false, e.getMessage());
 			}/*finally{
 				if(configurationServer != null)
 				configurationServer.close();
 			}*/
 		}
+	}
+
+	@Override
+	public void validate(AbstractGenericParticipantModel model, Errors errors) {
+		// NOTE: this implementation can be customized as per third party participant implementation
+		List<CCFCoreProperty> landscapeConfigList = model.getLandscapeConfigList();
+		List<CCFCoreProperty> participantConfigList = model.getParticipantConfigList();
+		validateValue(landscapeConfigList, errors,LANDSCAPE_CONFIG_LIST_ELEMENT_NAME);
+		validateValue(participantConfigList, errors,PARTICIPANT_CONFIG_LIST_ELEMENT_NAME);
 	}
 	
 }

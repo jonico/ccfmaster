@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
@@ -32,7 +32,7 @@ public class CreateLandscapeHelper {
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
 	
 	@Autowired(required= false)
-	public GenericParticipant genericParticipant;
+	public GenericParticipantFacade genericParticipant;
 
 
 	/**
@@ -248,7 +248,7 @@ public class CreateLandscapeHelper {
 				directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
 				directionConfigTFMaxSize.persist();
 				
-				List<DirectionConfig> directionCollection = GenericParticipantUtils.buildDirectionConfig(genericParticipant.getDirectionFieldList());
+				List<DirectionConfig> directionCollection = GenericParticipantUtils.buildDirectionConfig(genericParticipant.getGenericParticipantConfigBuilder().getDirectionFieldList());
 				for(DirectionConfig config:directionCollection){
 					config.setDirection(reverseDirection);
 					config.persist();

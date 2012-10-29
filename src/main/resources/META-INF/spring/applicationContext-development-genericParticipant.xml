@@ -5,15 +5,36 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
-	<bean id="genericParticipant" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant" >
+	<bean id="genericParticipant" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade" >
 		<property name="name" value="Team Foundation Server"/>
 		<property name="systemKind" value="Team Foundation Server"/>
 		<property name="description" value="Team Foundation Server"/>
 		<property name="prefix" value="TFS"/>
-		<property name="customValidator" ref="TFSGenericParticipantValidator"></property>
+		<property name="genericParticipantConfigBuilder" ref="genericParticipantConfigBuilder"/>
+		<property name="genericParticipantRMDBuilder" ref="genericParticipantRMDBuilder"/>
+	</bean>
+	
+	<bean id="genericParticipantConfigBuilder" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">	
+		<property name="customValidator" ref="TFSGenericParticipantValidator"/>
 		<property name="participantFieldList" ref="participantConfigFieldList"/>
 		<property name="landscapeFieldList" ref="landscapeConfigFieldList"/>
 		<property name="directionFieldList" ref="directionConfigFieldList"/>
+	</bean>
+	
+	<bean id="TFSGenericParticipantValidator" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.TFSGenericParticipantConfigValidator"/>
+	
+	<bean id="genericParticipantRMDBuilder" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantRMDFactory">	
+		<property name="customRMDValidator" ref="TFSGenericParticipantRMDValidator"/>
+		<property name="participantSelectorFieldList" ref="participantSelectorList"/>
+		<property name="customParticipantRMD" ref="customParticipantRMD"/>
+	</bean>
+	
+	<bean id="customParticipantRMD" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.TFSCustomRMDParticipant"/>
+	
+	<bean id="TFSGenericParticipantRMDValidator" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.TFSGenericParticipantRMDValidator">
+		<constructor-arg name="urlKey" value="ccf.participant.tfs.url"/>
+		<constructor-arg name="userNameKey" value="ccf.landscape.tfs.username"/>
+		<constructor-arg name="passwordKey" value="ccf.landscape.tfs.password"/>		
 	</bean>
 	
 	<util:list id="participantConfigFieldList" list-class="java.util.ArrayList"	value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
@@ -27,10 +48,15 @@
 	
 	<util:list id="directionConfigFieldList" list-class="java.util.ArrayList" value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
 	</util:list>
-	
-	<bean id="TFSGenericParticipantValidator" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.SampleTFSGenericParticipantValidator"></bean>
+		
+	<util:list id="participantSelectorList" list-class="java.util.ArrayList" value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<ref bean="tfsCollectionProperty"/>
+		<ref bean="tfsProjectListProperty"/>
+		<ref bean="tfsWorkItemTypeProperty"/>
+	</util:list>
 	
 	<bean id="urlParticipantConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
 		<property name="name" value="ccf.participant.tfs.url"/>
 		<property name="labelName" value="TeamFoundation Server Endpoint URL"/>
 		<property name="systemKind" value="GENERIC"/>
@@ -39,6 +65,7 @@
 	</bean>
 	
 	<bean id="userNameLandscapeConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
 		<property name="name" value="ccf.landscape.tfs.username"/>
 		<property name="labelName" value="Username"/>
 		<property name="systemKind" value="GENERIC"/>
@@ -47,10 +74,38 @@
 	</bean>
 		
 	<bean id="passwordLandscapeConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
 		<property name="name" value="ccf.landscape.tfs.password"/>
 		<property name="labelName" value="Password"/>
 		<property name="systemKind" value="GENERIC"/>
 		<property name="type" value="PASSWORD"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+	
+	<bean id="tfsCollectionProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="tfsCollection"/>
+		<property name="labelName" value="TFS Collection"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+	
+	<bean id="tfsProjectListProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="tfsProjectList"/>
+		<property name="labelName" value="TFS Project Name"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+		
+	<bean id="tfsWorkItemTypeProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="tfsWorkItemType"/>
+		<property name="labelName" value="TFS Work Item Type"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
 		<property name="displayInHTML" value="true"/>
 	</bean>
 	

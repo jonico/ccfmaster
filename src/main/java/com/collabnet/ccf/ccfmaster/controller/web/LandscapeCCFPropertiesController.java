@@ -30,7 +30,6 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.config.CoreConfigLoader;
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
 import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyList;
@@ -52,9 +51,6 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 	
 	@Autowired
 	private CoreConfigLoader coreConfigLoader;
-	
-	@Autowired(required= false)
-	public GenericParticipant genericParticipant;
 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeCCFPropertiesController.class);
 	

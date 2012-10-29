@@ -28,10 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
-import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipant;
-import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.validator.GenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.web.model.ConnectionResult;
+import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantConfigValidator;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.core.QCMetaDataProvider;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -64,9 +64,6 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	private ScrumWorksAPIService endpoint;
 	
-	@Autowired(required= false)
-	public GenericParticipant genericParticipant;
-	
 	/**
 	 * Controller method to display participant settings 
 	 * 
@@ -75,8 +72,8 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	public String displayParticipantSettings(Model model, HttpServletRequest request) {
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
 		if(genericParticipant != null){
-			participantSettingsModel.setLandscapeConfigList(genericParticipant.getLandscapeFieldList());
-			participantSettingsModel.setParticipantConfigList(genericParticipant.getParticipantFieldList());
+			participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigBuilder().getLandscapeFieldList());
+			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigBuilder().getParticipantFieldList());
 		}
 		Landscape landscape=ControllerHelper.findLandscape();
 		Participant participant=landscape.getParticipant();
@@ -180,10 +177,10 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	@RequestMapping(value = UIPathConstants.LANDSCAPESETTINGS_GP_TEST_CONNECTION, method = RequestMethod.POST)
 	public @ResponseBody String testGenericParticipantConnection(@ModelAttribute("qcsettingsmodel") ParticipantSettingsModel participantSettingsModel, HttpServletRequest request){
 		RequestContext ctx = new RequestContext(request);
-		ConnectionResult connectionResult = null;
+		ValidationResult connectionResult = null;
 		if(genericParticipant != null){
-			GenericParticipantValidator validator = genericParticipant.getCustomValidator();
-			connectionResult = validator.validateConnection(participantSettingsModel);
+			IGenericParticipantValidator<AbstractGenericParticipantModel> validator = genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator();
+			connectionResult = validator.validate(participantSettingsModel);
 		}
 		
 		if(connectionResult != null && connectionResult.isConnectionValid()){
@@ -225,9 +222,9 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	private void validateGenericParticipant(ParticipantSettingsModel participantSettingsModel, BindingResult bindingResult){
 		if(genericParticipant != null){
-			GenericParticipantValidator participantValidator = genericParticipant.getCustomValidator();
-			if(genericParticipant.getCustomValidator() == null){
-				participantValidator = new DefaultGenericParticipantValidator(); 
+			IGenericParticipantValidator<AbstractGenericParticipantModel> participantValidator = genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator();
+			if(genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator() == null){
+				participantValidator = new DefaultGenericParticipantConfigValidator(); 
 				participantValidator.validate(participantSettingsModel, bindingResult);
 			}else{
 				participantValidator.validate(participantSettingsModel, bindingResult);

@@ -7,11 +7,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
+import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
+import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 
 public abstract class AbstractLandscapeController {
 
+	protected static final String PARTICIPANT_FULLNAME_MODEL_ATTRIBUTE = "participantFullName";
+	protected static final String PARTICIPANT_PREFIXNAME_MODEL_ATTRIBUTE = "participantPerfix";
 	protected static final String PARTICIPANT_MODEL_ATTRIBUTE = "participant";
 	protected static final String LANDSCAPE_MODEL_ATTRIBUTE = "landscape";
 	protected static final String PAGE_REQUEST_PARAM = "page";
@@ -20,6 +25,9 @@ public abstract class AbstractLandscapeController {
 
 	@Autowired
 	protected CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
+	
+	@Autowired(required= false)
+	public GenericParticipantFacade genericParticipant;
 
 
 	/**
@@ -109,6 +117,46 @@ public abstract class AbstractLandscapeController {
 	@ModelAttribute(TF_URL_MODEL_ATTRIBUTE)
 	public String populateTfUrl() {
 		return ccfRuntimePropertyHolder.getTfUrl();
+	}
+	
+	@ModelAttribute(PARTICIPANT_FULLNAME_MODEL_ATTRIBUTE)
+	public String participantFullName(){
+		String fullName = null;
+		SystemKind systemKind = ControllerHelper.findLandscape().getParticipant().getSystemKind();
+		switch(systemKind){
+		 // TODO: how to handle locale specific names
+			case QC:
+				fullName = "HP Quality Center";
+				break;
+			case SWP:
+				fullName = "ScrumWorks Pro";
+				break;
+			case GENERIC:
+				if(genericParticipant != null)
+					fullName = genericParticipant.getName();
+				break;
+		}
+		return fullName;
+	}
+	
+	@ModelAttribute(PARTICIPANT_PREFIXNAME_MODEL_ATTRIBUTE)
+	public String participantPrefix(){
+		String prefix = null;
+		SystemKind systemKind = ControllerHelper.findLandscape().getParticipant().getSystemKind();
+		switch(systemKind){
+		 // TODO: how to handle locale specific names
+			case QC:
+				prefix = SystemKind.QC.toString();
+				break;
+			case SWP:
+				prefix = SystemKind.SWP.toString();
+				break;
+			case GENERIC:
+				if(genericParticipant != null)
+					prefix = genericParticipant.getPrefix();
+				break;
+		}
+		return prefix;
 	}
 	
 }

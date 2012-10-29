@@ -6,17 +6,17 @@ package com.collabnet.ccf.ccfmaster.gp.web.model;
  * @author kbalaji
  *
  */
-public class ConnectionResult {
+public class ValidationResult {
 
 	private boolean isConnectionValid;
 	
 	private String message;
 	
-	public ConnectionResult(boolean isConnectionValid){
+	public ValidationResult(boolean isConnectionValid){
 		setConnectionValid(isConnectionValid);
 	}
 	
-	public ConnectionResult(boolean isConnectionValid,String message){
+	public ValidationResult(boolean isConnectionValid,String message){
 		setConnectionValid(isConnectionValid);
 		setMessage(message);
 	}

@@ -9,19 +9,22 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
+import com.collabnet.ccf.ccfmaster.controller.web.AbstractLandscapeController;
 import com.collabnet.ccf.ccfmaster.controller.web.UIPathConstants;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
+import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
+import com.collabnet.ccf.ccfmaster.gp.web.rmd.ICustomizeRMDParticipant;
 import com.collabnet.ccf.ccfmaster.server.domain.ConflictResolutionPolicy;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
@@ -32,12 +35,9 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingScope;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMap;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMapEntry;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
-import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
-import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMapping;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
-import com.collabnet.ccf.ccfmaster.web.helper.TFSMetadataHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeConnectionHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeMetadataHelper;
 import com.collabnet.teamforge.api.Connection;
@@ -47,12 +47,7 @@ import flexjson.JSONSerializer;
 
 @RequestMapping("/admin/**")
 @Controller
-public class CreateRMDController {
-
-	@Autowired
-	private CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
-	
-	private TFSMetadataHelper tfsMetadataHelper = new TFSMetadataHelper();
+public class CreateRMDController extends AbstractLandscapeController{
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE, method=RequestMethod.POST)
 	public String intializeRMDSettings(Model model, HttpServletRequest request){
@@ -69,15 +64,20 @@ public class CreateRMDController {
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS, method=RequestMethod.POST)
 	public String intializeParticipantSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel){
-		buildTFSMetadatahelper();
-		rmdmodel.setParticipantDomainNames(tfsMetadataHelper.getTFSCollectionList().toArray(new String[]{}));
-		rmdmodel.setParticipantMappingTypes(new String[]{"User Story","Task","Bug"});
+		if(genericParticipant != null && rmdmodel.getParticipantSelectorFieldList() == null){
+			rmdmodel.setParticipantSelectorFieldList(genericParticipant.getGenericParticipantRMDBuilder().getParticipantSelectorFieldList());
+		}
 		populateModel(model);
 		return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
 	}
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_SAVE, method=RequestMethod.POST)
-	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel, Model model){
+	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel,BindingResult bindingResult, Model model, HttpServletRequest request){
+		validateRMD(rmdmodel, bindingResult,model);
+		if(bindingResult.hasErrors()){
+			populateModel(model);
+			return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
+		}
 		String direction = rmdmodel.getDirection();
 		ConflictResolutionPolicy forwardConflictPolicy = null,reverseConflictPolicy = null;
 		if(!rmdmodel.getForwardConfilictPolicies().isEmpty()){
@@ -108,24 +108,8 @@ public class CreateRMDController {
 		} catch (RemoteException e) { }//ignore the remote exception
 		return new JSONSerializer().serialize(teamForgeTracker);		
 	}
-	
-	@RequestMapping(value="/admin/participant/projectList",method= RequestMethod.POST)
-	public @ResponseBody String getAllProjectNames(@RequestParam String collectionName){//TODO: Need to move this method
-		List<String> participantProjectList = new ArrayList<String>();
-		buildTFSMetadatahelper();
-		participantProjectList = tfsMetadataHelper.getTFSProjectList(collectionName);
-		return new JSONSerializer().serialize(participantProjectList);		
-	}
-	
-	@RequestMapping(value="/admin/participant/WorkItem",method= RequestMethod.POST)
-	public @ResponseBody String getWorkItemList(@RequestParam String collectionName,@RequestParam String projectName){//TODO: Need to move this method
-		List<String> workItemList = new ArrayList<String>();
-		buildTFSMetadatahelper();
-		workItemList = tfsMetadataHelper.getTFSWorkItemList(collectionName, projectName);
-		return new JSONSerializer().serialize(workItemList);		
-	}
 		
-	@ModelAttribute(value="conflictPolicies")
+	@ModelAttribute(value="tfConflictPolicies")
 	public String[] getConfilictPolicies(){
 		ConflictResolutionPolicy[]  conflictValues = ConflictResolutionPolicy.values();
 		String[] conflictPolicyArray = new String[conflictValues.length];
@@ -133,6 +117,17 @@ public class CreateRMDController {
 			conflictPolicyArray[i]= conflictValues[i].toString();
 		}
 		return conflictPolicyArray;
+	}
+	
+	@ModelAttribute(value="gpConflictPolicies")
+	public String[] getParticipantConfilictPolicies(){
+		if(genericParticipant != null){
+			ICustomizeRMDParticipant<RMDModel> customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDBuilder().getCustomParticipantRMD();
+			if(customizeParticipantRMDInfo!= null){
+				return customizeParticipantRMDInfo.getCustomConflictResolutionPolicy();
+			}
+		}
+		return new String[]{};
 	}	
 	
 	@ModelAttribute(value="teamForgeProjects")
@@ -165,16 +160,13 @@ public class CreateRMDController {
 	}
 	
 	public void populateModel(Model model){
-		Landscape landscape = ControllerHelper.findLandscape();
-		model.addAttribute("participant",landscape.getParticipant());
-		model.addAttribute("landscape",landscape);
 		model.addAttribute("selectedLink", "repositorymappings");
 	}
 
 	private void buildRepositoryMappingDir(Model model, RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName) {
 		try {
 			String teamForgeRepositoryId = getTeamForgeRepoId(rmdmodel);
-			String participantRepositoryId = String.format("%s-%s-%s", rmdmodel.getParticipantDomainName(),rmdmodel.getParticipantProjectId(),rmdmodel.getParticipantMappingType());
+			String participantRepositoryId = getParticipantRepoId(rmdmodel);
 			ExternalApp externalApp = getExternalApp(ccfRuntimePropertyHolder.getCcfBaseUrl(), rmdmodel.getTeamforgeProjectId());
 			RepositoryMapping repositoryMapping = getRespositoryMapping(externalApp, teamForgeRepositoryId, participantRepositoryId);
 			RepositoryMappingDirection repoMappingDirection = getRepositoryMappingDirection(directions, repositoryMapping, conflictPolicy);
@@ -190,6 +182,17 @@ public class CreateRMDController {
 		}
 	}
 	
+	private String getParticipantRepoId(RMDModel rmdmodel) {
+		String participantRepoId = "";
+		if(genericParticipant != null){
+			ICustomizeRMDParticipant<RMDModel> customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDBuilder().getCustomParticipantRMD();
+			if(customizeParticipantRMDInfo!= null){
+				participantRepoId = customizeParticipantRMDInfo.getParticipantRepositoryId(rmdmodel);
+			}
+		}
+		return participantRepoId; // value should be empty or null
+	}
+
 	private String getTeamForgeRepoId(RMDModel rmdmodel) {
 		String teamForgeRepositoryId = String.format("%s-%s-%s", rmdmodel.getTeamforgeProjectId(),rmdmodel.getTeamforgeTracker(),rmdmodel.getTeamForgeMappingType());
 		if(rmdmodel.getTeamForgeMappingType().equalsIgnoreCase("tracker")){
@@ -261,7 +264,6 @@ public class CreateRMDController {
 		List<RepositoryMappingDirection> repositoryMappingDirectionList = RepositoryMappingDirection.findRepositoryMappingDirectionsByRepositoryMappingAndDirection(repositoryMapping, direction).getResultList();
 		if(repositoryMappingDirectionList.isEmpty()){
 			RepositoryMappingDirection repositoryMappingDirection = new RepositoryMappingDirection();
-//			repositoryMappingDirection.setActiveFieldMapping(fieldMapping);
 			repositoryMappingDirection.setConflictResolutionPolicy(conflictPolicy);
 			repositoryMappingDirection.setDirection(direction);
 			repositoryMappingDirection.setRepositoryMapping(repositoryMapping);
@@ -334,15 +336,22 @@ public class CreateRMDController {
 		}
 		return newFieldMappingValueMapEntries;
 	}
-	
-	private void buildTFSMetadatahelper(){
-		Landscape landscape = ControllerHelper.findLandscape();
-		ParticipantConfig urlConfig = ParticipantConfig.findParticipantConfigsByParticipantAndName(landscape.getParticipant(),"ccf.participant.tfs.url").getSingleResult();
-		LandscapeConfig userNameConfig = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,"ccf.landscape.tfs.username").getSingleResult();
-		LandscapeConfig passwordConfig = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,"ccf.landscape.tfs.password").getSingleResult();
-		tfsMetadataHelper.setUrl(urlConfig.getVal());
-		tfsMetadataHelper.setUserName(userNameConfig.getVal()); // TODO: currently username got appended with domain name; so split by "/" get the username later
-		tfsMetadataHelper.setPassword(passwordConfig.getVal());
+
+	private void validateRMD(RMDModel rmdmodel, BindingResult bindingResult,Model model) {
+		if(genericParticipant != null){
+			IGenericParticipantValidator<RMDModel> rmdValidator = genericParticipant.getGenericParticipantRMDBuilder().getCustomRMDValidator();
+			if(rmdValidator!= null){
+				rmdValidator.validate(rmdmodel, bindingResult);
+				ValidationResult result = rmdValidator.validate(rmdmodel);
+				if(result != null){
+					if(!result.isConnectionValid()){
+						model.addAttribute("connectionerror",result.getMessage());
+					}else{
+						model.addAttribute("connectionmessage",result.getMessage());
+					}
+				}
+			}
+		}
 	}
 
 }
