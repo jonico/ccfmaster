@@ -72,8 +72,8 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	public String displayParticipantSettings(Model model, HttpServletRequest request) {
 		ParticipantSettingsModel participantSettingsModel=new ParticipantSettingsModel();
 		if(genericParticipant != null){
-			participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigBuilder().getLandscapeFieldList());
-			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigBuilder().getParticipantFieldList());
+			participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getLandscapeFieldList());
+			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getParticipantFieldList());
 		}
 		Landscape landscape=ControllerHelper.findLandscape();
 		Participant participant=landscape.getParticipant();
@@ -179,7 +179,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 		RequestContext ctx = new RequestContext(request);
 		ValidationResult connectionResult = null;
 		if(genericParticipant != null){
-			IGenericParticipantValidator<AbstractGenericParticipantModel> validator = genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator();
+			IGenericParticipantValidator<AbstractGenericParticipantModel> validator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
 			connectionResult = validator.validate(participantSettingsModel);
 		}
 		
@@ -222,8 +222,8 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	private void validateGenericParticipant(ParticipantSettingsModel participantSettingsModel, BindingResult bindingResult){
 		if(genericParticipant != null){
-			IGenericParticipantValidator<AbstractGenericParticipantModel> participantValidator = genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator();
-			if(genericParticipant.getGenericParticipantConfigBuilder().getCustomValidator() == null){
+			IGenericParticipantValidator<AbstractGenericParticipantModel> participantValidator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
+			if(genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator() == null){
 				participantValidator = new DefaultGenericParticipantConfigValidator(); 
 				participantValidator.validate(participantSettingsModel, bindingResult);
 			}else{

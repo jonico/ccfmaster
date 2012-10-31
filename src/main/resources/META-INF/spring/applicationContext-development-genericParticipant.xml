@@ -10,11 +10,11 @@
 		<property name="systemKind" value="Team Foundation Server"/>
 		<property name="description" value="Team Foundation Server"/>
 		<property name="prefix" value="TFS"/>
-		<property name="genericParticipantConfigBuilder" ref="genericParticipantConfigBuilder"/>
-		<property name="genericParticipantRMDBuilder" ref="genericParticipantRMDBuilder"/>
+		<property name="genericParticipantConfigItemFactory" ref="genericParticipantConfigItemFactory"/>
+		<property name="genericParticipantRMDFactory" ref="genericParticipantRMDFactory"/>
 	</bean>
 	
-	<bean id="genericParticipantConfigBuilder" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">	
+	<bean id="genericParticipantConfigItemFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">	
 		<property name="customValidator" ref="TFSGenericParticipantValidator"/>
 		<property name="participantFieldList" ref="participantConfigFieldList"/>
 		<property name="landscapeFieldList" ref="landscapeConfigFieldList"/>
@@ -23,7 +23,7 @@
 	
 	<bean id="TFSGenericParticipantValidator" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.TFSGenericParticipantConfigValidator"/>
 	
-	<bean id="genericParticipantRMDBuilder" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantRMDFactory">	
+	<bean id="genericParticipantRMDFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantRMDFactory">	
 		<property name="customRMDValidator" ref="TFSGenericParticipantRMDValidator"/>
 		<property name="participantSelectorFieldList" ref="participantSelectorList"/>
 		<property name="customParticipantRMD" ref="customParticipantRMD"/>

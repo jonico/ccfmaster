@@ -31,10 +31,10 @@ public class GenericParticipantFacade {
 	private String description;
 	
 	@XmlTransient
-	private GenericParticipantConfigItemFactory genericParticipantConfigBuilder;
+	private GenericParticipantConfigItemFactory genericParticipantConfigItemFactory;
 	
 	@XmlTransient
-	private GenericParticipantRMDFactory genericParticipantRMDBuilder;
+	private GenericParticipantRMDFactory genericParticipantRMDFactory;
 	
 	public String getName() {
 		return name;
@@ -52,12 +52,12 @@ public class GenericParticipantFacade {
 		return description;
 	}
 
-	public GenericParticipantConfigItemFactory getGenericParticipantConfigBuilder() {
-		return genericParticipantConfigBuilder;
+	public GenericParticipantRMDFactory getGenericParticipantRMDFactory() {
+		return genericParticipantRMDFactory;
 	}
-	
-	public GenericParticipantRMDFactory getGenericParticipantRMDBuilder() {
-		return genericParticipantRMDBuilder;
+
+	public GenericParticipantConfigItemFactory getGenericParticipantConfigItemFactory() {
+		return genericParticipantConfigItemFactory;
 	}
 
 	public void setName(String name) {
@@ -76,12 +76,12 @@ public class GenericParticipantFacade {
 		this.description = description;
 	}
 
-	public void setGenericParticipantConfigBuilder(GenericParticipantConfigItemFactory genericParticipantConfigBuilder) {
-		this.genericParticipantConfigBuilder = genericParticipantConfigBuilder;
+	public void setGenericParticipantConfigItemFactory(GenericParticipantConfigItemFactory genericParticipantConfigItemFactory) {
+		this.genericParticipantConfigItemFactory = genericParticipantConfigItemFactory;
 	}
 
-	public void setGenericParticipantRMDBuilder(GenericParticipantRMDFactory genericParticipantRMDBuilder) {
-		this.genericParticipantRMDBuilder = genericParticipantRMDBuilder;
+	public void setGenericParticipantRMDFactory(GenericParticipantRMDFactory genericParticipantRMDFactory) {
+		this.genericParticipantRMDFactory = genericParticipantRMDFactory;
 	}
 
 	@Override
@@ -95,10 +95,10 @@ public class GenericParticipantFacade {
 		builder.append(systemKind);
 		builder.append(", description=");
 		builder.append(description);
-		builder.append(", genericParticipantConfigBuilder=");
-		builder.append(genericParticipantConfigBuilder);
-		builder.append(", genericParticipantRMDBuilder=");
-		builder.append(genericParticipantRMDBuilder);
+		builder.append(", genericParticipantConfigItemFactory=");
+		builder.append(genericParticipantConfigItemFactory);
+		builder.append(", genericParticipantConfigItemFactory=");
+		builder.append(genericParticipantConfigItemFactory);
 		builder.append("]");
 		return builder.toString();
 	}

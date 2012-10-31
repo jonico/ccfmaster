@@ -65,7 +65,7 @@ public class CreateRMDController extends AbstractLandscapeController{
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS, method=RequestMethod.POST)
 	public String intializeParticipantSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel){
 		if(genericParticipant != null && rmdmodel.getParticipantSelectorFieldList() == null){
-			rmdmodel.setParticipantSelectorFieldList(genericParticipant.getGenericParticipantRMDBuilder().getParticipantSelectorFieldList());
+			rmdmodel.setParticipantSelectorFieldList(genericParticipant.getGenericParticipantRMDFactory().getParticipantSelectorFieldList());
 		}
 		populateModel(model);
 		return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
@@ -122,7 +122,7 @@ public class CreateRMDController extends AbstractLandscapeController{
 	@ModelAttribute(value="gpConflictPolicies")
 	public String[] getParticipantConfilictPolicies(){
 		if(genericParticipant != null){
-			ICustomizeRMDParticipant<RMDModel> customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDBuilder().getCustomParticipantRMD();
+			ICustomizeRMDParticipant<RMDModel> customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDFactory().getCustomParticipantRMD();
 			if(customizeParticipantRMDInfo!= null){
 				return customizeParticipantRMDInfo.getCustomConflictResolutionPolicy();
 			}
@@ -185,7 +185,7 @@ public class CreateRMDController extends AbstractLandscapeController{
 	private String getParticipantRepoId(RMDModel rmdmodel) {
 		String participantRepoId = "";
 		if(genericParticipant != null){
-			ICustomizeRMDParticipant<RMDModel> customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDBuilder().getCustomParticipantRMD();
+			ICustomizeRMDParticipant<RMDModel> customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDFactory().getCustomParticipantRMD();
 			if(customizeParticipantRMDInfo!= null){
 				participantRepoId = customizeParticipantRMDInfo.getParticipantRepositoryId(rmdmodel);
 			}
@@ -339,7 +339,7 @@ public class CreateRMDController extends AbstractLandscapeController{
 
 	private void validateRMD(RMDModel rmdmodel, BindingResult bindingResult,Model model) {
 		if(genericParticipant != null){
-			IGenericParticipantValidator<RMDModel> rmdValidator = genericParticipant.getGenericParticipantRMDBuilder().getCustomRMDValidator();
+			IGenericParticipantValidator<RMDModel> rmdValidator = genericParticipant.getGenericParticipantRMDFactory().getCustomRMDValidator();
 			if(rmdValidator!= null){
 				rmdValidator.validate(rmdmodel, bindingResult);
 				ValidationResult result = rmdValidator.validate(rmdmodel);

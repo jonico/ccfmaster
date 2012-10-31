@@ -1,7 +1,7 @@
 package com.collabnet.ccf.ccfmaster.gp.web.model;
 
 /**
- * ConnectionResult returns the status of connection and provides extra -(success/error) information required 
+ * ValidationResult returns the status of connection and provides extra -(success/error) information required 
  * 
  * @author kbalaji
  *

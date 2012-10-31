@@ -248,7 +248,7 @@ public class CreateLandscapeHelper {
 				directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
 				directionConfigTFMaxSize.persist();
 				
-				List<DirectionConfig> directionCollection = GenericParticipantUtils.buildDirectionConfig(genericParticipant.getGenericParticipantConfigBuilder().getDirectionFieldList());
+				List<DirectionConfig> directionCollection = GenericParticipantUtils.buildDirectionConfig(genericParticipant.getGenericParticipantConfigItemFactory().getDirectionFieldList());
 				for(DirectionConfig config:directionCollection){
 					config.setDirection(reverseDirection);
 					config.persist();
