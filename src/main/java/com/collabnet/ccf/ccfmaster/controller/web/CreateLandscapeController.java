@@ -44,6 +44,9 @@ import com.collabnet.teamforge.api.Connection;
 @Controller
 public class CreateLandscapeController{
 
+	private static final String PARTICIPANT_FULLNAME_MODEL_ATTRIBUTE = "participantFullName";
+	private static final String PARTICIPANT_PREFIXNAME_MODEL_ATTRIBUTE = "participantPerfix";
+
 	private static final Logger log = LoggerFactory.getLogger(CreateLandscapeController.class);
 
 	private final Capabilities capabilities = new Capabilities();
@@ -106,6 +109,7 @@ public class CreateLandscapeController{
 				landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
 				Participant participant=landscape.getParticipant();
 				landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
+				populatePariticipantNameandPrefix(model);
 				return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
 			}
 		}
@@ -163,6 +167,7 @@ public class CreateLandscapeController{
 			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getParticipantFieldList());
 		}
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel, model);
+		populatePariticipantNameandPrefix(model);
 		log.debug("saveLandscape ended");
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS; 
 	}
@@ -219,6 +224,51 @@ public class CreateLandscapeController{
 	public String populateTfUrl() {
 		return ccfRuntimePropertyHolder.getTfUrl();
 	}
+
+	private void populatePariticipantNameandPrefix(Model model) {
+		model.addAttribute(PARTICIPANT_FULLNAME_MODEL_ATTRIBUTE, getParticipantFullName());
+		model.addAttribute(PARTICIPANT_PREFIXNAME_MODEL_ATTRIBUTE, getParticipantPrefix());
+		
+	}
+	
+	private String getParticipantFullName(){
+		String fullName = null;
+		SystemKind systemKind = ControllerHelper.findLandscape().getParticipant().getSystemKind();
+		switch(systemKind){
+		 // TODO: how to handle locale specific names
+			case QC:
+				fullName = "HP Quality Center";
+				break;
+			case SWP:
+				fullName = "ScrumWorks Pro";
+				break;
+			case GENERIC:
+				if(genericParticipant != null)
+					fullName = genericParticipant.getName();
+				break;
+		}
+		return fullName;
+	}
+	
+	private String getParticipantPrefix(){
+		String prefix = null;
+		SystemKind systemKind = ControllerHelper.findLandscape().getParticipant().getSystemKind();
+		switch(systemKind){
+		 // TODO: how to handle locale specific names
+			case QC:
+				prefix = SystemKind.QC.toString();
+				break;
+			case SWP:
+				prefix = SystemKind.SWP.toString();
+				break;
+			case GENERIC:
+				if(genericParticipant != null)
+					prefix = genericParticipant.getPrefix();
+				break;
+		}
+		return prefix;
+	}
+	
 
 	private void populateGenericParticipantToModel(LandscapeModel landscapemodel) {
 		if(genericParticipant != null){
