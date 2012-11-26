@@ -24,8 +24,7 @@ import org.springframework.web.servlet.support.RequestContext;
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantConfigValidator;
-import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantConfigItemValidator;
 import com.collabnet.ccf.ccfmaster.server.domain.Capabilities;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -283,7 +282,7 @@ public class CreateLandscapeController{
 	
 	private void validateGenericParticipant(LandscapeModel landscapeModel, BindingResult bindingResult){
 		if(genericParticipant != null){
-			IGenericParticipantValidator<AbstractGenericParticipantModel> participantValidator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
+			IGenericParticipantConfigItemValidator participantValidator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
 			if(genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator() == null){
 				participantValidator = new DefaultGenericParticipantConfigValidator(); 
 				participantValidator.validate(landscapeModel, bindingResult);

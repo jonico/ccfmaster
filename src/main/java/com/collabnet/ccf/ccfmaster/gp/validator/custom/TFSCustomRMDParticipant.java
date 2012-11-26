@@ -7,7 +7,7 @@ import com.collabnet.ccf.ccfmaster.gp.web.rmd.ICustomizeRMDParticipant;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.ConflictResolutionPolicy;
 
-public class TFSCustomRMDParticipant implements ICustomizeRMDParticipant<RMDModel>{
+public class TFSCustomRMDParticipant implements ICustomizeRMDParticipant{
 
 	@Override
 	public String getParticipantRepositoryId(RMDModel model) {

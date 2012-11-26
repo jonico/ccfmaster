@@ -1,25 +1,20 @@
 package com.collabnet.ccf.ccfmaster.gp.validator;
 
+import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.DEFAULT_ERRORMSG_NOT_EMPTY_VALUE;
+import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.PARTICIPANT_SHOULD_MATCH_CONDITIONAL_REGEX;
+import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.VALIDATE_NOT_EMPTY_CCFCOREPROPERTIES_VALUE;
+import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC;
+
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.core.utils.ValidatorUtils;
 
-import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.DEFAULT_ERRORMSG_NOT_EMPTY_VALUE;
-import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.VALIDATE_NOT_EMPTY_CCFCOREPROPERTIES_VALUE;
-import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC;
-import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.PARTICIPANT_SHOULD_MATCH_CONDITIONAL_REGEX;
-
-public abstract class AbstractGenericParticipantValidator<T> implements IGenericParticipantValidator<T> {
-	
-	public abstract ValidationResult validate(T model);
-	
-	public abstract void validate(T model, Errors errors);
+public abstract class AbstractGenericParticipantValidator{
 	
 	public void validateValue(List<CCFCoreProperty> configProperties, Errors errors,String errorElementName){
 		for (int i = 0; i < configProperties.size(); i++) { 

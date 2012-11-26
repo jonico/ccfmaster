@@ -8,7 +8,7 @@ import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
-public class DefaultGenericParticipantConfigValidator extends AbstractGenericParticipantValidator<AbstractGenericParticipantModel>{
+public class DefaultGenericParticipantConfigValidator extends AbstractGenericParticipantValidator implements IGenericParticipantConfigItemValidator{
 
 	@Override
 	public void validate(AbstractGenericParticipantModel model, Errors errors) {
@@ -18,7 +18,7 @@ public class DefaultGenericParticipantConfigValidator extends AbstractGenericPar
 		validateValue(participantConfigList, errors,PARTICIPANT_CONFIG_LIST_ELEMENT_NAME);
 	}
 
-	public ValidationResult validate(AbstractGenericParticipantModel model) {
+	public ValidationResult validateConnection(AbstractGenericParticipantModel model) {
 		return null;
 	}
 

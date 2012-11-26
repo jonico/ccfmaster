@@ -5,26 +5,22 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantConfigItemValidator;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
 public class GenericParticipantConfigItemFactory {
 
 	@XmlTransient
-	private IGenericParticipantValidator<AbstractGenericParticipantModel> customValidator;
+	private IGenericParticipantConfigItemValidator customValidator;
 	
 	@XmlElement(name = "participantProperty")
 	private List<CCFCoreProperty> participantFieldList;
 
 	@XmlElement(name = "landscapeProperty")
 	private List<CCFCoreProperty> landscapeFieldList;
-	
-	@XmlElement(name = "directionProperty")
-	private List<CCFCoreProperty> directionFieldList;
 
 
-	public IGenericParticipantValidator<AbstractGenericParticipantModel> getCustomValidator() {
+	public IGenericParticipantConfigItemValidator getCustomValidator() {
 		return customValidator;
 	}
 
@@ -36,11 +32,7 @@ public class GenericParticipantConfigItemFactory {
 		return landscapeFieldList;
 	}
 
-	public List<CCFCoreProperty> getDirectionFieldList() {
-		return directionFieldList;
-	}
-
-	public void setCustomValidator(IGenericParticipantValidator<AbstractGenericParticipantModel> customValidator) {
+	public void setCustomValidator(IGenericParticipantConfigItemValidator customValidator) {
 		this.customValidator = customValidator;
 	}
 
@@ -50,10 +42,6 @@ public class GenericParticipantConfigItemFactory {
 
 	public void setLandscapeFieldList(List<CCFCoreProperty> landscapeFieldList) {
 		this.landscapeFieldList = landscapeFieldList;
-	}
-
-	public void setDirectionFieldList(List<CCFCoreProperty> directionFieldList) {
-		this.directionFieldList = directionFieldList;
 	}
 	
 	@Override
@@ -65,8 +53,6 @@ public class GenericParticipantConfigItemFactory {
 		builder.append(participantFieldList);
 		builder.append(", landscapeFieldList=");
 		builder.append(landscapeFieldList);
-		builder.append(", directionFieldList=");
-		builder.append(directionFieldList);
 		builder.append("]");
 		return builder.toString();
 	}

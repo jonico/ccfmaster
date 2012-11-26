@@ -29,8 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.gp.validator.DefaultGenericParticipantConfigValidator;
-import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantConfigItemValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.core.QCMetaDataProvider;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
@@ -179,8 +178,8 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 		RequestContext ctx = new RequestContext(request);
 		ValidationResult connectionResult = null;
 		if(genericParticipant != null){
-			IGenericParticipantValidator<AbstractGenericParticipantModel> validator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
-			connectionResult = validator.validate(participantSettingsModel);
+			IGenericParticipantConfigItemValidator validator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
+			connectionResult = validator.validateConnection(participantSettingsModel);
 		}
 		
 		if(connectionResult != null && connectionResult.isConnectionValid()){
@@ -222,7 +221,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	private void validateGenericParticipant(ParticipantSettingsModel participantSettingsModel, BindingResult bindingResult){
 		if(genericParticipant != null){
-			IGenericParticipantValidator<AbstractGenericParticipantModel> participantValidator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
+			IGenericParticipantConfigItemValidator participantValidator = genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
 			if(genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator() == null){
 				participantValidator = new DefaultGenericParticipantConfigValidator(); 
 				participantValidator.validate(participantSettingsModel, bindingResult);

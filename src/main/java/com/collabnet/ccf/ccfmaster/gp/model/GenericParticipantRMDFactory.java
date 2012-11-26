@@ -5,35 +5,34 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantValidator;
-import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantRMDValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.rmd.ICustomizeRMDParticipant;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
 public class GenericParticipantRMDFactory {
 	
 	@XmlTransient
-	private IGenericParticipantValidator<RMDModel> customRMDValidator;
+	private IGenericParticipantRMDValidator customRMDValidator;
 	
 	@XmlElement(name = "rmdParticipantProperty")
 	private List<CCFCoreProperty> participantSelectorFieldList;
 	
 	@XmlTransient
-	private ICustomizeRMDParticipant<RMDModel> customParticipantRMD;
+	private ICustomizeRMDParticipant customParticipantRMD;
 
-	public IGenericParticipantValidator<RMDModel> getCustomRMDValidator() {
+	public IGenericParticipantRMDValidator getCustomRMDValidator() {
 		return customRMDValidator;
 	}
 
-	public void setCustomRMDValidator(IGenericParticipantValidator<RMDModel> customRMDValidator) {
+	public void setCustomRMDValidator(IGenericParticipantRMDValidator customRMDValidator) {
 		this.customRMDValidator = customRMDValidator;
 	}
 
-	public ICustomizeRMDParticipant<RMDModel> getCustomParticipantRMD() {
+	public ICustomizeRMDParticipant  getCustomParticipantRMD() {
 		return customParticipantRMD;
 	}
 
-	public void setCustomParticipantRMD(ICustomizeRMDParticipant<RMDModel> customParticipantRMD) {
+	public void setCustomParticipantRMD(ICustomizeRMDParticipant customParticipantRMD) {
 		this.customParticipantRMD = customParticipantRMD;
 	}
 

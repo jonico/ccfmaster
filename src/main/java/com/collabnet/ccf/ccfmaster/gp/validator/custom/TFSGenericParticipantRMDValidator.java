@@ -6,15 +6,11 @@ import java.util.List;
 import org.springframework.validation.Errors;
 
 import com.collabnet.ccf.ccfmaster.gp.validator.AbstractGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantRMDValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
-import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
-import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
-import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
-import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
-import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 
-public class TFSGenericParticipantRMDValidator extends AbstractGenericParticipantValidator<RMDModel>{
+public class TFSGenericParticipantRMDValidator extends AbstractGenericParticipantValidator implements IGenericParticipantRMDValidator{
 	
 	private String urlKey;
 	
@@ -30,17 +26,10 @@ public class TFSGenericParticipantRMDValidator extends AbstractGenericParticipan
 		this.passwordKey = passwordKey;
 		this.tfsMetadataHelper = new TFSMetadataHelper();
 	}
-	
-
-	@Override
-	public ValidationResult validate(RMDModel model) {
-		//Validate the model object and set a global error for given model
-		return null;
-	}
 
 	@Override
 	public void validate(RMDModel model, Errors errors) {
-		buildTFSMetadatahelperAttr();
+		buildTFSMetadatahelperAttr(model);
 		String collectionName = null;
 		List<CCFCoreProperty> configProperties = model.getParticipantSelectorFieldList();
 		validateValue(configProperties, errors, RMD_CONFIG_LIST_ELEMENT_NAME);
@@ -71,19 +60,15 @@ public class TFSGenericParticipantRMDValidator extends AbstractGenericParticipan
 		}
 	}
 	
-	private void buildTFSMetadatahelperAttr(){
-		Landscape landscape = ControllerHelper.findLandscape();
-		ParticipantConfig urlConfig = ParticipantConfig.findParticipantConfigsByParticipantAndName(landscape.getParticipant(),urlKey).getSingleResult();
-		LandscapeConfig userNameConfig = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, userNameKey).getSingleResult();
-		LandscapeConfig passwordConfig = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, passwordKey).getSingleResult();
-		tfsMetadataHelper.setUrl(urlConfig.getVal());
-		String userName = userNameConfig.getVal();
-		if(userNameConfig.getVal().contains("\\")){// TODO: currently username got appended with domain name; so split by "/" get the username later
-			String userDetails[] = userNameConfig.getVal().split("\\\\");
+	private void buildTFSMetadatahelperAttr(RMDModel model){
+		tfsMetadataHelper.setUrl(model.getParticipantConfigMap().get(urlKey));
+		String userName = model.getLandscapeConfigMap().get(userNameKey);
+		if(userName.contains("\\")){
+			String userDetails[] = userName.split("\\\\");
 			userName = userDetails[1];
 		}
 		tfsMetadataHelper.setUserName(userName); 
-		tfsMetadataHelper.setPassword(passwordConfig.getVal());
+		tfsMetadataHelper.setPassword(model.getLandscapeConfigMap().get(passwordKey));
 	}
 
 }

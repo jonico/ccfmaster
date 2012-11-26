@@ -1,8 +1,10 @@
 package com.collabnet.ccf.ccfmaster.gp.web.rmd;
 
-public interface ICustomizeRMDParticipant<T> {
+import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
+
+public interface ICustomizeRMDParticipant {
 	
-	public String getParticipantRepositoryId(T model);
+	public String getParticipantRepositoryId(RMDModel model);
 	
 	public String[] getCustomConflictResolutionPolicy();
 

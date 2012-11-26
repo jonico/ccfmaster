@@ -16,16 +16,30 @@
 	
 	<bean id="genericParticipantConfigItemFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">	
 		<property name="customValidator" ref="TFSGenericParticipantValidator"/>
-		<property name="participantFieldList" ref="participantConfigFieldList"/>
-		<property name="landscapeFieldList" ref="landscapeConfigFieldList"/>
-		<property name="directionFieldList" ref="directionConfigFieldList"/>
+		<property name="participantFieldList">
+			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+				<ref bean="urlParticipantConfig" />
+			</list>
+		</property>
+		<property name="landscapeFieldList">
+			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+				<ref bean="userNameLandscapeConfig" />
+				<ref bean="passwordLandscapeConfig" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="TFSGenericParticipantValidator" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.TFSGenericParticipantConfigValidator"/>
 	
 	<bean id="genericParticipantRMDFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantRMDFactory">	
 		<property name="customRMDValidator" ref="TFSGenericParticipantRMDValidator"/>
-		<property name="participantSelectorFieldList" ref="participantSelectorList"/>
+		<property name="participantSelectorFieldList">
+			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+				<ref bean="tfsCollectionProperty" />
+				<ref bean="tfsProjectListProperty" />
+				<ref bean="tfsWorkItemTypeProperty" />
+			</list>
+		</property>
 		<property name="customParticipantRMD" ref="customParticipantRMD"/>
 	</bean>
 	
@@ -36,24 +50,6 @@
 		<constructor-arg name="userNameKey" value="ccf.landscape.tfs.username"/>
 		<constructor-arg name="passwordKey" value="ccf.landscape.tfs.password"/>		
 	</bean>
-	
-	<util:list id="participantConfigFieldList" list-class="java.util.ArrayList"	value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
-		<ref bean="urlParticipantConfig"/>
-	</util:list>
-	
-	<util:list id="landscapeConfigFieldList" list-class="java.util.ArrayList" value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
-		<ref bean="userNameLandscapeConfig"/>
-		<ref bean="passwordLandscapeConfig"/>
-	</util:list>
-	
-	<util:list id="directionConfigFieldList" list-class="java.util.ArrayList" value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
-	</util:list>
-		
-	<util:list id="participantSelectorList" list-class="java.util.ArrayList" value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
-		<ref bean="tfsCollectionProperty"/>
-		<ref bean="tfsProjectListProperty"/>
-		<ref bean="tfsWorkItemTypeProperty"/>
-	</util:list>
 	
 	<bean id="urlParticipantConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
 		<!--  name property should be unique  -->
