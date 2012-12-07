@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
+import com.collabnet.ccf.ccfmaster.server.domain.Participant;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.google.common.base.Preconditions;
 
@@ -15,8 +16,12 @@ import com.google.common.base.Preconditions;
 public final class SerializableParticipant implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private final SystemKind systemKind;
+	
+	private final String prefix;
+	
+	private final String description;
 
 	/**
 	 * Dig around in the database to find the participant. Default constructor is
@@ -25,16 +30,29 @@ public final class SerializableParticipant implements Serializable {
 	public SerializableParticipant() {
 		List<Landscape> landscapes = Landscape.findAllLandscapes();
 		Preconditions.checkState(!landscapes.isEmpty(), "no landscapes in database");
-		this.systemKind = landscapes.get(0).getParticipant().getSystemKind();
+		Participant participant = landscapes.get(0).getParticipant();
+		this.systemKind = participant.getSystemKind();
+		this.prefix = participant.getPrefix();
+		this.description = participant.getDescription();
 	}
 	
-	public SerializableParticipant(SystemKind systemKind) {
+	public SerializableParticipant(SystemKind systemKind, String prefix , String description) {
 		this.systemKind = systemKind;
+		this.prefix = prefix;
+		this.description = description;
 	}
 
 	public SystemKind getSystemKind() {
 		return systemKind;
 	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+	
+	public String getDescription() {
+        return description;
+    }
 
 
 }

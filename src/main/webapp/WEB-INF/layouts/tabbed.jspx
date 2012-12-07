@@ -19,7 +19,7 @@
 				<!-- Added to change the label header w.r.t participant -->
 				<c:set var="newtabname" value="${tabLabel}" />	
 				<c:if test="${!empty participant}">
-					<c:set var="newtabname" value="${fn:replace(tabLabel,'PARTICIPANT',participantPerfix)}"/>
+					<c:set var="newtabname" value="${fn:replace(tabLabel,'PARTICIPANT',participant.prefix)}"/>
 				</c:if>
 				<menu:tab
 					label="${newtabname}"

@@ -60,7 +60,7 @@
     	<c:if test="${selectedLink == 'genericsettings'}" >
     		<c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
     	</c:if>
-    	<div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">${participantFullName}</a></div>
+    	<div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">${participant.description}</a></div>
 	</c:if>
 	
     <c:set var="itemClass" value="ImageListParent"/>

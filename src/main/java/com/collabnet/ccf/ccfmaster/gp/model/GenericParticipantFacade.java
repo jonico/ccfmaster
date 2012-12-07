@@ -23,12 +23,6 @@ public class GenericParticipantFacade {
 
 	@XmlElement(name = "prefix")
 	private String prefix;
-
-	@XmlElement(name = "systemKind")
-	private String systemKind;
-
-	@XmlElement(name = "description")
-	private String description;
 	
 	@XmlTransient
 	private GenericParticipantConfigItemFactory genericParticipantConfigItemFactory;
@@ -42,14 +36,6 @@ public class GenericParticipantFacade {
 
 	public String getPrefix() {
 		return prefix;
-	}
-
-	public String getSystemKind() {
-		return systemKind;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	public GenericParticipantRMDFactory getGenericParticipantRMDFactory() {
@@ -68,14 +54,6 @@ public class GenericParticipantFacade {
 		this.prefix = prefix;
 	}
 
-	public void setSystemKind(String systemKind) {
-		this.systemKind = systemKind;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public void setGenericParticipantConfigItemFactory(GenericParticipantConfigItemFactory genericParticipantConfigItemFactory) {
 		this.genericParticipantConfigItemFactory = genericParticipantConfigItemFactory;
 	}
@@ -91,10 +69,6 @@ public class GenericParticipantFacade {
 		builder.append(name);
 		builder.append(", prefix=");
 		builder.append(prefix);
-		builder.append(", systemKind=");
-		builder.append(systemKind);
-		builder.append(", description=");
-		builder.append(description);
 		builder.append(", genericParticipantConfigItemFactory=");
 		builder.append(genericParticipantConfigItemFactory);
 		builder.append(", genericParticipantConfigItemFactory=");

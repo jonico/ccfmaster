@@ -60,7 +60,7 @@ public class CreateLandscapeHelper {
 		if(participant.getSystemKind().equals(SystemKind.GENERIC)){ // need to move this code piece to switch case
 			if(genericParticipant != null){
 				participant.setSystemId(genericParticipant.getPrefix());
-				participant.setDescription(genericParticipant.getDescription());
+				participant.setDescription(genericParticipant.getName());
 				participant.setPrefix(genericParticipant.getPrefix());
 			}
 		}		

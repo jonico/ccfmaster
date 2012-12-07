@@ -6,9 +6,11 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
 	<bean id="genericParticipant" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade" >
+		<!-- name property should hold full name of the participant (e.g. "HP Quality Center","ScrumWorks Pro");
+		 this value is used to display  in the admin screen menu-->
 		<property name="name" value="Team Foundation Server"/>
-		<property name="systemKind" value="Team Foundation Server"/>
-		<property name="description" value="Team Foundation Server"/>
+		<!-- prefix property should hold short Name of the participant (e.g. "QC","SWP");
+		 this value is used set as participant perfix and systemId ; Also used to display in header labels-->
 		<property name="prefix" value="TFS"/>
 		<property name="genericParticipantConfigItemFactory" ref="genericParticipantConfigItemFactory"/>
 		<property name="genericParticipantRMDFactory" ref="genericParticipantRMDFactory"/>
