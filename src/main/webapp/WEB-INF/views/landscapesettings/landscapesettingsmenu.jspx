@@ -54,10 +54,10 @@
 	
 		<c:if test="${participant.systemKind eq 'GENERIC'}"> 
 		<c:if test="${selectedLink==null || selectedLink==''}">
-  			<c:set  var="selectedLink" scope="request" value="genericsettings"/>
+  			<c:set  var="selectedLink" scope="request" value="qcsettings"/>
 		</c:if> 
 		<c:set var="itemClass" value="ImageListParent"/>
-    	<c:if test="${selectedLink == 'genericsettings'}" >
+    	<c:if test="${selectedLink == 'qcsettings'}" >
     		<c:set var="itemClass" value="ImageListParentSelectedNoTop"/>
     	</c:if>
     	<div class="${fn:escapeXml(itemClass)}"><img src="${fn:escapeXml(bullet_image_url)}" height="9" width="9" hspace="5"/><a href="${fn:escapeXml(qcsettings_url)}">${participant.description}</a></div>
