@@ -6,6 +6,7 @@
 <spring:message code="status" var="label_status"/>  
 <spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 <spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:message code="tftogenericlabel" var="tftogenericlabel" htmlEscape="false"/>
 <spring:message code="status" var="statuslabel" htmlEscape="false"/>  
 <spring:message code="sourceRepository" var="sourceRepositorylabel" htmlEscape="false"/>
 <spring:message code="targetRepository" var="targetRepositorylabel" htmlEscape="false"/>
@@ -62,6 +63,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

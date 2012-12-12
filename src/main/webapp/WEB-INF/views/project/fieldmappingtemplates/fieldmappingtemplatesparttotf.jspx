@@ -6,6 +6,7 @@
 <spring:message code="button_import" var="import_button"/>
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 <spring:message code="namelabel" var="namelabel" htmlEscape="false"/>  
 <spring:message code="typelabel" var="typelabel" htmlEscape="false"/>
 <spring:message code="nofieldmappingtemplatelabel" var="nofieldmappingtemplatelabel" htmlEscape="false"/>
@@ -39,6 +40,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

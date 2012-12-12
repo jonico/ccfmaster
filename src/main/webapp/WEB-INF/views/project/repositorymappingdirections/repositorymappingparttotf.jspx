@@ -7,6 +7,7 @@
 <spring:message code="status" var="label_status"/>  
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 <spring:message code="status" var="statuslabel" htmlEscape="false"/>  
 <spring:message code="sourceRepository" var="sourceRepositorylabel" htmlEscape="false"/>
 <spring:message code="targetRepository" var="targetRepositorylabel" htmlEscape="false"/>
@@ -56,6 +57,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

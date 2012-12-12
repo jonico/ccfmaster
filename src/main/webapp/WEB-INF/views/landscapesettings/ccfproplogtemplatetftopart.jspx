@@ -10,6 +10,7 @@
 <spring:url value="/admin/saveccfpropertieslogtemplate?param_direction=forward" var="saveccfproplogtemplatetftopart_url" />
 <spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 <spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:message code="tftogenericlabel" var="tftogenericlabel" htmlEscape="false"/>
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
@@ -42,6 +43,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

@@ -6,6 +6,7 @@
 <spring:message code="button_import" var="import_button"/>
 <spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 <spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:message code="tftogenericlabel" var="tftogenericlabel" htmlEscape="false"/>
 <spring:message code="namelabel" var="namelabel" htmlEscape="false"/>  
 <spring:message code="typelabel" var="typelabel" htmlEscape="false"/>
 <spring:url value="/admin/deletefieldmappingtemplate?direction=forward" var="delete_url" />
@@ -38,6 +39,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

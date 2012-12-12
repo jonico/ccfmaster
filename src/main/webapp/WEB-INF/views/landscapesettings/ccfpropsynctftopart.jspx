@@ -11,6 +11,7 @@
 
 <spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 <spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+<spring:message code="tftogenericlabel" var="tftogenericlabel" htmlEscape="false"/>
 <spring:message code="shouldStartAutomatically_label" var="shouldStartAutomatically_label" htmlEscape="false"/>			
 <spring:message code="restorelabel" var="restorelabel" htmlEscape="false"/>
 <spring:message code="coresettingslabel" var="coresettingslabel" htmlEscape="false"/>
@@ -58,6 +59,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

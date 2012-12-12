@@ -8,6 +8,7 @@
 <spring:message code="statuslabel" var="label_status"/>  
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 
 <spring:url value="/admin/displayparticipanttotfstatus" var="refresh_url" />
 <spring:url value="/admin/startccfcorestatus?param_direction=reverse" var="start_url" />
@@ -39,6 +40,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>
