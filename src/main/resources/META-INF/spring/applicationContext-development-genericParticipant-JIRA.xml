@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	
+	<bean id="genericParticipant" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade" >
+		<!-- name property should hold full name of the participant (e.g. "HP Quality Center","ScrumWorks Pro");
+		 this value is used to display  in the admin screen menu-->
+		<property name="name" value="JIRA"/>
+		<!-- prefix property should hold short Name of the participant (e.g. "QC","SWP");
+		 this value is used set as participant prefix and systemId ; Also used to display in header labels-->
+		<property name="prefix" value="JIRA"/>
+		<property name="genericParticipantConfigItemFactory" ref="genericParticipantConfigItemFactory"/>
+		<property name="genericParticipantRMDFactory" ref="genericParticipantRMDFactory"/>
+	</bean>
+	
+	<bean id="genericParticipantConfigItemFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">	
+		<property name="participantFieldList">
+			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+				<ref bean="urlParticipantConfig" />
+			</list>
+		</property>
+		<property name="landscapeFieldList">
+			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+				<ref bean="userNameLandscapeConfig" />
+				<ref bean="passwordLandscapeConfig" />
+			</list>
+		</property>
+	</bean>
+		
+	<bean id="genericParticipantRMDFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantRMDFactory">	
+		<property name="participantSelectorFieldList">
+			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+				<ref bean="jiraCollectionProperty" />
+				<ref bean="jiraProjectListProperty" />
+				<ref bean="jiraWorkItemTypeProperty" />
+			</list>
+		</property>
+		<property name="customParticipantRMD" ref="customParticipantRMD"/>
+	</bean>
+	
+	<bean id="customParticipantRMD" class="com.collabnet.ccf.ccfmaster.gp.validator.custom.JIRACustomRMDParticipant"/> 
+	
+	<bean id="urlParticipantConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="ccf.participant.jira.url"/>
+		<property name="labelName" value="JIRA URL"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+	
+	<bean id="userNameLandscapeConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="ccf.landscape.jira.username"/>
+		<property name="labelName" value="Username"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+		
+	<bean id="passwordLandscapeConfig" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="ccf.landscape.jira.password"/>
+		<property name="labelName" value="Password"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="PASSWORD"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+	 
+	<bean id="jiraCollectionProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="jiraCollection"/>
+		<property name="labelName" value="JIRA Collection"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+	 
+	<bean id="jiraProjectListProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="jiraProjectList"/>
+		<property name="labelName" value="JIRA Project Name"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+		
+	<bean id="jiraWorkItemTypeProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+		<!--  name property should be unique  -->
+		<property name="name" value="jiraWorkItemType"/>
+		<property name="labelName" value="JIRA Work Item Type"/>
+		<property name="systemKind" value="GENERIC"/>
+		<property name="type" value="STRING"/>
+		<property name="displayInHTML" value="true"/>
+	</bean>
+	
+</beans>
