@@ -4,6 +4,7 @@
 <spring:message code="button_delete" var="delete_button"/>
 <spring:message code="button_resume" var="resume_button"/>
 <spring:message code="button_pause" var="pause_button"/>
+<spring:message code="button_create" var="create_button"/>
 <spring:message code="status" var="label_status"/>  
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
@@ -36,7 +37,7 @@
 <spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
 <spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
 
-<spring:url value="/creatermd" var="create_mapping_rule_url"/>
+<spring:url value="/admin/creatermd" var="create_rmd_url"/>
 <spring:url value="/images/icons/xslt_active.png" var="fm_xslt_image_url" />
 <spring:url value="/images/icons/mapforce_active.png" var="fm_mf_image_url" />
 <spring:url value="/images/icons/custom_mapping_active.gif" var="fm_mr_image_url" />
@@ -185,7 +186,7 @@
 			</table>
 				<br/>
 				<br/>
-				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
+				
 				<tr class="ContainerFooter">
 				 <td >
 				 <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}">
@@ -197,8 +198,7 @@
 				<div id="enablebutton" class="AlignRight" style="display:none;">
 				<div class="Button">
 				<div class="Middle">
-						  <a href="javascript: createMappingRuleForm('${fn:escapeXml(create_mapping_rule_url)}');">Create</a> 
-				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
+						 <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				</div>
 				</div>
 				<div class="ButtonSpace"></div>
@@ -235,8 +235,7 @@
 				<div class="AlignRight" id="disablebutton">
 				<div class="Button">
 				<div class="Middle">
-						  <a href="javascript: createMappingRuleForm('${fn:escapeXml(create_mapping_rule_url)}');">Create</a> 
-				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
+						 <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				</div>
 				</div>
 				
@@ -262,7 +261,7 @@
 				
 				</td>
 				</tr>
-				</c:if>
+				
 				</td>
 				</tr>
 	</tbody>
@@ -273,10 +272,11 @@
   
 	<script language="JavaScript">
 	
-		function createMappingRuleForm(url){
+		function createRMD(url){
 			document.getElementById("repositoryForm").action=url;
-	  		document.getElementById("repositoryForm").submit();
+  			document.getElementById("repositoryForm").submit();
 		}
+		
 		function resumeForm(url){
 			document.getElementById("repositoryForm").action=url;
 	  		document.getElementById("repositoryForm").submit();

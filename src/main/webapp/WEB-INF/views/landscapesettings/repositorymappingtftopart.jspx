@@ -3,6 +3,7 @@
 <spring:message code="button_delete" var="delete_button"/>
 <spring:message code="button_resume" var="resume_button"/>
 <spring:message code="button_pause" var="pause_button"/>
+<spring:message code="button_create" var="create_button"/>
 <spring:message code="status" var="label_status"/>  
 <spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 <spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
@@ -202,7 +203,7 @@
 				<div id="enablebutton" class="AlignRight" style="display:none;">
 				<div class="Button">
 				<div class="Middle">
-						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">Create</a> 
+						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
 				</div>
 				</div>
@@ -234,7 +235,7 @@
 				<div class="AlignRight" id="disablebutton">
 				<div class="Button">
 				<div class="Middle">
-						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">Create</a> 
+						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
 				</div>
 				</div>
