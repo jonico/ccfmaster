@@ -3,7 +3,7 @@
 
 <spring:message code="qcurl" var="qcurllabel" htmlEscape="false"/>
 <spring:message code="swpurl" var="swpurllabel" htmlEscape="false"/>
-<spring:message code="hpqctimezone" var="hpqctimezonelabel" htmlEscape="false"/>  
+<spring:message code="timezone" var="timezone" htmlEscape="false"/>  
 <spring:message code="hpqcusername" var="hpqcusernamelabel" htmlEscape="false"/>  
 <spring:message code="hpqcpassword" var="hpqcpasswordlabel" htmlEscape="false"/>
 <spring:message code="swptimezone" var="swptimezonelabel" htmlEscape="false"/>  
@@ -72,7 +72,7 @@
 				</tr>
 				<tr>
 				<td class="ItemDetailName">
-				<form:label path="participant.timezone">Time Zone:</form:label>
+				<form:label path="participant.timezone">${timezone}:</form:label>
 				</td>
 				<td class="ItemDetailValue">
 				<form:select  path="participant.timezone" items="${timezones}" id="c_hpqctimezone" cssClass="inputfield"></form:select>

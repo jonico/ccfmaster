@@ -2,7 +2,8 @@
 <jsp:output omit-xml-declaration="yes" />
 
 <spring:message code="button_submit" var="submit_button"/>
-<spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="button_back" var="button_back"/>
+<spring:url value="/admin/creatermdstep3" var="creatermdstep3_url" />
 <spring:url value="/admin/creatermd" var="creatermdstep2_url" />
 <spring:url value="/admin/saveRMD" var="creatermdstep4_url" />
 <spring:url value="/admin/participant/projectList" var="gettftrackerlist_url" />
@@ -33,8 +34,6 @@
 	  		<div class="errorMessage">${connectionerror}</div>
 			</c:if></td></tr>
 			<tr><td><br/></td></tr>
-		<table class="ItemDetailContainer" width="100%" >	
-		<tbody>		
 			<tr>
 			<td> <br/></td>
 			</tr>
@@ -60,8 +59,6 @@
 				</c:forEach>
 			</c:if> 				
 			<tr><td><br/></td></tr>
-		</tbody>
-	</table>
 			<tr class="ContainerFooter" >
 				<td colspan="5">
 					<form:hidden path="direction"/>
@@ -75,10 +72,10 @@
 					<div class="AlignRight">
 					<div class="Button">
 					<div class="Middle">               
-    					<a href="javascript: submitForm('${fn:escapeXml(creatermdstep2_url)}');" id="cancelForm">${cancel_button}</a>
+    					<a href="javascript: submitForm('${fn:escapeXml(creatermdstep2_url)}');" id="cancelForm">${button_back}</a>
 					</div>
 					</div>
-					<div class="ButtonSpace"> </div> 
+					<div class="ButtonSpace"> </div>  
 					<div class="Button">
 					<div class="Middle">
 						<a href="javascript: submitForm('${fn:escapeXml(creatermdstep4_url)}');" id="submitForm">${submit_button}</a> 
@@ -103,39 +100,5 @@
 		document.getElementById("creatermdstep3").action=url;
   		document.getElementById("creatermdstep3").submit();
 	}
-	
-	function doAjaxPost(posturl) {
-		var projectid = $("#id_ParticipantDomain").val();
-	   	 $.ajax({
-	      		beforeSend: function() {
-			 		 $('#spinner').show();
-			 		 $('#browseproject').show();
-		         },
-		         complete: function(){
-		        	 $('#spinner').hide();
-		        	 $('#browseproject').show();
-		         },
-	       		type:"POST",
-	       		url: posturl,
-	       		data:"collectionName=" + projectid,
-	       		dataType:"json",
-	       		success: function(response){
-		       		 $("#id_participantProjectId").get(0).options.length = 0;
-		           	 $("#id_participantProjectId").get(0).options[0] = new Option("Select a Project", "-1");
-		          	 $.each(response,function(index,value) {
-	           		 $("#id_participantProjectId").get(0).options[$("#id_participantProjectId").get(0).options.length] = new Option(value, value);
-	        	 });
-		     	 },
-	        	error: function(e){
-	        	alert('Failed to load projects: ' + e);
-	        	}
-        	});
-     }
-	$(document).ready(function () {			 
-		 $('#id_ParticipantDomain').change(function(){
-			 var value = $("#id_ParticipantDomain").val();
-			 $('#participantDomainName').val(value);
-		 });
-	}); 	      
  </script>  
 </div>

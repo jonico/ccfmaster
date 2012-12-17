@@ -1,6 +1,7 @@
 package com.collabnet.ccf.ccfmaster.gp.web.controller;
 
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,8 +63,7 @@ public class CreateRMDController extends AbstractLandscapeController{
 	private static final Logger log = LoggerFactory.getLogger(LandscapeParticipantSettingsController.class);
 	
 	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE, method=RequestMethod.POST)
-	public String intializeRMDSettings(Model model, HttpServletRequest request){
-		model.addAttribute("rmdModel", new RMDModel());
+	public String intializeRMDSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel, HttpServletRequest request){
 		populateModel(model);
 		return UIPathConstants.RMD_CONFIGURE;		
 	}
@@ -292,7 +292,8 @@ public class CreateRMDController extends AbstractLandscapeController{
 			repositoryMappingDirection.setDirection(direction);
 			repositoryMappingDirection.setRepositoryMapping(repositoryMapping);
 			repositoryMappingDirection.setLastSourceArtifactId(StringUtils.EMPTY);
-			repositoryMappingDirection.setLastSourceArtifactVersion(StringUtils.EMPTY);
+			repositoryMappingDirection.setLastSourceArtifactVersion("0"); // setting default version
+			repositoryMappingDirection.setLastSourceArtifactModificationDate(new Timestamp(0)); // setting default timestamp
 			repositoryMappingDirection.persist();
 			return repositoryMappingDirection;
 		}

@@ -3,6 +3,10 @@
 
 <spring:message code="button_next" var="next_button"/>
 <spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
+<spring:message code="tftogenericlabel" var="tftogenericlabel" htmlEscape="false"/>
+<spring:message code="tftogenericPrefixlabel" var="tftogenericPrefixlabel" htmlEscape="false"/>
+<spring:message code="genericPrefixtotflabel" var="genericPrefixtotflabel" htmlEscape="false"/>
 
 <spring:url value="/admin/displayrepositorymappingtftopart" var="displayrmd_url" />
 <spring:url value="/admin/creatermdstep2" var="creatermdstep2_url" />
@@ -25,21 +29,20 @@
 				<tr>
 				<td> <br/></td>
 				</tr>
-			
-			<tr>
-				<td class="ItemDetailName">
-					<form:label path="" name="Direction">Direction:</form:label><br/><br/>
+				<tr>
+				<td class="ItemDetailName" width="20%">
+					<form:label path="" name="Direction">Direction :</form:label><br/><br/>
 				</td>
 				<td class="ItemDetailValue">					
-					<c:forEach var="direction" varStatus="status" items="${directions}">
-						<c:if test="${direction eq 'FORWARD'}">
-	 						<form:radiobutton id="id_forward" value="${direction}" path="" name="direction" />FORWARD
+					<c:forEach var="directionVar" varStatus="status" items="${directions}">
+						<c:if test="${directionVar eq 'FORWARD'}">
+	 						<form:radiobutton id="id_forward" value="${directionVar}" path="direction" name="direction" />${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}
 	 					</c:if>
-	 					<c:if test="${direction eq 'REVERSE'}">
-	 						<form:radiobutton id="id_reverse" value="${direction}" path="" name="direction"/>REVERSE
+	 					<c:if test="${directionVar eq 'REVERSE'}">
+	 						<form:radiobutton id="id_reverse" value="${directionVar}" path="direction" name="direction"/>${fn:replace(generictotflabel,'GenericParticipant',participant.description)}
 	 					</c:if> 						
-	 					<c:if test="${direction eq 'BOTH'}">
-	 						<form:radiobutton id="id_both" value="${direction}" path="" name="direction"/>BOTH
+	 					<c:if test="${directionVar eq 'BOTH'}">
+	 						<form:radiobutton id="id_both" value="${directionVar}" path="direction" name="direction"/>Both
 	 					</c:if>
 	 					<br/><br/>
 					</c:forEach>						
@@ -48,46 +51,64 @@
 			<tr><td><br/></td></tr>	
 			<tr id="forwardconflict" style="display:none">
 				<td class="ItemDetailName">
-					<form:label  path="" name="forwardconflictlabel">Forward Direction Conflict Resolution Policy:</form:label>
+					<form:label  path="" name="forwardconflictlabel">${fn:replace(tftogenericPrefixlabel,'GenericParticipant',participant.prefix)} Conflict Resolution Policy :</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="forwardconflictCombo" path="" cssClass="inputfield"> <form:options items="${tfConflictPolicies}"/></form:select>
-					<form:hidden path="forwardConfilictPolicies"/>
+					<form:select  id="forwardconflictCombo" path="forwardConfilictPolicies" cssClass="inputfield"> 
+					<form:option value="NONE" label="--- Select ---"/>
+					<form:options items="${tfConflictPolicies}"/></form:select>
 				</td>
 			</tr>
 			<tr><td><br/></td></tr>					
 			<tr id="reverseconflict" style="display:none">			
 				<td class="ItemDetailName">
-					<form:label  path="" name="reverseconflict" >Reverse Direction Conflict Resolution Policy:</form:label>
+					<form:label  path="" name="reverseconflict" >${fn:replace(genericPrefixtotflabel,'GenericParticipant',participant.prefix)} Conflict Resolution Policy :</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="reversedConfilictCombo" path=""  cssClass="inputfield"> <form:options items="${gpConflictPolicies}"/></form:select>
-					<form:hidden path="reversedConfilictPolicies"/>
+					<form:select  id="reversedConfilictCombo" path="reversedConfilictPolicies"  cssClass="inputfield">
+					 <form:option value="NONE" label="--- Select ---"/>
+					 <form:options items="${gpConflictPolicies}"/></form:select>
 				</td>	
 			</tr>
 			<tr><td><br/></td></tr>	
 			<tr id="forwardTemplateName" style="display:none">
 				<td class="ItemDetailName">
-					<form:label  path="" name="forwardTemplateName">Forward Direction Field Mapping Template:</form:label>
+					<form:label  path="" name="forwardTemplateName">${fn:replace(tftogenericPrefixlabel,'GenericParticipant',participant.prefix)} Field Mapping Template :</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="forwardTemplateNameCombo" path="" cssClass="inputfield"> <form:options items="${forwardFieldMappingTemplateNames}"/></form:select>
-					<form:hidden path="forwardFieldMappingTemplateName"/>
+					<form:select  id="forwardTemplateNameCombo" path="forwardFieldMappingTemplateName" cssClass="inputfield"> 
+					<form:option value="NONE" label="--- Select ---"/>
+					<form:options items="${forwardFieldMappingTemplateNames}"/></form:select>
 				</td>
 			</tr>
 			<tr><td><br/></td></tr>				
 			<tr id="reverseTemplateName" style="display:none">			
 				<td class="ItemDetailName">
-					<form:label  path="" name="reverseTemplateName" >Reverse Direction Conflict Resolution Policy:</form:label>
+					<form:label  path="" name="reverseTemplateName" >${fn:replace(genericPrefixtotflabel,'GenericParticipant',participant.prefix)} Field Mapping Template :</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="reversedTemplateNameCombo" path=""  cssClass="inputfield"> <form:options items="${reverseFieldMappingTemplateNames}"/></form:select>
-					<form:hidden path="reverseFieldMappingTemplateName"/>
+					<form:select  id="reversedTemplateNameCombo" path="reverseFieldMappingTemplateName"  cssClass="inputfield"> 
+					<form:option value="NONE" label="--- Select ---"/>
+					<form:options items="${reverseFieldMappingTemplateNames}"/></form:select>
 				</td>	
 			</tr>
 			<tr><td><br/></td></tr>
 			<tr class="ContainerFooter" >
 				<td colspan="5">
+					<form:hidden path="teamForgeMappingType"/>
+					<form:hidden path="teamforgeProjectId"/>
+					<form:hidden path="teamforgeTracker"/>
+					<c:if test="${not empty rmdModel.participantSelectorFieldList}">	
+					<c:forEach items="${rmdModel.participantSelectorFieldList}" varStatus="status" var="participantSelector">
+					<form:hidden path="participantSelectorFieldList[${status.index}].name"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].conditionalRegex"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].displayInHTML"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].type"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].labelName"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].systemKind"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].value" />
+					</c:forEach>
+					</c:if> 
 					<div class="AlignRight">
 					<div class="Button">
 					<div class="Middle"> 
@@ -115,45 +136,48 @@
 				document.getElementById("creatermdstep1").action=url;
 	  			document.getElementById("creatermdstep1").submit();
 		}
-		
+			 
 		$(document).ready(function () {
 			 $('#submitForm').click(function() {
 				    if (!$("input[@name='direction']:checked").val()) {
 				    	alert('Please select the direction');
 				        return false;
 				    }
-				    
 			 });
-		});	
 			 
-		$(document).ready(function () {			 
 			 $('#forwardconflictCombo').change(function(){
 				 var value = $("#forwardconflictCombo").val();
 				 $('#forwardConfilictPolicies').val(value);
 			 });
-		});
-		
-		$(document).ready(function () {			 
+			 
 			 $('#reversedConfilictCombo').change(function(){
 				 var value = $("#reversedConfilictCombo").val();
 				 $('#reversedConfilictPolicies').val(value);
 			 });
-		});		
-		 
-		$(document).ready(function () {			 
+			 
 			 $('#forwardTemplateNameCombo').change(function(){
 				 var value = $("#forwardTemplateNameCombo").val();
 				 $('#forwardFieldMappingTemplateName').val(value);
 			 });
-		});
-		
-		$(document).ready(function () {			 
+			 
 			 $('#reversedTemplateNameCombo').change(function(){
 				 var value = $("#reversedTemplateNameCombo").val();
 				 $('#reverseFieldMappingTemplateName').val(value);
 			 });
-		});
-
+			 
+			 if($('#forwardConfilictPolicies').val() != null){
+				 $('#forwardconflictCombo').val($('#forwardConfilictPolicies').val());
+			 }
+			 if($('#reversedConfilictPolicies').val() != null){
+				 $('#reversedConfilictCombo').val($('#reversedConfilictPolicies').val());
+			 }
+			 if($('#forwardFieldMappingTemplateName').val() != null){
+				 $('#forwardTemplateNameCombo').val($('#forwardFieldMappingTemplateName').val());
+			 }
+			 if($('#reverseFieldMappingTemplateName').val() != null){
+				 $('#reversedTemplateNameCombo').val($('#reverseFieldMappingTemplateName').val());
+			 }
+		});	
 		 
 		$(document).ready(function () {
 			
@@ -177,8 +201,31 @@
 		             $('#forwardTemplateName').show();
 		             $('#reverseTemplateName').show();
 	             }	
-        	});  
-		});		 
+        	});
+			 
+			 if($("input[name$='direction'][checked$='checked']").val() != null){
+				 var radioval=$("input[name$='direction'][checked$='checked']").val();
+				 if(radioval=='FORWARD'){
+	               $('#reverseconflict').hide();
+	               $('#reverseTemplateName').hide();
+	               $('#forwardconflict').show();
+	               $('#forwardTemplateName').show();
+	              }
+	             else if(radioval=='REVERSE'){
+	               $('#forwardconflict').hide();
+	               $('#forwardTemplateName').hide();
+	               $('#reverseconflict').show();
+	               $('#reverseTemplateName').show();
+	             }
+	             else if(radioval=='BOTH'){
+		             $('#forwardconflict').show();
+		             $('#reverseconflict').show();
+		             $('#forwardTemplateName').show();
+		             $('#reverseTemplateName').show();
+	             }	
+			 }
+		});	
+		
  	</script>  
 
 

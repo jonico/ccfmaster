@@ -2,7 +2,10 @@ package com.collabnet.ccf.ccfmaster.web.helper;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +29,16 @@ public class TeamForgeMetadataHelper {
 	
 	
 	public static Map<String,String> getAllTeamForgeProjects() throws RemoteException{
-		Map<String,String> projectInfoMap = new HashMap<String,String>();
+		Map<String,String> projectInfoMap = new LinkedHashMap<String,String>();
 		Connection connection;
 		connection = TeamForgeConnectionHelper.teamForgeConnection();
 		ProjectList projectList = connection.getTeamForgeClient().getProjectList();
 		ProjectRow [] projectRows = projectList.getDataRows();
+		Arrays.sort(projectRows, new Comparator<ProjectRow>() {
+			public int compare(ProjectRow p1, ProjectRow p2) {
+				return p1.getTitle().toLowerCase().compareTo(p2.getTitle().toLowerCase());
+			}
+		});
 		for(ProjectRow project: projectRows){
 			projectInfoMap.put(project.getId(),project.getTitle());
 		}

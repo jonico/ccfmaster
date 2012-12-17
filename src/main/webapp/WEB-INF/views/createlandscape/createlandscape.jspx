@@ -5,10 +5,11 @@
 <spring:message code="create_landscape_header" var="landscapelabel" htmlEscape="false"/>
 <spring:message code="create_hp_qc_ctf_landscape" var="createhpqcctflandscapelabel" htmlEscape="false"/>
 <spring:message code="create_swp_landscape" var="createswplandscapelabel" htmlEscape="false"/>    
+<spring:message code="create_gp_landscape" var="create_gp_landscape" htmlEscape="false"/>   
 <spring:message code="landscapename" var="landscapenamelabel" htmlEscape="false"/>    
 <spring:message code="qcurl" var="qcurllabel" htmlEscape="false"/>
 <spring:message code="swpurl" var="swpurllabel" htmlEscape="false"/>
-<spring:message code="hpqctimezone" var="hpqctimezonelabel" htmlEscape="false"/>  
+<spring:message code="timezone" var="timezone" htmlEscape="false"/>  
 <spring:message code="hpqcusername" var="hpqcusernamelabel" htmlEscape="false"/>  
 <spring:message code="hpqcpassword" var="hpqcpasswordlabel" htmlEscape="false"/>  
 <spring:message code="tftimezone" var="tftimezonelabel" htmlEscape="false"/>  
@@ -61,6 +62,9 @@
 				<c:if test="${participant.systemKind eq 'QC'}">
 				<strong><c:out value="${createhpqcctflandscapelabel}" /></strong>
 				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(create_gp_landscape,'GenericParticipant',participant.description)}" /></strong>
+				</c:if>
 				<br/>
 				<br/>
 				</td>
@@ -88,7 +92,7 @@
 				</tr>
 				<tr>
 				<td class="ItemDetailName">
-				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				<form:label path="participant.timezone">${timezone}:</form:label>
 				</td>
 				<td class="ItemDetailValue">
 				<field:select field="participant.timezone" id="c_hpqctimezone" items="${timezones}" path="participant.timezone"/>
@@ -127,7 +131,7 @@
 				</tr>
 				<tr>
 				<td class="ItemDetailName">
-				<form:label path="participant.timezone">${swptimezonelabel}:</form:label>
+				<form:label path="participant.timezone">${timezone}:</form:label>
 				</td>
 				<td class="ItemDetailValue">
 				<field:select field="participant.timezone" id="c_swptimezone" items="${timezones}" path="participant.timezone" />
@@ -195,7 +199,7 @@
 				</c:if>
 				<tr>
 				<td class="ItemDetailName">
-				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				<form:label path="participant.timezone">${timezone}:</form:label>
 				</td>
 				<td class="ItemDetailValue">
 				<field:select field="participant.timezone" id="c_hpqctimezone" items="${timezones}" path="participant.timezone"/>

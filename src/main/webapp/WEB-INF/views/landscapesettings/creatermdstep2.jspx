@@ -2,7 +2,7 @@
 <jsp:output omit-xml-declaration="yes" />
 
 <spring:message code="button_next" var="next_button"/>
-<spring:message code="button_cancel" var="cancel_button"/>
+<spring:message code="button_back" var="button_back"/>
 <spring:url value="/admin/creatermd" var="creatermdstep1_url" />
 <spring:url value="/admin/creatermdstep3" var="creatermdstep3_url" />
 <spring:url value="/admin/teamForge/trackerList" var="gettftrackerlist_url" />
@@ -27,10 +27,10 @@
 				<td> <br/></td>
 			</tr>
 			<tr>
-				<td class="ItemDetailName">TeamForge :<br/><br/>	</td>
+				<td class="ItemDetailName">TeamForge:<br/><br/>	</td>
 				<td class="ItemDetailValue"> 
 					<c:forEach var="tfMappingType" varStatus="status" items="${teamForgeMappingType}">
-	 					<form:radiobutton id="id_tfMappingType" value="${tfMappingType}" path="" name="teamForgeMappingType" />${tfMappingType}
+	 					<form:radiobutton id="id_tfMappingType" value="${tfMappingType}" path="teamForgeMappingType" name="teamForgeMappingType" />${tfMappingType}
 	 					<br/><br/>
 					</c:forEach>	
 				</td>
@@ -40,8 +40,9 @@
 					<form:label name="projectname" path="">Project Name:</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select id="id_tfProject" path=""><form:options items="${teamForgeProjects}" /></form:select>
-					<form:hidden path="teamforgeProjectId"/>
+					<form:select id="id_tfProject" path="teamforgeProjectId">
+					<form:option value="NONE" label="--- Select ---"/>
+					<form:options items="${teamForgeProjects}" /></form:select>
 				</td>
 			</tr>
 			<tr id="trackerid">
@@ -61,11 +62,22 @@
 					<form:hidden path="forwardConfilictPolicies"/>
 					<form:hidden path="reversedConfilictPolicies"/>
 					<form:hidden path="forwardFieldMappingTemplateName"/>
-					<form:hidden path="reverseFieldMappingTemplateName"/>
+					<form:hidden path="reverseFieldMappingTemplateName"/>					
+					<c:if test="${not empty rmdModel.participantSelectorFieldList}">	
+					<c:forEach items="${rmdModel.participantSelectorFieldList}" varStatus="status" var="participantSelector">
+					<form:hidden path="participantSelectorFieldList[${status.index}].name"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].conditionalRegex"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].displayInHTML"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].type"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].labelName"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].systemKind"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].value" />
+					</c:forEach>
+					</c:if> 
 					<div class="AlignRight">
 					<div class="Button">
 					<div class="Middle">               
-				          <a href="javascript: submitForm('${fn:escapeXml(creatermdstep1_url)}');" id="cancelForm">${cancel_button}</a> 
+				          <a href="javascript: submitForm('${fn:escapeXml(creatermdstep1_url)}');" id="cancelForm">${button_back}</a> 
 					</div>
 					</div>
 					<div class="ButtonSpace"> </div> 
@@ -94,13 +106,13 @@
 		document.getElementById("creatermdstep2").action=url;
   		document.getElementById("creatermdstep2").submit();
 	}
-	$(document).ready(function () {			 
+	
+	$(document).ready(function () {		 
 		 $('#id_tfProject').change(function(){
 			 var value = $("#id_tfProject").val();
 			 $('#teamforgeProjectId').val(value);
 		 });
-	});
-	$(document).ready(function () {
+		 
 		$('#submitForm').click(function() {
 		    if (!$("input[@name='workitem']:checked").val()) {
 		    	alert('Please select the TeamForge Work Item type');
@@ -117,17 +129,25 @@
                	$('#trackerid').hide();
               	$('#projectid').show();
             }
-		});  
-	 });	
-	$(document).ready(function () {			 
+		});
+			 
 		 $('#id_trackerList').change(function(){
 			 var value = $("#id_trackerList").val();
 			 $('#teamforgeTracker').val(value);
 		 });
-	});
+		 
+		 if($('#teamforgeProjectId').val() != null){
+			 $('#forwardconflictCombo').val($('#teamforgeProjectId').val());
+		 }
+		 if($('#teamforgeTracker').val() != null){
+			 $('#id_trackerList').val($('#teamforgeTracker').val());
+			 $('#id_trackerList').attr("disabled", true);
+		 }
+		 
+	 });
 		
 	function doAjaxPost(posturl) {
-		var projectid = $("#teamforgeProjectId").val();
+		var projectid = $("#id_tfProject").val();
 	  	 $.ajax({
 	       		beforeSend: function() {
 			 		 $('#spinner').show();
@@ -142,8 +162,9 @@
 	       		data:"projectId=" + projectid,
 	       		dataType:"json",
 	       		success: function(response){
+		           	 $("#id_trackerList").attr("disabled", false);
 		       		 $("#id_trackerList").get(0).options.length = 0;
-		             $("#id_trackerList").get(0).options[0] = new Option("Select a Project", "-1");
+		             $("#id_trackerList").get(0).options[0] = new Option("---- Select ----", "-1");
 		           	 $.each(response,function(index,value) {
 		           	 $("#id_trackerList").get(0).options[$("#id_trackerList").get(0).options.length] = new Option(value.title, value.id);
 		        	 });
