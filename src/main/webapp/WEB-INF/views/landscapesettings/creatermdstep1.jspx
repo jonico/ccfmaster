@@ -55,7 +55,7 @@
 				</td>
 				<td class="ItemDetailValue"> 
 					<form:select  id="forwardconflictCombo" path="forwardConfilictPolicies" cssClass="inputfield"> 
-					<form:option value="NONE" label="--- Select ---"/>
+					<form:option value="" label="--- Select ---"/>
 					<form:options items="${tfConflictPolicies}"/></form:select>
 				</td>
 			</tr>
@@ -66,7 +66,7 @@
 				</td>
 				<td class="ItemDetailValue"> 
 					<form:select  id="reversedConfilictCombo" path="reversedConfilictPolicies"  cssClass="inputfield">
-					 <form:option value="NONE" label="--- Select ---"/>
+					 <form:option value="" label="--- Select ---"/>
 					 <form:options items="${gpConflictPolicies}"/></form:select>
 				</td>	
 			</tr>
@@ -77,7 +77,7 @@
 				</td>
 				<td class="ItemDetailValue"> 
 					<form:select  id="forwardTemplateNameCombo" path="forwardFieldMappingTemplateName" cssClass="inputfield"> 
-					<form:option value="NONE" label="--- Select ---"/>
+					<form:option value="" label="--- Select ---"/>
 					<form:options items="${forwardFieldMappingTemplateNames}"/></form:select>
 				</td>
 			</tr>
@@ -88,7 +88,7 @@
 				</td>
 				<td class="ItemDetailValue"> 
 					<form:select  id="reversedTemplateNameCombo" path="reverseFieldMappingTemplateName"  cssClass="inputfield"> 
-					<form:option value="NONE" label="--- Select ---"/>
+					<form:option value="" label="--- Select ---"/>
 					<form:options items="${reverseFieldMappingTemplateNames}"/></form:select>
 				</td>	
 			</tr>

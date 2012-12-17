@@ -41,7 +41,7 @@
 				</td>
 				<td class="ItemDetailValue"> 
 					<form:select id="id_tfProject" path="teamforgeProjectId">
-					<form:option value="NONE" label="--- Select ---"/>
+					<form:option value="" label="--- Select ---"/>
 					<form:options items="${teamForgeProjects}" /></form:select>
 				</td>
 			</tr>
