@@ -132,15 +132,14 @@
 		});
 			 
 		 $('#id_trackerList').change(function(){
+			 var key = $("#id_trackerList").find('option:selected').text();
 			 var value = $("#id_trackerList").val();
-			 $('#teamforgeTracker').val(value);
+			 $('#teamforgeTracker').val(key+"|"+value);
 		 });
 		 
-		 if($('#teamforgeProjectId').val() != null){
-			 $('#forwardconflictCombo').val($('#teamforgeProjectId').val());
-		 }
 		 if($('#teamforgeTracker').val() != null){
-			 $('#id_trackerList').val($('#teamforgeTracker').val());
+			 var selectedOption = $('#teamforgeTracker').val().split("|");
+			 $("#id_trackerList").get(0).add(new Option(selectedOption[0], selectedOption[1]));
 			 $('#id_trackerList').attr("disabled", true);
 		 }
 		 

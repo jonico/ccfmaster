@@ -56,7 +56,7 @@
 				<td class="ItemDetailValue"> 
 					<form:select  id="forwardconflictCombo" path="forwardConfilictPolicies" cssClass="inputfield"> 
 					<form:option value="" label="--- Select ---"/>
-					<form:options items="${tfConflictPolicies}"/></form:select>
+					<form:options items="${gpConflictPolicies}"/></form:select>
 				</td>
 			</tr>
 			<tr><td><br/></td></tr>					
@@ -67,7 +67,7 @@
 				<td class="ItemDetailValue"> 
 					<form:select  id="reversedConfilictCombo" path="reversedConfilictPolicies"  cssClass="inputfield">
 					 <form:option value="" label="--- Select ---"/>
-					 <form:options items="${gpConflictPolicies}"/></form:select>
+					 <form:options items="${tfConflictPolicies}"/></form:select>
 				</td>	
 			</tr>
 			<tr><td><br/></td></tr>	
@@ -144,39 +144,6 @@
 				        return false;
 				    }
 			 });
-			 
-			 $('#forwardconflictCombo').change(function(){
-				 var value = $("#forwardconflictCombo").val();
-				 $('#forwardConfilictPolicies').val(value);
-			 });
-			 
-			 $('#reversedConfilictCombo').change(function(){
-				 var value = $("#reversedConfilictCombo").val();
-				 $('#reversedConfilictPolicies').val(value);
-			 });
-			 
-			 $('#forwardTemplateNameCombo').change(function(){
-				 var value = $("#forwardTemplateNameCombo").val();
-				 $('#forwardFieldMappingTemplateName').val(value);
-			 });
-			 
-			 $('#reversedTemplateNameCombo').change(function(){
-				 var value = $("#reversedTemplateNameCombo").val();
-				 $('#reverseFieldMappingTemplateName').val(value);
-			 });
-			 
-			 if($('#forwardConfilictPolicies').val() != null){
-				 $('#forwardconflictCombo').val($('#forwardConfilictPolicies').val());
-			 }
-			 if($('#reversedConfilictPolicies').val() != null){
-				 $('#reversedConfilictCombo').val($('#reversedConfilictPolicies').val());
-			 }
-			 if($('#forwardFieldMappingTemplateName').val() != null){
-				 $('#forwardTemplateNameCombo').val($('#forwardFieldMappingTemplateName').val());
-			 }
-			 if($('#reverseFieldMappingTemplateName').val() != null){
-				 $('#reversedTemplateNameCombo').val($('#reverseFieldMappingTemplateName').val());
-			 }
 		});	
 		 
 		$(document).ready(function () {

@@ -222,14 +222,25 @@ public class CreateRMDController extends AbstractLandscapeController{
 	}
 
 	private String getTeamForgeRepoId(RMDModel rmdmodel) {
-		String teamForgeRepositoryId = String.format("%s-%s-%s", rmdmodel.getTeamforgeProjectId(),rmdmodel.getTeamforgeTracker(),rmdmodel.getTeamForgeMappingType());
+		String trackerId = getTeamForgeTrackerId(rmdmodel.getTeamforgeTracker());
+		String teamForgeRepositoryId = String.format("%s-%s-%s", rmdmodel.getTeamforgeProjectId(),trackerId,rmdmodel.getTeamForgeMappingType());
 		if(rmdmodel.getTeamForgeMappingType().equalsIgnoreCase("tracker")){
-			teamForgeRepositoryId = rmdmodel.getTeamforgeTracker();
+			teamForgeRepositoryId = trackerId;
 		}
 		if(rmdmodel.getTeamForgeMappingType().equalsIgnoreCase("planning folder")){
-			teamForgeRepositoryId = String.format("%s-%s", rmdmodel.getTeamforgeProjectId(),rmdmodel.getTeamForgeMappingType());
+			teamForgeRepositoryId = String.format("%s-%s", trackerId,rmdmodel.getTeamForgeMappingType());
 		}
 		return teamForgeRepositoryId;
+	}
+	
+	private String getTeamForgeTrackerId(String teamForgeTrackerInfo){
+		if (teamForgeTrackerInfo.contains("|")) { 
+			String[] trackerInfo = StringUtils.split(teamForgeTrackerInfo, "|");
+			if (trackerInfo.length > 0) {
+				return trackerInfo[1];
+			}		
+		}
+		return teamForgeTrackerInfo;
 	}
 	
 	private List<String> getFieldMappingTemplateNames(Directions direction) {
