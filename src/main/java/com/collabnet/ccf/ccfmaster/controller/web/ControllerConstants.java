@@ -216,6 +216,13 @@ public class ControllerConstants {
 		public static final String FIELD_MAPPING_SETAS_ACTIVE_SUCCESS_MESSAGE="fieldmappingsetasactivesuccessmessage";
 		public static final String FIELD_MAPPING_SETAS_ACTIVE_FAILURE_MESSAGE="fieldmappingsetasactivefailuremessage";
 		public static final String FIELD_MAPPING_NODELETE_ACTIVE_FAILURE_MESSAGE="nodeleteactivemapping";
+		public static final String FIELD_MAPPING_CREATE_SUCCESS_MESSAGE="fieldmappingcreatesuccessmessage";
+		public static final String FIELD_MAPPING_CREATE_FAILURE_MESSAGE="fieldmappingcreatefailuremessage";
+		public static final String FIELD_MAPPING_ALREADY_LINKED_MESSAGE="fieldmappingalreadylinkedmessage";
+		public static final String FIELD_MAPPING_ALREADY_EXISTS_MESSAGE="fieldmappingalreadyexistmessage";
+		
+		
+		
 	/**
 	 * 
 	 */

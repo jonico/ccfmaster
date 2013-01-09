@@ -4,6 +4,7 @@
 	<spring:message code="button_return" var="return_button"/>
 	<spring:message code="button_delete" var="delete_button"/>
 	<spring:message code="button_active" var="active_button"/>
+	<spring:message code="button_create" var="create_button"/>
 	
 	<spring:message code="logname" var="lognamelabel" htmlEscape="false"/>  
 	<spring:message code="logsize" var="logsizelabel" htmlEscape="false"/>  
@@ -52,15 +53,14 @@
 	  <c:forEach items="${associatedfmmodel}" var="associatedfm" varStatus="i">
 	   <tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
 	   <td ><input type="checkbox" class="fieldmappingid"   name="fieldmappingid" value="${associatedfm.id}" onClick='javascript:toggleButton()'/></td>
-	  	 	
-		   <c:set var="fm_image_url" value="${fm_xslt_image_url	}"/>
-	 	   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'CUSTOM_XSLT'}">
+	  	   <c:set var="fm_image_url" value="${fm_xslt_image_url	}"/>
+		   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'CUSTOM_XSLT'}">
 			  	<c:set var="fm_image_url" value="${fm_xslt_image_url}"/>
 		   </c:if>
-		   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPFORCE'}">
+		   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'MAPFORCE'}">
 	  			<c:set var="fm_image_url" value="${fm_mf_image_url}"/>
 	  	   </c:if>
-	   	   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPPING_RULES'}">
+	   	   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'MAPPING_RULES'}">
 	  			<c:set var="fm_image_url" value="${fm_mr_image_url}"/>
 	 	   </c:if>
 		   <c:if test="${activeFieldMappingid eq associatedfm.id}">
@@ -94,7 +94,20 @@
 		<tr class="ContainerFooter">
 				
 				<td>
+				
+				
 				<div id="enablebutton" class="AlignRight" style="display:none;" >
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/createfm?rmdid={rmdid}&amp;direction={direction}" var="createfm_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+						<spring:param name="direction" value="${direction}" />
+				</spring:url>	
+						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				
 				<div class="Button">
 				<div class="Middle">
 				<spring:url value="/admin/setasactivefm?rmdid={rmdid}" var="activefm_url">
@@ -131,6 +144,16 @@
 				<td>
 				<div class="AlignRight" id="disablebutton">
 				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/createfm?rmdid={rmdid}&amp;direction={direction}" var="createfm_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+						<spring:param name="direction" value="${direction}" />
+				</spring:url>	
+						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
 				<div class="MiddleDisabled">
 					${active_button}
 				</div>
@@ -158,6 +181,15 @@
 				
 				<td>
 				<div id="disableactivebutton" class="AlignRight" style="display:none;">
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/createfm?rmdid={rmdid}&amp;direction={direction}" var="createfm_url">
+						<spring:param name="rmdid" value="${rmdid}"/>
+						<spring:param name="direction" value="${direction}" />
+				</spring:url>	
+						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
+				</div>
+				</div>
 				<div class="ButtonSpace"></div>
 				<div class="Button">
 				<div class="MiddleDisabled">
@@ -189,15 +221,16 @@
   </table>
   </form:form>   
  	
- 
 	<script language="JavaScript">
-
-	
 	function returnForm(url){
 		document.getElementById("associatedMappingsForm").action=url;
 		document.getElementById("associatedMappingsForm").submit();	
 	}	
 	
+	function createFMForm(url){
+		document.getElementById("associatedMappingsForm").action=url;
+  		document.getElementById("associatedMappingsForm").submit();
+	}	
 	
 	function setasActiveFMForm(url){
 		document.getElementById("associatedMappingsForm").action=url;

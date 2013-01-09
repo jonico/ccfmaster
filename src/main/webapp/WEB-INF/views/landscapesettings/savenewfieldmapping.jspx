@@ -1,0 +1,192 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
+<jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_submit" var="submit_button"/>
+<spring:message code="button_return" var="return_button"/>
+
+<spring:url value="/images/icons/help.png" var="help_image_url" />
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<form:form id="savenewfm"  name="savenewfm" modelAttribute="fieldMappingTemplateModel" commandName="fieldMappingTemplateModel" method="post">
+ <table class="Container" >
+		<tbody>
+		<tr>
+		<td colspan="9">
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+			<tr class="ContainerHeader">
+			<td colspan="5">
+			New Field Mapping - Select a Field Mapping Template
+			</td>
+			</tr>
+			<br/>
+			<br/>
+				<tr>
+				<td> <br/></td>
+				</tr>
+				
+			<tr><td><br/></td></tr>	
+			<tr>
+				<td class="ItemDetailName">
+					<form:radiobutton path="templateType" id="connector" value="connector"  label="Connector field mapping template"/>
+				</td>
+				<td class="ItemDetailName">	
+					<form:radiobutton path="templateType" id="project" value="project" label="Project field mapping template"/>
+				</td>
+			</tr>
+			<tr><td><br/></td></tr>	
+			<tr>
+			<td class="ItemDetailName">
+				<form:label  path="" name="fieldMappingTemplateModel">Select a field mapping template :</form:label>
+			</td>
+				<td class="ItemDetailValue"> 
+					<form:select  path="fieldMappingLandscapeTemplate"  id="fieldMappingLandscapeTemplate" multiple="single" cssClass="inputfield" >
+						<form:option selected="selected" value="-1" label="--- Select ---"/>
+						<form:options items="${fieldMappingTemplateModel.fieldMappingLandscapeTemplate}" itemLabel="name" itemValue="id" />
+            			<form:option selected="selected" value="-1" label="--- Select ---"/>
+           			</form:select>
+					<form:select  path="fieldMappingExternalAppTemplate" id="fieldMappingExternalAppTemplate" multiple="single" cssClass="inputfield" style="display:none">
+						<form:option selected="selected" value="-1" label="--- Select ---"/>
+						<form:options items="${fieldMappingTemplateModel.fieldMappingExternalAppTemplate}" itemLabel="name" itemValue="id" />
+            			<form:option selected="selected" value="-1" label="--- Select ---"/>
+           			</form:select>
+				</td>
+			</tr>
+			<tr><td><br/></td></tr>		
+		<tr>
+		<td class="ItemDetailName" width="20%">
+		<form:label path="linktoTemplate">Link new field mapping to template : </form:label>&#160;
+		<a class="poptip" title="Link the new field mapping to the template"><img src="${fn:escapeXml(help_image_url)}" border="0" title="help" alt="help"/></a>
+		</td>
+		<td class="ItemDetailValue">
+		<form:checkbox path="linktoTemplate" id="linktemplate" cssClass="inputfield"/><br/>
+		</td>
+		</tr>
+		<tr><td><br/></td></tr>		
+		<tr>
+		<td class="ItemDetailName">
+		<form:label path="fieldmappingName">New Field Mapping Name : </form:label>&#160;
+		</td>
+		<td  class="ItemDetailValue">
+		<form:input path="fieldmappingName" id="fieldmappingName" cssClass="inputfield" size="60"/><br/>
+		</td>
+		</tr>
+			
+			<tr><td><br/></td></tr>
+			<tr class="ContainerFooter" >
+				<td colspan="5">
+					
+					<div class="AlignRight">
+					<div class="Button">
+					<div class="Middle">
+					<spring:url value="/admin/savefieldmapping?rmdid={rmdid}&amp;direction={direction}" var="savefm_url">
+							<spring:param name="rmdid" value="${rmdid}" />
+							<spring:param name="direction" value="${direction}" />
+						</spring:url>	
+						<a href="javascript: submitForm('${fn:escapeXml(savefm_url)}');" id="submitForm">${submit_button}</a> 
+					</div>
+					</div>
+					<div class="ButtonSpace"> </div>
+					<div class="Button">
+					<div class="Middle"> 
+					<spring:url value="/admin/associatedfmbyrmd?rmdid={rmdid}" var="associated_fmapping_url">
+							<spring:param name="rmdid" value="${rmdid}" />
+						</spring:url>	  
+					<a href="${fn:escapeXml(associated_fmapping_url)}">${return_button}</a>
+					</div>
+					</div>
+					</div>
+				</td>
+			</tr>
+		</td>
+	</tr>
+	</tbody>
+  	</table>
+</form:form>
+
+<script language="JavaScript">
+
+		function submitForm(url){
+			var inp = $("#fieldmappingName").val();
+			var landscapevalue= $('#fieldMappingLandscapeTemplate :selected').val();
+			var externalappvalue= $('#fieldMappingExternalAppTemplate :selected').val();
+			if(landscapevalue == -1 &amp;&amp;  externalappvalue==-1 ){
+				alert('Please select a field mapping template');
+			}
+			else if(!$('#linktemplate').is(':checked') &amp;&amp; jQuery.trim(inp).length == 0){
+				alert('Please either check Link new field mapping to template or input new field mapping name to create field mapping');
+			}
+			else{
+				document.getElementById("savenewfm").action=url;
+	  			document.getElementById("savenewfm").submit();
+			}
+		}
+			 
+		
+		$(function(){
+		    $("#linktemplate").click(function () {
+		    	  if($('#linktemplate').is(':checked')){
+		        	  $('#fieldmappingName').attr("disabled", true);
+		          }
+		          else{
+		        	  $('#fieldmappingName').attr("disabled", false);
+		          }  
+		    });
+		 
+		});
+		    
+		$(document).ready(function() {                                       
+		    $("#fieldMappingLandscapeTemplate").live("change", function() {
+		      $("#fieldmappingName").val( $('#fieldMappingLandscapeTemplate :selected').text());
+		    })
+		    $("#fieldMappingExternalAppTemplate").live("change", function() {
+		      $("#fieldmappingName").val( $('#fieldMappingExternalAppTemplate :selected').text());
+		    })
+		 }); 
+		
+		$("#connector").click(function() {
+            $("#fieldMappingExternalAppTemplate").hide();
+            $("#fieldMappingLandscapeTemplate").show();
+        });
+        $("#project").click(function() {
+            $("#fieldMappingLandscapeTemplate").hide();
+            $("#fieldMappingExternalAppTemplate").show();
+            
+        });
+		
+		$(document).ready(function(){
+			$('.poptip').mouseenter(function(){
+				var text = $(this).attr('title');
+				var posi = $(this).position();
+				var top  = posi.top;
+				var left = posi.left+5;
+				var wid	 = $(this).width();
+				$(this).attr('title','');
+				$(this).parent().append('<div class="poptext">'+text.replace('|','<br />')+'</div>');
+				$('.poptext').css({'left':(left+wid)+'px',
+							'top':(top-$('.poptext').height())+'px',
+							'background':'#fffeee',
+							'border':'1px solid #f7a229',
+							'display':'none',
+							'position':'absolute',
+							'z-index':'1000',
+							'padding':'8px',
+							'font-size':'1em'
+				});
+				$('.poptext').fadeIn('slow');
+			});
+			$('.poptip').mouseleave(function(){
+				var title = $(this).parent().find('.poptext').html();
+				$(this).attr('title',title.replace('<br />','|'));
+				$(this).parent().find('.poptext').fadeOut('slow');
+				$(this).parent().find('.poptext').remove();
+			});
+			});
+ 	</script>  
+
+
+</div>

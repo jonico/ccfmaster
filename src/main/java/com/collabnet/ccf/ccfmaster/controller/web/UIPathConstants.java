@@ -92,6 +92,10 @@ public class UIPathConstants {
 	public static final String VIEW_ASSOCIATED_FIELD_MAPPINGS = "admin/viewassociatedfm";
 	public static final String DELETE_ASSOCIATED_FIELD_MAPPINGS = "admin/deleteassociatedfm";
 	public static final String SETAS_ACTIVE_FIELD_MAPPING = "admin/setasactivefm";
+	public static final String CREATE_FIELD_MAPPING = "admin/createfm";
+	public static final String DISPALY_SAVE_FIELD_MAPPING = "admin/displaysavenewfm";
+	public static final String SAVE_NEW_FIELD_MAPPING = "admin/savefieldmapping";
+	
 	
 	//CreateRMDController
 	public static final String RMD_CONFIGURE = "admin/creatermd";
@@ -99,5 +103,6 @@ public class UIPathConstants {
 	public static final String RMD_CONFIGURE_TFSETTINGS = "admin/creatermdstep2";
 	public static final String RMD_CONFIGURE_PARTICIPANT_SETTINGS= "admin/creatermdstep3";
 	public static final String RMD_SAVE = "admin/saveRMD";
+	
 	
 }
