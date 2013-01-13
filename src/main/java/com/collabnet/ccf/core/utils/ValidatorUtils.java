@@ -33,6 +33,11 @@ public class ValidatorUtils {
 		return Pattern.matches(regex, value);
 	}
 	
+	public static boolean findMatch(String regex, String value){
+		if(StringUtils.isEmpty(regex)) return true;
+		return Pattern.compile(regex).matcher(value).find();
+	}
+	
 	private static boolean isValueNumeric(String value){
 		return isRegexMatch(NUMERIC_PATTERN, value);
 	}

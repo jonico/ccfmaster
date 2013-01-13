@@ -14,9 +14,9 @@ import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.core.utils.ValidatorUtils;
 
-public abstract class AbstractGenericParticipantValidator{
+public abstract class ConfigItemValidatorUtils{
 	
-	public void validateValue(List<CCFCoreProperty> configProperties, Errors errors,String errorElementName){
+	public static void validateValue(List<CCFCoreProperty> configProperties, Errors errors,String errorElementName){
 		for (int i = 0; i < configProperties.size(); i++) { 
 			String value = configProperties.get(i).getValue();
 			CCFCorePropertyType type = configProperties.get(i).getType();

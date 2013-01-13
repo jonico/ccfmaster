@@ -8,14 +8,14 @@ import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
-public class DefaultGenericParticipantConfigValidator extends AbstractGenericParticipantValidator implements IGenericParticipantConfigItemValidator{
+public class DefaultGenericParticipantConfigValidator implements IGenericParticipantConfigItemValidator{
 
 	@Override
 	public void validate(AbstractGenericParticipantModel model, Errors errors) {
 		List<CCFCoreProperty> landscapeConfigList = model.getLandscapeConfigList();
 		List<CCFCoreProperty> participantConfigList = model.getParticipantConfigList();
-		validateValue(landscapeConfigList, errors,LANDSCAPE_CONFIG_LIST_ELEMENT_NAME);
-		validateValue(participantConfigList, errors,PARTICIPANT_CONFIG_LIST_ELEMENT_NAME);
+		ConfigItemValidatorUtils.validateValue(landscapeConfigList, errors,LANDSCAPE_CONFIG_LIST_ELEMENT_NAME);
+		ConfigItemValidatorUtils.validateValue(participantConfigList, errors,PARTICIPANT_CONFIG_LIST_ELEMENT_NAME);
 	}
 
 	public ValidationResult validateConnection(AbstractGenericParticipantModel model) {

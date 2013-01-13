@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.validator.AbstractGenericParticipantValidator;
+import com.collabnet.ccf.ccfmaster.gp.validator.ConfigItemValidatorUtils;
 import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantRMDValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
-public class TFSGenericParticipantRMDValidator extends AbstractGenericParticipantValidator implements IGenericParticipantRMDValidator{
+public class TFSGenericParticipantRMDValidator implements IGenericParticipantRMDValidator{
 	
 	private String urlKey;
 	
@@ -32,7 +32,7 @@ public class TFSGenericParticipantRMDValidator extends AbstractGenericParticipan
 		buildTFSMetadatahelperAttr(model);
 		String collectionName = null;
 		List<CCFCoreProperty> configProperties = model.getParticipantSelectorFieldList();
-		validateValue(configProperties, errors, RMD_CONFIG_LIST_ELEMENT_NAME);
+		ConfigItemValidatorUtils.validateValue(configProperties, errors, RMD_CONFIG_LIST_ELEMENT_NAME);
 		for (int i = 0; i < configProperties.size(); i++) { 
 			String name = configProperties.get(i).getName();
 			if(name.equalsIgnoreCase("tfsCollection")){
