@@ -35,7 +35,7 @@
 			<list value-type="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
 				<ref bean="jiraCollectionProperty" />
 				<ref bean="jiraProjectListProperty" />
-				<ref bean="jiraWorkItemTypeProperty" />
+				<ref bean="jiraIssueTypeProperty" />
 			</list>
 		</property>
 		<property name="customParticipantRMD" ref="customParticipantRMD"/>
@@ -88,10 +88,10 @@
 		<property name="displayInHTML" value="true"/>
 	</bean>
 		
-	<bean id="jiraWorkItemTypeProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
+	<bean id="jiraIssueTypeProperty" class="com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty">
 		<!--  name property should be unique  -->
-		<property name="name" value="jiraWorkItemType"/>
-		<property name="labelName" value="JIRA Work Item Type"/>
+		<property name="name" value="jiraIssueType"/>
+		<property name="labelName" value="JIRA Issue Type"/>
 		<property name="systemKind" value="GENERIC"/>
 		<property name="type" value="STRING"/>
 		<property name="displayInHTML" value="true"/>
