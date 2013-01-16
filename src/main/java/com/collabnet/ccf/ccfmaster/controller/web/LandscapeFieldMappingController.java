@@ -55,7 +55,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	}
 
 	
-	private List<FieldMapping> getFieldMappingForRMD(
+	public static List<FieldMapping> getFieldMappingForRMD(
 			RepositoryMappingDirection rmd, Model model) {
 		List<FieldMapping> fieldMapping=FieldMapping.findFieldMappingsByParent(rmd).getResultList();
 		if( "FORWARD".equalsIgnoreCase(rmd.getDirection().name()))
@@ -71,7 +71,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		populateFieldMappingModel(fieldMapping,model);
 		return fieldMapping;
 	}
-	
+	  
 	
 	/**
 	 * Controller method to create field mapping for the RMD
@@ -314,7 +314,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 
 	}
 	
-	void populateFieldMappingModel(List<FieldMapping> fieldMappingEntrys,  Model model) {
+	static void populateFieldMappingModel(List<FieldMapping> fieldMappingEntrys,  Model model) {
 		Landscape landscape=ControllerHelper.findLandscape();
 		model.addAttribute("participant",landscape.getParticipant());
 		model.addAttribute("landscape",landscape);

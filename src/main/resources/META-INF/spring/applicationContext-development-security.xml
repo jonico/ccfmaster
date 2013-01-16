@@ -173,6 +173,7 @@
 		<intercept-url pattern="/project/" access="ROLE_IAF_USER"/> 
 		<intercept-url pattern="/project/fieldmappingtemplates/**"  access="ROLE_MAPPING_RULE_TEMPLATES" />
 		<intercept-url pattern="/project/identitymappings/**"  access="ROLE_IDENTITY_MAPPINGS" />
+		<intercept-url pattern="/project/fieldmapping/**" access="ROLE_MAPPING_RULES"/> 
 		 
 		<!-- block everything else -->
 		<intercept-url pattern="/project/**" access="ROLE_DOES_NOT_EXIST"/> 
