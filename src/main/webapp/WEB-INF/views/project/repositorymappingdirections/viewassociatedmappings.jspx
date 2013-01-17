@@ -16,6 +16,7 @@
 	<spring:message code="viewlabel" var="viewlabel" htmlEscape="false"/>
 	<spring:message code="fieldmappingname" var="fieldmappingname" htmlEscape="false"/>
 	<spring:message code="fieldmappingtype" var="fieldmappingtype" htmlEscape="false"/>
+	<spring:message code="fieldmappingscope" var="fieldmappingscope" htmlEscape="false"/>
 	<spring:message code="noassociatedfieldmapping" var="noassociatedfieldmapping" htmlEscape="false"/>
 	
 	<spring:url value="/project/repositorymappings?direction=FORWARD" var="returnforward_url" />
@@ -45,7 +46,7 @@
 				<td colspan="5">Associated Field Mapping(s) for ${rmdname}</td>
 				</tr>
 		<tr class="ItemListHeader">
-    	 <td><input type="checkbox" id="selectall" name="selectall"></input></td><td>${fieldmappingname}</td> <td>${fieldmappingtype}</td> 
+    	 <td><input type="checkbox" id="selectall" name="selectall"></input></td><td>${fieldmappingname}</td> <td>${fieldmappingtype}</td><td>${fieldmappingscope}</td> 
       	</tr>
      
      <c:if test="${fn:length(associatedfmmodel) > 0}">
@@ -62,11 +63,18 @@
 	   	   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'MAPPING_RULES'}">
 	  			<c:set var="fm_image_url" value="${fm_mr_image_url}"/>
 	 	   </c:if>
+	 	   <c:set var="fieldmappingname" value="${associatedfm.name}"/>
+	 	   <c:if test="${'EXTERNAL_APP' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingname" value="&lt;i&gt;Link to project mapping ${associatedfm.name} &lt;/i&gt;"/>
+	 	   </c:if>
+	 	   <c:if test="${'LANDSCAPE' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingname" value="&lt;i&gt;Link to connector mapping ${associatedfm.name}&lt;/i&gt;"/>
+	 	   </c:if>
 		   <c:if test="${activeFieldMappingid eq associatedfm.id}">
-	  	 	<td><img src="${fn:escapeXml(fm_image_url)}" title="Active field mapping"  alt="Active field mapping" border="0" class="trackerIcon" />&#160;&#160;&#160;${associatedfm.name}</td>	
+	  	 	<td><img src="${fn:escapeXml(fm_image_url)}" title="Active field mapping"  alt="Active field mapping" border="0" class="trackerIcon" />&#160;&#160;&#160;${fieldmappingname}</td>	
 	  	 	</c:if>
 	  	 	<c:if test="${activeFieldMappingid ne associatedfm.id}">
-	  		<td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;${associatedfm.name}</td> 	
+	  		<td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;${fieldmappingname}</td> 	
 	  	 	</c:if>
 		  <c:if test="${associatedfm.kind eq 'MAPFORCE'}">
 				    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${associatedfm.kind}" title="${associatedfm.kind}"/>&#160;<c:out value= "${associatedfm.kind}" /></td>
@@ -77,7 +85,8 @@
 				     <c:if test="${associatedfm.kind eq 'MAPPING_RULES'}">
 				     <td><img src="${fn:escapeXml(mapping_rules_image_url)}" border="0" alt="${associatedfm.kind}" title="${associatedfm.kind}"/>&#160;<c:out value= "${associatedfm.kind}" /></td>
 		  </c:if>
-		 </tr> 		
+		  <td>${associatedfm.scope}</td>
+		  </tr> 		
 		</c:forEach>  
 	</c:if>
 	 <c:if test="${fn:length(associatedfmmodel) == 0}">
@@ -101,9 +110,8 @@
 				<div id="enablebutton" class="AlignRight" style="display:none;" >
 				<div class="Button">
 				<div class="Middle">
-				<spring:url value="/admin/createfm?rmdid={rmdid}&amp;direction={direction}" var="createfm_url">
+				<spring:url value="/admin/createfm?rmdid={rmdid}" var="createfm_url">
 						<spring:param name="rmdid" value="${rmdid}" />
-						<spring:param name="direction" value="${direction}" />
 				</spring:url>	
 						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
 				</div>
@@ -147,9 +155,8 @@
 				<div class="AlignRight" id="disablebutton">
 				<div class="Button">
 				<div class="Middle">
-				<spring:url value="/project/fieldmapping/createfm?rmdid={rmdid}&amp;direction={direction}" var="createfm_url">
+				<spring:url value="/project/fieldmapping/createfm?rmdid={rmdid}" var="createfm_url">
 						<spring:param name="rmdid" value="${rmdid}" />
-						<spring:param name="direction" value="${direction}" />
 				</spring:url>	
 						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
 				</div>
@@ -185,9 +192,8 @@
 				<div id="disableactivebutton" class="AlignRight" style="display:none;">
 				<div class="Button">
 				<div class="Middle">
-				<spring:url value="/project/fieldmapping/createfm?rmdid={rmdid}&amp;direction={direction}" var="createfm_url">
+				<spring:url value="/project/fieldmapping/createfm?rmdid={rmdid}" var="createfm_url">
 						<spring:param name="rmdid" value="${rmdid}"/>
-						<spring:param name="direction" value="${direction}" />
 				</spring:url>	
 						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
 				</div>

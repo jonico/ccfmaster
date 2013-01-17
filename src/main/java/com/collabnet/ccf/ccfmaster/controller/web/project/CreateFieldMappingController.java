@@ -50,6 +50,8 @@ public class CreateFieldMappingController extends AbstractProjectController {
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
 			Model model,HttpSession session) {
 			LandscapeFieldMappingController.getFieldMappingForRMD(rmd, model);
+			Directions directions = ControllerConstants.FORWARD.equals(direction) ? Directions.FORWARD : Directions.REVERSE;
+			populatePageSizetoModel(directions,ea,model, session);
 			return PROJECT_FIELD_MAPPING_NAME + "/viewassociatefm";
 	}
 
@@ -135,6 +137,28 @@ public class CreateFieldMappingController extends AbstractProjectController {
 		return  PROJECT_FIELD_MAPPING_NAME + "/displaycreatenewfm";
 	}
 	
+	public static void populatePageSizetoModel(Directions direction,ExternalApp ea, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)RepositoryMappingDirection.countRepositoryMappingDirectionsByExternalAppAndDirection(ea, direction) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
+	}
 	
 
 	

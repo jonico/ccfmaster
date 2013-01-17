@@ -1,7 +1,7 @@
 <div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
 <jsp:output omit-xml-declaration="yes" />
 
-<spring:message code="button_submit" var="submit_button"/>
+<spring:message code="button_save" var="save_button"/>
 <spring:message code="button_return" var="return_button"/>
 
 <spring:url value="/images/icons/help.png" var="help_image_url" />
@@ -87,7 +87,7 @@
 							<spring:param name="rmdid" value="${rmdid}" />
 							<spring:param name="direction" value="${direction}" />
 						</spring:url>	
-						<a href="javascript: submitForm('${fn:escapeXml(savefm_url)}');" id="submitForm">${submit_button}</a> 
+						<a href="javascript: submitForm('${fn:escapeXml(savefm_url)}');" id="submitForm">${save_button}</a> 
 					</div>
 					</div>
 					<div class="ButtonSpace"> </div>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.mvc.extensions.flash.FlashMap;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMapping;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
@@ -32,9 +34,6 @@ import com.collabnet.ccf.ccfmaster.web.model.FieldMappingTemplateModel;
 public class LandscapeFieldMappingController extends AbstractLandscapeController {
 
 	
-	
-	private static final String LINK_TO_PROJECT_MAPPING = "Link to Project Mapping ";
-	private static final String LINK_TO_CONNECTOR_MAPPING = "Link to Connector Mapping ";
 	private static final String PROJECT_TEMPLATE_TYPE = "project";
 	private static final String FIELD_MAPPING_ID = "fieldmappingid";
 	private static final String RMD_ID_REQUEST_PARAM = "rmdid";
@@ -48,8 +47,12 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	@RequestMapping(value = "/"+UIPathConstants.ASSOCIATED_FIELD_MAPPINGS_BY_RMD, method = RequestMethod.GET)
 	public String listForRepositoryMappingDirection(
 			@RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection rmd,
-			Model model) {
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size,
+			Model model,HttpSession session) {
 		getFieldMappingForRMD(rmd, model);
+		Directions directions = ControllerConstants.FORWARD.equals(rmd.getDirection()) ? Directions.FORWARD : Directions.REVERSE;
+		populatePageSizetoModel(directions,model, session);
 		return UIPathConstants.VIEW_ASSOCIATED_FIELD_MAPPINGS;
 
 	}
@@ -58,6 +61,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	public static List<FieldMapping> getFieldMappingForRMD(
 			RepositoryMappingDirection rmd, Model model) {
 		List<FieldMapping> fieldMapping=FieldMapping.findFieldMappingsByParent(rmd).getResultList();
+		
 		if( "FORWARD".equalsIgnoreCase(rmd.getDirection().name()))
 		{
 			model.addAttribute("rmdname", rmd.getRepositoryMapping().getTeamForgeRepositoryId()+"=>"+rmd.getRepositoryMapping().getParticipantRepositoryId());
@@ -189,22 +193,22 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate=fieldMappingTemplateModel.getFieldMappingExternalAppTemplate().get(0);
 		
 		//  if its a connector template and the template is already with the same name display error message
-		if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType()) && isTemplateExists(LINK_TO_CONNECTOR_MAPPING+fieldMappingLandscapeTemplate.getName(), rmd,FieldMappingScope.LANDSCAPE)) {
+		if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType()) && isTemplateExists(fieldMappingLandscapeTemplate.getName(), rmd,FieldMappingScope.LANDSCAPE)) {
 			FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_ALREADY_LINKED_MESSAGE);
 		}
 		// if its a project template and the template is already with the same name display error message
-		else if(PROJECT_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType()) && isTemplateExists(LINK_TO_PROJECT_MAPPING+fieldMappingExternalAppTemplate.getName(), rmd,FieldMappingScope.EXTERNAL_APP)) {
+		else if(PROJECT_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType()) && isTemplateExists(fieldMappingExternalAppTemplate.getName(), rmd,FieldMappingScope.EXTERNAL_APP)) {
 			FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_ALREADY_LINKED_MESSAGE);
 		}
 		else{
 			if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType())) {
 				fieldMapping.setScope(FieldMappingScope.LANDSCAPE);
-				fieldMapping.setName(LINK_TO_CONNECTOR_MAPPING+fieldMappingLandscapeTemplate.getName());
+				fieldMapping.setName(fieldMappingLandscapeTemplate.getName());
 				fieldMapping.setKind(fieldMappingLandscapeTemplate.getKind());
 			}
 			else if(PROJECT_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType())){
 				fieldMapping.setScope(FieldMappingScope.EXTERNAL_APP);
-				fieldMapping.setName(LINK_TO_PROJECT_MAPPING+fieldMappingExternalAppTemplate.getName());
+				fieldMapping.setName(fieldMappingExternalAppTemplate.getName());
 				fieldMapping.setKind(fieldMappingExternalAppTemplate.getKind());
 			}
 			fieldMapping.setRules(null);
@@ -331,6 +335,29 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 			templateexists = false;
 		}
 		return templateexists;
+	}
+	
+	public static void populatePageSizetoModel(Directions directions, Model model,
+			HttpSession session) {
+		Integer size = (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION) == null ? ControllerConstants.PAGINATION_SIZE: (Integer) session.getAttribute(ControllerConstants.SIZE_IN_SESSION);
+		float nrOfPages = (float)RepositoryMappingDirection.countRepositoryMappingDirectionsByDirection(directions) / size.intValue();
+		Integer page = (Integer) session.getAttribute(ControllerConstants.PAGE_IN_SESSION);
+		// if page in session is null.get the default value of page
+		if (page == null) {
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (page <= 0) {
+			// in case if current page value is less than or equal to zero get
+			// default value of page (on deleting the last record of the first
+			// page)
+			page = Integer.valueOf(ControllerConstants.DEFAULT_PAGE);
+		} else if (Math.ceil(nrOfPages) != 0.0 && page >= Math.ceil(nrOfPages)) {
+			// in case if current page value is greater than no of page (on
+			// deleting last record from the current page.traverse to the
+			// previous page)
+			page = (int) Math.ceil(nrOfPages);
+		}
+		model.addAttribute("page", page);
+		model.addAttribute("size", size);
 	}
 	
 	
