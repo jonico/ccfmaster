@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
 import com.collabnet.ccf.ccfmaster.controller.web.LandscapeFieldMappingController;
+import com.collabnet.ccf.ccfmaster.controller.web.UIPathConstants;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMapping;
@@ -136,6 +137,28 @@ public class CreateFieldMappingController extends AbstractProjectController {
 		model.addAttribute("selectedLink", "repositorymappings");
 		return  PROJECT_FIELD_MAPPING_NAME + "/displaycreatenewfm";
 	}
+	
+	
+	/**
+	 * Controller method to save new field mapping for the existing RMD
+	 * 
+	 */ 
+	@RequestMapping(value="/savefm", method=RequestMethod.POST)
+	public String saveNewFieldMapping(
+			@RequestParam(RMD_ID_REQUEST_PARAM)  RepositoryMappingDirection rmd,
+			FieldMappingTemplateModel fieldMappingTemplateModel,Model model,HttpServletRequest request) {
+		try{
+			LandscapeFieldMappingController.persistFieldMapping(fieldMappingTemplateModel, rmd);
+			
+		} catch (Exception exception) {
+		FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_CREATE_FAILURE_MESSAGE, exception.getMessage());
+		}
+		model.asMap().clear();
+		model.addAttribute(RMD_ID_REQUEST_PARAM, rmd.getId());
+		return "redirect:" + PROJECT_FIELD_MAPPING_PATH;
+
+	}
+
 	
 	public static void populatePageSizetoModel(Directions direction,ExternalApp ea, Model model,
 			HttpSession session) {

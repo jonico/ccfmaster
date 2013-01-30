@@ -110,7 +110,7 @@
 				<div id="enablebutton" class="AlignRight" style="display:none;" >
 				<div class="Button">
 				<div class="Middle">
-				<spring:url value="/admin/createfm?rmdid={rmdid}" var="createfm_url">
+				<spring:url value="/project/fieldmapping/createfm?rmdid={rmdid}" var="createfm_url">
 						<spring:param name="rmdid" value="${rmdid}" />
 				</spring:url>	
 						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>

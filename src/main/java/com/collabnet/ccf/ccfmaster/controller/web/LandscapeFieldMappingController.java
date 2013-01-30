@@ -128,7 +128,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	/**
 	 * Persists new field mapping for repository mapping direction
 	 */
-	private void persistFieldMapping(FieldMappingTemplateModel fieldMappingTemplateModel,RepositoryMappingDirection rmd) {
+	public static void persistFieldMapping(FieldMappingTemplateModel fieldMappingTemplateModel,RepositoryMappingDirection rmd) {
 		// link a template true/false
 		boolean linkToTemplate = fieldMappingTemplateModel.isLinktoTemplate();
 		// template type connector/project
@@ -152,7 +152,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	 * @param fieldMappingExternalAppTemplate
 	 * @param fieldMapping
 	 */
-	private void createFieldMappingTemplate(
+	public static void createFieldMappingTemplate(
 			FieldMappingTemplateModel fieldMappingTemplateModel,
 			RepositoryMappingDirection rmd,	FieldMapping fieldMapping) {
 		// Check if new field mapping with the same name already exists. display error message to the user
@@ -187,7 +187,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	 * @param templateType
 	 * @param fieldMapping
 	 */
-	private void createLinkFieldMapping2Template(RepositoryMappingDirection rmd,
+	public static void createLinkFieldMapping2Template(RepositoryMappingDirection rmd,
 			FieldMappingTemplateModel fieldMappingTemplateModel, FieldMapping fieldMapping) {
 		FieldMappingLandscapeTemplate fieldMappingLandscapeTemplate=fieldMappingTemplateModel.getFieldMappingLandscapeTemplate().get(0);
 		FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate=fieldMappingTemplateModel.getFieldMappingExternalAppTemplate().get(0);
@@ -220,7 +220,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		
 	
 	
-	private List<FieldMappingRule> cloneFieldMappingRules(List<FieldMappingRule> templateRules){
+	public static List<FieldMappingRule> cloneFieldMappingRules(List<FieldMappingRule> templateRules){
 		List<FieldMappingRule> newFieldMappingRule = new ArrayList<FieldMappingRule>();
 		for(FieldMappingRule templateRule:templateRules){
 			FieldMappingRule newRule = new FieldMappingRule();
@@ -239,7 +239,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		return newFieldMappingRule;
 	}
 	
-	private List<FieldMappingValueMap> cloneFieldMappingValueMap(List<FieldMappingValueMap> templateValueMaps){
+	public static List<FieldMappingValueMap> cloneFieldMappingValueMap(List<FieldMappingValueMap> templateValueMaps){
 		List<FieldMappingValueMap> newFieldMappingValueMap = new ArrayList<FieldMappingValueMap>();
 		for(FieldMappingValueMap templateMap:templateValueMaps){
 			FieldMappingValueMap newValueMap = new FieldMappingValueMap();
@@ -252,7 +252,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		return newFieldMappingValueMap;
 	}
 	
-	private List<FieldMappingValueMapEntry> cloneFieldMappingValueMapEntry(List<FieldMappingValueMapEntry> templateValueMapEntries){
+	public static List<FieldMappingValueMapEntry> cloneFieldMappingValueMapEntry(List<FieldMappingValueMapEntry> templateValueMapEntries){
 		List<FieldMappingValueMapEntry> newFieldMappingValueMapEntries = new ArrayList<FieldMappingValueMapEntry>();
 		for(FieldMappingValueMapEntry templateMapEntry:templateValueMapEntries){
 			FieldMappingValueMapEntry newValueMap = new FieldMappingValueMapEntry();
@@ -326,7 +326,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		model.addAttribute("associatedfmmodel", fieldMappingEntrys);
 	}
 
-	private boolean isTemplateExists(String templateName, RepositoryMappingDirection rmd,FieldMappingScope scope) {
+	public static boolean isTemplateExists(String templateName, RepositoryMappingDirection rmd,FieldMappingScope scope) {
 		boolean templateexists = false;
 		if(FieldMapping.findFieldMappingsByNameAndParentAndScope(templateName, rmd, scope).getResultList().size()!=0){
 			templateexists = true;

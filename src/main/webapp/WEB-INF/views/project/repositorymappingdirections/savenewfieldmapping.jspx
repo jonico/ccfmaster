@@ -83,7 +83,7 @@
 					<div class="AlignRight">
 					<div class="Button">
 					<div class="Middle">
-					<spring:url value="/admin/savefieldmapping?rmdid={rmdid}&amp;direction={direction}" var="savefm_url">
+					<spring:url value="/project/fieldmapping/savefm?rmdid={rmdid}&amp;direction={direction}" var="savefm_url">
 							<spring:param name="rmdid" value="${rmdid}" />
 							<spring:param name="direction" value="${direction}" />
 						</spring:url>	
