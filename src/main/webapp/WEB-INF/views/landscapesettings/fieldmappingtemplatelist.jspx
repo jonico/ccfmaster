@@ -11,6 +11,9 @@
 <spring:url value="/images/icons/map.png" var="map_image_url" />
 <spring:url value="/images/icons/xslt.png" var="xslt_image_url" />
 <spring:url value="/images/icons/custom_mapping.gif" var="mapping_rules_image_url" />
+<spring:message code="customxslt" var="customxslt" htmlEscape="false"/>
+<spring:message code="mapforce" var="mapforce" htmlEscape="false"/>
+<spring:message code="mappingrules" var="mappingrules" htmlEscape="false"/>
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
@@ -46,13 +49,13 @@
      		 		<td styleclass="FormArea"><input type="checkbox" checked="checked" class="fmtname" name="fmtname" value="${fmtlist.name}" /></td>
      		 	  	<td><input type="text"  id="textbox" name="name-${fmtlist.name}" size="60" class="inputfield" value="${fmtlist.name}"/>${alreadyExists[status.index]}</td>
 				 	 <c:if test="${fmtlist.kind eq 'MAPFORCE'}">
-				    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${fmtlist.kind}" title="${fmtlist.kind}"/>&#160;<c:out value= "${fmtlist.kind}" /></td>
+				    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${mapforce}" title="${mapforce}"/>&#160;<c:out value= "${mapforce}" /></td>
 				    </c:if>
 				    <c:if test="${fmtlist.kind eq 'CUSTOM_XSLT'}">
-				     <td><img src="${fn:escapeXml(xslt_image_url)}" border="0" alt="${fmtlist.kind}" title="${fmtlist.kind}"/>&#160;<c:out value= "${fmtlist.kind}" /></td>
+				     <td><img src="${fn:escapeXml(xslt_image_url)}" border="0" alt="${customxslt}" title="${customxslt}"/>&#160;<c:out value= "${customxslt}" /></td>
 				    </c:if>
 				     <c:if test="${fmtlist.kind eq 'MAPPING_RULES'}">
-				     <td><img src="${fn:escapeXml(mapping_rules_image_url)}" border="0" alt="${fmtlist.kind}" title="${fmtlist.kind}"/>&#160;<c:out value= "${fmtlist.kind}" /></td>
+				     <td><img src="${fn:escapeXml(mapping_rules_image_url)}" border="0" alt="${mappingrules}" title="${mappingrules}"/>&#160;<c:out value= "${mappingrules}" /></td>
 				    </c:if>
 				   </tr> 		
 		 		  

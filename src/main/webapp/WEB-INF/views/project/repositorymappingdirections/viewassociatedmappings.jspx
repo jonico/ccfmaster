@@ -18,6 +18,13 @@
 	<spring:message code="fieldmappingtype" var="fieldmappingtype" htmlEscape="false"/>
 	<spring:message code="fieldmappingscope" var="fieldmappingscope" htmlEscape="false"/>
 	<spring:message code="noassociatedfieldmapping" var="noassociatedfieldmapping" htmlEscape="false"/>
+	<spring:message code="customxslt" var="customxslt" htmlEscape="false"/>
+	<spring:message code="mapforce" var="mapforce" htmlEscape="false"/>
+	<spring:message code="mappingrules" var="mappingrules" htmlEscape="false"/>
+	<spring:message code="externalapp" var="externalapp" htmlEscape="false"/>
+	<spring:message code="repositorymappingdirection" var="repositorymappingdirection" htmlEscape="false"/>
+	<spring:message code="landscape" var="landscape" htmlEscape="false"/>
+	<spring:message code="ccfcore" var="ccfcore" htmlEscape="false"/>
 	
 	<spring:url value="/project/repositorymappings?direction=FORWARD" var="returnforward_url" />
 	<spring:url value="/project/repositorymappings?direction=REVERSE" var="returnreverse_url" />
@@ -76,17 +83,31 @@
 	  	 	<c:if test="${activeFieldMappingid ne associatedfm.id}">
 	  		<td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;${fieldmappingname}</td> 	
 	  	 	</c:if>
-		  <c:if test="${associatedfm.kind eq 'MAPFORCE'}">
-				    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${associatedfm.kind}" title="${associatedfm.kind}"/>&#160;<c:out value= "${associatedfm.kind}" /></td>
-				    </c:if>
-				    <c:if test="${associatedfm.kind eq 'CUSTOM_XSLT'}">
-				     <td><img src="${fn:escapeXml(xslt_image_url)}" border="0" alt="${associatedfm.kind}" title="${associatedfm.kind}"/>&#160;<c:out value= "${associatedfm.kind}" /></td>
-				    </c:if>
-				     <c:if test="${associatedfm.kind eq 'MAPPING_RULES'}">
-				     <td><img src="${fn:escapeXml(mapping_rules_image_url)}" border="0" alt="${associatedfm.kind}" title="${associatedfm.kind}"/>&#160;<c:out value= "${associatedfm.kind}" /></td>
-		  </c:if>
-		  <td>${associatedfm.scope}</td>
-		  </tr> 		
+  			<c:if test="${associatedfm.kind eq 'MAPFORCE'}">
+		    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${mapforce}" title="${mapforce}"/>&#160;<c:out value= "${mapforce}" /></td>
+		    </c:if>
+		    <c:if test="${associatedfm.kind eq 'CUSTOM_XSLT'}">
+		     <td><img src="${fn:escapeXml(xslt_image_url)}" border="0" alt="${customxslt}" title="${customxslt}"/>&#160;<c:out value= "${customxslt}" /></td>
+		    </c:if>
+		    <c:if test="${associatedfm.kind eq 'MAPPING_RULES'}">
+		    <td><img src="${fn:escapeXml(mapping_rules_image_url)}" border="0" alt="${mappingrules}" title="${mappingrules}"/>&#160;<c:out value= "${mappingrules}" /></td>
+ 			</c:if>
+		   <c:set var="fieldmappingscope" value="${associatedfm.scope}"/>
+	 	   <c:if test="${'EXTERNAL_APP' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${externalapp}"/>
+	 	   </c:if>
+	 	   <c:if test="${'LANDSCAPE' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${landscape}"/>
+	 	   </c:if>
+		   <c:if test="${'REPOSITORY_MAPPING_DIRECTION' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${repositorymappingdirection}"/>
+	 	   </c:if>
+		  <c:if test="${'CCF_CORE' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${ccfcore}"/>
+	 	   </c:if>
+		  <td>${fieldmappingscope}</td>
+		 </tr> 		
+		 
 		</c:forEach>  
 	</c:if>
 	 <c:if test="${fn:length(associatedfmmodel) == 0}">
