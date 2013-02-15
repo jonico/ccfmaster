@@ -71,7 +71,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		}
 		model.addAttribute("rmdid", rmd.getId());
 		model.addAttribute("direction", rmd.getDirection().name());
-		model.addAttribute("activeFieldMappingid", rmd.getActiveFieldMapping().getId());
+		model.addAttribute("activeFieldMappingid", rmd.getActiveFieldMapping()==null?-1:rmd.getActiveFieldMapping().getId());
 		populateFieldMappingModel(fieldMapping,model);
 		return fieldMapping;
 	}
