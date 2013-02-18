@@ -23,6 +23,8 @@ public final class Util {
 	
 	private static final String xpath_Stopped_elemLocator = "//input[@name='currentStatus' and @value='STOPPED']";
 	
+	private static final String xpath_EditFM_elemLocator = "//img[@alt='Associated Field Mappings']";
+	
 	private static final String tfBackup_SuccesMsg = "Backup is created successfully";
 	
 	// prevent instantiation.
@@ -178,6 +180,117 @@ public final class Util {
 			throw e;
 		}
 	}
+	
+	public static void testcreateLinkFieldMapping(Selenium selenium){
+		try{
+			//To link new field mapping to the template 
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("css=#disablebutton > div.Button > div.Middle > a");
+			selenium.waitForPageToLoad("30000");
+			selenium.select("id=fieldMappingLandscapeTemplate", "label=Default MapForce TF Tracker Item to QC Defect");
+			selenium.click("id=linktemplate");
+			selenium.click("id=submitForm");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("Field mapping created and associated to the repository mapping direction successfully"));
+			
+			//To link new field mapping to the already linked template
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("css=#disablebutton > div.Button > div.Middle > a");
+			selenium.waitForPageToLoad("30000");
+			selenium.select("id=fieldMappingLandscapeTemplate", "label=Default MapForce TF Tracker Item to QC Defect");
+			selenium.click("id=linktemplate");
+			selenium.click("id=submitForm");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("A field mapping is already linked to the selected template"));
+		}catch (AssertionError e) {
+			final String msg = "test create Link FieldMapping failed. Base64 screenshot:\n";
+			logScreenshot(msg, selenium);
+			throw e;
+		}
+	}
+	
+	public static void testcreateFieldMapping(Selenium selenium){
+		try {
+			//To link new field mapping to the template 
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("css=#disablebutton > div.Button > div.Middle > a");
+			selenium.waitForPageToLoad("30000");
+			selenium.select("id=fieldMappingLandscapeTemplate", "label=Default MapForce TF Tracker Item to QC Defect");
+			selenium.type("id=fieldmappingName", "Modified Default MapForce TF Tracker Item to QC Defect");
+			selenium.click("id=submitForm");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("Field mapping created and associated to the repository mapping direction successfully"));
+			
+			//To link new field mapping to the already linked template
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("css=#disablebutton > div.Button > div.Middle > a");
+			selenium.waitForPageToLoad("30000");
+			selenium.select("id=fieldMappingLandscapeTemplate", "label=Default MapForce TF Tracker Item to QC Defect");
+			selenium.type("id=fieldmappingName", "Modified Default MapForce TF Tracker Item to QC Defect");
+			selenium.click("id=submitForm");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("Field mapping template already exists with the same name"));
+		} catch (AssertionError e) {
+			final String msg = "test create FieldMapping failed. Base64 screenshot:\n";
+			logScreenshot(msg, selenium);
+			throw e;
+		}
+	}
+	
+	public static void testAssociateFieldMapping(Selenium selenium){
+		try {
+			//To set active field mapping
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("name=fieldmappingid");
+			selenium.chooseOkOnNextConfirmation();
+			selenium.click("link=Set as Active Field Mapping");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("Selected field mapping is activated successfully"));
+			
+			//To delete active field mapping
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("name=fieldmappingid");
+			selenium.chooseOkOnNextConfirmation();
+			selenium.click("link=Delete");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("Active field mapping cannot be deleted"));
+			
+			//To delete field mapping
+			selenium.click("link=Repository Mappings");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//img[@alt='Associated Field Mappings']");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("xpath=(//input[@type='checkbox'])[last()]");
+			selenium.chooseOkOnNextConfirmation();
+			selenium.click("link=Delete");
+			selenium.waitForPageToLoad("30000");
+			assertTrue(selenium.isTextPresent("Selected field mapping(s) deleted successfully"));
+		
+		} catch (AssertionError e) {
+			final String msg = "test Associate FieldMapping failed. Base64 screenshot:\n";
+			logScreenshot(msg, selenium); 
+			throw e;
+		}
+	}
+	
 	
 	public static void testTeamforgeSettings(Selenium selenium){
 		try{
