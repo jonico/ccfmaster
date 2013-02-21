@@ -195,6 +195,8 @@ public final class Util {
 			selenium.click("id=submitForm");
 			selenium.waitForPageToLoad("30000");
 			assertTrue(selenium.isTextPresent("Field mapping created and associated to the repository mapping direction successfully"));
+			assertTrue(selenium.isTextPresent("MapForce"));
+			assertTrue(selenium.isTextPresent("Landscape"));
 			
 			//To link new field mapping to the already linked template
 			selenium.click("link=Repository Mappings");
@@ -217,7 +219,7 @@ public final class Util {
 	
 	public static void testcreateFieldMapping(Selenium selenium){
 		try {
-			//To link new field mapping to the template 
+			//To create new field mapping to the template 
 			selenium.click("link=Repository Mappings");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//img[@alt='Associated Field Mappings']");
@@ -229,8 +231,10 @@ public final class Util {
 			selenium.click("id=submitForm");
 			selenium.waitForPageToLoad("30000");
 			assertTrue(selenium.isTextPresent("Field mapping created and associated to the repository mapping direction successfully"));
+			assertTrue(selenium.isTextPresent("Repository Mapping Direction"));
+			assertTrue(selenium.isTextPresent("MapForce"));
 			
-			//To link new field mapping to the already linked template
+			//To create new field mapping to the already linked template
 			selenium.click("link=Repository Mappings");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//img[@alt='Associated Field Mappings']");
@@ -261,6 +265,7 @@ public final class Util {
 			selenium.click("link=Set as Active Field Mapping");
 			selenium.waitForPageToLoad("30000");
 			assertTrue(selenium.isTextPresent("Selected field mapping is activated successfully"));
+			assertTrue(selenium.isElementPresent("css=img.trackerIcon"));
 			
 			//To delete active field mapping
 			selenium.click("link=Repository Mappings");
