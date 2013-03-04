@@ -104,7 +104,7 @@ public class CreateLandscapeController{
 					participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getLandscapeFieldList());
 					participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getParticipantFieldList());
 					IGenericParticipantConfigItemValidator customValidator=genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
-					if(customValidator==null || !genericParticipant.getGenericParticipantConfigItemFactory().isDisplayTestConnection()) {
+					if(customValidator!=null || genericParticipant.getGenericParticipantConfigItemFactory().isDisplayTestConnection()) {
 						model.addAttribute(DISPLAY_TEST_CONNECTION_BUTTON, true);
 					}
 				}
