@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.validator.ConfigItemValidatorUtils;
 import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantConfigItemValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;

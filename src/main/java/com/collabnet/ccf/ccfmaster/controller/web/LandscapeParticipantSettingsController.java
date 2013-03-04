@@ -55,6 +55,8 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 	
 	private static final String RESTART = "restart";
 	
+	private static final String DISPLAY_TEST_CONNECTION_BUTTON = "displaytestconnectionbutton";
+	
 	private static final Logger log = LoggerFactory.getLogger(LandscapeParticipantSettingsController.class);
 	
 	LandscapeParticipantSettingsHelper landscapeParticipantSettingsHelper=new LandscapeParticipantSettingsHelper();
@@ -73,11 +75,12 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 		if(genericParticipant != null){
 			participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getLandscapeFieldList());
 			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getParticipantFieldList());
+			IGenericParticipantConfigItemValidator customValidator=genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
+			if(customValidator!=null || genericParticipant.getGenericParticipantConfigItemFactory().isDisplayTestConnection()) {
+				model.addAttribute(DISPLAY_TEST_CONNECTION_BUTTON, true);
+			}
 		}
-		Landscape landscape=ControllerHelper.findLandscape();
-		Participant participant=landscape.getParticipant();
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
-		landscapeParticipantSettingsHelper.makeModel(model, participantSettingsModel, landscape, participant);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;
 	}
 

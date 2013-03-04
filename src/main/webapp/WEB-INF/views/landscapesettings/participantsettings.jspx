@@ -210,8 +210,10 @@
 				<form:hidden path="landscapeConfigList[${status.index}].labelName"/>
 				<form:hidden path="landscapeConfigList[${status.index}].systemKind"/>
 				<form:password id="landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value" showPassword="true" size="60" cssClass="inputfield"/>
+				<c:if test="${displaytestconnectionbutton eq  'true'}">
 				 <input type="button" value="${testconnectionlabel}" onclick="doGenericAjaxPost('${fn:escapeXml(testconnectiongp_url)}')" />
 				<div id="spinner" style="display:none;"><img src="${fn:escapeXml(spinner_image_url)}" border="0" /></div><div id="info"></div>
+				</c:if>
 				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
 				</td>
 				</tr>

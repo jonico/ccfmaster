@@ -18,7 +18,9 @@ public class GenericParticipantConfigItemFactory {
 
 	@XmlElement(name = "landscapeProperty")
 	private List<CCFCoreProperty> landscapeFieldList;
-
+	
+	@XmlElement
+	private boolean displayTestConnection;
 
 	public IGenericParticipantConfigItemValidator getCustomValidator() {
 		return customValidator;
@@ -44,11 +46,23 @@ public class GenericParticipantConfigItemFactory {
 		this.landscapeFieldList = landscapeFieldList;
 	}
 	
+	
+	
+	public boolean isDisplayTestConnection() {
+		return displayTestConnection;
+	}
+
+	public void setDisplayTestConnection(boolean displayTestConnection) {
+		this.displayTestConnection = displayTestConnection;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("GenericParticipantConfigBuilder [customValidator=");
 		builder.append(customValidator);
+		builder.append(", displayTestConnection=");
+		builder.append(displayTestConnection);
 		builder.append(", participantFieldList=");
 		builder.append(participantFieldList);
 		builder.append(", landscapeFieldList=");
