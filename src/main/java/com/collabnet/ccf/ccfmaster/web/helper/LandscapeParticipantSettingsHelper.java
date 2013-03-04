@@ -19,6 +19,8 @@ import com.collabnet.ccf.ccfmaster.web.model.ParticipantSettingsModel;
 
 public class LandscapeParticipantSettingsHelper {
 
+	private static final String PASSWORD_PROPERTY_TYPE = "PASSWORD";
+
 	/**
 	 * Helper method to populate the participant settings 
 	 * 
@@ -67,8 +69,12 @@ public class LandscapeParticipantSettingsHelper {
 			for(CCFCoreProperty property: landscapeConfigList){
 				String name = property.getName();
 				LandscapeConfig config = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,name).getSingleResult();
-				property.setValue(config.getVal());
-				
+				if(PASSWORD_PROPERTY_TYPE.equals(property.getType().toString())) {
+					property.setValue(Obfuscator.decodePassword(config.getVal()));
+				}
+				else {
+					property.setValue(config.getVal());
+				}
 			}
 		
 			for(CCFCoreProperty property: participantConfigList){
@@ -238,9 +244,12 @@ public class LandscapeParticipantSettingsHelper {
 			for(CCFCoreProperty property: landscapeConfigList){
 				String name = property.getName();
 				LandscapeConfig config = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,name).getSingleResult();
-				config.setVal(property.getValue());
+				if (PASSWORD_PROPERTY_TYPE.equals(property.getType().toString())) {
+					config.setVal(Obfuscator.encodePassword(property.getValue()));
+				} else {
+					config.setVal(property.getValue());
+				}
 				config.persist();
-				
 			}
 		
 			for(CCFCoreProperty property: participantConfigList){
