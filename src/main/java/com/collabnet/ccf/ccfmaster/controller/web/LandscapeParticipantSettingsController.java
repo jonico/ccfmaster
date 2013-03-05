@@ -75,10 +75,7 @@ public class LandscapeParticipantSettingsController extends AbstractLandscapeCon
 		if(genericParticipant != null){
 			participantSettingsModel.setLandscapeConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getLandscapeFieldList());
 			participantSettingsModel.setParticipantConfigList(genericParticipant.getGenericParticipantConfigItemFactory().getParticipantFieldList());
-			IGenericParticipantConfigItemValidator customValidator=genericParticipant.getGenericParticipantConfigItemFactory().getCustomValidator();
-			if(customValidator!=null || genericParticipant.getGenericParticipantConfigItemFactory().isDisplayTestConnection()) {
-				model.addAttribute(DISPLAY_TEST_CONNECTION_BUTTON, true);
-			}
+			model.addAttribute(DISPLAY_TEST_CONNECTION_BUTTON,genericParticipant.getGenericParticipantConfigItemFactory().isDisplayTestConnection() );
 		}
 		landscapeParticipantSettingsHelper.populateParticipantSettingsModel(participantSettingsModel,model);
 		return UIPathConstants.LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS;

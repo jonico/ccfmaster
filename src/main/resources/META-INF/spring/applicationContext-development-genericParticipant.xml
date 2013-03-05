@@ -16,7 +16,9 @@
 		<property name="genericParticipantRMDFactory" ref="genericParticipantRMDFactory"/>
 	</bean>
 	
-	<bean id="genericParticipantConfigItemFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">	
+	<bean id="genericParticipantConfigItemFactory" class="com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantConfigItemFactory">
+	<!-- If there is a custom implementation for validateConnection().Enable displayTestConnection property and 
+	set value to true to display test connection button in UI-->	
 		<property name="displayTestConnection" value="true"/>
 		<property name="customValidator" ref="TFSGenericParticipantValidator"/>
 		<property name="participantFieldList">
