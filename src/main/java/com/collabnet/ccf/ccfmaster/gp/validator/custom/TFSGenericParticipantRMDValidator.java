@@ -39,21 +39,21 @@ public class TFSGenericParticipantRMDValidator implements IGenericParticipantRMD
 				collectionName = configProperties.get(i).getValue();
 				boolean isvalid = tfsMetadataHelper.getTFSCollectionList().contains(collectionName);
 				if(!isvalid){
-					errors.rejectValue(RMD_CONFIG_LIST_ELEMENT_NAME+"[" + i + "].value","","Collection is not Found");				
+					errors.rejectValue(RMD_CONFIG_LIST_ELEMENT_NAME+"[" + i + "].value","","Collection is not found");				
 				}
 				continue;
 			}
 			if(name.equalsIgnoreCase("tfsProjectList")){
 				boolean isvalid = tfsMetadataHelper.getTFSProjectList(collectionName).contains(configProperties.get(i).getValue());
 				if(!isvalid){
-					errors.rejectValue(RMD_CONFIG_LIST_ELEMENT_NAME+"[" + i + "].value","","Project for given collection is not Found");
+					errors.rejectValue(RMD_CONFIG_LIST_ELEMENT_NAME+"[" + i + "].value","","Project for given collection is not found");
 				}
 				continue;
 			}
 			if(name.equalsIgnoreCase("tfsWorkItemType")){
 				boolean isvalid = Arrays.asList(new String[]{"User Story","Task","Bug"}).contains(configProperties.get(i).getValue());
 				if(!isvalid){
-					errors.rejectValue(RMD_CONFIG_LIST_ELEMENT_NAME+"[" + i + "].value","","Work Item is incorrect");
+					errors.rejectValue(RMD_CONFIG_LIST_ELEMENT_NAME+"[" + i + "].value","","WorkItem for given project is not found");
 				}
 				continue;
 			}
