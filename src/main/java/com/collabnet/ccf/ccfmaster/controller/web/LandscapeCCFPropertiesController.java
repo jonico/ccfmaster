@@ -298,19 +298,17 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 
 
 	private void updateDirectionConfigs(CCFCorePropertyList props, Direction direction){
-		List<DirectionConfig> configList = CoreConfigLoader
-				.getAsDirectionConfigList(props, direction);
+		List<DirectionConfig> configList = CoreConfigLoader.getAsDirectionConfigList(props, direction);
 		for (DirectionConfig dc : configList) {
-			if (!DirectionConfig.findDirectionConfigsByDirectionAndName(direction,dc.getName()).getResultList().isEmpty()) {
-				DirectionConfig result = DirectionConfig.findDirectionConfigsByDirectionAndName(direction,dc.getName()).getSingleResult();
-				if (result != null) { // if the directionconfig property is found,update the value of the property
+				List<DirectionConfig> resultList = DirectionConfig.findDirectionConfigsByDirectionAndName(direction,dc.getName()).getResultList();
+				if (!resultList.isEmpty()) { // if the directionconfig property is found,update the value of the property
+					DirectionConfig result = resultList.get(0);
 					if (!dc.getVal().equals(result.getVal())) {
 						result.setVal(dc.getVal());
 						result.merge();
 					}
 					continue;
 				}
-			}
 			dc.persist();
 		}
 	}
@@ -336,15 +334,13 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 		List<CCFCoreProperty> newdefaultProperties = new ArrayList<CCFCoreProperty>();
 		List<CCFCoreProperty> defaultProperties = coreConfigLoader.getDefaultCCFCorePropertyList(direction);
 		for(CCFCoreProperty config: defaultProperties){
-			//Check needed in case of core upgrade with newly added directionconfigs fails with no entity found for query.
-			if (!DirectionConfig.findDirectionConfigsByDirectionAndName(direction,config.getName()).getResultList().isEmpty()) {
-				DirectionConfig currentConfig = DirectionConfig.findDirectionConfigsByDirectionAndName(direction,config.getName()).getSingleResult();
-				if (currentConfig != null) {
+				List<DirectionConfig> configList = DirectionConfig.findDirectionConfigsByDirectionAndName(direction,config.getName()).getResultList();
+				if (!configList.isEmpty()) {
+					DirectionConfig currentConfig = configList.get(0);
 					if (!config.getValue().equals(currentConfig.getVal())) {
 						config.setValue(currentConfig.getVal());
 					}
 				}
-			}
 			newdefaultProperties.add(config);
 		}
 		return newdefaultProperties;
