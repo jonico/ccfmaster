@@ -70,6 +70,7 @@ public class CreateLandscapeHelper {
 		model.addAttribute("parsystemid", participant.getSystemId());
 		model.addAttribute("pdescription", participant.getDescription());
 		model.addAttribute("tdescription", teamforge.getDescription());
+		model.addAttribute("tfprefix", teamforge.getPrefix());
 
 	}
 

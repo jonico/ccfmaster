@@ -287,6 +287,7 @@
 						<input type="hidden" name="landscape.plugId" value="${plugid}"/>
 						<input type="hidden" name="teamforge.systemKind" value="${tfsystemkind}"/>
 						<input type="hidden" name="teamforge.systemId" value="${tfsystemid}"/>
+						<input type="hidden" name="teamforge.prefix" value="${tfprefix}"/>
 						<input type="hidden" name="participant.systemId" value="${parsystemid}"/>
 						<input type="hidden" name="participant.description" value="${pdescription}"/>
 						<input type="hidden" name="teamforge.description" value="${tdescription}"/>
