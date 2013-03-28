@@ -3,6 +3,7 @@ package com.collabnet.ccf.ccfmaster.gp.validator.custom;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.collabnet.ccf.ccfmaster.util.Obfuscator;
 import com.microsoft.tfs.core.TFSTeamProjectCollection;
 import com.microsoft.tfs.core.clients.framework.configuration.entities.ProjectCollectionEntity;
 import com.microsoft.tfs.core.clients.framework.configuration.entities.TeamFoundationServerEntity;
@@ -47,7 +48,7 @@ public class TFSMetadataHelper {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = Obfuscator.decodePassword(password);
 	}
 	
 	public TFSMetadataHelper(){
