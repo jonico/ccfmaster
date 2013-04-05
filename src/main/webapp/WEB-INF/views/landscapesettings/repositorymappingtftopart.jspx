@@ -201,13 +201,13 @@
 				
 				<td>
 				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
 				<div class="Button">
 				<div class="Middle">
-						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
-				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
+					 <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				</div>
 				</div>
-				
+				</c:if>
 				<div class="ButtonSpace"></div>
 				<div class="Button">
 				<div class="Middle">
@@ -233,12 +233,13 @@
 				<td>
 				
 				<div class="AlignRight" id="disablebutton">
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
 				<div class="Button">
 				<div class="Middle">
 						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
-				     	<!--  <a href="${flowExecutionUrl}&amp;_eventId=enter">Create Mapping Rule</a> --> 
 				</div>
 				</div>
+				</c:if>
 				
 				<div class="ButtonSpace"></div>
 				<div class="Button">
