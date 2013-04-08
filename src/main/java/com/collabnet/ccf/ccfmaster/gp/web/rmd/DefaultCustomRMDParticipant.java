@@ -1,11 +1,10 @@
-package com.collabnet.ccf.ccfmaster.gp.validator.custom;
+package com.collabnet.ccf.ccfmaster.gp.web.rmd;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
-import com.collabnet.ccf.ccfmaster.gp.web.rmd.ICustomizeRMDParticipant;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.ConflictResolutionPolicy;
 

@@ -1,4 +1,4 @@
-package com.collabnet.ccf.ccfmaster.gp.validator;
+package com.collabnet.ccf.core.utils;
 
 import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.DEFAULT_ERRORMSG_NOT_EMPTY_VALUE;
 import static com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants.PARTICIPANT_SHOULD_MATCH_CONDITIONAL_REGEX;
@@ -12,7 +12,6 @@ import org.springframework.validation.Errors;
 
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
-import com.collabnet.ccf.core.utils.ValidatorUtils;
 
 public abstract class ConfigItemValidatorUtils{
 	

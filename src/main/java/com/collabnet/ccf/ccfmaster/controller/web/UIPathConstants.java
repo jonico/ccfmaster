@@ -103,6 +103,12 @@ public class UIPathConstants {
 	public static final String RMD_CONFIGURE_TFSETTINGS = "admin/creatermdstep2";
 	public static final String RMD_CONFIGURE_PARTICIPANT_SETTINGS= "admin/creatermdstep3";
 	public static final String RMD_SAVE = "admin/saveRMD";
+	public static final String PROJECT_RMD_CONFIGURE = "project/creatermd";
+	public static final String PROJECT_RMD_CONFIGURE_DIRECTION = "project/creatermdstep1";
+	public static final String PROJECT_RMD_CONFIGURE_TFSETTINGS = "project/creatermdstep2";
+	public static final String PROJECT_RMD_CONFIGURE_PARTICIPANT_SETTINGS= "project/creatermdstep3";
+	public static final String PROJECT_RMD_SAVE = "project/saveRMD";
+	
 	
 	
 }

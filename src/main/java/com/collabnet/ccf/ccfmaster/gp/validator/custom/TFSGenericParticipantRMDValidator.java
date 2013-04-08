@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.validation.Errors;
 
-import com.collabnet.ccf.ccfmaster.gp.validator.ConfigItemValidatorUtils;
 import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantRMDValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.core.utils.ConfigItemValidatorUtils;
 
 public class TFSGenericParticipantRMDValidator implements IGenericParticipantRMDValidator{
 	

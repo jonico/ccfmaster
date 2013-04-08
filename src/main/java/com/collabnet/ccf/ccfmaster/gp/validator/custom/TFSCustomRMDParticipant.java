@@ -3,6 +3,7 @@ package com.collabnet.ccf.ccfmaster.gp.validator.custom;
 import java.util.List;
 
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
+import com.collabnet.ccf.ccfmaster.gp.web.rmd.DefaultCustomRMDParticipant;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 
 public class TFSCustomRMDParticipant extends DefaultCustomRMDParticipant{

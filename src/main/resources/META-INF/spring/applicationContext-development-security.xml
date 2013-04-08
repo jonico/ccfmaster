@@ -168,8 +168,14 @@
 		<intercept-url pattern="/project/hospitalentrys/**" access="ROLE_HOSPITAL"/>
 		<intercept-url pattern="/project/repositorymappings/pause" access="ROLE_PAUSE_SYNCHRONIZATION"/> 
 		<intercept-url pattern="/project/repositorymappings/resume" access="ROLE_PAUSE_SYNCHRONIZATION"/> 
-		<intercept-url pattern="/project/repositorymappings/delete" access="ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/> 
-		<intercept-url pattern="/project/repositorymappings/**" access="ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url pattern="/project/repositorymappings/delete" access="ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
+		<intercept-url pattern="/project/repositorymappings/**" access="ROLE_REPOSITORY_MAPPINGS"/> 
+		<intercept-url pattern="/project/creatermd/**" access="ROLE_REPOSITORY_MAPPINGS"/> 
+		<intercept-url pattern="/project/creatermdstep1/**" access="ROLE_REPOSITORY_MAPPINGS"/> 
+		<intercept-url pattern="/project/creatermdstep2/**" access="ROLE_REPOSITORY_MAPPINGS"/> 
+		<intercept-url pattern="/project/creatermdstep3/**" access="ROLE_REPOSITORY_MAPPINGS"/> 
+		<intercept-url pattern="/project/saveRMD/**" access="ROLE_REPOSITORY_MAPPINGS"/> 
+		<intercept-url pattern="/project/teamForge/trackerList/**" access="ROLE_REPOSITORY_MAPPINGS"/>
 		<intercept-url pattern="/project/" access="ROLE_IAF_USER"/> 
 		<intercept-url pattern="/project/fieldmappingtemplates/**"  access="ROLE_MAPPING_RULE_TEMPLATES" />
 		<intercept-url pattern="/project/identitymappings/**"  access="ROLE_IDENTITY_MAPPINGS" />

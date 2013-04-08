@@ -1,4 +1,4 @@
-package com.collabnet.ccf.ccfmaster.gp.web.controller;
+package com.collabnet.ccf.ccfmaster.gp.controller.web;
 
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
@@ -7,23 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.collabnet.ccf.ccfmaster.controller.web.AbstractLandscapeController;
-import com.collabnet.ccf.ccfmaster.controller.web.LandscapeParticipantSettingsController;
-import com.collabnet.ccf.ccfmaster.controller.web.UIPathConstants;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantRMDValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
 import com.collabnet.ccf.ccfmaster.gp.web.rmd.ICustomizeRMDParticipant;
@@ -51,47 +43,20 @@ import com.collabnet.teamforge.api.main.ProjectDO;
 import flexjson.JSONSerializer;
 
 /**
- * CreateRMDController - controls request to create Repository Mapping Direction
+ * AbstractCreateRMDController - handles create repository mapping direction
  * 
  * @author kbalaji
  *
  */
-@RequestMapping("/admin/**")
-@Controller
-public class CreateRMDController extends AbstractLandscapeController{
+@Configurable
+public class CreateRMDHelper {
 	
-	private static final Logger log = LoggerFactory.getLogger(LandscapeParticipantSettingsController.class);
+	private static final Logger log = LoggerFactory.getLogger(CreateRMDHelper.class);
 	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE, method=RequestMethod.POST)
-	public String intializeRMDSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel, HttpServletRequest request){
-		populateModel(model);
-		return UIPathConstants.RMD_CONFIGURE;		
-	}
+	@Autowired(required= false)
+	public GenericParticipantFacade genericParticipant;
 	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_TFSETTINGS, method=RequestMethod.POST)
-	public String intializeTFSettings(Model model,@ModelAttribute(value="rmdModel")RMDModel rmdmodel){
-		populateModel(model);
-		return UIPathConstants.RMD_CONFIGURE_TFSETTINGS;
-	}
-	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS, method=RequestMethod.POST)
-	public String intializeParticipantSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel){
-		if(genericParticipant != null && rmdmodel.getParticipantSelectorFieldList() == null){
-			rmdmodel.setParticipantSelectorFieldList(genericParticipant.getGenericParticipantRMDFactory().getParticipantSelectorFieldList());
-		}
-		populateModel(model);
-		return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
-	}
-	
-	@RequestMapping(value="/"+UIPathConstants.RMD_SAVE, method=RequestMethod.POST)
-	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel,BindingResult bindingResult, Model model, HttpServletRequest request){
-		ConflictResolutionPolicy forwardConflictPolicy = null,reverseConflictPolicy = null;
-		populateConfigMaps(rmdmodel);
-		validateRMD(rmdmodel, bindingResult,model);
-		if(bindingResult.hasErrors()){
-			populateModel(model);
-			return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
-		}
+	public void createAndPersistRMD(RMDModel rmdmodel, Model model,ConflictResolutionPolicy forwardConflictPolicy,ConflictResolutionPolicy reverseConflictPolicy) {
 		try {
 			String direction = rmdmodel.getDirection();
 			String projectId = rmdmodel.getTeamforgeProjectId();
@@ -116,13 +81,10 @@ public class CreateRMDController extends AbstractLandscapeController{
 		} catch (RemoteException e) {
 			log.debug("TeamForge request to check for its connection to retrieve linkid info got failed ", e);
 		}
-
-		populateModel(model);
-		return UIPathConstants.RMD_SAVE;		
 	}
 
-	@RequestMapping(value="/admin/teamForge/trackerList",method= RequestMethod.POST)
-	public @ResponseBody String getAllTrackerInfo(@RequestParam String projectId){
+	
+	public String getAllTrackerInfo(String projectId){
 		List<Map<String, String>> teamForgeTracker = new ArrayList<Map<String,String>>();
 		try {
 			teamForgeTracker = TeamForgeMetadataHelper.getAllTrackersOfProject(projectId);
@@ -130,61 +92,9 @@ public class CreateRMDController extends AbstractLandscapeController{
 		return new JSONSerializer().serialize(teamForgeTracker);		
 	}
 		
-	@ModelAttribute(value="tfConflictPolicies")
-	public String[] getConfilictPolicies(){
-		ConflictResolutionPolicy[]  conflictValues = ConflictResolutionPolicy.values();
-		String[] conflictPolicyArray = new String[conflictValues.length];
-		for(int i=0;i<conflictValues.length;i++){
-			conflictPolicyArray[i]= conflictValues[i].toString();
-		}
-		return conflictPolicyArray;
-	}
 	
-	@ModelAttribute(value="gpConflictPolicies")
-	public String[] getParticipantConfilictPolicies(){
-		if(genericParticipant != null){
-			ICustomizeRMDParticipant customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDFactory().getCustomParticipantRMD();
-			if(customizeParticipantRMDInfo!= null){
-				return customizeParticipantRMDInfo.getCustomConflictResolutionPolicy();
-			}
-		}
-		return new String[]{};
-	}	
-	
-	@ModelAttribute(value="teamForgeProjects")
-	public Map<String, String> getAllTeamForgeProjects(){
-		Map<String,String> teamForgeProject = new HashMap<String,String>();
-		try {
-			teamForgeProject =  TeamForgeMetadataHelper.getAllTeamForgeProjects();
-		} catch (RemoteException e) { } //ignore the remote exception
-		return teamForgeProject;
-	}
-	
-	@ModelAttribute(value="directions")
-	public String[] getDirectionList(){
-		return new String[]{"FORWARD","REVERSE","BOTH"};
-	}
-	
-	@ModelAttribute(value="teamForgeMappingType")	
-	public String[] getTeamForgeMappingType(){
-		return new String[] {"PlanningFolder","Tracker","Metadata"};
-	}
-	
-	@ModelAttribute(value="forwardFieldMappingTemplateNames")
-	public List<String> getForwardFieldMappingTemplateNames(){
-		return getFieldMappingTemplateNames(Directions.FORWARD);
-	}
-	
-	@ModelAttribute(value="reverseFieldMappingTemplateNames")
-	public List<String> getReverseFieldMappingTemplateNames(){
-		return getFieldMappingTemplateNames(Directions.REVERSE);
-	}
-	
-	public void populateModel(Model model){
-		model.addAttribute("selectedLink", "repositorymappings");
-	}
 
-	private void buildRepositoryMappingDir(Model model, RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName,ExternalApp externalApp) {
+	public void buildRepositoryMappingDir(Model model, RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName,ExternalApp externalApp) {
 		String teamForgeRepositoryId = getTeamForgeRepoId(rmdmodel);
 		String participantRepositoryId = getParticipantRepoId(rmdmodel);
 		RepositoryMapping repositoryMapping = getRespositoryMapping(externalApp, teamForgeRepositoryId, participantRepositoryId);
@@ -193,6 +103,31 @@ public class CreateRMDController extends AbstractLandscapeController{
 		mergeRepositoryMappingDirection(repoMappingDirection, fieldMapping);			
 		model.addAttribute("teamForgeRepoId", teamForgeRepositoryId);
 		model.addAttribute("participanteRepoId", participantRepositoryId);
+	}
+
+	public void validateRMD(RMDModel rmdmodel, BindingResult bindingResult,Model model) {
+		if(genericParticipant != null){
+			IGenericParticipantRMDValidator rmdValidator = genericParticipant.getGenericParticipantRMDFactory().getCustomRMDValidator();
+			if(rmdValidator!= null){
+				rmdValidator.validate(rmdmodel, bindingResult);
+			}
+		}
+	}
+
+	public void populateConfigMaps(RMDModel rmdmodel) {
+		List<ParticipantConfig> participantConfig = ParticipantConfig.findAllParticipantConfigs();
+		List<LandscapeConfig> landscapeConfig = LandscapeConfig.findAllLandscapeConfigs();
+		rmdmodel.setParticipantConfigMap(buildConfigMap(participantConfig));
+		rmdmodel.setLandscapeConfigMap(buildConfigMap(landscapeConfig));
+	}
+	
+	public List<String> getFieldMappingTemplateNames(Directions direction) {
+		List<String> fieldMappingTemplateNames = new ArrayList<String>();
+		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplates = FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByDirection(direction).getResultList();
+		for(FieldMappingLandscapeTemplate template: fieldMappingLandscapeTemplates){
+			fieldMappingTemplateNames.add(template.getName());
+		}
+		return fieldMappingTemplateNames;
 	}
 	
 	private String getParticipantRepoId(RMDModel rmdmodel) {
@@ -204,13 +139,6 @@ public class CreateRMDController extends AbstractLandscapeController{
 			}
 		}
 		return participantRepoId;
-	}
-
-	private void populateConfigMaps(RMDModel rmdmodel) {
-		List<ParticipantConfig> participantConfig = ParticipantConfig.findAllParticipantConfigs();
-		List<LandscapeConfig> landscapeConfig = LandscapeConfig.findAllLandscapeConfigs();
-		rmdmodel.setParticipantConfigMap(buildConfigMap(participantConfig));
-		rmdmodel.setLandscapeConfigMap(buildConfigMap(landscapeConfig));
 	}
 		
 	private static Map<String,String> buildConfigMap(List<? extends ConfigItem> configList) {
@@ -242,16 +170,6 @@ public class CreateRMDController extends AbstractLandscapeController{
 		}
 		return teamForgeTrackerInfo;
 	}
-	
-	private List<String> getFieldMappingTemplateNames(Directions direction) {
-		List<String> fieldMappingTemplateNames = new ArrayList<String>();
-		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplates = FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByDirection(direction).getResultList();
-		for(FieldMappingLandscapeTemplate template: fieldMappingLandscapeTemplates){
-			fieldMappingTemplateNames.add(template.getName());
-		}
-		return fieldMappingTemplateNames;
-	}
-
 	
 	private void mergeRepositoryMappingDirection(RepositoryMappingDirection repoMappingDirection, FieldMapping fieldMapping) {
 		if(fieldMapping != null){
@@ -372,14 +290,4 @@ public class CreateRMDController extends AbstractLandscapeController{
 		}
 		return newFieldMappingValueMapEntries;
 	}
-
-	private void validateRMD(RMDModel rmdmodel, BindingResult bindingResult,Model model) {
-		if(genericParticipant != null){
-			IGenericParticipantRMDValidator rmdValidator = genericParticipant.getGenericParticipantRMDFactory().getCustomRMDValidator();
-			if(rmdValidator!= null){
-				rmdValidator.validate(rmdmodel, bindingResult);
-			}
-		}
-	}
-
 }

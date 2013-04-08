@@ -36,7 +36,7 @@
 <spring:url value="/images/icons/swp_release.gif" var="swp_release_image_url" />
 <spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
 <spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
-<spring:url value="/admin/creatermd" var="create_rmd_url"/>
+<spring:url value="/project/creatermd" var="create_rmd_url"/>
 <spring:url value="/images/icons/xslt_active.png" var="fm_xslt_image_url" />
 <spring:url value="/images/icons/mapforce_active.png" var="fm_mf_image_url" />
 <spring:url value="/images/icons/custom_mapping_active.gif" var="fm_mr_image_url" />
@@ -209,11 +209,15 @@
 				</td>
 				<td>
 				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<sec:authorize access="hasRole('ROLE_REPOSITORY_MAPPINGS')">
 				<div class="Button">
 				<div class="Middle">
 						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				</div>
 				</div>
+				</sec:authorize>
+				</c:if>
 				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
 				<div class="ButtonSpace"></div>
 				
@@ -244,11 +248,15 @@
 				
 				<td>
 				<div class="AlignRight" id="disablebutton">
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<sec:authorize access="hasRole('ROLE_REPOSITORY_MAPPINGS')">
 				<div class="Button">
 				<div class="Middle">
 						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
 				</div>
 				</div>
+				</sec:authorize>
+				</c:if>
 				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
 				<div class="ButtonSpace"></div>
 				

@@ -7,6 +7,7 @@ import org.springframework.validation.Errors;
 import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.gp.web.model.ValidationResult;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.core.utils.ConfigItemValidatorUtils;
 
 public class DefaultGenericParticipantConfigValidator implements IGenericParticipantConfigItemValidator{
 
