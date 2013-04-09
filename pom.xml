@@ -856,5 +856,53 @@
 				</plugins>
 			</build>
 		</profile>
+		<!-- Creating profile to build Generic participant needed implementation as jar -->
+		<profile>
+			<id>buildGenericParticipantJar</id>
+			<activation>
+				<property>
+					<name>buildGenericParticipantJar</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<executions>
+							<execution>
+					        <id>genericParticipant</id>
+					        <goals>
+					        	<goal>jar</goal>
+					        </goals>
+					        <phase>package</phase>
+					        <configuration>
+					          <classifier>GenericParticipant</classifier>
+					          <includes>
+					            <include>com/collabnet/ccf/ccfmaster/gp/**/*</include>
+					            <include>com/collabnet/ccf/ccfmaster/server/domain/CCFCoreProperty*</include>
+					            <include>com/collabnet/ccf/ccfmaster/server/domain/CCFCorePropertyType*</include>
+					            <include>com/collabnet/ccf/ccfmaster/server/domain/SystemKind*</include>
+					            <include>com/collabnet/ccf/ccfmaster/server/domain/Directions*</include>
+					            <include>com/collabnet/ccf/ccfmaster/server/domain/ConflictResolutionPolicy*</include>
+					            <include>com/collabnet/ccf/core/utils/ValidatorUtils*</include>
+					            <include>com/collabnet/ccf/core/utils/ConfigItemValidatorUtils*</include>
+					            <include> com/collabnet/ccf/ccfmaster/util/Obfuscator*</include>
+					          </includes>
+					          <excludes>
+						          <exclude>com/collabnet/ccf/ccfmaster/gp/controller/**/*</exclude>
+						          <exclude>com/collabnet/ccf/ccfmaster/gp/validator/custom/TFSCustomRMDParticipant*</exclude>
+						          <exclude>com/collabnet/ccf/ccfmaster/gp/validator/custom/TFSGenericParticipantConfigValidator*</exclude>
+						          <exclude>com/collabnet/ccf/ccfmaster/gp/validator/custom/TFSGenericParticipantRMDValidator*</exclude>
+						          <exclude>com/collabnet/ccf/ccfmaster/gp/validator/custom/TFSMetadataHelper*</exclude>
+					          </excludes>
+					        </configuration>
+					      </execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
