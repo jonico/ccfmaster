@@ -62,8 +62,8 @@
 			<tr class="ContainerFooter" >
 				<td colspan="5">
 					<form:hidden path="direction"/>
-					<form:hidden path="forwardConfilictPolicies"/>
-					<form:hidden path="reversedConfilictPolicies"/>	
+					<form:hidden path="forwardConflictPolicies"/>
+					<form:hidden path="reversedConflictPolicies"/>	
 					<form:hidden path="forwardFieldMappingTemplateName"/>
 					<form:hidden path="reverseFieldMappingTemplateName"/>	
 					<form:hidden path="teamForgeMappingType"/>

@@ -54,7 +54,7 @@
 					<form:label  path="" name="forwardconflictlabel">${fn:replace(tftogenericPrefixlabel,'GenericParticipant',participant.prefix)} Conflict Resolution Policy :</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="forwardconflictCombo" path="forwardConfilictPolicies" cssClass="inputfield"> 
+					<form:select  id="forwardconflictCombo" path="forwardConflictPolicies" cssClass="inputfield"> 
 					<form:option value="" label="--- Select ---"/>
 					<form:options items="${gpConflictPolicies}"/></form:select>
 				</td>
@@ -65,7 +65,7 @@
 					<form:label  path="" name="reverseconflict" >${fn:replace(genericPrefixtotflabel,'GenericParticipant',participant.prefix)} Conflict Resolution Policy :</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
-					<form:select  id="reversedConfilictCombo" path="reversedConfilictPolicies"  cssClass="inputfield">
+					<form:select  id="reversedConfilictCombo" path="reversedConflictPolicies"  cssClass="inputfield">
 					 <form:option value="" label="--- Select ---"/>
 					 <form:options items="${tfConflictPolicies}"/></form:select>
 				</td>	

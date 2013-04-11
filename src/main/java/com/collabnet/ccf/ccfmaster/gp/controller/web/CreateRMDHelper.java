@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.collabnet.ccf.ccfmaster.controller.api.BadRequestException;
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.gp.validator.IGenericParticipantRMDValidator;
 import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
@@ -35,7 +34,6 @@ import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMapping;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
-import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeConnectionHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeMetadataHelper;
 import com.collabnet.teamforge.api.Connection;
 import com.collabnet.teamforge.api.main.ProjectDO;
@@ -43,7 +41,7 @@ import com.collabnet.teamforge.api.main.ProjectDO;
 import flexjson.JSONSerializer;
 
 /**
- * AbstractCreateRMDController - handles create repository mapping direction
+ * CreateRMDHelper - handles create repository mapping direction
  * 
  * @author kbalaji
  *
@@ -51,35 +49,34 @@ import flexjson.JSONSerializer;
 @Configurable
 public class CreateRMDHelper {
 	
-	private static final Logger log = LoggerFactory.getLogger(CreateRMDHelper.class);
-	
 	@Autowired(required= false)
 	public GenericParticipantFacade genericParticipant;
 	
-	public void createAndPersistRMD(RMDModel rmdmodel, Model model,ConflictResolutionPolicy forwardConflictPolicy,ConflictResolutionPolicy reverseConflictPolicy) {
-		try {
-			String direction = rmdmodel.getDirection();
-			String projectId = rmdmodel.getTeamforgeProjectId();
-			Landscape landscape = ControllerHelper.findLandscape();
-			Connection connection = TeamForgeConnectionHelper.teamForgeConnection();
-			String linkId = TeamForgeMetadataHelper.getTFLinkId(connection,landscape.getPlugId(),projectId);
-			ExternalApp externalApp = getExternalApp(landscape,projectId, linkId,connection);
-			if(!rmdmodel.getForwardConfilictPolicies().isEmpty()){
-				forwardConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getForwardConfilictPolicies());
-			}
-			if(!rmdmodel.getReversedConfilictPolicies().isEmpty()){
-				reverseConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getReversedConfilictPolicies());
-			}
-			if("FORWARD".equalsIgnoreCase(direction)){
-				buildRepositoryMappingDir(model, rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName(),externalApp);
-			}else if("REVERSE".equalsIgnoreCase(direction)){
-				buildRepositoryMappingDir(model, rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName(),externalApp);	
-			}else{
-				buildRepositoryMappingDir(model, rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName(),externalApp);
-				buildRepositoryMappingDir(model, rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName(),externalApp);
-			}
-		} catch (RemoteException e) {
-			log.debug("TeamForge request to check for its connection to retrieve linkid info got failed ", e);
+	private boolean validateRMDAgainstExternalApp = false;
+	
+	public boolean isValidateRMDAgainstExternalApp() {
+		return validateRMDAgainstExternalApp;
+	}
+
+	public void setValidateRMDAgainstExternalApp(boolean validateRMDAgainstExternalApp) {
+		this.validateRMDAgainstExternalApp = validateRMDAgainstExternalApp;
+	}
+
+	public void createAndPersistRMD(RMDModel rmdmodel, Model model,String direction, ExternalApp extApp) {
+		ConflictResolutionPolicy forwardConflictPolicy = null,reverseConflictPolicy = null;
+		if(!rmdmodel.getForwardConflictPolicies().isEmpty()){
+			forwardConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getForwardConflictPolicies());
+		}
+		if(!rmdmodel.getReversedConflictPolicies().isEmpty()){
+			reverseConflictPolicy = ConflictResolutionPolicy.valueOf(rmdmodel.getReversedConflictPolicies());
+		}
+		if("FORWARD".equalsIgnoreCase(direction)){
+			buildRepositoryMappingDir(model, rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName(),extApp);
+		}else if("REVERSE".equalsIgnoreCase(direction)){
+			buildRepositoryMappingDir(model, rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName(),extApp);	
+		}else{
+			buildRepositoryMappingDir(model, rmdmodel, forwardConflictPolicy, Directions.FORWARD,rmdmodel.getForwardFieldMappingTemplateName(),extApp);
+			buildRepositoryMappingDir(model, rmdmodel, reverseConflictPolicy, Directions.REVERSE,rmdmodel.getReverseFieldMappingTemplateName(),extApp);
 		}
 	}
 
@@ -94,10 +91,13 @@ public class CreateRMDHelper {
 		
 	
 
-	public void buildRepositoryMappingDir(Model model, RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName,ExternalApp externalApp) {
+	public void buildRepositoryMappingDir(Model model, RMDModel rmdmodel,ConflictResolutionPolicy conflictPolicy,Directions directions,String templateName,ExternalApp extApp) {
 		String teamForgeRepositoryId = getTeamForgeRepoId(rmdmodel);
 		String participantRepositoryId = getParticipantRepoId(rmdmodel);
-		RepositoryMapping repositoryMapping = getRespositoryMapping(externalApp, teamForgeRepositoryId, participantRepositoryId);
+		RepositoryMapping repositoryMapping = getRespositoryMapping(extApp, teamForgeRepositoryId, participantRepositoryId);
+		if(isValidateRMDAgainstExternalApp()){
+			validateRepositoryMapping(extApp, repositoryMapping);
+		}
 		RepositoryMappingDirection repoMappingDirection = getRepositoryMappingDirection(directions, repositoryMapping, conflictPolicy);
 		FieldMapping fieldMapping = getFieldMapping(templateName,directions, repoMappingDirection);
 		mergeRepositoryMappingDirection(repoMappingDirection, fieldMapping);			
@@ -179,7 +179,7 @@ public class CreateRMDHelper {
 	}
 	
 	
-	private ExternalApp getExternalApp(Landscape landscape, String projectId, String linkId, Connection connection) throws RemoteException{
+	protected ExternalApp getExternalApp(Landscape landscape, String projectId, String linkId, Connection connection) throws RemoteException{
 		if(linkId != null){
 			List<ExternalApp> externalApps = ExternalApp.findExternalAppsByLinkIdEquals(linkId).getResultList();
 			if (externalApps.isEmpty()) {
@@ -289,5 +289,10 @@ public class CreateRMDHelper {
 			newFieldMappingValueMapEntries.add(newValueMap);
 		}
 		return newFieldMappingValueMapEntries;
+	}
+	
+	private void validateRepositoryMapping(ExternalApp ea, RepositoryMapping rm) {
+		if (!ea.getId().equals(rm.getExternalApp().getId()))
+			throw new BadRequestException("wrong external app.");
 	}
 }

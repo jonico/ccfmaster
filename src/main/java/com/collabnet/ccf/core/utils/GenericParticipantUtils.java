@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
@@ -17,7 +18,6 @@ import com.collabnet.ccf.ccfmaster.util.Obfuscator;
  */
 public class GenericParticipantUtils {
 	
-	private static final String PASSWORD_PROPERTY_TYPE = "PASSWORD";
 	
 	private GenericParticipantUtils(){ }
 
@@ -26,7 +26,7 @@ public class GenericParticipantUtils {
 		for (CCFCoreProperty property : landscapeConfigList) {
 			LandscapeConfig config = new LandscapeConfig();
 			config.setName(property.getName());
-			if(PASSWORD_PROPERTY_TYPE.equals(property.getType().toString())) {
+			if(CCFCorePropertyType.PASSWORD.equals(property.getType())) {
 				config.setVal(Obfuscator.encodePassword(property.getValue()));
 			}
 			else {

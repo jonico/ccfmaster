@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
 import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -18,8 +19,6 @@ import com.collabnet.ccf.ccfmaster.util.Obfuscator;
 import com.collabnet.ccf.ccfmaster.web.model.ParticipantSettingsModel;
 
 public class LandscapeParticipantSettingsHelper {
-
-	private static final String PASSWORD_PROPERTY_TYPE = "PASSWORD";
 
 	/**
 	 * Helper method to populate the participant settings 
@@ -69,10 +68,9 @@ public class LandscapeParticipantSettingsHelper {
 			for(CCFCoreProperty property: landscapeConfigList){
 				String name = property.getName();
 				LandscapeConfig config = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,name).getSingleResult();
-				if(PASSWORD_PROPERTY_TYPE.equals(property.getType().toString())) {
+				if(CCFCorePropertyType.PASSWORD.equals(property.getType())) {
 					property.setValue(Obfuscator.decodePassword(config.getVal()));
-				}
-				else {
+				} else {
 					property.setValue(config.getVal());
 				}
 			}
@@ -244,7 +242,7 @@ public class LandscapeParticipantSettingsHelper {
 			for(CCFCoreProperty property: landscapeConfigList){
 				String name = property.getName();
 				LandscapeConfig config = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,name).getSingleResult();
-				if (PASSWORD_PROPERTY_TYPE.equals(property.getType().toString())) {
+				if (CCFCorePropertyType.PASSWORD.equals(property.getType())) {
 					config.setVal(Obfuscator.encodePassword(property.getValue()));
 				} else {
 					config.setVal(property.getValue());

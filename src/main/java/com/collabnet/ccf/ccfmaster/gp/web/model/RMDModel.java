@@ -10,9 +10,9 @@ public class RMDModel {
 	
 	public String direction ;
 	
-	public String forwardConfilictPolicies;
+	public String forwardConflictPolicies;
 	
-	public String reversedConfilictPolicies;
+	public String reversedConflictPolicies;
 	
 	public String forwardFieldMappingTemplateName;
 	
@@ -34,12 +34,12 @@ public class RMDModel {
 		return direction;
 	}
 
-	public String getForwardConfilictPolicies() {
-		return forwardConfilictPolicies;
+	public String getForwardConflictPolicies() {
+		return forwardConflictPolicies;
 	}
 
-	public String getReversedConfilictPolicies() {
-		return reversedConfilictPolicies;
+	public String getReversedConflictPolicies() {
+		return reversedConflictPolicies;
 	}
 
 	public String getTeamForgeMappingType() {
@@ -74,12 +74,12 @@ public class RMDModel {
 		this.direction = direction;
 	}
 
-	public void setForwardConfilictPolicies(String forwardConfilictPolicies) {
-		this.forwardConfilictPolicies = forwardConfilictPolicies;
+	public void setForwardConflictPolicies(String forwardConflictPolicies) {
+		this.forwardConflictPolicies = forwardConflictPolicies;
 	}
 
-	public void setReversedConfilictPolicies(String reversedConfilictPolicies) {
-		this.reversedConfilictPolicies = reversedConfilictPolicies;
+	public void setReversedConflictPolicies(String reversedConflictPolicies) {
+		this.reversedConflictPolicies = reversedConflictPolicies;
 	}
 
 	public void setTeamForgeMappingType(String teamForgeMappingType) {
@@ -124,9 +124,9 @@ public class RMDModel {
 		builder.append("RMDModel [direction=");
 		builder.append(direction);
 		builder.append(", forwardConfilictPolicies=");
-		builder.append(forwardConfilictPolicies);
+		builder.append(forwardConflictPolicies);
 		builder.append(", reversedConfilictPolicies=");
-		builder.append(reversedConfilictPolicies);
+		builder.append(reversedConflictPolicies);
 		builder.append(", forwardFieldMappingTemplateName=");
 		builder.append(forwardFieldMappingTemplateName);
 		builder.append(", reverseFieldMappingTemplateName=");
@@ -152,13 +152,13 @@ public class RMDModel {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result	+ ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result	+ ((forwardConfilictPolicies == null) ? 0 : forwardConfilictPolicies.hashCode());
+		result = prime * result	+ ((forwardConflictPolicies == null) ? 0 : forwardConflictPolicies.hashCode());
 		result = prime * result	+ ((forwardFieldMappingTemplateName == null) ? 0 : forwardFieldMappingTemplateName.hashCode());
 		result = prime * result	+ ((landscapeConfigMap == null) ? 0 : landscapeConfigMap.hashCode());
 		result = prime * result	+ ((participantConfigMap == null) ? 0 : participantConfigMap.hashCode());
 		result = prime * result	+ ((participantSelectorFieldList == null) ? 0 : participantSelectorFieldList.hashCode());
 		result = prime * result	+ ((reverseFieldMappingTemplateName == null) ? 0 : reverseFieldMappingTemplateName.hashCode());
-		result = prime * result	+ ((reversedConfilictPolicies == null) ? 0 : reversedConfilictPolicies.hashCode());
+		result = prime * result	+ ((reversedConflictPolicies == null) ? 0 : reversedConflictPolicies.hashCode());
 		result = prime * result	+ ((teamForgeMappingType == null) ? 0 : teamForgeMappingType.hashCode());
 		result = prime * result	+ ((teamforgeProjectId == null) ? 0 : teamforgeProjectId.hashCode());
 		result = prime * result	+ ((teamforgeTracker == null) ? 0 : teamforgeTracker.hashCode());
@@ -179,11 +179,11 @@ public class RMDModel {
 				return false;
 		} else if (!direction.equals(other.direction))
 			return false;
-		if (forwardConfilictPolicies == null) {
-			if (other.forwardConfilictPolicies != null)
+		if (forwardConflictPolicies == null) {
+			if (other.forwardConflictPolicies != null)
 				return false;
-		} else if (!forwardConfilictPolicies
-				.equals(other.forwardConfilictPolicies))
+		} else if (!forwardConflictPolicies
+				.equals(other.forwardConflictPolicies))
 			return false;
 		if (forwardFieldMappingTemplateName == null) {
 			if (other.forwardFieldMappingTemplateName != null)
@@ -213,11 +213,11 @@ public class RMDModel {
 		} else if (!reverseFieldMappingTemplateName
 				.equals(other.reverseFieldMappingTemplateName))
 			return false;
-		if (reversedConfilictPolicies == null) {
-			if (other.reversedConfilictPolicies != null)
+		if (reversedConflictPolicies == null) {
+			if (other.reversedConflictPolicies != null)
 				return false;
-		} else if (!reversedConfilictPolicies
-				.equals(other.reversedConfilictPolicies))
+		} else if (!reversedConflictPolicies
+				.equals(other.reversedConflictPolicies))
 			return false;
 		if (teamForgeMappingType == null) {
 			if (other.teamForgeMappingType != null)

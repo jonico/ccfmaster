@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +24,12 @@ import com.collabnet.ccf.ccfmaster.gp.web.model.RMDModel;
 import com.collabnet.ccf.ccfmaster.gp.web.rmd.ICustomizeRMDParticipant;
 import com.collabnet.ccf.ccfmaster.server.domain.ConflictResolutionPolicy;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
+import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
+import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
+import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
+import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeConnectionHelper;
 import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeMetadataHelper;
+import com.collabnet.teamforge.api.Connection;
 
 /**
  * LandscapeRMDController - admin scope request to create Repository Mapping Direction
@@ -33,6 +40,8 @@ import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeMetadataHelper;
 @RequestMapping("/admin/**")
 @Controller
 public class LandscapeRMDController extends AbstractLandscapeController {
+	
+	private static final Logger log = LoggerFactory.getLogger(LandscapeRMDController.class);
 	
 	private CreateRMDHelper createRMDHelper = new CreateRMDHelper();
 	
@@ -58,15 +67,25 @@ public class LandscapeRMDController extends AbstractLandscapeController {
 	}
 
 	@RequestMapping(value="/"+UIPathConstants.RMD_SAVE, method=RequestMethod.POST)
-	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel,BindingResult bindingResult, Model model, HttpServletRequest request){
-		ConflictResolutionPolicy forwardConflictPolicy = null,reverseConflictPolicy = null;
+	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel,BindingResult bindingResult, Model model, HttpServletRequest request){		
 		createRMDHelper.populateConfigMaps(rmdmodel);
 		createRMDHelper.validateRMD(rmdmodel, bindingResult,model);
 		if(bindingResult.hasErrors()){
 			populateModel(model);
 			return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
 		}
-		createRMDHelper.createAndPersistRMD(rmdmodel, model, forwardConflictPolicy, reverseConflictPolicy);
+		try {
+			String direction = rmdmodel.getDirection();
+			String projectId = rmdmodel.getTeamforgeProjectId();
+			Landscape landscape = ControllerHelper.findLandscape();
+			Connection connection = TeamForgeConnectionHelper.teamForgeConnection();
+			String linkId = TeamForgeMetadataHelper.getTFLinkId(connection,landscape.getPlugId(),projectId);
+			ExternalApp externalApp = createRMDHelper.getExternalApp(landscape,projectId, linkId,connection);
+			createRMDHelper.createAndPersistRMD(rmdmodel, model, direction, externalApp);
+			
+		} catch (RemoteException e) {
+			log.debug("TeamForge request to check for its connection to retrieve linkid info got failed ", e);
+		}
 		populateModel(model);
 		return UIPathConstants.RMD_SAVE;		
 	}

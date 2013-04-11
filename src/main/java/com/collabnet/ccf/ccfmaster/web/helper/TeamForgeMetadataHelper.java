@@ -30,8 +30,7 @@ public class TeamForgeMetadataHelper {
 	
 	public static Map<String,String> getAllTeamForgeProjects() throws RemoteException{
 		Map<String,String> projectInfoMap = new LinkedHashMap<String,String>();
-		Connection connection;
-		connection = TeamForgeConnectionHelper.teamForgeConnection();
+		Connection connection = TeamForgeConnectionHelper.teamForgeConnection();
 		ProjectList projectList = connection.getTeamForgeClient().getProjectList();
 		ProjectRow [] projectRows = projectList.getDataRows();
 		Arrays.sort(projectRows, new Comparator<ProjectRow>() {
@@ -44,6 +43,14 @@ public class TeamForgeMetadataHelper {
 		}
 		return projectInfoMap;
 	
+	}
+	
+	public static Map<String,String> getTeamForgeProject(String projectPath) throws RemoteException{
+		Map<String,String> projectInfoMap = new LinkedHashMap<String,String>();
+		Connection connection = TeamForgeConnectionHelper.teamForgeConnection();
+		ProjectDO project = connection.getTeamForgeClient().getProjectDataByPath(projectPath);
+		projectInfoMap.put(project.getId(),project.getTitle());
+		return projectInfoMap;
 	}
 	
 	

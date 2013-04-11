@@ -72,7 +72,11 @@
 				</tr>
 				<tr class="ItemListHeader">
     			<c:if test="${fn:length(repositoryMappingsModel) > 0}">
-				 <td width="1"><input type="checkbox" id="selectall"  name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>Active Field Mapping</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>
+				 <td width="1"><input type="checkbox" id="selectall"  name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td>
+				 <c:if test="${participant.systemKind ne 'SWP'}">
+				 <td>Active Field Mapping</td>
+				 </c:if>
+				 <td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>
 				 <c:forEach items="${repositoryMappingsModel}" var="rmm" varStatus="status">
 				 	<c:set var="rmd" value="${rmm.repositoryMappingDirection}" />
 				 	<tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
@@ -152,12 +156,12 @@
 							   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPPING_RULES'}">
 							  	<c:set var="fm_image_url" value="${fm_mr_image_url}"/>
 							   </c:if>
-						
+						<c:if test="${participant.systemKind ne 'SWP'}">
 		 				<spring:url value="/admin/associatedfmbyrmd?rmdid={rmdid}" var="associated_fmapping_url">
 							<spring:param name="rmdid" value="${rmd.id}" />
 						</spring:url>	   
 			 			<td><a href="#" title="${rmm.repositoryMappingDirection.activeFieldMapping.name}" class="poptip" ><img src="${fn:escapeXml(fm_image_url)}" title="${rmm.repositoryMappingDirection.activeFieldMapping.kind}"  alt="${rmm.repositoryMappingDirection.activeFieldMapping.kind}" border="0" class="trackerIcon" /></a>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<a href="${associated_fmapping_url}&amp;direction=FORWARD" ><img src="${fn:escapeXml(fm_templates_image_url)}" title="Associated Field Mappings"  alt="Associated Field Mappings" border="0" class="trackerIcon" /></a></td>
-			 			
+			 			</c:if>
 		 				<spring:url value="/admin/displayhospitalbyrmd?rmdid={rmdid}" var="hospital_url">
 							<spring:param name="rmdid" value="${rmd.id}" />
 						</spring:url>
