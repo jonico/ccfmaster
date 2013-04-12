@@ -19,14 +19,14 @@
 	<!-- Default ccf runtime properties -->
 	<util:properties id="defaultCcfRuntimeProperties">
 		<prop key="ccf.maxAttachment.size">10485760</prop>
-		<prop key="ccf.baseUrl">http://ccfmaster:8080/CCFMaster</prop>
+		<prop key="ccf.baseUrl">http://wxpccf.lan:8080/CCFMaster</prop>
 		<prop key="ccf.db.port">9002</prop>
 		<prop key="ccf.home">/tmp</prop>
-		<prop key="ccf.iafServiceEndpoint">http://localhost:8090/services/DummyService</prop>
+		<prop key="ccf.iafServiceEndpoint">http://ptctf621.lan:8080/ccf-iaf-dummyservice/services/DummyService61</prop>
 		<prop key="ccf.forward.jmxport">8001</prop>
 		<prop key="ccf.reverse.jmxport">8002</prop>
-		<prop key="ccf.tf.url">http://pebblevm</prop>
-		<prop key="ccf.saasmode">false</prop>
+		<prop key="ccf.tf.url">https://ptctf621.lan</prop>
+		<prop key="ccf.saasmode">true</prop>
 		<prop key="ccf.isArchiveRequired">true</prop>
 	</util:properties>
 </beans>
