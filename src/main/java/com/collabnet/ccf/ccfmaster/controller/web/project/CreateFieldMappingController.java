@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.collabnet.ccf.ccfmaster.controller.api.BadRequestException;
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
 import com.collabnet.ccf.ccfmaster.controller.web.LandscapeFieldMappingController;
-import com.collabnet.ccf.ccfmaster.controller.web.UIPathConstants;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMapping;
@@ -50,6 +50,7 @@ public class CreateFieldMappingController extends AbstractProjectController {
 			@RequestParam(value = PAGE_REQUEST_PARAM, required = false) Integer page,
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
 			Model model,HttpSession session) {
+			validateRepositoryMappingDirection(ea, rmd);
 			LandscapeFieldMappingController.getFieldMappingForRMD(rmd, model);
 			Directions directions = ControllerConstants.FORWARD.equals(direction) ? Directions.FORWARD : Directions.REVERSE;
 			populatePageSizetoModel(directions,ea,model, session);
@@ -63,10 +64,12 @@ public class CreateFieldMappingController extends AbstractProjectController {
 	 */ 
 	@RequestMapping(value="/setactivefm", method=RequestMethod.POST)
 	public String setasActiveFieldMapping(
+			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(RMD_ID_REQUEST_PARAM)  RepositoryMappingDirection rmd,
 			@RequestParam(FIELD_MAPPING_ID) FieldMapping fieldMapping,
 			Model model,HttpServletRequest request) {
 		try{
+			validateRepositoryMappingDirection(ea, rmd);
 			rmd.setActiveFieldMapping(fieldMapping);
 			rmd.merge();
 			FlashMap.setSuccessMessage(ControllerConstants.FIELD_MAPPING_SETAS_ACTIVE_SUCCESS_MESSAGE);
@@ -85,12 +88,14 @@ public class CreateFieldMappingController extends AbstractProjectController {
 	 */ 
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public String deleteFieldMapping(
+			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(RMD_ID_REQUEST_PARAM)  RepositoryMappingDirection rmd,
 			@RequestParam(FIELD_MAPPING_ID) String[] items,
 			Model model,HttpServletRequest request) {
 		if (items == null) 
 			items = new String[0];
 		try {
+			validateRepositoryMappingDirection(ea, rmd);
 			for (String fieldMappingId: items ) {
 				if(rmd.getActiveFieldMapping().getId() == Long.valueOf(fieldMappingId).longValue()){
 					FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_NODELETE_ACTIVE_FAILURE_MESSAGE);
@@ -118,15 +123,17 @@ public class CreateFieldMappingController extends AbstractProjectController {
 	 */ 
 	@RequestMapping(value="/createfm", method=RequestMethod.POST)
 	public String createFieldMapping(
+			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(RMD_ID_REQUEST_PARAM)  RepositoryMappingDirection rmd,
 			Model model,HttpServletRequest request) {
 		
+		validateRepositoryMappingDirection(ea, rmd);
 		Landscape landscape=ControllerHelper.findLandscape();
 		FieldMappingTemplateModel fieldMappingTemplateModel=new FieldMappingTemplateModel();
 		//Get landscape templates by landscape and direction - connector templates
-				List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate = FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndDirection(landscape, rmd.getDirection()).getResultList();
+		List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate = FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByParentAndDirection(landscape, rmd.getDirection()).getResultList();
 		//Get external app templates by external app and direction - project templates
-				List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate = 
+		List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate = 
 						FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParentAndDirection(rmd.getRepositoryMapping().getExternalApp(), rmd.getDirection()).getResultList();
 				
 		fieldMappingTemplateModel.setFieldMappingLandscapeTemplate(fieldMappingLandscapeTemplate);
@@ -145,9 +152,11 @@ public class CreateFieldMappingController extends AbstractProjectController {
 	 */ 
 	@RequestMapping(value="/savefm", method=RequestMethod.POST)
 	public String saveNewFieldMapping(
+			@ModelAttribute(EXTERNAL_APP_MODEL_ATTRIBUTE) ExternalApp ea,
 			@RequestParam(RMD_ID_REQUEST_PARAM)  RepositoryMappingDirection rmd,
 			FieldMappingTemplateModel fieldMappingTemplateModel,Model model,HttpServletRequest request) {
 		try{
+			validateRepositoryMappingDirection(ea, rmd);
 			LandscapeFieldMappingController.persistFieldMapping(fieldMappingTemplateModel, rmd);
 			
 		} catch (Exception exception) {
@@ -183,6 +192,9 @@ public class CreateFieldMappingController extends AbstractProjectController {
 		model.addAttribute("size", size);
 	}
 	
-
+	void validateRepositoryMappingDirection(ExternalApp ea, RepositoryMappingDirection rmd) {
+		if (!ea.getId().equals(rmd.getRepositoryMapping().getExternalApp().getId()))
+			throw new BadRequestException("wrong external app.");
+	}
 	
 }
