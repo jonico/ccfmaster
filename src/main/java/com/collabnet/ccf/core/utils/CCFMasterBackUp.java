@@ -1,10 +1,12 @@
 package com.collabnet.ccf.core.utils;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.dao.DataAccessException;
@@ -32,8 +34,6 @@ public class CCFMasterBackUp {
 	private String archiveLocation;
 	
 	private String backupFilePath;
-
-	private File [] backupFiles = null; // files to be backed up
 	
 	private JdbcTemplate jdbcTemplate;
 	
@@ -41,7 +41,6 @@ public class CCFMasterBackUp {
 	
 	public void setDbPath(String dbPath) {
 		this.dbPath = dbPath;
-		loadRequiredDbFiles();
 	}
 
 	public void setCcfHome(String ccfHome) {
@@ -83,6 +82,7 @@ public class CCFMasterBackUp {
 	protected synchronized void doDBBackup(File destDir) {
 		try {
 			this.jdbcTemplate.execute(CHECKPOINT_SQL_STRING);
+			File [] backupFiles = loadRequiredDbFiles();
 			for (File backupFile : backupFiles) {
 				if (backupFile.exists())
 					FileUtils.copyFileToDirectory(backupFile, destDir);
@@ -99,16 +99,21 @@ public class CCFMasterBackUp {
 		try {
 			String landscapeDir = ControllerHelper.landscapeDirName(ccfHome);
 			FileUtils.copyDirectoryToDirectory(new File(landscapeDir), destDir);
+			File [] participantPropetiesFiles = loadParticipantPropFiles();
+			for(File propertyFile: participantPropetiesFiles){
+				if (propertyFile.exists())
+				FileUtils.copyFileToDirectory(propertyFile, destDir);
+			}
 		} catch (IOException e) {
 			throw new CoreConfigurationException("Backup operation failed- "+e.getMessage(), e);
 		}
 
 	}
 	
-	private void loadRequiredDbFiles() {
-		File dbDir = new File(dbPath);
+	private File[] loadRequiredDbFiles() {
+		File dbDir = new File(this.dbPath);
 		File backupFileHolder = dbDir.getAbsoluteFile().getParentFile();
-		this.backupFiles = new File[] { 
+		return new File[] { 
 				new File(backupFileHolder, dbDir.getName() + ".properties"), //required files
 				new File(backupFileHolder, dbDir.getName() + ".script"), //required files
 	            new File(backupFileHolder, dbDir.getName() + ".backup"),
@@ -116,6 +121,27 @@ public class CCFMasterBackUp {
 	            new File(backupFileHolder, dbDir.getName() + ".log"),
 	            new File(backupFileHolder, dbDir.getName() + ".lobs")};
 
+	}
+	
+	private File[] loadParticipantPropFiles(){
+		File dir = new File(this.ccfHome);
+		return dir.listFiles(new FilenameFilter() {
+			private String[] regexs = {"^*-participant.properties","^*runtimeconfig.properties"};
+			
+	        @Override
+	        public boolean accept(File dir, String name) {
+	            return findMatch(name);
+	        }
+	    	
+	    	public boolean findMatch( String value){
+	    		boolean isValueMatched = false;
+	    		for(String regex : this.regexs){
+		    		isValueMatched = Pattern.compile(regex).matcher(value).find();
+		    		if(isValueMatched) break;
+	    		}
+				return isValueMatched;
+	    	}
+	    });
 	}
 	
 	private File createBackupDir() {
