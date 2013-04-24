@@ -50,7 +50,6 @@ public class CreateFieldMappingController extends AbstractProjectController {
 			@RequestParam(value = PAGE_REQUEST_PARAM, required = false) Integer page,
 			@RequestParam(value = PAGE_SIZE_REQUEST_PARAM, required = false) Integer size,
 			Model model,HttpSession session) {
-			validateRepositoryMappingDirection(ea, rmd);
 			LandscapeFieldMappingController.getFieldMappingForRMD(rmd, model);
 			Directions directions = ControllerConstants.FORWARD.equals(direction) ? Directions.FORWARD : Directions.REVERSE;
 			populatePageSizetoModel(directions,ea,model, session);
@@ -102,6 +101,7 @@ public class CreateFieldMappingController extends AbstractProjectController {
 				}
 				else{
 					FieldMapping fieldMappingEntry=FieldMapping.findFieldMapping(new Long(fieldMappingId));
+					validateRepositoryMappingDirection(ea, fieldMappingEntry.getParent());
 					fieldMappingEntry.remove();
 					FlashMap.setSuccessMessage(ControllerConstants.FIELD_MAPPING_DELETE_SUCCESS_MESSAGE);
 				}
