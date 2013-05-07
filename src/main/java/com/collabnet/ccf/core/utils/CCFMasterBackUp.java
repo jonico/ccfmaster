@@ -126,7 +126,7 @@ public class CCFMasterBackUp {
 	private File[] loadParticipantPropFiles(){
 		File dir = new File(this.ccfHome);
 		return dir.listFiles(new FilenameFilter() {
-			private String[] regexs = {"^*-participant.properties","^*runtimeconfig.properties"};
+			private String[] regexs = {"^.*-participant\\.properties","^.*runtimeconfig\\.properties"};
 			
 	        @Override
 	        public boolean accept(File dir, String name) {
@@ -136,7 +136,7 @@ public class CCFMasterBackUp {
 	    	public boolean findMatch( String value){
 	    		boolean isValueMatched = false;
 	    		for(String regex : this.regexs){
-		    		isValueMatched = Pattern.compile(regex).matcher(value).find();
+		    		isValueMatched = Pattern.matches(regex, value);
 		    		if(isValueMatched) break;
 	    		}
 				return isValueMatched;
