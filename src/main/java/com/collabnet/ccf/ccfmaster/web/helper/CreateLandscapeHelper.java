@@ -240,10 +240,9 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateTFtoGeneric.persist();
 			directionConfigLogTemplateGenerictoTF.persist();
 			
-			// Creation for attachment size should be proper... that is handling genericparticipantloader(pass from contoller or have it is has instance variable)
 			if(genericParticipant != null){
 				DirectionConfig directionConfigTFMaxSize = new DirectionConfig(); 
-				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix());
+				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix().toLowerCase());
 				directionConfigTFMaxSize.setDirection(reverseDirection);
 				directionConfigTFMaxSize.setName(configName);
 				directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());

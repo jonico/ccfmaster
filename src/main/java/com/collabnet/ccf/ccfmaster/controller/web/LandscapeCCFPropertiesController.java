@@ -359,7 +359,7 @@ public class LandscapeCCFPropertiesController extends AbstractLandscapeControlle
 			property = createMaxAttachmentProperty(	ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE, systemkind, direction, isValueDefault);
 		} else if (!isForwardDir && systemkind.equals(SystemKind.GENERIC)){
 			if(genericParticipant != null){
-				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix());
+				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix().toLowerCase());
 				property = createMaxAttachmentProperty(	configName, systemkind, direction, isValueDefault);
 			}
 		}		
