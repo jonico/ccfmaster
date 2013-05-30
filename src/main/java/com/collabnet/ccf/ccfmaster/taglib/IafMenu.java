@@ -103,6 +103,7 @@ public class IafMenu extends TagSupport {
 		 * com.collabnet.ce.soap50.integratedapps.taglib.ViewButtonBarTag and
 		 * com.collabnet.ce.soap50.integratedapps.taglib.RenderButtonBar.
 		 */
+		buf.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 		buf.append(String.format("<html><head><base href=\"%s/sf\" target=\"_top\" />\n", serverUrl));
 		buf.append(cssInclude(serverUrl));
 		buf.append(jsIncludes(serverUrl));
