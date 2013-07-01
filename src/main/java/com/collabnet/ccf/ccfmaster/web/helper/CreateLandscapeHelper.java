@@ -240,7 +240,7 @@ public class CreateLandscapeHelper {
 			directionConfigLogTemplateTFtoGeneric.persist();
 			directionConfigLogTemplateGenerictoTF.persist();
 			
-			if(genericParticipant != null){
+			if(genericParticipant != null && !isGenericParticipantMaxAttachmentExist(reverseDirection, genericParticipant.getPrefix())){
 				DirectionConfig directionConfigTFMaxSize = new DirectionConfig(); 
 				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix().toLowerCase());
 				directionConfigTFMaxSize.setDirection(reverseDirection);
@@ -354,6 +354,11 @@ public class CreateLandscapeHelper {
 	
 	public static boolean isTFMaxAttachmentExist(Direction forwardDirection) {
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(forwardDirection,ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE).getResultList().size()!=0;
+	}
+	
+	public static boolean isGenericParticipantMaxAttachmentExist(Direction reverseDirection,String prefix) {
+		String configName = String.format("ccf.direction.%s.max.attachmentsize",prefix.toLowerCase());
+		return DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,configName).getResultList().size()!=0;
 	}
 
 }
