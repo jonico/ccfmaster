@@ -114,18 +114,18 @@
 		 });
 		 
 		$('#submitForm').click(function() {
-		    if (!$("input[@name='workitem']:checked").val()) {
-		    	alert('Please select the TeamForge Work Item type');
+		    if (!$("input[@name='teamForgeMappingType']:checked").val()) {
+		    	alert('Please select the TeamForge Mapping type');
 		        return false;
 		    }    
 		 });
 			
-		 $("input[name$='workitem']").click(function(){
+		 $("input[name$='teamForgeMappingType']").click(function(){
 			 var radioval=$(this).val();
-			 if(radioval=='tracker'){
-	             $('#projectid').hide();
+			 if(radioval=='Tracker' ||radioval=='MetaData'){
+	             $('#projectid').show();
 	             $('#trackerid').show();
-             } else if(radioval=='planningfolder'){
+             } else if(radioval=='PlanningFolders'){
                	$('#trackerid').hide();
               	$('#projectid').show();
             }
