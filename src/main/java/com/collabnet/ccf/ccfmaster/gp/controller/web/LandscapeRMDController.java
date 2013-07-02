@@ -132,7 +132,7 @@ public class LandscapeRMDController extends AbstractLandscapeController {
 	
 	@ModelAttribute(value="teamForgeMappingType")	
 	protected String[] getTeamForgeMappingType(){
-		return new String[] {"PlanningFolder","Tracker","Metadata"};
+		return new String[] {"PlanningFolders","Tracker","MetaData"};
 	}
 	
 	@ModelAttribute(value="forwardFieldMappingTemplateNames")

@@ -49,6 +49,8 @@ import flexjson.JSONSerializer;
 @Configurable
 public class CreateRMDHelper {
 	
+	private static final String PLANNINGFOLDERS = "planningFolders";
+
 	@Autowired(required= false)
 	public GenericParticipantFacade genericParticipant;
 	
@@ -151,11 +153,13 @@ public class CreateRMDHelper {
 
 	private String getTeamForgeRepoId(RMDModel rmdmodel) {
 		String trackerId = getTeamForgeTrackerId(rmdmodel.getTeamforgeTracker());
-		String teamForgeRepositoryId = String.format("%s-%s-%s", rmdmodel.getTeamforgeProjectId(),trackerId,rmdmodel.getTeamForgeMappingType());
+		String projectId = rmdmodel.getTeamforgeProjectId();
+		String teamForgeRepositoryId = String.format("%s-%s-%s", projectId,trackerId,rmdmodel.getTeamForgeMappingType());
 		if(rmdmodel.getTeamForgeMappingType().equalsIgnoreCase("tracker")){
 			teamForgeRepositoryId = trackerId;
-		}
-		if(rmdmodel.getTeamForgeMappingType().equalsIgnoreCase("planning folder")){
+		} else if(rmdmodel.getTeamForgeMappingType().equalsIgnoreCase(PLANNINGFOLDERS)){
+			teamForgeRepositoryId = String.format("%s-%s", projectId,PLANNINGFOLDERS);
+		} else if (rmdmodel.getTeamForgeMappingType().equalsIgnoreCase("MetaData")){
 			teamForgeRepositoryId = String.format("%s-%s", trackerId,rmdmodel.getTeamForgeMappingType());
 		}
 		return teamForgeRepositoryId;
