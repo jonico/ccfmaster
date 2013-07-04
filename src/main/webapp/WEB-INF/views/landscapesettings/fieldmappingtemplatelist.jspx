@@ -113,6 +113,10 @@
 		
 		function saveForm(url){
 			var isnull=false;
+			if ($('input:checked').length &lt; 1){
+				alert('Please select atleast one Field mapping template name to import');	
+				return false;
+			}
 		//	 pattern = /^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\s]*$/;
 			  pattern = /^[a-zA-Z0-9\s]*$/;
 			for(i=0; i&lt;document.forms[0].elements.length; i++){
@@ -139,7 +143,6 @@
 			if(isnull){
 			alert('Field mapping template name cannot be empty.');	
 			} 
-			
 			else{
 		    	 document.getElementById("fieldMappingTemplatelistform").action=url;
 		    	 document.getElementById("fieldMappingTemplatelistform").submit();
@@ -156,7 +159,6 @@
 			
 		}
 	
-		
 		$(function(){
 		    $("#selectall").click(function () {
 		          $('.fmtname').attr('checked', this.checked);

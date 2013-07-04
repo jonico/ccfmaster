@@ -80,7 +80,7 @@
 				 <c:forEach items="${repositoryMappingsModel}" var="rmm" varStatus="status">
 				 	<c:set var="rmd" value="${rmm.repositoryMappingDirection}" />
 				 	<tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-				 	<td><input type="checkbox" class="rmdid" name="rmdid" value="${rmd.id}"  onClick="javascript:toggleButton()" /></td>
+				 	<td><input type="checkbox" class="rmdid" name="rmdid" value="${rmd.id}"  /></td>
 				 	<td width="1">
 					<sec:authorize access="hasRole('ROLE_PAUSE_SYNCHRONIZATION')">
 						<c:if test="${rmd.status eq 'PAUSED'}">
@@ -359,23 +359,7 @@
  
 		}
 	
-		function toggleButton(){
-			var checkSelected = false;
-			for (i = 0; i &lt; document.getElementById("repositoryForm").elements.length; i++)
-			{
-				if (document.getElementById("repositoryForm").elements[i].checked) {
-					checkSelected=true;
-				}
-			}	
-			if(checkSelected){
-				document.getElementById("enablebutton").style.display = "inline";
-				document.getElementById("disablebutton").style.display = "none";
-			}	
-			if (!checkSelected) {
-				document.getElementById("enablebutton").style.display = "none";
-				document.getElementById("disablebutton").style.display = "inline";
-			}
-		}
+	
 		
 		$(function(){
 		    $("#selectall").click(function () {
@@ -393,6 +377,14 @@
 		    // if all checkbox are selected, check the selectall checkbox
 		    // and viceversa
 		    $(".rmdid").click(function(){
+		    	if($(".rmdid:checked").length &gt; 0){
+		    		 $("#enablebutton").css('display', 'inline');
+		        	 $("#disablebutton").css('display', 'none');
+		    	}
+		    	else{
+		    		 $("#disablebutton").css('display', 'inline');
+		        	 $("#enablebutton").css('display', 'none');
+		    	}
 		 		if($(".rmdid").length == $(".rmdid:checked").length) {
 		            $("#selectall").attr("checked", "checked");
 		        } else {

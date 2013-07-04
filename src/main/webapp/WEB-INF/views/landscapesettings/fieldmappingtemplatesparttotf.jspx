@@ -53,7 +53,7 @@
 				 <td width="1"><input type="checkbox" id="selectall"  name="selectall"></input></td><td>${namelabel}</td><td>${typelabel}</td>
      		 	 <c:forEach items="${fieldMappingLandscapeTemplate}" var="fmtlist" varStatus="status">
      		 	   <tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-     		 	    <td><input type="checkbox" class="fmtid"  name="fmtid" value="${fmtlist.name}-${fmtlist.id}" onClick='javascript:toggleButton()'/></td>
+     		 	    <td><input type="checkbox" class="fmtid"  name="fmtid" value="${fmtlist.name}-${fmtlist.id}"/></td>
 				    <td><c:out value= "${fmtlist.name}" /></td>
 				    <c:if test="${fmtlist.kind eq 'MAPFORCE'}">
 				    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${mapforce}" title="${mapforce}"/>&#160;<c:out value= "${mapforce}" /></td>
@@ -180,28 +180,6 @@
 			}
 	  	}
 		
-		
-		function toggleButton(){
-			var checkSelected = false;
-			var count=0;
-			for (i = 0; i &lt; document.getElementById("fmTemplateForm").elements.length; i++)
-			{
-				if (document.getElementById("fmTemplateForm").elements[i].checked) {
-					checkSelected=true;
-					count++;
-				}
-			}	
-			if(checkSelected){
-				document.getElementById("enablebutton").style.display = "inline";
-				document.getElementById("disablebutton").style.display = "none";
-			}
-			
-			if (!checkSelected) {
-				document.getElementById("enablebutton").style.display = "none";
-				document.getElementById("disablebutton").style.display = "inline";
-			}
-		}
-		
 		$(function(){
 		    $("#selectall").click(function () {
 		          $('.fmtid').attr('checked', this.checked);
@@ -218,6 +196,14 @@
 		    // if all checkbox are selected, check the selectall checkbox
 		    // and viceversa
 		    $(".fmtid").click(function(){
+		    	if($(".fmtid:checked").length &gt; 0){
+		    		 $("#enablebutton").css('display', 'inline');
+		        	 $("#disablebutton").css('display', 'none');
+		    	}
+		    	else{
+		    		 $("#disablebutton").css('display', 'inline');
+		        	 $("#enablebutton").css('display', 'none');
+		    	}
 		 		if($(".fmtid").length == $(".fmtid:checked").length) {
 		            $("#selectall").attr("checked", "checked");
 		        } else {

@@ -45,7 +45,7 @@
 		 		<td width="1"><input type="checkbox" id="selectall"  checked="checked" name="selectall"></input></td><td>Field Mapping Template Name</td><td>Type</td>
 				 <c:forEach items="${fieldMappingLandscapeTemplatelist}" var="fmtlist" varStatus="status">
 					<tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-     		 		<td styleclass="FormArea"><input type="checkbox" class="fmtname" checked="checked" name="fmtname" value="${fmtlist.name}"  onClick='javascript:toggleButton()'/></td>
+     		 		<td styleclass="FormArea"><input type="checkbox" class="fmtname" checked="checked" name="fmtname" value="${fmtlist.name}"  /></td>
      		 	  	<td><input type="text"  id="textbox" name="name-${fmtlist.name}" size="60" class="inputfield" value="${fmtlist.name}"/>${alreadyExists[status.index]}</td>
 				 	 <c:if test="${fmtlist.kind eq 'MAPFORCE'}">
 				    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${mapforce}" title="${mapforce}"/>&#160;<c:out value= "${mapforce}" /></td>
@@ -112,8 +112,11 @@
 		
 		function saveForm(url){
 			var isnull=false;
-		//	 pattern = /^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\s]*$/;
-			  pattern = /^[a-zA-Z0-9\s]*$/;
+			if ($('input:checked').length &lt; 1){
+				alert('Please select atleast one Field mapping template name to import');	
+				return false;
+			}
+			pattern = /^[a-zA-Z0-9\s]*$/;
 			for(i=0; i&lt;document.forms[0].elements.length; i++){
 				   if(document.forms[0].elements[i].type == 'text'){
 				      var elValue1 = document.forms[0].elements[i].value;

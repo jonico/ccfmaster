@@ -106,7 +106,7 @@
 					<c:set var="errortitle" value="${hospitalentryreplayedlabel}"/>
 					</c:if>
      		  	    <tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-					<td><input type="checkbox" class="hospitalid"  name="hospitalid" value="${hospitalentry.id}" onClick='javascript:toggleButton()'/></td>
+					<td><input type="checkbox" class="hospitalid"  name="hospitalid" value="${hospitalentry.id}" /></td>
 					<td nowrap="nowrap">${hospitalentry.timestamp}</td>
 					<td>${hospitalentry.originatingComponent}</td>
 					<c:if test="${hospitalist.artifactIcon ne 'null'}">
@@ -311,36 +311,6 @@
 		}
 	
 		
-		function toggleButton(){
-			var checkSelected = false;
-			var count=0;
-			for (i = 0; i &lt; document.getElementById("hospitalTeamForgeForm").elements.length; i++)
-			{
-				if (document.getElementById("hospitalTeamForgeForm").elements[i].checked) {
-					checkSelected=true;
-					count++;
-				}
-			}	
-			if(checkSelected){
-				if(count>1){
-					document.getElementById("enablebutton").style.display = "none";
-					document.getElementById("disablebutton").style.display = "none";
-					document.getElementById("disableexaminebutton").style.display = "inline";	
-				}
-				else{
-					document.getElementById("enablebutton").style.display = "inline";
-					document.getElementById("disablebutton").style.display = "none";
-					document.getElementById("disableexaminebutton").style.display = "none";
-				}
-				
-			}	
-			if (!checkSelected) {
-				document.getElementById("enablebutton").style.display = "none";
-				document.getElementById("disablebutton").style.display = "inline";
-				document.getElementById("disableexaminebutton").style.display = "none";
-			}			
-		}
-		
 		$(function(){
 		    $("#selectall").click(function () {
 		          $('.hospitalid').attr('checked', this.checked);
@@ -360,6 +330,21 @@
 		    // if all checkbox are selected, check the selectall checkbox
 		    // and viceversa
 		    $(".hospitalid").click(function(){
+		    	if($(".hospitalid:checked").length == 1){
+		    		$("#enablebutton").css('display', 'inline');
+	        	  	$("#disablebutton").css('display', 'none');
+	        		$("#disableexaminebutton").css('display', 'none');
+		    	}
+		    	else if($(".hospitalid:checked").length &gt; 1){
+		    		$("#enablebutton").css('display', 'none');
+	        	  	$("#disablebutton").css('display', 'none');
+	        		$("#disableexaminebutton").css('display', 'inline');
+		    	}
+		    	else{
+		    		$("#enablebutton").css('display', 'none');
+	        	  	$("#disablebutton").css('display', 'inline');
+	        		$("#disableexaminebutton").css('display', 'none');
+		    	}
 		 		if($(".hospitalid").length == $(".hospitalid:checked").length) {
 		            $("#selectall").attr("checked", "checked");
 		        } else {
