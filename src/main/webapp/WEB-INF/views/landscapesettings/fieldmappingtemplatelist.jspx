@@ -110,8 +110,11 @@
 		
 		function saveForm(url){
 			var isnull=false;
-		//	 pattern = /^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\s]*$/;
-			  pattern = /^[a-zA-Z0-9\s]*$/;
+			if ($('input:checked').length &lt; 1){
+				alert('Please select atleast one Field mapping template name to import');	
+				return false;
+			}
+		 	pattern = /^[a-zA-Z0-9\s]*$/;
 			for(i=0; i&lt;document.forms[0].elements.length; i++){
 				   if(document.forms[0].elements[i].type == 'text'){
 				      var elValue1 = document.forms[0].elements[i].value;

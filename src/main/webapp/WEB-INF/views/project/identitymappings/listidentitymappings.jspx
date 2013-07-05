@@ -70,7 +70,7 @@
      		 	 <c:forEach items="${identitymappingsmodel}" var="idmappinglist" varStatus="status">
      		 	 	<c:set var="identityMappingentry" value="${idmappinglist.identityMappingEntry}" />
      		  	    <tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-					<td><input type="checkbox" class="mappingid" name="mappingid" value="${identityMappingentry.id}" onClick='javascript:toggleButton()'/></td>
+					<td><input type="checkbox" class="mappingid" name="mappingid" value="${identityMappingentry.id}"/></td>
 					<c:if test="${idmappinglist.artifactIcon ne 'null'}">
 					<spring:url value="/images/tracker/icons/${idmappinglist.artifactIcon}" var="artifact_image_url" />
 						<td nowrap="nowrap"><img src="${fn:escapeXml(artifact_image_url)}" title="${idmappinglist.repositoryData}"  alt="${idmappinglist.repositoryData}" border="0" class="trackerIcon" />&#160;${identityMappingentry.sourceArtifactId}&#160; : &#160;<a href="${idmappinglist.tfUrl}/sf/go/${identityMappingentry.sourceArtifactId}">${idmappinglist.artifactData}</a></td>
@@ -180,24 +180,6 @@
 		}
 	
 		
-		function toggleButton(){
-			var checkSelected = false;
-			for (i = 0; i &lt; document.getElementById("identitymappingForm").elements.length; i++)
-			{
-				if (document.getElementById("identitymappingForm").elements[i].checked) {
-					checkSelected=true;
-				}
-			}	
-			if(checkSelected){
-				document.getElementById("enablebutton").style.display = "inline";
-				document.getElementById("disablebutton").style.display = "none";
-			}	
-			if (!checkSelected) {
-				document.getElementById("enablebutton").style.display = "none";
-				document.getElementById("disablebutton").style.display = "inline";
-			}	
-		}
-		
 		$(function(){
 		    $("#selectall").click(function () {
 		          $('.mappingid').attr('checked', this.checked);
@@ -216,6 +198,14 @@
 		    // if all checkbox are selected, check the selectall checkbox
 		    // and viceversa
 		    $(".mappingid").click(function(){
+		    	if($(".mappingid:checked").length &gt; 0){
+		    		 $("#enablebutton").css('display', 'inline');
+		        	 $("#disablebutton").css('display', 'none');
+		    	}
+		    	else{
+		    		 $("#disablebutton").css('display', 'inline');
+		        	 $("#enablebutton").css('display', 'none');
+		    	}
 		 		if($(".mappingid").length == $(".mappingid:checked").length) {
 		            $("#selectall").attr("checked", "checked");
 		        } else {
