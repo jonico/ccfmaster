@@ -35,7 +35,7 @@
 					</c:forEach>	
 				</td>
 			</tr>
-			<tr>
+			<tr id="projectid" style="display:none">
 				<td class="ItemDetailName">
 					<form:label name="projectname" path="">Project Name:</form:label>
 				</td>
@@ -45,7 +45,7 @@
 					<form:options items="${teamForgeProjects}" /></form:select>
 				</td>
 			</tr>
-			<tr id="trackerid">
+			<tr id="trackerid" style="display:none">
 				<td class="ItemDetailName">
 					<form:label name="trackerid" path="">Tracker Id:</form:label>
 				</td>
@@ -126,8 +126,12 @@
 	             $('#projectid').show();
 	             $('#trackerid').show();
              } else if(radioval=='PlanningFolders'){
-               	$('#trackerid').hide();
-              	$('#projectid').show();
+            	 $("#id_trackerList").children().remove();
+            	 $("#id_trackerList").get(0).add(new Option("---- Select ----", "-1"));
+            	 $('#id_trackerList').attr("disabled", true);
+            	 $('#teamforgeTracker').val("");
+               	 $('#trackerid').hide();
+              	 $('#projectid').show();
             }
 		});
 			 
@@ -142,6 +146,19 @@
 			 $("#id_trackerList").get(0).add(new Option(selectedOption[0], selectedOption[1]));
 			 $('#id_trackerList').attr("disabled", true);
 		 }
+		 	 
+		 var teamForgeMappingVal=$("input[@name='teamForgeMappingType']:checked").val();
+		 if(teamForgeMappingVal=='Tracker' ||teamForgeMappingVal=='MetaData'){
+             $('#projectid').show();
+             $('#trackerid').show();
+         } else if(teamForgeMappingVal=='PlanningFolders'){
+        	 $("#id_trackerList").children().remove();
+        	 $("#id_trackerList").get(0).add(new Option("---- Select ----", "-1"));
+        	 $('#id_trackerList').attr("disabled", true);
+        	 $('#teamforgeTracker').val("");
+        	 $('#trackerid').hide();
+          	 $('#projectid').show();
+        }
 		 
 	 });
 		
