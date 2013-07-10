@@ -35,10 +35,10 @@
 				<tr>
 					<td class="ItemDetailName"> 	
 						<c:if test="${systemKind eq 'QC'}">
- 						<form:radiobutton id="systemKind" path="systemKind" value="${systemKind}"  />&#160;${qcsetting_label}
+ 						<form:radiobutton id="systemKind" path="systemKind" value="${systemKind}"  label="${qcsetting_label}"/>
  						</c:if>
  						<c:if test="${systemKind eq 'SWP'}">
- 						<form:radiobutton id="systemKind" path="systemKind" value="${systemKind}"  />&#160;${swpsetting_label}
+ 						<form:radiobutton id="systemKind" path="systemKind" value="${systemKind}" label="${swpsetting_label}"/>
  						</c:if>
  					</td>
  					</tr>
