@@ -230,7 +230,7 @@
 				<form:hidden path="landscapeConfigList[${status.index}].type"/>
 				<form:hidden path="landscapeConfigList[${status.index}].labelName"/>
 				<form:hidden path="landscapeConfigList[${status.index}].systemKind"/>
-				<form:input id ="landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
+				<form:input id ="landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value"  size="60" cssClass="inputfield" />
 				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
 				</td>
 				</tr>

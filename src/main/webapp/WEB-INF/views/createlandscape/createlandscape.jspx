@@ -224,7 +224,7 @@
 						<form:password path="landscapeConfigList[${status.index}].value" showPassword="true" size="60" cssClass="inputfield"/>
 					</c:when>
 					<c:otherwise>
-						<form:input path="landscapeConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
+						<form:input path="landscapeConfigList[${status.index}].value"  size="60" cssClass="inputfield" />
 					</c:otherwise>
 				</c:choose>		
 				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>

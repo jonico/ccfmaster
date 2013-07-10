@@ -30,7 +30,7 @@
 				<td class="ItemDetailName">TeamForge:<br/><br/>	</td>
 				<td class="ItemDetailValue"> 
 					<c:forEach var="tfMappingType" varStatus="status" items="${teamForgeMappingType}">
-	 					<form:radiobutton id="id_tfMappingType" value="${tfMappingType}" path="teamForgeMappingType" name="teamForgeMappingType" />${tfMappingType}
+	 					<form:radiobutton id="id_tfMappingType" value="${tfMappingType}" path="teamForgeMappingType" name="teamForgeMappingType" label="${tfMappingType}"/>
 	 					<br/><br/>
 					</c:forEach>	
 				</td>

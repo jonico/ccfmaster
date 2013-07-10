@@ -36,13 +36,13 @@
 				<td class="ItemDetailValue">					
 					<c:forEach var="directionVar" varStatus="status" items="${directions}">
 						<c:if test="${directionVar eq 'FORWARD'}">
-	 						<form:radiobutton id="id_forward" value="${directionVar}" path="direction" name="direction" />${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}
+	 						<form:radiobutton id="id_forward" value="${directionVar}" path="direction" name="direction" label="${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}"/>
 	 					</c:if>
 	 					<c:if test="${directionVar eq 'REVERSE'}">
-	 						<form:radiobutton id="id_reverse" value="${directionVar}" path="direction" name="direction"/>${fn:replace(generictotflabel,'GenericParticipant',participant.description)}
+	 						<form:radiobutton id="id_reverse" value="${directionVar}" path="direction" name="direction" label="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}"/>
 	 					</c:if> 						
 	 					<c:if test="${directionVar eq 'BOTH'}">
-	 						<form:radiobutton id="id_both" value="${directionVar}" path="direction" name="direction"/>Both
+	 						<form:radiobutton id="id_both" value="${directionVar}" path="direction" name="direction" label="Both"/>
 	 					</c:if>
 	 					<br/><br/>
 					</c:forEach>						
