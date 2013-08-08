@@ -108,7 +108,7 @@ public class IafMenu extends TagSupport {
 		buf.append(cssInclude(serverUrl));
 		buf.append(jsIncludes(serverUrl));
 		// hide jump box
-		buf.append("<style type=\"text/css\">div.jumpbutton, div.jumpfield {display: none;}</style>");
+		buf.append("<style type=\"text/css\">div.jumpbutton, div.jumpfield, td.jumpfieldcontainer, #quickJumpForm {display: none;}</style>");
 		buf.append("</head><body>");
 		for (String line : CharStreams.readLines(isr)) {
 			buf.append(
