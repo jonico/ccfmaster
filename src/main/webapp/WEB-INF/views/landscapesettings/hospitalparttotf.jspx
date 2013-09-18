@@ -7,6 +7,7 @@
 <spring:message code="button_export" var="export_button"/>
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 <spring:message code="timestamplabel" var="timestamplabel" htmlEscape="false"/>
 <spring:message code="adaptornamelabel" var="adaptornamelabel" htmlEscape="false"/>
 <spring:message code="originatingcomponentlabel" var="originatingcomponentlabel" htmlEscape="false"/>
@@ -70,6 +71,9 @@
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
 				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
+				</c:if>
 				</td>
 				<util:header-row  
 				formname="hospitalTeamForgeForm"
@@ -100,7 +104,7 @@
 					<c:set var="errortitle" value="${hospitalentryreplayedlabel}"/>
 					</c:if>
      		 	   <tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-					<td><input type="checkbox" class="hospitalid" name="hospitalid" value="${hospitalentry.id}"/></td>
+					<td><input type="checkbox" class="hospitalid" name="hospitalid" value="${hospitalentry.id}" /></td>
 					<td nowrap="nowrap">${hospitalentry.timestamp}</td>
 					<td>${hospitalentry.originatingComponent}</td>
 					<c:if test="${participant.systemKind eq 'QC'}">
@@ -135,6 +139,21 @@
 							   </c:if>
 			 			<td ><img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}" title="${swpdomainlabel}"/>&#160;${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.sourceArtifactId}</td>
 			 		</c:if>
+			 		<c:if test="${participant.systemKind eq 'GENERIC'}">
+			 			 	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'Bug')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId, 'User Story')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+							   <td>
+					 	   	 	<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${hospitalentry.repositoryMappingDirection.repositoryMapping.participantRepositoryId} - ${hospitalentry.sourceArtifactId}" />
+					 	   	 	</td>
+			 			</c:if>
 			 		<c:if test="${hospitalist.artifactIcon ne 'null'}">
 					<td ><img src="../images/tracker/icons/${hospitalist.artifactIcon}" title="${hospitalist.repositoryData}"  alt="${hospitalist.repositoryData}" border="0" class="trackerIcon" />&#160;${hospitalentry.targetArtifactId}&#160;:&#160;<a href="${hospitalist.tfUrl}/sf/go/${hospitalentry.targetArtifactId}">${hospitalist.artifactData}</a></td>
 					</c:if>
@@ -304,6 +323,8 @@
 			
 		}
 	
+
+		
 		$(function(){
 		    $("#selectall").click(function () {
 		          $('.hospitalid').attr('checked', this.checked);

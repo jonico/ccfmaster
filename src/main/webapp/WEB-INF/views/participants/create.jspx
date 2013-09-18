@@ -10,6 +10,7 @@
     
     <field:select field="timezone" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_timezone" items="${timezones}" path="timezones" required="true" z="rtbVaKjrdUcEr3UT4L+9e6Qj6NU="/>
     <field:select field="systemKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemKind" items="${systemkinds}" path="systemkinds" required="true" z="LaxxgAKuhpSHuz4Uz3/sBm2oGO4="/>
+    <field:input field="prefix" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_prefix" z="J3ZyNL4GNTwwAv1S45Bch1YX9rk="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_collabnet_ccf_ccfmaster_server_domain_Participant" render="${not empty dependencies}" z="kyanP8QVfkxcIf6I06HbWSxYxWE="/>
 </div>

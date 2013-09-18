@@ -10,6 +10,7 @@
 	<spring:message code="nolog" var="nologlabel" htmlEscape="false"/>  
 	<spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
 	<spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+	<spring:message code="tftogenericlabel" var="tftogenericlabel" htmlEscape="false"/>
 	<spring:message code="downloadlabel" var="downloadlabel" htmlEscape="false"/>
 	<spring:message code="viewlabel" var="viewlabel" htmlEscape="false"/>
 	
@@ -32,6 +33,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${tftoswplabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(tftogenericlabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

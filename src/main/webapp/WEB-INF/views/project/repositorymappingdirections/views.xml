@@ -19,4 +19,29 @@
 		<put-attribute name="activeTab" value="Reverse" cascade="true" />
 		<put-attribute name="tabBody" value="/WEB-INF/views/project/repositorymappingdirections/repositorymappingparttotf.jspx" cascade="true" />
 	</definition>    
+	
+	 <definition  extends="project/repositorymappings" name="project/fieldmapping/viewassociatefm">
+    <put-attribute name="body" value="/WEB-INF/views/project/repositorymappingdirections/viewassociatedmappings.jspx"/>
+  </definition>
+  
+  <definition  extends="project/repositorymappings" name="project/fieldmapping/displaycreatenewfm">
+    <put-attribute name="body" value="/WEB-INF/views/project/repositorymappingdirections/savenewfieldmapping.jspx"/>
+  </definition>	
+  
+  <definition  extends="project/repositorymappings" name="project/creatermd">
+    <put-attribute name="body" value="/WEB-INF/views/project/repositorymappingdirections/creatermdstep1.jspx"/>
+  </definition>
+  
+  <definition  extends="project/repositorymappings" name="project/creatermdstep2">
+    <put-attribute name="body" value="/WEB-INF/views/project/repositorymappingdirections/creatermdstep2.jspx"/>
+  </definition>
+  
+  <definition  extends="project/repositorymappings" name="project/creatermdstep3">
+    <put-attribute name="body" value="/WEB-INF/views/project/repositorymappingdirections/creatermdstep3.jspx"/>
+  </definition>
+	
+	<definition  extends="project/repositorymappings" name="project/saveRMD">
+    <put-attribute name="body" value="/WEB-INF/views/project/repositorymappingdirections/creatermdsuccess.jspx"/>
+  </definition>
+	
 </tiles-definitions>

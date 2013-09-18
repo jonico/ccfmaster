@@ -1,0 +1,327 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:output omit-xml-declaration="yes" />
+	
+	<spring:message code="button_return" var="return_button"/>
+	<spring:message code="button_delete" var="delete_button"/>
+	<spring:message code="button_active" var="active_button"/>
+	<spring:message code="button_create" var="create_button"/>
+	
+	<spring:message code="logname" var="lognamelabel" htmlEscape="false"/>  
+	<spring:message code="logsize" var="logsizelabel" htmlEscape="false"/>  
+	<spring:message code="logmodificationdate" var="logmodificationdatelabel" htmlEscape="false"/>  
+	<spring:message code="nolog" var="nologlabel" htmlEscape="false"/>  
+	<spring:message code="tftoqclabel" var="tftoqclabel" htmlEscape="false"/>
+	<spring:message code="tftoswplabel" var="tftoswplabel" htmlEscape="false"/>
+	<spring:message code="downloadlabel" var="downloadlabel" htmlEscape="false"/>
+	<spring:message code="viewlabel" var="viewlabel" htmlEscape="false"/>
+	<spring:message code="fieldmappingname" var="fieldmappingname" htmlEscape="false"/>
+	<spring:message code="fieldmappingtype" var="fieldmappingtype" htmlEscape="false"/>
+	<spring:message code="fieldmappingscope" var="fieldmappingscope" htmlEscape="false"/>
+	<spring:message code="noassociatedfieldmapping" var="noassociatedfieldmapping" htmlEscape="false"/>
+	<spring:message code="customxslt" var="customxslt" htmlEscape="false"/>
+	<spring:message code="mapforce" var="mapforce" htmlEscape="false"/>
+	<spring:message code="mappingrules" var="mappingrules" htmlEscape="false"/>
+	<spring:message code="externalapp" var="externalapp" htmlEscape="false"/>
+	<spring:message code="repositorymappingdirection" var="repositorymappingdirection" htmlEscape="false"/>
+	<spring:message code="landscape" var="landscape" htmlEscape="false"/>
+	<spring:message code="ccfcore" var="ccfcore" htmlEscape="false"/>
+	<spring:url value="/mapping-rules" var="create_mapping_rule_url"/>
+	<spring:url value="/admin/displayrepositorymappingtftopart?direction=forward" var="returnforward_url" />
+	<spring:url value="/admin/displayrepositorymappingparttotf?direction=reverse" var="returnreverse_url" />
+	<spring:url value="/images/icons/map.png" var="map_image_url" />
+	<spring:url value="/images/icons/xslt.png" var="xslt_image_url" />
+	<spring:url value="/images/icons/custom_mapping.gif" var="mapping_rules_image_url" />
+	<spring:url value="/images/icons/xslt_active.png" var="fm_xslt_image_url" />
+	<spring:url value="/images/icons/mapforce_active.png" var="fm_mf_image_url" />
+	<spring:url value="/images/icons/custom_mapping_active.gif" var="fm_mr_image_url" />
+	<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+	<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+	
+<form:form id="associatedMappingsForm"  name="associatedMappingsForm" method="POST" commandName="associatedfmmodel" modelAttribute="associatedfmmodel">
+	<table class="Container">
+	  <tbody>
+		<tr>
+		<td colspan="9">
+		<c:if test="${!empty message}">
+			<div class="${message.cssClass}"><spring:message code="${message.messageCode}" /><c:if test="${!empty message.message}">: ${message.message}</c:if></div>
+		</c:if>
+		<br/>
+		<br/>
+		<table class="ItemDetailContainer" width="100%" >
+			<tbody>
+				<tr class="ContainerHeader">
+				<td colspan="5">Associated Field Mapping(s) for ${rmdname}</td>
+				</tr>
+		<tr class="ItemListHeader">
+    	 <td><input type="checkbox" id="selectall" name="selectall"></input></td><td>${fieldmappingname}</td><td>${fieldmappingtype}</td><td>${fieldmappingscope}</td>  
+      	</tr>
+     
+     <c:if test="${fn:length(associatedfmmodel) > 0}">
+	  <c:forEach items="${associatedfmmodel}" var="associatedfm" varStatus="i">
+	   <tr class="${(i.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
+	   <td ><input type="checkbox" class="fieldmappingid"   name="fieldmappingid" value="${associatedfm.id}"/></td>
+	  	   <c:set var="fm_image_url" value="${fm_xslt_image_url	}"/>
+		   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'CUSTOM_XSLT'}">
+			  	<c:set var="fm_image_url" value="${fm_xslt_image_url}"/>
+		   </c:if>
+		   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'MAPFORCE'}">
+	  			<c:set var="fm_image_url" value="${fm_mf_image_url}"/>
+	  	   </c:if>
+	   	   <c:if test="${associatedfm.parent.activeFieldMapping.kind eq 'MAPPING_RULES'}">
+	  			<c:set var="fm_image_url" value="${fm_mr_image_url}"/>
+	 	   </c:if>
+	 	   
+	 	   <c:set var="fieldmappingname" value="${associatedfm.name}"/>
+	 	   <c:if test="${'EXTERNAL_APP' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingname" value="&lt;i&gt;Link to project mapping ${associatedfm.name} &lt;/i&gt;"/>
+	 	   </c:if>
+	 	   <c:if test="${'LANDSCAPE' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingname" value="&lt;i&gt;Link to connector mapping ${associatedfm.name}&lt;/i&gt;"/>
+	 	   </c:if>
+	 	 
+	 	   <c:if test="${activeFieldMappingid eq associatedfm.id}">
+	  	 	<td><img src="${fn:escapeXml(fm_image_url)}" title="Active field mapping"  alt="Active field mapping" border="0" class="trackerIcon" />&#160;&#160;&#160;${fieldmappingname}</td>	
+	  	 	</c:if>
+	  	 	<c:if test="${activeFieldMappingid ne associatedfm.id}">
+	  		<td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;${fieldmappingname}</td> 	
+	  	 	</c:if>
+		 	 <c:if test="${associatedfm.kind eq 'MAPFORCE'}">
+		    <td><img src="${fn:escapeXml(map_image_url)}" border="0" alt="${mapforce}" title="${mapforce}"/>&#160;<c:out value= "${mapforce}" /></td>
+		    </c:if>
+		    <c:if test="${associatedfm.kind eq 'CUSTOM_XSLT'}">
+		     <td><img src="${fn:escapeXml(xslt_image_url)}" border="0" alt="${customxslt}" title="${customxslt}"/>&#160;<c:out value= "${customxslt}" /></td>
+		    </c:if>
+		     <c:if test="${associatedfm.kind eq 'MAPPING_RULES'}">
+		     <td><img src="${fn:escapeXml(mapping_rules_image_url)}" border="0" alt="${mappingrules}" title="${mappingrules}"/>&#160;<c:out value= "${mappingrules}" /></td>
+	  		</c:if>
+		   <c:set var="fieldmappingscope" value="${associatedfm.scope}"/>
+	 	   <c:if test="${'EXTERNAL_APP' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${externalapp}"/>
+	 	   </c:if>
+	 	   <c:if test="${'LANDSCAPE' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${landscape}"/>
+	 	   </c:if>
+		   <c:if test="${'REPOSITORY_MAPPING_DIRECTION' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${repositorymappingdirection}"/>
+	 	   </c:if>
+		  <c:if test="${'CCF_CORE' eq associatedfm.scope}">
+	 	   	<c:set var="fieldmappingscope" value="${ccfcore}"/>
+	 	   </c:if>
+		  <td>${fieldmappingscope}</td>
+		  </tr>
+		</c:forEach>  
+	</c:if>
+	 <c:if test="${fn:length(associatedfmmodel) == 0}">
+	 <tr class="ItemListNoData">
+        <td colspan="5"><center>${noassociatedfieldmapping}</center></td>
+      </tr>
+	
+	</c:if>
+		 </tbody>
+		 </table>
+		</td>
+		</tr>
+		<tr class="ContainerFooter">
+				
+				<td>
+				
+				
+				<div id="enablebutton" class="AlignRight" style="display:none;" >
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/createfm?rmdid={rmdid}" var="createfm_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+						
+				</spring:url>	
+						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/setasactivefm?rmdid={rmdid}" var="activefm_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+				</spring:url>	
+				
+						 <a href="javascript: setasActiveFMForm('${fn:escapeXml(activefm_url)}');">${active_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/deleteassociatedfm?rmdid={rmdid}" var="delete_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+				</spring:url>	
+						<a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+				
+						<c:if test="${direction eq 'FORWARD'}">
+						<a href="${fn:escapeXml(returnforward_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
+						</c:if>
+						<c:if test="${direction eq 'REVERSE'}">
+						<a href="${fn:escapeXml(returnreverse_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
+						</c:if>
+				</div>
+				</div>
+				</div>
+				</td>
+			
+				<td>
+				<div class="AlignRight" id="disablebutton">
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/createfm?rmdid={rmdid}" var="createfm_url">
+						<spring:param name="rmdid" value="${rmdid}" />
+						
+				</spring:url>	
+						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+					${active_button}
+				</div>
+				</div>
+				
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+					${delete_button} 
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+						<c:if test="${direction eq 'FORWARD'}">
+						<a href="${fn:escapeXml(returnforward_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
+						</c:if>
+						<c:if test="${direction eq 'REVERSE'}">
+						<a href="${fn:escapeXml(returnreverse_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
+						</c:if>
+				</div>
+				</div>
+				</div>
+				</td>
+				
+				<td>
+				<div id="disableactivebutton" class="AlignRight" style="display:none;">
+				<div class="Button">
+				<div class="Middle">
+				<spring:url value="/admin/createfm?rmdid={rmdid}" var="createfm_url">
+						<spring:param name="rmdid" value="${rmdid}"/>
+						
+				</spring:url>	
+						 <a href="javascript: createFMForm('${fn:escapeXml(createfm_url)}');">${create_button}</a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="MiddleDisabled">
+					${active_button}
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+				     	<a href="javascript: deleteForm('${fn:escapeXml(delete_url)}');">${delete_button} </a>
+				</div>
+				</div>
+				<div class="ButtonSpace"></div>
+				<div class="Button">
+				<div class="Middle">
+						<c:if test="${direction eq 'FORWARD'}">
+						<a href="${fn:escapeXml(returnforward_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
+						</c:if>
+						<c:if test="${direction eq 'REVERSE'}">
+						<a href="${fn:escapeXml(returnreverse_url)}&amp;page=${page}&amp;size=${size}">${return_button}</a>
+						</c:if>
+				</div>
+				</div>
+				</div>
+				</td>
+				</tr>
+				
+		 </tbody>
+  </table>
+  </form:form>   
+ 	
+	<script language="JavaScript">
+	function returnForm(url){
+		document.getElementById("associatedMappingsForm").action=url;
+		document.getElementById("associatedMappingsForm").submit();	
+	}	
+	
+	function createFMForm(url){
+		document.getElementById("associatedMappingsForm").action=url;
+  		document.getElementById("associatedMappingsForm").submit();
+	}	
+	
+	function setasActiveFMForm(url){
+		document.getElementById("associatedMappingsForm").action=url;
+  		document.getElementById("associatedMappingsForm").submit();
+	}	
+	
+  
+  $(function(){
+	    $("#selectall").click(function () {
+	          $('.fieldmappingid').attr('checked', this.checked);
+	          if($('#selectall').is(':checked')){
+	       	   		$("#enablebutton").css('display', 'none');
+	        	  	$("#disablebutton").css('display', 'none');
+	        		$("#disableactivebutton").css('display', 'inline');
+	          }
+	          else{
+	        		$("#disablebutton").css('display', 'inline');
+	        		$("#enablebutton").css('display', 'none');
+	        		$("#disableactivebutton").css('display', 'none');
+	          }  
+	    });
+	 
+	    // if all checkbox are selected, check the selectall checkbox
+	    // and viceversa
+	    $(".fieldmappingid").click(function(){
+	    	if($(".fieldmappingid:checked").length == 1){
+	    		$("#enablebutton").css('display', 'inline');
+        	  	$("#disablebutton").css('display', 'none');
+        		$("#disableactivebutton").css('display', 'none');
+	    	}
+	    	else if($(".fieldmappingid:checked").length &gt; 1){
+	    		$("#enablebutton").css('display', 'none');
+        	  	$("#disablebutton").css('display', 'none');
+        		$("#disableactivebutton").css('display', 'inline');
+	    	}
+	    	else{
+	    		$("#enablebutton").css('display', 'none');
+        	  	$("#disablebutton").css('display', 'inline');
+        		$("#disableactivebutton").css('display', 'none');
+	    	}
+	 		if($(".fieldmappingid").length == $(".fieldmappingid:checked").length) {
+	            $("#selectall").attr("checked", "checked");
+	        } else {
+	            $("#selectall").removeAttr("checked");
+	          }
+	 
+	    });
+	  
+	    
+	});
+	
+  
+  function deleteForm(url){
+		var result = confirm ("Do you want to delete the selected field mapping(s)?")
+		if (result){
+		document.getElementById("associatedMappingsForm").action=url;
+		document.getElementById("associatedMappingsForm").submit();
+		}
+		
+	}
+  
+  </script>
+  
+</div>

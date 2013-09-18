@@ -25,12 +25,18 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_DISPLAYPARTICIPANTSETTINGS = "admin/displayparticipantsettings";
 	public static final String LANDSCAPESETTINGS_QC_TEST_CONNECTION = "/admin/qctestconnection";
 	public static final String LANDSCAPESETTINGS_SWP_TEST_CONNECTION = "/admin/swptestconnection";
+	public static final String LANDSCAPESETTINGS_GP_TEST_CONNECTION = "/admin/gptestconnection";
+	
 	//LandscapeRepositoryMappingsController
 	public static final String LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGTFTOPART = "admin/displayrepositorymappingtftopart";
 	public static final String LANDSCAPESETTINGS_DISPLAYREPOSITORYMAPPINGPARTTOTF = "admin/displayrepositorymappingparttotf";
 	public static final String LANDSCAPESETTINGS_RESUMESYNCHRONIZATION = "/admin/resumesynch";
 	public static final String LANDSCAPESETTINGS_PAUSESYNCHRONIZATION = "/admin/pausesynch";
 	public static final String LANDSCAPESETTINGS_DELETESYNCHRONIZATION = "/admin/deletesynch";
+	
+	//sv
+	public static final String LANDSCAPESETTINGS_CREATE_MAPPING_RULE = "admin/createmappingrule";
+	public static final String LANDSCAPESETTINGS_DISPLAY_MAPPING_RULE = "admin/displaymappingrule";
 	
 	// LandscapeFieldMappingTemplatesController
 	public static final String LANDSCAPESETTINGS_DISPLAYFIELDMAPPINGTEMPLATESTFTOPART = "admin/displayfieldmappingtemplatestftopart";
@@ -80,6 +86,28 @@ public class UIPathConstants {
 	public static final String LANDSCAPESETTINGS_TAILLOGFILE = "/admin/taillogfile";
 	public static final String LANDSCAPESETTINGS_PROCESSRAWLOGFILE = "/admin/processrawlogfile";
 	public static final String LANDSCAPESETTINGS_VIEWRAWLOGFILE = "admin/viewrawlogfile";
+	
+	//LandscapeFieldMappingController
+	public static final String ASSOCIATED_FIELD_MAPPINGS_BY_RMD="/admin/associatedfmbyrmd";
+	public static final String VIEW_ASSOCIATED_FIELD_MAPPINGS = "admin/viewassociatedfm";
+	public static final String DELETE_ASSOCIATED_FIELD_MAPPINGS = "admin/deleteassociatedfm";
+	public static final String SETAS_ACTIVE_FIELD_MAPPING = "admin/setasactivefm";
+	public static final String CREATE_FIELD_MAPPING = "admin/createfm";
+	public static final String DISPALY_SAVE_FIELD_MAPPING = "admin/displaysavenewfm";
+	public static final String SAVE_NEW_FIELD_MAPPING = "admin/savefieldmapping";
+	
+	
+	//CreateRMDController
+	public static final String RMD_CONFIGURE = "admin/creatermd";
+	public static final String RMD_CONFIGURE_DIRECTION = "admin/creatermdstep1";
+	public static final String RMD_CONFIGURE_TFSETTINGS = "admin/creatermdstep2";
+	public static final String RMD_CONFIGURE_PARTICIPANT_SETTINGS= "admin/creatermdstep3";
+	public static final String RMD_SAVE = "admin/saveRMD";
+	public static final String PROJECT_RMD_CONFIGURE = "project/creatermd";
+	public static final String PROJECT_RMD_CONFIGURE_DIRECTION = "project/creatermdstep1";
+	public static final String PROJECT_RMD_CONFIGURE_TFSETTINGS = "project/creatermdstep2";
+	public static final String PROJECT_RMD_CONFIGURE_PARTICIPANT_SETTINGS= "project/creatermdstep3";
+	public static final String PROJECT_RMD_SAVE = "project/saveRMD";
 	
 	
 	

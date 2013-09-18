@@ -1,11 +1,15 @@
 package com.collabnet.ccf.ccfmaster.web.helper;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.mvc.extensions.flash.FlashMap;
 import org.springframework.ui.Model;
 
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
@@ -35,9 +39,9 @@ public class LandscapeParticipantSettingsHelper {
 	private void makeParticipantSettingsModel(
 			ParticipantSettingsModel participantSettingsModel,
 			Landscape landscape, Participant participant) {
-		ParticipantConfig participantUrlParticipantConfig=null;
-		LandscapeConfig participantUserNameLandscapeConfig=null;
-		LandscapeConfig participantPasswordLandscapeConfig=null;
+		ParticipantConfig participantUrlParticipantConfig= new ParticipantConfig(); //Code fix needed
+		LandscapeConfig participantUserNameLandscapeConfig=new LandscapeConfig();//Code fix needed
+		LandscapeConfig participantPasswordLandscapeConfig=new LandscapeConfig();//Code fix needed
 		LandscapeConfig participantResyncUserNameLandscapeConfig=null;
 		LandscapeConfig participantResyncPasswordLandscapeConfig=null;
 
@@ -56,6 +60,27 @@ public class LandscapeParticipantSettingsHelper {
 			participantResyncUserNameLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_USERNAME).getSingleResult();
 			participantResyncPasswordLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_PASSWORD).getSingleResult();
 			participantResyncPasswordLandscapeConfig.setVal(Obfuscator.decodePassword(participantResyncPasswordLandscapeConfig.getVal()));
+		}
+		
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){// Need to refactor it later and also needs to consider race condition on list of CCFCoreProperty
+			List<CCFCoreProperty> landscapeConfigList= participantSettingsModel.getLandscapeConfigList();
+			List<CCFCoreProperty> participantConfigList = participantSettingsModel.getParticipantConfigList();
+			for(CCFCoreProperty property: landscapeConfigList){
+				String name = property.getName();
+				LandscapeConfig config = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,name).getSingleResult();
+				if(CCFCorePropertyType.PASSWORD.equals(property.getType())) {
+					property.setValue(Obfuscator.decodePassword(config.getVal()));
+				} else {
+					property.setValue(config.getVal());
+				}
+			}
+		
+			for(CCFCoreProperty property: participantConfigList){
+				String name = property.getName();
+				ParticipantConfig config = ParticipantConfig.findParticipantConfigsByParticipantAndName(participant, name).getSingleResult();
+				property.setValue(config.getVal());
+				
+			}
 		}
 
 		participantSettingsModel.setParticipant(participant);
@@ -114,9 +139,11 @@ public class LandscapeParticipantSettingsHelper {
 		// merge swp participant settings 
 		if(landscape.getParticipant().getSystemKind().equals(SystemKind.SWP)){
 			mergeSWPParticipantSettings(participantSettingsModel, request,model,landscape);
-		}else{
+		}else if ((landscape.getParticipant().getSystemKind().equals(SystemKind.QC))){
 			//merge qc participant settings
 			mergeQCPartcipantSettings(participantSettingsModel, request, model,landscape);
+		}else{
+			mergeParticipantSettings(participantSettingsModel, request, model,landscape);
 		}
 		model.addAttribute("qcsettingsmodel",participantSettingsModel);
 		model.addAttribute("selectedLink", ControllerConstants.QCSETTINGS);
@@ -198,6 +225,39 @@ public class LandscapeParticipantSettingsHelper {
 		LandscapeConfig participantResyncPasswordLandscapeConfig=LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape, ControllerConstants.CCF_LANDSCAPE_SWP_RESYNC_PASSWORD).getSingleResult();
 		participantResyncPasswordLandscapeConfig.setVal(Obfuscator.encodePassword(participantSettingsModel.getParticipantResyncPasswordLandscapeConfig().getVal()));
 		participantResyncPasswordLandscapeConfig.merge();
+	}
+	
+	private void mergeParticipantSettings(ParticipantSettingsModel participantSettingsModel,
+			HttpServletRequest request,Model model,Landscape landscape){
+		Participant participant=landscape.getParticipant();
+		//merge participantTimezone
+		Participant participantTimezone=participantSettingsModel.getParticipant();
+		participantTimezone.setId(Long.valueOf(request.getParameter(ControllerConstants.PARTICIPANT_ID)));
+		participantTimezone.setVersion(Integer.parseInt(request.getParameter(ControllerConstants.PARTICIPANT_VERSION)));
+		participantTimezone.merge();
+		
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){// Need to refactor it later and also needs to consider race condition on list of CCFCoreProperty
+			List<CCFCoreProperty> landscapeConfigList= participantSettingsModel.getLandscapeConfigList();
+			List<CCFCoreProperty> participantConfigList = participantSettingsModel.getParticipantConfigList();
+			for(CCFCoreProperty property: landscapeConfigList){
+				String name = property.getName();
+				LandscapeConfig config = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,name).getSingleResult();
+				if (CCFCorePropertyType.PASSWORD.equals(property.getType())) {
+					config.setVal(Obfuscator.encodePassword(property.getValue()));
+				} else {
+					config.setVal(property.getValue());
+				}
+				config.persist();
+			}
+		
+			for(CCFCoreProperty property: participantConfigList){
+				String name = property.getName();
+				ParticipantConfig config = ParticipantConfig.findParticipantConfigsByParticipantAndName(participant, name).getSingleResult();
+				config.setVal(property.getValue());
+				config.persist();
+				
+			}
+		}
 	}
 
 }

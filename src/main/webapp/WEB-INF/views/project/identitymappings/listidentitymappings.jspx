@@ -111,6 +111,21 @@
 							   </c:if>
 				 		<td nowrap="nowrap"><img src="${fn:escapeXml(swp_image_url)}"  alt="${swpdomainlabel}" title="${swpdomainlabel}"/>&#160;${identityMappingentry.repositoryMapping.participantRepositoryId} -${identityMappingentry.targetArtifactId}</td>
 			 		</c:if>
+			 		<c:if test="${participant.systemKind eq 'GENERIC'}">
+			 			 	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'Bug')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(identityMappingentry.repositoryMapping.participantRepositoryId, 'User Story')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+							   <td>
+					 	   	 	<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${identityMappingentry.repositoryMapping.participantRepositoryId} -${identityMappingentry.targetArtifactId}" />
+					 	   	 	</td>
+			 			</c:if>
 					<td nowrap="nowrap">${identityMappingentry.sourceLastModificationTime}</td>
 					<td nowrap="nowrap">${identityMappingentry.targetLastModificationTime}</td>
 					<td><a href="${details_url}?mappingid=${identityMappingentry.id}&amp;rmdid=${rmdid}"><img src="${fn:escapeXml(idmapping_image_url)}" title="${detaillabel}" alt="${detaillabel}" border="0" /></a></td>

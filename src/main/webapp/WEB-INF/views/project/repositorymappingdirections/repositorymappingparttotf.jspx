@@ -4,12 +4,15 @@
 <spring:message code="button_delete" var="delete_button"/>
 <spring:message code="button_resume" var="resume_button"/>
 <spring:message code="button_pause" var="pause_button"/>
+<spring:message code="button_create" var="create_button"/>
 <spring:message code="status" var="label_status"/>  
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 <spring:message code="status" var="statuslabel" htmlEscape="false"/>  
 <spring:message code="sourceRepository" var="sourceRepositorylabel" htmlEscape="false"/>
 <spring:message code="targetRepository" var="targetRepositorylabel" htmlEscape="false"/>
+<spring:message code="activefieldmappinglabel" var="activefieldmappinglabel" htmlEscape="false"/>
 <spring:message code="hospital" var="hospitallabel" htmlEscape="false"/>
 <spring:message code="pausedlabel" var="pausedlabel" htmlEscape="false"/>
 <spring:message code="resumelabel" var="resumelabel" htmlEscape="false"/>
@@ -33,6 +36,11 @@
 <spring:url value="/images/icons/swp_release.gif" var="swp_release_image_url" />
 <spring:url value="/images/icons/swp_task.png" var="swp_task_image_url" />
 <spring:url value="/images/icons/swp_theme.gif" var="swp_theme_image_url" />
+<spring:url value="/project/creatermd" var="create_rmd_url"/>
+<spring:url value="/images/icons/xslt_active.png" var="fm_xslt_image_url" />
+<spring:url value="/images/icons/mapforce_active.png" var="fm_mf_image_url" />
+<spring:url value="/images/icons/custom_mapping_active.gif" var="fm_mr_image_url" />
+<spring:url value="/images/icons/edit.gif" var="fm_templates_image_url" />
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
@@ -57,11 +65,18 @@
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
 				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
+				</c:if>
 				</td>
 				</tr>
 				<tr class="ItemListHeader">
     			<c:if test="${fn:length(repositoryMappingsModel) > 0}">
-				 <td width="1"><input type="checkbox" id="selectall"   name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>				 
+				 <td width="1"><input type="checkbox" id="selectall"   name="selectall"></input></td><td>${statuslabel}</td><td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td>
+				 <c:if test="${participant.systemKind ne 'SWP'}">
+				 <td>${activefieldmappinglabel}</td>
+				 </c:if>
+				 <td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>				 
 				 <c:forEach items="${repositoryMappingsModel}" var="rmm" varStatus="status">
 				 	<c:set var="rmd" value="${rmm.repositoryMappingDirection}" />
 				 	<tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
@@ -118,6 +133,20 @@
 							   </c:if>
 			 				<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${rmd.repositoryMapping.participantRepositoryId}" />
 			 			</c:if>
+			 			<c:if test="${participant.systemKind eq 'GENERIC'}">
+			 			 	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Task')}">
+							  	<c:set var="swp_image_url" value="${swp_task_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'Bug')}">
+							  	<c:set var="swp_image_url" value="${swp_pbi_image_url}"/>
+							   </c:if>
+							   <c:if test="${fn:endsWith(rmd.repositoryMapping.participantRepositoryId, 'User Story')}">
+							  	<c:set var="swp_image_url" value="${swp_product_image_url}"/>
+							   </c:if>
+					 	   	 	<img src="${fn:escapeXml(swp_image_url)}" border="0"  alt="${swpdomainlabel}"  title="${swpdomainlabel}"/>&#160;<c:out value= "${rmd.repositoryMapping.participantRepositoryId}" />
+			 			</c:if>
+			 			
 		 			</td>
 		 			<td nowrap="nowrap">
 			 			<c:if test="${rmm.repositoryIcon ne 'null'}">
@@ -127,7 +156,28 @@
 							<c:out value= "${rmm.repositoryId}" />
 						</c:if>
 		 			</td>
-					<td>
+		 					 	<c:set var="fm_image_url" value="${fm_xslt_image_url	}"/>
+			 			 	   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'CUSTOM_XSLT'}">
+							  	<c:set var="fm_image_url" value="${fm_xslt_image_url}"/>
+							   </c:if>
+							  <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPFORCE'}">
+							  	<c:set var="fm_image_url" value="${fm_mf_image_url}"/>
+							   </c:if>
+							   <c:if test="${rmm.repositoryMappingDirection.activeFieldMapping.kind eq 'MAPPING_RULES'}">
+							  	<c:set var="fm_image_url" value="${fm_mr_image_url}"/>
+							   </c:if>
+						<c:if test="${participant.systemKind ne 'SWP'}">
+		 				<spring:url value="/project/fieldmapping?rmdid={rmdid}" var="associated_fmapping_url">
+							<spring:param name="rmdid" value="${rmd.id}" />
+						</spring:url>	   
+			 			<td>
+			 			<sec:authorize access="hasRole('ROLE_MAPPING_RULES')">
+			 			<a href="#" title="${rmm.repositoryMappingDirection.activeFieldMapping.name}" class="poptip" ><img src="${fn:escapeXml(fm_image_url)}" title="${rmm.repositoryMappingDirection.activeFieldMapping.kind}"  alt="${rmm.repositoryMappingDirection.activeFieldMapping.kind}" border="0" class="trackerIcon" /></a>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<a href="${associated_fmapping_url}&amp;direction=FORWARD" ><img src="${fn:escapeXml(fm_templates_image_url)}" title="Associated Field Mappings"  alt="Associated Field Mappings" border="0" class="trackerIcon" /></a>
+			 			</sec:authorize>
+			 			<sec:authorize access="!hasRole('ROLE_MAPPING_RULES')">?</sec:authorize>
+			 			</td>
+			 			</c:if>
+			 		<td>
 					<sec:authorize access="hasRole('ROLE_HOSPITAL')">
 						<spring:url value="/project/hospitalentrys?rmdid={rmdid}" var="hospital_url">
 							<spring:param name="rmdid" value="${rmd.id}" />
@@ -144,7 +194,6 @@
 						<a href="${identity_url}"><c:out value= "${rmm.identityMappingCount}" /></a>
 					</sec:authorize>
 					<sec:authorize access="!hasRole('ROLE_IDENTITY_MAPPINGS')">?</sec:authorize>
-				
 					</td>
 					<td><a class="poptip" title="${lastartifactversionlabel} :${rmd.lastSourceArtifactVersion} | ${lastmodificationdatelabel} :${rmd.lastSourceArtifactModificationDate}">${rmd.lastSourceArtifactId}</a></td>
 					</tr>
@@ -153,7 +202,7 @@
 			</tr>
 	 		<c:if test="${fn:length(repositoryMappingsModel) == 0}">
 	 			<tr class="ItemListHeader">
-	 			<td>${statuslabel}</td> <td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>
+	 			<td>${statuslabel}</td> <td>${sourceRepositorylabel}</td><td>${targetRepositorylabel}</td><td>${activefieldmappinglabel}</td><td>${hospitallabel}</td><td>${identitylabel}</td><td>${lastsyncartifactidlabel}</td>
 	 			</tr>
 	 			<tr class="ItemListNoData">
      		 	<td colspan="9"><center>${norepositorymappingsmessagelabel}</center></td>
@@ -163,13 +212,25 @@
 			</table>
 				<br/>
 				<br/>
-				<c:if test="${fn:length(repositoryMappingsModel) > 0}">		
+				
 				<tr class="ContainerFooter">
 				<td>
 				 <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" direction="REVERSE"/>
 				</td>
 				<td>
 				<div id="enablebutton" class="AlignRight" style="display:none;">
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<sec:authorize access="hasRole('ROLE_REPOSITORY_MAPPINGS') and hasRole('ROLE_RESET_SYNCHRONIZATION_STATUS') and hasRole('ROLE_PAUSE_SYNCHRONIZATION') and hasRole('ROLE_MAPPING_RULES')">
+				<div class="Button">
+				<div class="Middle">
+						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
+				</div>
+				</div>
+				</sec:authorize>
+				</c:if>
+				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
+				<div class="ButtonSpace"></div>
+				
 				<sec:authorize access="hasRole('ROLE_RESET_SYNCHRONIZATION_STATUS') and hasRole('ROLE_PAUSE_SYNCHRONIZATION') and hasRole('ROLE_MAPPING_RULES')">
 					<div class="Button">
 					<div class="Middle">
@@ -191,11 +252,24 @@
 					</div>
 					</div>
 				</sec:authorize>
+				</c:if>
 				</div>
 				</td>
 				
 				<td>
 				<div class="AlignRight" id="disablebutton">
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<sec:authorize access="hasRole('ROLE_REPOSITORY_MAPPINGS') and hasRole('ROLE_RESET_SYNCHRONIZATION_STATUS') and hasRole('ROLE_PAUSE_SYNCHRONIZATION') and hasRole('ROLE_MAPPING_RULES')">
+				<div class="Button">
+				<div class="Middle">
+						  <a href="javascript: createRMD('${fn:escapeXml(create_rmd_url)}');">${create_button}</a> 
+				</div>
+				</div>
+				</sec:authorize>
+				</c:if>
+				<c:if test="${fn:length(repositoryMappingsModel) > 0}">
+				<div class="ButtonSpace"></div>
+				
 				<sec:authorize access="hasRole('ROLE_RESET_SYNCHRONIZATION_STATUS') and hasRole('ROLE_PAUSE_SYNCHRONIZATION') and hasRole('ROLE_MAPPING_RULES')">
 					<div class="Button">
 					<div class="MiddleDisabled">
@@ -217,11 +291,13 @@
 					</div>
 					</div>
 				</sec:authorize>
+				</c:if>
 				</div>
+				
 				
 				</td>
 				</tr>
-				</c:if>
+			
 				</td>
 				</tr>
 	</tbody>
@@ -231,6 +307,14 @@
   
   
 	<script language="JavaScript">
+	
+	
+		function createRMD(url){
+			document.getElementById("repositoryForm").action=url;
+	  		document.getElementById("repositoryForm").submit();
+		}
+
+
 		function resumeForm(url){
 			document.getElementById("repositoryForm").action=url;
 	  		document.getElementById("repositoryForm").submit();
@@ -275,6 +359,8 @@
  
 		}
 	
+	
+		
 		$(function(){
 		    $("#selectall").click(function () {
 		          $('.rmdid').attr('checked', this.checked);

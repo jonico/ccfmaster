@@ -1,6 +1,7 @@
 package com.collabnet.ccf.ccfmaster.web.helper;
 
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
@@ -21,12 +23,16 @@ import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 import com.collabnet.ccf.ccfmaster.util.Obfuscator;
 import com.collabnet.ccf.ccfmaster.web.model.LandscapeModel;
+import com.collabnet.ccf.core.utils.GenericParticipantUtils;
 
 @Configurable
 public class CreateLandscapeHelper {
 
 	@Autowired 
 	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
+	
+	@Autowired(required= false)
+	public GenericParticipantFacade genericParticipant;
 
 
 	/**
@@ -39,21 +45,32 @@ public class CreateLandscapeHelper {
 		teamforge.setSystemId(ControllerConstants.TF);
 		teamforge.setSystemKind(SystemKind.TF);
 		teamforge.setDescription(ControllerConstants.TFDESCRIPTION);
+		teamforge.setPrefix(SystemKind.TF.toString()); //prefix added
 		if(participant.getSystemKind().equals(SystemKind.QC))
 		{
 			participant.setSystemId(ControllerConstants.QC);
 			participant.setDescription(ControllerConstants.QCDESCRIPTION);
+			participant.setPrefix(SystemKind.QC.toString());
 		}
 		if(participant.getSystemKind().equals(SystemKind.SWP)){
 			participant.setSystemId(ControllerConstants.SWP);
 			participant.setDescription(ControllerConstants.SW_PDESCRIPTION);
+			participant.setPrefix(SystemKind.SWP.toString());
 		}
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){ // need to move this code piece to switch case
+			if(genericParticipant != null){
+				participant.setSystemId(genericParticipant.getPrefix());
+				participant.setDescription(genericParticipant.getName());
+				participant.setPrefix(genericParticipant.getPrefix());
+			}
+		}		
 		model.addAttribute("plugid", ControllerConstants.PLUGID);
 		model.addAttribute("tfsystemkind", teamforge.getSystemKind());
 		model.addAttribute("tfsystemid", teamforge.getSystemId());
 		model.addAttribute("parsystemid", participant.getSystemId());
 		model.addAttribute("pdescription", participant.getDescription());
 		model.addAttribute("tdescription", teamforge.getDescription());
+		model.addAttribute("tfprefix", teamforge.getPrefix());
 
 	}
 
@@ -86,12 +103,14 @@ public class CreateLandscapeHelper {
 		participant.persist();
 		landscape.persist();
 		createDirections(landscape,participant);
-		urlParticipantconfig.persist();
 		tfUserNameLandscapeConfig.persist();
 		tfPasswordLandscapeConfig.persist();
-		participantUserNameLandscapeConfig.persist();
-		participantPasswordLandscapeConfig.persist();
 		tfParticipantUrlParticipantconfig.persist();
+		if(participant.getSystemKind().equals(SystemKind.SWP)||participant.getSystemKind().equals(SystemKind.QC)){ // need to organize the loops
+			urlParticipantconfig.persist();
+			participantUserNameLandscapeConfig.persist();
+			participantPasswordLandscapeConfig.persist();
+		}
 
 		//persist resync name and password for SWP
 		if(participant.getSystemKind().equals(SystemKind.SWP)){
@@ -100,6 +119,18 @@ public class CreateLandscapeHelper {
 			participantResyncPasswordLandscapeConfig.setVal(Obfuscator.encodePassword(participantResyncPasswordLandscapeConfig.getVal()));
 			participantResyncUserNameLandscapeConfig.persist();
 			participantResyncPasswordLandscapeConfig.persist();
+		}
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){
+			List<LandscapeConfig> landscapeCollection = GenericParticipantUtils.buildLandscapeConfig(landscapemodel.getLandscapeConfigList());
+			List<ParticipantConfig> participantCollection =  GenericParticipantUtils.buildParticipantConfig(landscapemodel.getParticipantConfigList());
+			for(LandscapeConfig config:landscapeCollection){
+				config.setLandscape(landscape);
+				config.persist();
+			}
+			for(ParticipantConfig participantConfig:participantCollection){
+				participantConfig.setParticipant(participant);
+				participantConfig.persist();
+			}
 		}
 	}
 
@@ -113,8 +144,10 @@ public class CreateLandscapeHelper {
 		if(participant.getSystemKind().equals(SystemKind.QC)){
 			forwardDirection.setDescription(forwardQcDirectionDescription);
 		}
-		else{
+		else if(participant.getSystemKind().equals(SystemKind.SWP)){
 			forwardDirection.setDescription(forwardSwpDirectionDescription);
+		}else{
+			forwardDirection.setDescription("TF-GENERIC direction"); //hard coding 
 		}
 		forwardDirection.setDirection(Directions.FORWARD);
 		forwardDirection.setLandscape(landscape);
@@ -125,8 +158,10 @@ public class CreateLandscapeHelper {
 		if(participant.getSystemKind().equals(SystemKind.QC)){
 			reverseDirection.setDescription(reverseQcDirectionDescription);
 		}
-		else{
+		else if(participant.getSystemKind().equals(SystemKind.SWP)){
 			reverseDirection.setDescription(reverseSwpDirectionDescription);
+		}else{
+			reverseDirection.setDescription("GENERIC-TF direction");//hard coding
 		}
 		reverseDirection.setDirection(Directions.REVERSE);
 		reverseDirection.setLandscape(landscape);
@@ -190,6 +225,32 @@ public class CreateLandscapeHelper {
 			}
 		}
 		
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){
+			
+			DirectionConfig directionConfigLogTemplateGenerictoTF=new DirectionConfig(); // repeated code need to refactor later :'(
+			DirectionConfig directionConfigLogTemplateTFtoGeneric=new DirectionConfig();
+
+			directionConfigLogTemplateTFtoGeneric.setDirection(forwardDirection);
+			directionConfigLogTemplateGenerictoTF.setDirection(reverseDirection);
+			directionConfigLogTemplateTFtoGeneric.setName(ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE);
+			directionConfigLogTemplateGenerictoTF.setName(ControllerConstants.CCF_DIRECTION_LOGMESSAGETEMPLATE);
+			directionConfigLogTemplateTFtoGeneric.setVal(newval);
+			directionConfigLogTemplateGenerictoTF.setVal(newval);
+
+			directionConfigLogTemplateTFtoGeneric.persist();
+			directionConfigLogTemplateGenerictoTF.persist();
+			
+			if(genericParticipant != null && !isGenericParticipantMaxAttachmentExist(reverseDirection, genericParticipant.getPrefix())){
+				DirectionConfig directionConfigTFMaxSize = new DirectionConfig(); 
+				String configName = String.format("ccf.direction.%s.max.attachmentsize", genericParticipant.getPrefix().toLowerCase());
+				directionConfigTFMaxSize.setDirection(reverseDirection);
+				directionConfigTFMaxSize.setName(configName);
+				directionConfigTFMaxSize.setVal(ccfRuntimePropertyHolder.getMaxAttachmentSize());
+				directionConfigTFMaxSize.persist();
+			}
+			
+		}
+		
 		if (!isTFMaxAttachmentExist(forwardDirection)) {
 			DirectionConfig directionConfigTFMaxSize = new DirectionConfig();
 			directionConfigTFMaxSize.setDirection(forwardDirection);
@@ -215,7 +276,10 @@ public class CreateLandscapeHelper {
 				if(verifySWPEntities(landscape,reverseDirection,model,context)){
 					return false;
 				}
-			}	
+			}
+			else if(participant.getSystemKind().equals(SystemKind.GENERIC)){
+				return false; //TODO: need to handle validation for generic participant
+			}
 		}
 		return true;
 	}
@@ -290,6 +354,11 @@ public class CreateLandscapeHelper {
 	
 	public static boolean isTFMaxAttachmentExist(Direction forwardDirection) {
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(forwardDirection,ControllerConstants.CCF_DIRECTION_TF_MAX_ATTACHMENTSIZE).getResultList().size()!=0;
+	}
+	
+	public static boolean isGenericParticipantMaxAttachmentExist(Direction reverseDirection,String prefix) {
+		String configName = String.format("ccf.direction.%s.max.attachmentsize",prefix.toLowerCase());
+		return DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,configName).getResultList().size()!=0;
 	}
 
 }

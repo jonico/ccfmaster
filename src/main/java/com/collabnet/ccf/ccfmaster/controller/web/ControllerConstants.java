@@ -81,6 +81,7 @@ public class ControllerConstants {
 	public static final String CCF_PARTICIPANT_QC_URL = "ccf.participant.qc.url";
 	public static final String PARTICIPANT_SAVE_FAIL_MESSAGE = "participantsavefailmessage";
 	public static final String PARTICIPANT_RESTART_SUCCESS_MESSAGE = "participantrestartmessage";
+	public static final String PARTICIPANT_SHOULD_MATCH_CONDITIONAL_REGEX = "participantConditionalRegexErrorMessage";
 	
 	// Persist participant constants
 	public static final String PARTICIPANT_SAVE_SUCCESS_MESSAGE = "participantsavesuccessmessage";
@@ -104,6 +105,8 @@ public class ControllerConstants {
 	public static final String QC_CONNECTION_FAILURE_MESSAGE="qcconnectionfailuremessage";
 	public static final String SWP_CONNECTION_SUCCESS_MESSAGE="swpconnectionsuccessmessage";
 	public static final String SWP_CONNECTION_FAILURE_MESSAGE="swpconnectionfailuremessage";
+	public static final String GP_CONNECTION_SUCCESS_MESSAGE="gpconnectionsuccessmessage";
+	public static final String GP_CONNECTION_FAILURE_MESSAGE="gpconnectionfailuremessage";
 	
 	
 	
@@ -206,6 +209,20 @@ public class ControllerConstants {
 	
 	public static final String FORWARD = "forward";
 	
+	
+	//View Associated Field Mappings
+		public static final String FIELD_MAPPING_DELETE_SUCCESS_MESSAGE="fieldmappingdeletesuccessmessage";
+		public static final String FIELD_MAPPING_DELETE_FAILURE_MESSAGE="fieldmappingdeletefailuremessage";
+		public static final String FIELD_MAPPING_SETAS_ACTIVE_SUCCESS_MESSAGE="fieldmappingsetasactivesuccessmessage";
+		public static final String FIELD_MAPPING_SETAS_ACTIVE_FAILURE_MESSAGE="fieldmappingsetasactivefailuremessage";
+		public static final String FIELD_MAPPING_NODELETE_ACTIVE_FAILURE_MESSAGE="nodeleteactivemapping";
+		public static final String FIELD_MAPPING_CREATE_SUCCESS_MESSAGE="fieldmappingcreatesuccessmessage";
+		public static final String FIELD_MAPPING_CREATE_FAILURE_MESSAGE="fieldmappingcreatefailuremessage";
+		public static final String FIELD_MAPPING_ALREADY_LINKED_MESSAGE="fieldmappingalreadylinkedmessage";
+		public static final String FIELD_MAPPING_ALREADY_EXISTS_MESSAGE="fieldmappingalreadyexistmessage";
+		
+		
+		
 	/**
 	 * 
 	 */

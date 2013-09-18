@@ -16,4 +16,7 @@
 <definition extends="default" name="repositorymappings/findRepositoryMappingsByExternalApp">
         <put-attribute name="body" value="/WEB-INF/views/repositorymappings/findRepositoryMappingsByExternalApp.jspx"/>
     </definition>
+<definition extends="default" name="repositorymappings/findRepositoryMappingsByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId">
+        <put-attribute name="body" value="/WEB-INF/views/repositorymappings/findRepositoryMappingsByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId.jspx"/>
+    </definition>
 </tiles-definitions>

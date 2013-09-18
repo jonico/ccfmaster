@@ -5,8 +5,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
-import com.collabnet.ccf.ccfmaster.server.domain.CCFCorePropertyType;
-
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CCFCoreProperty {
 	
@@ -14,7 +12,6 @@ public class CCFCoreProperty {
 	@XmlAttribute(required=true)
 	private String name;
 	
-	@NotNull
 	@XmlAttribute(required=true)
 	private String value;
 	
@@ -37,6 +34,12 @@ public class CCFCoreProperty {
 	
 	@XmlAttribute
 	private  CCFCorePropertyType type;
+	
+	@XmlAttribute
+	private boolean displayInHTML;
+	
+	@XmlAttribute
+	private String conditionalRegex;
 	
 	public CCFCoreProperty() {	}
 	
@@ -64,16 +67,13 @@ public class CCFCoreProperty {
 		this.category = category;
 	}
 
-
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public String getValue() {
 		return value;
@@ -114,6 +114,24 @@ public class CCFCoreProperty {
 		this.type = type;
 	}
 
+	public boolean isDisplayInHTML() {
+		return displayInHTML;
+	}
+
+	public void setDisplayInHTML(boolean displayInHTML) {
+		this.displayInHTML = displayInHTML;
+	}
+
+
+	public String getConditionalRegex() {
+		return conditionalRegex;
+	}
+
+
+	public void setConditionalRegex(String conditionalRegex) {
+		this.conditionalRegex = conditionalRegex;
+	}
+
 
 	@Override
 	public String toString() {
@@ -134,6 +152,10 @@ public class CCFCoreProperty {
 		builder.append(toolTip);
 		builder.append(", type=");
 		builder.append(type);
+		builder.append(", displayInHTML=");
+		builder.append(displayInHTML);
+		builder.append(", conditionalRegex=");
+		builder.append(conditionalRegex);
 		builder.append("]");
 		return builder.toString();
 	}

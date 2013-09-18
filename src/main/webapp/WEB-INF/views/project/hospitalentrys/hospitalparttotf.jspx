@@ -7,6 +7,7 @@
 <spring:message code="button_export" var="export_button"/>
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 <spring:message code="timestamplabel" var="timestamplabel" htmlEscape="false"/>
 <spring:message code="adaptornamelabel" var="adaptornamelabel" htmlEscape="false"/>
 <spring:message code="originatingcomponentlabel" var="originatingcomponentlabel" htmlEscape="false"/>
@@ -74,6 +75,9 @@
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
 				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
+				</c:if>
 				</td>
 				<util:header-row  
 				formname="hospitalTeamForgeForm"
@@ -105,7 +109,7 @@
 					<c:set var="errortitle" value="${hospitalentryreplayedlabel}"/>
 					</c:if>
      		 	   <tr class="${(status.count % 2) == 0 ? 'EvenRow' : 'OddRow'}">
-					<td><input type="checkbox" class="hospitalid"  name="hospitalid" value="${hospitalentry.id}" /></td>
+					<td><input type="checkbox" class="hospitalid"  name="hospitalid" value="${hospitalentry.id}"/></td>
 					<td nowrap="nowrap">${hospitalentry.timestamp}</td>
 					<td>${hospitalentry.originatingComponent}</td>
 					<c:if test="${participant.systemKind eq 'QC'}">
@@ -310,7 +314,6 @@
 			
 		}
 	
-		
 		
 		$(function(){
 		    $("#selectall").click(function () {

@@ -4,11 +4,25 @@
 package com.collabnet.ccf.ccfmaster.server.domain;
 
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMapping;
+import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingScope;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
+import java.lang.String;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 privileged aspect FieldMapping_Roo_Finder {
+    
+    public static TypedQuery<FieldMapping> FieldMapping.findFieldMappingsByNameAndParentAndScope(String name, RepositoryMappingDirection parent, FieldMappingScope scope) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        if (parent == null) throw new IllegalArgumentException("The parent argument is required");
+        if (scope == null) throw new IllegalArgumentException("The scope argument is required");
+        EntityManager em = FieldMapping.entityManager();
+        TypedQuery<FieldMapping> q = em.createQuery("SELECT o FROM FieldMapping AS o WHERE o.name = :name AND o.parent = :parent AND o.scope = :scope", FieldMapping.class);
+        q.setParameter("name", name);
+        q.setParameter("parent", parent);
+        q.setParameter("scope", scope);
+        return q;
+    }
     
     public static TypedQuery<FieldMapping> FieldMapping.findFieldMappingsByParent(RepositoryMappingDirection parent) {
         if (parent == null) throw new IllegalArgumentException("The parent argument is required");

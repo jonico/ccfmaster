@@ -40,7 +40,8 @@
 			<menu:item id="i_repositorymapping_new" messageCode="global_menu_new" url="/repositorymappings?form" z="user-managed"/>
 			<menu:item id="i_repositorymapping_list" messageCode="global_menu_list" url="/repositorymappings?page=${empty param.page ? 1 : param.page}&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
 			<menu:item id="fi_repositorymapping_externalapp" messageCode="global_menu_find" url="/repositorymappings?find=ByExternalApp&amp;form" z="user-managed"/>
-	    </menu:category>
+	    <menu:item id="fi_repositorymapping_externalappandparticipantrepositoryidandteamforgerepositoryid" messageCode="global_menu_find" url="/repositorymappings?find=ByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId&amp;form" z="4owi7RCjyuxZBsPYPo9sRP8oFWQ="/>
+            </menu:category>
 		<menu:category id="c_repositorymappingdirection" z="Su7vOsc4OygtzcUbvgg2ZgA8MiI=">
 	        <menu:item id="i_repositorymappingdirection_new" messageCode="global_menu_new" url="/repositorymappingdirections?form" z="user-managed"/>
 	        <menu:item id="i_repositorymappingdirection_list" messageCode="global_menu_list" url="/repositorymappingdirections?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
@@ -83,6 +84,7 @@
             <menu:item id="i_fieldmapping_list" messageCode="global_menu_list" url="/fieldmappings?page=1&amp;size=${empty param.size ? 10 : param.size}" z="116btLXFa2QutdZhTukZHke0kbA="/>
             
             <menu:item id="fi_fieldmapping_parent" messageCode="global_menu_find" url="/fieldmappings?find=ByParent&amp;form" z="ENIyxuwWvHHpv+Qk1OxR0NtkdXY="/>
+            <menu:item id="fi_fieldmapping_nameandparentandscope" messageCode="global_menu_find" url="/fieldmappings?find=ByNameAndParentAndScope&amp;form" z="6P8yt1nIH8lYF6TIHC6VgJG29xM="/>
             </menu:category>
         <menu:category id="c_fieldmappingexternalapptemplate" z="WssK/BY9nKdV/dZZf7xAA2KBxR4=">
                 <menu:item id="i_fieldmappingexternalapptemplate_new" messageCode="global_menu_new" url="/fieldmappingexternalapptemplates?form" z="zNgzQR45CrrTE155Z91uFiKFTXQ="/>

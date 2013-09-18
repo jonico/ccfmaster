@@ -11,6 +11,7 @@
         
         <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_timezone" maxLength="-1" property="timezone" z="user-managed"/>
         <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemKind" property="systemKind" z="jw6ADgmAMY+X0zAAwdLQ+eY1aNU="/>
+        <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_prefix" property="prefix" z="IbIyKYQm6iENAzP0DqlUijEUzJQ="/>
         </table:table>
     </page:list>
 </div>

@@ -11,6 +11,7 @@ privileged aspect Participant_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Description: ").append(getDescription()).append(", ");
         sb.append("Encoding: ").append(getEncoding()).append(", ");
+        sb.append("Prefix: ").append(getPrefix()).append(", ");
         sb.append("SystemId: ").append(getSystemId()).append(", ");
         sb.append("SystemKind: ").append(getSystemKind()).append(", ");
         sb.append("Timezone: ").append(getTimezone());

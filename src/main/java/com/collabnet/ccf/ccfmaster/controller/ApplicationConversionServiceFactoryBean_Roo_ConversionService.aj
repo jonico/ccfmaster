@@ -153,7 +153,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     
     static class com.collabnet.ccf.ccfmaster.controller.ApplicationConversionServiceFactoryBean.ParticipantConverter implements org.springframework.core.convert.converter.Converter<com.collabnet.ccf.ccfmaster.server.domain.Participant, java.lang.String>  {
         public String convert(Participant participant) {
-        return new StringBuilder().append(participant.getDescription()).append(" ").append(participant.getSystemId()).append(" ").append(participant.getEncoding()).toString();
+        return new StringBuilder().append(participant.getDescription()).append(" ").append(participant.getSystemId()).append(" ").append(participant.getEncoding()).append(" ").append(participant.getPrefix()).toString();
         }
         
     }

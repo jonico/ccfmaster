@@ -10,13 +10,14 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.collabnet.ccf.ccfmaster.gp.web.model.AbstractGenericParticipantModel;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
 import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.google.common.base.Strings;
 
-public class LandscapeModel {
+public class LandscapeModel extends AbstractGenericParticipantModel {
 	 
 	private static final Logger log = LoggerFactory.getLogger(LandscapeModel.class);
 
@@ -86,7 +87,7 @@ public class LandscapeModel {
 	@Valid
 	private Landscape landscape=new Landscape();
 	
-	@Valid
+//	@Valid
 	private LandscapeConfig participantUserNameLandscapeConfig=new LandscapeConfig();
 
 	
@@ -219,11 +220,6 @@ public class LandscapeModel {
 
 	public void setTeamforge(Participant teamforge) {
 		this.teamforge = teamforge;
-	} 
-	
-	
-	
-	
-	
+	}
 	
 }

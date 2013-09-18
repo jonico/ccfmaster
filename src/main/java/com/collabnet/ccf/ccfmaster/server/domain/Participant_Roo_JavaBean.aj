@@ -49,4 +49,12 @@ privileged aspect Participant_Roo_JavaBean {
         this.systemKind = systemKind;
     }
     
+    public String Participant.getPrefix() {
+        return this.prefix;
+    }
+    
+    public void Participant.setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+    
 }

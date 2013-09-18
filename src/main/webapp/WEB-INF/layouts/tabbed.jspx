@@ -19,7 +19,16 @@
 				<!-- Added to change the label header w.r.t participant -->
 				<c:set var="newtabname" value="${tabLabel}" />	
 				<c:if test="${!empty participant}">
-					<c:set var="newtabname" value="${fn:replace(tabLabel,'PARTICIPANT',participant.systemKind)}"/>
+				<c:choose>
+					<!-- participant prefix is must for generic participants-->
+					<c:when test="${!empty participant.prefix}">
+						<c:set var="newtabname" value="${fn:replace(tabLabel,'PARTICIPANT',participant.prefix)}"/>
+					</c:when>
+					<c:otherwise>
+						<!-- For SWP and QC participant header label value will be taken from participant.systemKind -->
+						<c:set var="newtabname" value="${fn:replace(tabLabel,'PARTICIPANT',participant.systemKind)}"/>
+					</c:otherwise>
+				</c:choose>				
 				</c:if>
 				<menu:tab
 					label="${newtabname}"

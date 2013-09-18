@@ -8,6 +8,7 @@
 <spring:url value="/admin/saveccfpropertieslogtemplate?param_direction=reverse" var="saveccfproplogtemplateparttotf_url" />
 <spring:message code="qctotflabel" var="qctotflabel" htmlEscape="false"/>
 <spring:message code="swptotflabel" var="swptotflabel" htmlEscape="false"/>
+<spring:message code="generictotflabel" var="generictotflabel" htmlEscape="false"/>
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
@@ -40,6 +41,9 @@
 				</c:if>
 				<c:if test="${participant.systemKind eq 'SWP'}">
 				<strong><c:out value="${swptotflabel}" /></strong>
+				</c:if>
+				<c:if test="${participant.systemKind eq 'GENERIC'}">
+				<strong><c:out value="${fn:replace(generictotflabel,'GenericParticipant',participant.description)}" /></strong>
 				</c:if>
 				</td>
 				</tr>

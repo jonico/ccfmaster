@@ -1,0 +1,194 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page">
+<jsp:output omit-xml-declaration="yes" />
+
+<spring:message code="button_next" var="next_button"/>
+<spring:message code="button_back" var="button_back"/>
+<spring:url value="/project/creatermd" var="creatermdstep1_url" />
+<spring:url value="/project/creatermdstep3" var="creatermdstep3_url" />
+<spring:url value="/project/teamForge/trackerList" var="gettftrackerlist_url" />
+<spring:url value="/images/icons/spinner.gif" var="spinner_image_url" />
+<spring:url value="/project/creatermdstep2" var="creatermdstep2_url" />
+<spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
+
+<form:form id="creatermdstep2"  name="creatermdstep2" modelAttribute="rmdModel" commandName="rmdModel" method="post">
+ <table class="Container" >
+		<tbody>
+		<tr>
+		<td>
+			<tr class="ContainerHeader">
+				<td colspan="5">
+				Create new repository mapping direction wizard - Step 2
+				</td>
+			</tr>
+			<br/>
+			<br/>
+			<tr>
+				<td> <br/></td>
+			</tr>
+			<tr>
+				<td class="ItemDetailName">TeamForge:<br/><br/>	</td>
+				<td class="ItemDetailValue"> 
+					<c:forEach var="tfMappingType" varStatus="status" items="${teamForgeMappingType}">
+	 					<form:radiobutton id="id_tfMappingType" value="${tfMappingType}" path="teamForgeMappingType" name="teamForgeMappingType" label="${tfMappingType}"/>
+	 					<br/><br/>
+					</c:forEach>	
+				</td>
+			</tr>
+			<tr id="projectid" style="display:none">
+				<td class="ItemDetailName">
+					<form:label name="projectname" path="">Project Name:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+					<form:select id="id_tfProject" path="teamforgeProjectId">
+					<form:option value="" label="--- Select ---"/>
+					<form:options items="${teamForgeProjects}" /></form:select>
+				</td>
+			</tr>
+			<tr id="trackerid" style="display:none">
+				<td class="ItemDetailName">
+					<form:label name="trackerid" path="">Tracker Id:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+					<select id="id_trackerList"></select>					
+					<form:hidden path="teamforgeTracker"/>
+					<input type="button" id="browseproject" value="Trackers..." onclick="doAjaxPost('${fn:escapeXml(gettftrackerlist_url)}')" />
+					<div id="spinner" style="display:none;"><img src="${fn:escapeXml(spinner_image_url)}" border="0" /></div> 
+				</td>
+			</tr>
+			<tr class="ContainerFooter" >
+				<td colspan="5">
+					<form:hidden path="direction"/>
+					<form:hidden path="forwardConflictPolicies"/>
+					<form:hidden path="reversedConflictPolicies"/>
+					<form:hidden path="forwardFieldMappingTemplateName"/>
+					<form:hidden path="reverseFieldMappingTemplateName"/>					
+					<c:if test="${not empty rmdModel.participantSelectorFieldList}">	
+					<c:forEach items="${rmdModel.participantSelectorFieldList}" varStatus="status" var="participantSelector">
+					<form:hidden path="participantSelectorFieldList[${status.index}].name"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].conditionalRegex"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].displayInHTML"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].type"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].labelName"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].systemKind"/>
+					<form:hidden path="participantSelectorFieldList[${status.index}].value" />
+					</c:forEach>
+					</c:if> 
+					<div class="AlignRight">
+					<div class="Button">
+					<div class="Middle">               
+				          <a href="javascript: submitForm('${fn:escapeXml(creatermdstep1_url)}');" id="cancelForm">${button_back}</a> 
+					</div>
+					</div>
+					<div class="ButtonSpace"> </div> 
+					<div class="Button">
+					<div class="Middle">
+							<a href="javascript: submitForm('${fn:escapeXml(creatermdstep3_url)}');" id="submitForm">${next_button}</a> 
+					</div>
+					</div>
+					</div>
+				</td>
+			</tr>
+		</td>
+	</tr>
+	</tbody>
+  	</table>
+</form:form>
+
+<script language="JavaScript">
+
+	function submitForm(url){
+		document.getElementById("creatermdstep2").action=url;
+		document.getElementById("creatermdstep2").submit();
+	}
+	
+	function cancelForm(url){
+		document.getElementById("creatermdstep2").action=url;
+  		document.getElementById("creatermdstep2").submit();
+	}
+	
+	$(document).ready(function () {		 
+		 $('#id_tfProject').change(function(){
+			 var value = $("#id_tfProject").val();
+			 $('#teamforgeProjectId').val(value);
+		 });
+		 
+		$('#submitForm').click(function() {
+		    if (!$("input[@name='teamForgeMappingType']:checked").val()) {
+		    	alert('Please select the TeamForge Mapping type');
+		        return false;
+		    }    
+		 });
+			
+		 $("input[name$='teamForgeMappingType']").click(function(){
+			 var radioval=$(this).val();
+			 if(radioval=='Tracker' ||radioval=='MetaData'){
+	             $('#projectid').show();
+	             $('#trackerid').show();
+             } else if(radioval=='PlanningFolders'){
+            	 $("#id_trackerList").children().remove();
+            	 $("#id_trackerList").get(0).add(new Option("---- Select ----", "-1"));
+            	 $('#id_trackerList').attr("disabled", true);
+            	 $('#teamforgeTracker').val("");
+               	 $('#trackerid').hide();
+              	 $('#projectid').show();
+            }
+		});
+			 
+		 $('#id_trackerList').change(function(){
+			 var key = $("#id_trackerList").find('option:selected').text();
+			 var value = $("#id_trackerList").val();
+			 $('#teamforgeTracker').val(key+"|"+value);
+		 });
+		 
+		 if($('#teamforgeTracker').val() != null){
+			 var selectedOption = $('#teamforgeTracker').val().split("|");
+			 $("#id_trackerList").get(0).add(new Option(selectedOption[0], selectedOption[1]));
+			 $('#id_trackerList').attr("disabled", true);
+		 }
+		 	 
+		 var teamForgeMappingVal=$("input[@name='teamForgeMappingType']:checked").val();
+		 if(teamForgeMappingVal=='Tracker' ||teamForgeMappingVal=='MetaData'){
+             $('#projectid').show();
+             $('#trackerid').show();
+         } else if(teamForgeMappingVal=='PlanningFolders'){
+        	 $("#id_trackerList").children().remove();
+        	 $("#id_trackerList").get(0).add(new Option("---- Select ----", "-1"));
+        	 $('#id_trackerList').attr("disabled", true);
+        	 $('#teamforgeTracker').val("");
+        	 $('#trackerid').hide();
+          	 $('#projectid').show();
+        }
+		 
+	 });
+		
+	function doAjaxPost(posturl) {
+		var projectid = $("#id_tfProject").val();
+	  	 $.ajax({
+	       		beforeSend: function() {
+			 		 $('#spinner').show();
+			 		 $('#browseproject').show();
+		         },
+		         complete: function(){
+		        	 $('#spinner').hide();
+		        	 $('#browseproject').show();
+		         },
+	       		type:"POST",
+	       		url: posturl,
+	       		data:"projectId=" + projectid,
+	       		dataType:"json",
+	       		success: function(response){
+		           	 $("#id_trackerList").attr("disabled", false);
+		       		 $("#id_trackerList").get(0).options.length = 0;
+		             $("#id_trackerList").get(0).options[0] = new Option("---- Select ----", "-1");
+		           	 $.each(response,function(index,value) {
+		           	 $("#id_trackerList").get(0).options[$("#id_trackerList").get(0).options.length] = new Option(value.title, value.id);
+		        	 });
+	     		 },
+		       	error: function(e){
+		        	alert('Failed to load projects: ' + e);
+		        	}
+	        });
+	 }	      
+</script>
+</div>

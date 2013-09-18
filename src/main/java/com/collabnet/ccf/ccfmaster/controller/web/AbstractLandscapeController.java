@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
+import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
 
@@ -20,6 +21,9 @@ public abstract class AbstractLandscapeController {
 
 	@Autowired
 	protected CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
+	
+	@Autowired(required= false)
+	public GenericParticipantFacade genericParticipant;
 
 
 	/**

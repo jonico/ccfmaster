@@ -138,8 +138,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		verifyEquals("off", selenium.getValue("id=myCheckbox_8"));
 		verifyEquals("off", selenium.getValue("id=myCheckbox_9"));
 		verifyEquals(" > ", selenium.getValue("id=ccfCoreProperties9.value"));
-	
-		
 	}
 	
 	@Test
@@ -149,6 +147,14 @@ public class QCSettings extends CcfAuthenticatedTestBase {
 		Util.testFailedShipmentCount(selenium);
 		
 	}
+	
+	@Test
+	public void createFieldMapping(){
+		Util.testcreateFieldMapping(selenium);
+		Util.testcreateLinkFieldMapping(selenium);
+		Util.testAssociateFieldMapping(selenium);
+	}
+	
 	
 	@Test
 	public void exportFieldMappingTemplates(){

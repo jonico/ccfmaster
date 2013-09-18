@@ -21,7 +21,7 @@ import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
  * authenticated via IAF and makes the current {@link ExternalApp} available in
  * the model.
  */
-abstract class AbstractProjectController extends AbstractLandscapeController {
+public abstract class AbstractProjectController extends AbstractLandscapeController {
 	
 	protected static final String EXTERNAL_APP_MODEL_ATTRIBUTE = AbstractApiLinkIdController.EXTERNAL_APP_MODELATTRIBUTE_NAME;
 	//	@Autowired

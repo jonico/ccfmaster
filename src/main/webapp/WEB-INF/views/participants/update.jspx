@@ -7,5 +7,6 @@
         <field:textarea field="encoding" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_encoding" z="eH043PJgYRqqBKZswL8tLRFHlro="/>
         <field:select field="timezone" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_timezone" items="${timezones}" path="timezones" required="true" z="rtbVaKjrdUcEr3UT4L+9e6Qj6NU="/>
         <field:select field="systemKind" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_systemKind" items="${systemkinds}" path="systemkinds" required="true" z="LaxxgAKuhpSHuz4Uz3/sBm2oGO4="/>
+    <field:input field="prefix" id="c_com_collabnet_ccf_ccfmaster_server_domain_Participant_prefix" z="J3ZyNL4GNTwwAv1S45Bch1YX9rk="/>
     </form:update>
 </div>

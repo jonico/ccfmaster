@@ -20,6 +20,7 @@ public class ParticipantSystemKinds extends ForwardingList<SystemKind> {
 		if (SystemUtils.IS_OS_WINDOWS) {
 			builder.add(SystemKind.QC);
 		}
+		builder.add(SystemKind.GENERIC);// Adding generic participantSystemKind
 		builder.add(SystemKind.SWP);
 		systemKinds = builder.build();
 	}

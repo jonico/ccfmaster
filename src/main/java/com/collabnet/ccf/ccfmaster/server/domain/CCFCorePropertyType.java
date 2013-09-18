@@ -8,5 +8,5 @@ package com.collabnet.ccf.ccfmaster.server.domain;
  */
 public enum CCFCorePropertyType {
 
-	INTEGER, BOOLEAN, STRING;
+	INTEGER, BOOLEAN, STRING, PASSWORD;
 }

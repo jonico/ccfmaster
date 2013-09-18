@@ -3,7 +3,7 @@
 
 <spring:message code="qcurl" var="qcurllabel" htmlEscape="false"/>
 <spring:message code="swpurl" var="swpurllabel" htmlEscape="false"/>
-<spring:message code="hpqctimezone" var="hpqctimezonelabel" htmlEscape="false"/>  
+<spring:message code="timezone" var="timezone" htmlEscape="false"/>  
 <spring:message code="hpqcusername" var="hpqcusernamelabel" htmlEscape="false"/>  
 <spring:message code="hpqcpassword" var="hpqcpasswordlabel" htmlEscape="false"/>
 <spring:message code="swptimezone" var="swptimezonelabel" htmlEscape="false"/>  
@@ -22,6 +22,7 @@
 <spring:url value="/admin/qctestconnection" var="testconnection_url"/>
 <spring:url value="/admin/swptestconnection" var="testconnectionswp_url"/>
 <spring:url value="/admin/swptestconnection?resync=true" var="testconnectionswpresync_url"/>
+<spring:url value="/admin/gptestconnection" var="testconnectiongp_url"/>
 
 			
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
@@ -71,7 +72,7 @@
 				</tr>
 				<tr>
 				<td class="ItemDetailName">
-				<form:label path="participant.timezone">${hpqctimezonelabel}:</form:label>
+				<form:label path="participant.timezone">${timezone}:</form:label>
 				</td>
 				<td class="ItemDetailValue">
 				<form:select  path="participant.timezone" items="${timezones}" id="c_hpqctimezone" cssClass="inputfield"></form:select>
@@ -113,7 +114,7 @@
 				</tr>
 				<tr>
 				<td class="ItemDetailName">
-				<form:label path="participant.timezone">${swptimezonelabel}:</form:label>
+				<form:label path="participant.timezone">Time Zone:</form:label>
 				</td>
 				<td class="ItemDetailValue">
 				<form:select  path="participant.timezone" items="${timezones}" id="c_hpqctimezone" cssClass="inputfield"></form:select>
@@ -162,7 +163,82 @@
 				</td>
 				</tr>
 				</c:if>
-			 	
+			 	<!-- For Generic -->
+			 	<c:if test="${participant.systemKind=='GENERIC'}">			 	
+			 	<c:if test="${not empty qcsettingsmodel.participantConfigList}">	
+				<c:forEach items="${qcsettingsmodel.participantConfigList}" varStatus="status" var="participantconfig">
+				<c:if test="${participantconfig.displayInHTML}">
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="participantConfigList[${status.index}].labelName">${participantconfig.labelName}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<form:hidden path="participantConfigList[${status.index}].name"/>
+				<form:hidden path="participantConfigList[${status.index}].conditionalRegex"/>
+				<form:hidden path="participantConfigList[${status.index}].displayInHTML"/>
+				<form:hidden path="participantConfigList[${status.index}].type"/>
+				<form:hidden path="participantConfigList[${status.index}].labelName"/>
+				<form:hidden path="participantConfigList[${status.index}].systemKind"/>
+				<form:input id ="participantConfig${status.index}" path="participantConfigList[${status.index}].value"  size="80" cssClass="inputfield" />
+				<form:errors path="participantConfigList[${status.index}].value" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+				</c:forEach>
+				</c:if>				
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="participant.timezone">Time Zone:</form:label>
+				</td>
+				<td class="ItemDetailValue">
+				<form:select  path="participant.timezone" items="${timezones}" id="c_hpqctimezone" cssClass="inputfield"></form:select>
+				</td>
+				</tr>		
+			 	<c:if test="${not empty qcsettingsmodel.landscapeConfigList}">	
+				<c:forEach items="${qcsettingsmodel.landscapeConfigList}" varStatus="status" var="landscapeconfig">
+				<c:if test="${landscapeconfig.displayInHTML}">
+				<c:if test="${landscapeconfig.type eq  'PASSWORD'}">
+				<tr>
+				<td class="ItemDetailName">
+				<form:label path="landscapeConfigList[${status.index}].labelName">${landscapeconfig.labelName}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<form:hidden path="landscapeConfigList[${status.index}].name"/>
+				<form:hidden path="landscapeConfigList[${status.index}].conditionalRegex"/>
+				<form:hidden path="landscapeConfigList[${status.index}].displayInHTML"/>
+				<form:hidden path="landscapeConfigList[${status.index}].type"/>
+				<form:hidden path="landscapeConfigList[${status.index}].labelName"/>
+				<form:hidden path="landscapeConfigList[${status.index}].systemKind"/>
+				<form:password id="landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value" showPassword="true" size="60" cssClass="inputfield"/>
+				<c:if test="${displaytestconnectionbutton eq  'true'}">
+				 <input type="button" value="${testconnectionlabel}" onclick="doGenericAjaxPost('${fn:escapeXml(testconnectiongp_url)}')" />
+				<div id="spinner" style="display:none;"><img src="${fn:escapeXml(spinner_image_url)}" border="0" /></div><div id="info"></div>
+				</c:if>
+				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+				<c:if test="${landscapeconfig.type ne  'PASSWORD'}">
+			 	<tr>
+				<td class="ItemDetailName">
+				<form:label path="landscapeConfigList[${status.index}].labelName">${landscapeconfig.labelName}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<form:hidden path="landscapeConfigList[${status.index}].name"/>
+				<form:hidden path="landscapeConfigList[${status.index}].conditionalRegex"/>
+				<form:hidden path="landscapeConfigList[${status.index}].displayInHTML"/>
+				<form:hidden path="landscapeConfigList[${status.index}].type"/>
+				<form:hidden path="landscapeConfigList[${status.index}].labelName"/>
+				<form:hidden path="landscapeConfigList[${status.index}].systemKind"/>
+				<form:input id ="landscapeConfigList${status.index}" path="landscapeConfigList[${status.index}].value"  size="60" cssClass="inputfield" />
+				<form:errors path="landscapeConfigList[${status.index}].value" cssClass="errors"/>
+				</td>
+				</tr>
+				</c:if>
+				</c:if>
+				</c:forEach>
+				</c:if> 
+				</c:if>
 			
 		</tbody>
 	</table>
@@ -181,6 +257,7 @@
 				<div class="ButtonSpace"> </div>	
 				<div class="Button">
 				<div class="Middle">
+					<input type="hidden" name="participant.prefix" value="${participant.prefix}"/>
 					<input type="hidden" name="participant.systemKind" value="${systemkind}"/>
 					<input type="hidden" name="participant.systemId" value="${systemid}"/>
 					<input type="hidden" name="participant.description" value="${description}"/>
@@ -215,7 +292,7 @@
   				<c:if test="${participant.systemKind eq 'SWP'}"> 
   				<div id="dialog" title="Save ScrumWorks Pro Settings">
   				<p>Changes to the ScrumWorks Pro settings will only apply after connector restart</p>
-`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
 				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
 				<p>Click Cancel. to close the window</p>
 				</div>
@@ -224,7 +301,16 @@
   				<c:if test="${participant.systemKind eq 'QC'}"> 
   				<div id="dialog" title="Save Quality Center Settings">
   				<p>Changes to the Quality Center settings will only apply after connector restart</p>
-`				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
+				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
+				<p>Click Cancel. to close the window</p>
+				</div>
+				</c:if>
+				
+				<c:if test="${participant.systemKind eq 'GENERIC'}"> 
+  				<div id="dialog" title="Save Generic Center Settings">
+  				<p>Changes to the Generic Participant settings will only apply after connector restart</p>
+				<p>Click <strong>Save and Restart</strong>, to save the settings and restart Connector</p>
 				<p>Click <strong>Save Only</strong>, to save the settings without restarting Connector</p>
 				<p>Click Cancel. to close the window</p>
 				</div>
@@ -240,8 +326,7 @@
 	        // get the form values
 	        var url = $('#participantUrlParticipantConfig').val();
 	        var username = $('#participantUserNameLandscapeConfig').val();
-	        var password = $('#participantPasswordLandscapeConfig').val();
-	        
+	        var password = $('#participantPasswordLandscapeConfig').val();	        
 			 $.ajax({
 				 	 beforeSend: function() {
 			  			 $('#spinner').show();
@@ -263,8 +348,7 @@
 	        }
 	        });
 	        }
-		
-		
+	
 		function doAjaxResyncPost(posturl) {
 			var url = $('#participantUrlParticipantConfig').val();
 	        var resyncusername = $('#participantResyncUserNameLandscapeConfig').val();
@@ -291,6 +375,27 @@
 	        }
 	        });
 	        }
+		
+		function doGenericAjaxPost(posturl){
+			var form = $('form');
+			  $.ajax({
+				beforeSend: function() {
+			  		$('#spinner').show();
+			    },
+			    complete: function(){
+			        $('#spinner').hide();
+			    },
+			    type: 'POST',
+			    url: posturl,
+			    data: form.serialize(),
+			    success: function( resp ) {
+			    	$('#info').html(resp);
+			    },
+		        error: function(e){
+			        alert('Error: ' + e);
+			    }
+			  });
+		}
 		
 		$(function(){
 	        // jQuery UI Dialog    
