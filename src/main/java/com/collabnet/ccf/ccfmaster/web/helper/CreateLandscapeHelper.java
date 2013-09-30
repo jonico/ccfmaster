@@ -4,6 +4,7 @@ package com.collabnet.ccf.ccfmaster.web.helper;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.support.RequestContext;
 import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
 import com.collabnet.ccf.ccfmaster.gp.model.GenericParticipantFacade;
+import com.collabnet.ccf.ccfmaster.server.domain.CCFCoreProperty;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
@@ -57,7 +59,7 @@ public class CreateLandscapeHelper {
 			participant.setDescription(ControllerConstants.SW_PDESCRIPTION);
 			participant.setPrefix(SystemKind.SWP.toString());
 		}
-		if(participant.getSystemKind().equals(SystemKind.GENERIC)){ // need to move this code piece to switch case
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){
 			if(genericParticipant != null){
 				participant.setSystemId(genericParticipant.getPrefix());
 				participant.setDescription(genericParticipant.getName());
@@ -147,7 +149,7 @@ public class CreateLandscapeHelper {
 		else if(participant.getSystemKind().equals(SystemKind.SWP)){
 			forwardDirection.setDescription(forwardSwpDirectionDescription);
 		}else{
-			forwardDirection.setDescription("TF-GENERIC direction"); //hard coding 
+			forwardDirection.setDescription(ControllerConstants.TFTOGENERIC_DIRECTION_DESCRIPTION);
 		}
 		forwardDirection.setDirection(Directions.FORWARD);
 		forwardDirection.setLandscape(landscape);
@@ -161,7 +163,7 @@ public class CreateLandscapeHelper {
 		else if(participant.getSystemKind().equals(SystemKind.SWP)){
 			reverseDirection.setDescription(reverseSwpDirectionDescription);
 		}else{
-			reverseDirection.setDescription("GENERIC-TF direction");//hard coding
+			reverseDirection.setDescription(ControllerConstants.GENERICTOTF_DIRECTION_DESCRIPTION);
 		}
 		reverseDirection.setDirection(Directions.REVERSE);
 		reverseDirection.setLandscape(landscape);
@@ -278,7 +280,9 @@ public class CreateLandscapeHelper {
 				}
 			}
 			else if(participant.getSystemKind().equals(SystemKind.GENERIC)){
-				return false; //TODO: need to handle validation for generic participant
+				if(verifyGenericEntities(landscape, reverseDirection, model, context)) {
+					return false; 				
+				}
 			}
 		}
 		return true;
@@ -317,7 +321,6 @@ public class CreateLandscapeHelper {
 		}
 	}
 
-
 	public boolean verifySWPEntities(Landscape landscape, Direction reverseDirection,Model model,RequestContext context){
 		if(ParticipantConfig.findParticipantConfigsByParticipantAndName(landscape.getParticipant(), ControllerConstants.CCF_PARTICIPANT_SWP_URL).getResultList().size()!=0 &&
 				LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,ControllerConstants.CCF_LANDSCAPE_SWP_USERNAME).getResultList().size()!=0 &&
@@ -344,6 +347,22 @@ public class CreateLandscapeHelper {
 		}
 	}
 	
+	public boolean verifyGenericEntities(Landscape landscape, Direction reverseDirection, Model model, RequestContext context) {
+		if (genericParticipant != null) {
+			if (!checkParticipantConfigItemExist(landscape)
+					&& !checkLandscapeConfigItemExist(landscape)
+					&& !isGenericParticipantMaxAttachmentExist(
+							reverseDirection, genericParticipant.getPrefix())) {
+				String[] messageArgument = { genericParticipant.getName() };
+				model.addAttribute("errormessage", context.getMessage(
+						ControllerConstants.GENERIC_PARTICIPANT_ERROR_MESSAGE,
+						messageArgument));
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static boolean isSWPMaxAttachmentExist(Direction reverseDirection) {
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,ControllerConstants.CCF_DIRECTION_SWP_MAX_ATTACHMENTSIZE).getResultList().size()!=0;
 	}
@@ -359,6 +378,26 @@ public class CreateLandscapeHelper {
 	public static boolean isGenericParticipantMaxAttachmentExist(Direction reverseDirection,String prefix) {
 		String configName = String.format("ccf.direction.%s.max.attachmentsize",prefix.toLowerCase());
 		return DirectionConfig.findDirectionConfigsByDirectionAndName(reverseDirection,configName).getResultList().size()!=0;
+	}
+
+	private boolean checkLandscapeConfigItemExist(Landscape landscape) {
+		boolean isLandscapeConfigItemExist = true;
+		List<CCFCoreProperty> landscapeConfigList = genericParticipant.getGenericParticipantConfigItemFactory().getLandscapeFieldList();
+		for(int i= 0; i< landscapeConfigList.size() && isLandscapeConfigItemExist ; i++) {
+			CCFCoreProperty coreProperty = landscapeConfigList.get(i);
+			isLandscapeConfigItemExist = LandscapeConfig.findLandscapeConfigsByLandscapeAndName(landscape,coreProperty.getName()).getResultList().size()!=0;
+		}
+		return isLandscapeConfigItemExist;
+	}
+
+	private boolean checkParticipantConfigItemExist(Landscape landscape) {
+		boolean isParticipantConfigItemExist = true;
+		List<CCFCoreProperty> participantConfigList = genericParticipant.getGenericParticipantConfigItemFactory().getParticipantFieldList();
+		for(int i=0; i< participantConfigList.size() && isParticipantConfigItemExist; i++) {
+			CCFCoreProperty coreProperty = participantConfigList.get(i);
+			isParticipantConfigItemExist = ParticipantConfig.findParticipantConfigsByParticipantAndName(landscape.getParticipant(), coreProperty.getName()).getResultList().size()!=0;
+		}
+		return isParticipantConfigItemExist;
 	}
 
 }

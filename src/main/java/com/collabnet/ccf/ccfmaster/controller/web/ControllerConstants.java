@@ -24,6 +24,9 @@ public class ControllerConstants {
 	public static final String QC = "Quality Center";
 	public static final String TFDESCRIPTION = "TeamForge";
 	public static final String TF = "TeamForge";
+	
+	public static final String TFTOGENERIC_DIRECTION_DESCRIPTION = "TF-GENERIC direction";
+	public static final String GENERICTOTF_DIRECTION_DESCRIPTION = "GENERIC-TF direction";
 
 	// Landscape validator constants
 	public static final String VALIDATESWPURL = "wsdl";
@@ -39,6 +42,7 @@ public class ControllerConstants {
 	public static final String CCF_MIS_CONFIGURATION_ERROR_MESSAGE = "ccfmisconfigurationerrormessage";
 	public static final String TEAMFORGE_ERROR_MESSAGE = "teamforgeerrormessage";
 	public static final String SCRUM_WORKS_PRO_ERROR_MESSAGE = "scrumworksproerrormessage";
+	public static final String GENERIC_PARTICIPANT_ERROR_MESSAGE ="genericparticipanterrormessage";
 	public static final String QUALITY_CENTER_ERROR_MESSAGE = "qualitycentererrormessage";
 	public static final String DIRECTION_ERROR_MESSAGE = "directionerrormessage";
 	public static final String DIRECTION_CONFIG_ERROR_MESSAGE = "directionconfigerrormessage";

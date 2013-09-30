@@ -39,9 +39,9 @@ public class LandscapeParticipantSettingsHelper {
 	private void makeParticipantSettingsModel(
 			ParticipantSettingsModel participantSettingsModel,
 			Landscape landscape, Participant participant) {
-		ParticipantConfig participantUrlParticipantConfig= new ParticipantConfig(); //Code fix needed
-		LandscapeConfig participantUserNameLandscapeConfig=new LandscapeConfig();//Code fix needed
-		LandscapeConfig participantPasswordLandscapeConfig=new LandscapeConfig();//Code fix needed
+		ParticipantConfig participantUrlParticipantConfig= new ParticipantConfig(); 
+		LandscapeConfig participantUserNameLandscapeConfig=new LandscapeConfig();
+		LandscapeConfig participantPasswordLandscapeConfig=new LandscapeConfig();
 		LandscapeConfig participantResyncUserNameLandscapeConfig=null;
 		LandscapeConfig participantResyncPasswordLandscapeConfig=null;
 
@@ -62,7 +62,7 @@ public class LandscapeParticipantSettingsHelper {
 			participantResyncPasswordLandscapeConfig.setVal(Obfuscator.decodePassword(participantResyncPasswordLandscapeConfig.getVal()));
 		}
 		
-		if(participant.getSystemKind().equals(SystemKind.GENERIC)){// Need to refactor it later and also needs to consider race condition on list of CCFCoreProperty
+		if(participant.getSystemKind().equals(SystemKind.GENERIC)){
 			List<CCFCoreProperty> landscapeConfigList= participantSettingsModel.getLandscapeConfigList();
 			List<CCFCoreProperty> participantConfigList = participantSettingsModel.getParticipantConfigList();
 			for(CCFCoreProperty property: landscapeConfigList){

@@ -63,7 +63,7 @@ public class TFExternalAppCreationListenerFactory implements ExternalAppCreation
 					}
 					linkId = getLinkId(projectPath);
 					if(linkId == null) { // if dummyservice is down
-						throw new CoreConfigurationException("IntegratedApp is not functional. Please contact TeamForge administrator");
+						throw new CoreConfigurationException("IAF dummy service is down. Please contact TeamForge administrator");
 					}
 				}
 				externalApp.setLinkId(linkId);
