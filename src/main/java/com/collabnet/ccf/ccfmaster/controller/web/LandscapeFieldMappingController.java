@@ -3,6 +3,7 @@ package com.collabnet.ccf.ccfmaster.controller.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -38,7 +39,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 	private static final String FIELD_MAPPING_ID = "fieldmappingid";
 	private static final String RMD_ID_REQUEST_PARAM = "rmdid";
 	private static final String CONNECTOR_TEMPLATE_TYPE = "connector";
-	
+	 private static final String templateNameregex = "[a-zA-Z0-9_ ]+";
 	
 	/**
 	 * Controller method to display associated field mappings for the RMD
@@ -158,8 +159,9 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
 		// Check if new field mapping with the same name already exists. display error message to the user
 		if (isTemplateExists(fieldMappingTemplateModel.getFieldmappingName(), rmd,FieldMappingScope.REPOSITORY_MAPPING_DIRECTION)) {
 			FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_ALREADY_EXISTS_MESSAGE);
-		}
-		else{
+		} else if (!Pattern.matches(templateNameregex,fieldMappingTemplateModel.getFieldmappingName())) {
+	                FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_NAME_REGEX);
+	        } else {
 			fieldMapping.setName(fieldMappingTemplateModel.getFieldmappingName()); 
 			fieldMapping.setScope(FieldMappingScope.REPOSITORY_MAPPING_DIRECTION);
 			if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel.getTemplateType())) {

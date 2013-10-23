@@ -224,6 +224,7 @@ public class ControllerConstants {
 		public static final String FIELD_MAPPING_CREATE_FAILURE_MESSAGE="fieldmappingcreatefailuremessage";
 		public static final String FIELD_MAPPING_ALREADY_LINKED_MESSAGE="fieldmappingalreadylinkedmessage";
 		public static final String FIELD_MAPPING_ALREADY_EXISTS_MESSAGE="fieldmappingalreadyexistmessage";
+		public static final String FIELD_MAPPING_NAME_REGEX="fieldmappingnameregex";
 		
 		
 		
