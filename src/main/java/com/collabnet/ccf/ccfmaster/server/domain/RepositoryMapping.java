@@ -23,15 +23,31 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "EXTERNAL_APP", "participantRepositoryId", "teamForgeRepositoryId" }))
-@RooEntity(finders = { "findRepositoryMappingsByExternalApp", "findRepositoryMappingsByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId" })
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "EXTERNAL_APP",
+        "participantRepositoryId", "teamForgeRepositoryId" }))
+@RooEntity(finders = {
+        "findRepositoryMappingsByExternalApp",
+        "findRepositoryMappingsByExternalAppAndParticipantRepositoryIdAndTeamForgeRepositoryId" })
 public class RepositoryMapping {
 
-    @NotNull
-    private String description;
+    public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, RepositoryMapping> {
+
+        @Override
+        public Long marshal(RepositoryMapping v) throws Exception {
+            return v.getId();
+        }
+
+        @Override
+        public RepositoryMapping unmarshal(Long v) throws Exception {
+            return findRepositoryMapping(v);
+        }
+    }
 
     @NotNull
-    @ManyToOne(cascade = {  })
+    private String      description;
+
+    @NotNull
+    @ManyToOne(cascade = {})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @XmlJavaTypeAdapter(ExternalApp.XmlAdapter.class)
     private ExternalApp externalApp;
@@ -40,44 +56,50 @@ public class RepositoryMapping {
     @Size(max = 128)
     @Index(name = "teamForgeRepositoryIndex")
     @Pattern(regexp = "^[\\w\\-]+$")
-    private String teamForgeRepositoryId;
+    private String      teamForgeRepositoryId;
 
     @NotNull
     @Size(max = 128)
     @Index(name = "participantRepositoryIdIndex")
     @Pattern(regexp = "^[^']+$")
-    private String participantRepositoryId;
-
-    public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, RepositoryMapping> {
-
-        @Override
-        public RepositoryMapping unmarshal(Long v) throws Exception {
-            return findRepositoryMapping(v);
-        }
-
-        @Override
-        public Long marshal(RepositoryMapping v) throws Exception {
-            return v.getId();
-        }
-    }
+    private String      participantRepositoryId;
 
     public static long countRepositoryMappingsByExternalApp(ExternalApp ea) {
-        return entityManager().createQuery("select count(o) from RepositoryMapping o where o.externalApp = :externalApp", Long.class).setParameter("externalApp", ea).getSingleResult();
+        return entityManager()
+                .createQuery(
+                        "select count(o) from RepositoryMapping o where o.externalApp = :externalApp",
+                        Long.class).setParameter("externalApp", ea)
+                .getSingleResult();
     }
 
     public static long countRepositoryMappingsByLandscape(Landscape landscape) {
-        return entityManager().createQuery("select count(o) from RepositoryMapping o where o.externalApp.landscape = :landscape", Long.class).setParameter("landscape", landscape).getSingleResult();
+        return entityManager()
+                .createQuery(
+                        "select count(o) from RepositoryMapping o where o.externalApp.landscape = :landscape",
+                        Long.class).setParameter("landscape", landscape)
+                .getSingleResult();
     }
 
-    public static TypedQuery<RepositoryMapping> findRepositoryMappingsByLandscape(Landscape landscape) {
-        return entityManager().createQuery("select o from RepositoryMapping o where o.externalApp.landscape = :landscape ORDER BY o.id", RepositoryMapping.class).setParameter("landscape", landscape);
-    }
-
-    public static TypedQuery<RepositoryMapping> findRepositoryMappingsByExternalApp(ExternalApp externalApp) {
-        if (externalApp == null) throw new IllegalArgumentException("The externalApp argument is required");
+    public static TypedQuery<RepositoryMapping> findRepositoryMappingsByExternalApp(
+            ExternalApp externalApp) {
+        if (externalApp == null)
+            throw new IllegalArgumentException(
+                    "The externalApp argument is required");
         EntityManager em = RepositoryMapping.entityManager();
-        TypedQuery<RepositoryMapping> q = em.createQuery("SELECT o FROM RepositoryMapping AS o WHERE o.externalApp = :externalApp ORDER BY o.id", RepositoryMapping.class);
+        TypedQuery<RepositoryMapping> q = em
+                .createQuery(
+                        "SELECT o FROM RepositoryMapping AS o WHERE o.externalApp = :externalApp ORDER BY o.id",
+                        RepositoryMapping.class);
         q.setParameter("externalApp", externalApp);
         return q;
+    }
+
+    public static TypedQuery<RepositoryMapping> findRepositoryMappingsByLandscape(
+            Landscape landscape) {
+        return entityManager()
+                .createQuery(
+                        "select o from RepositoryMapping o where o.externalApp.landscape = :landscape ORDER BY o.id",
+                        RepositoryMapping.class).setParameter("landscape",
+                        landscape);
     }
 }

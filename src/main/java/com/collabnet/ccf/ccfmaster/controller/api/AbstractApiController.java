@@ -21,36 +21,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 public abstract class AbstractApiController<T> extends AbstractBaseApiController {
-	static final Logger log = LoggerFactory.getLogger(AbstractApiController.class);
-		
-	@ResponseStatus(CREATED)
-	@RequestMapping(method = POST, headers="Accept=application/xml")
-	public abstract T create(@RequestBody T requestBody, HttpServletResponse response);
-	
-	@RequestMapping(method = GET, headers="Accept=application/xml")
-	public abstract @ResponseBody List<T> list();
+    static final Logger log = LoggerFactory
+                                    .getLogger(AbstractApiController.class);
 
-	@RequestMapping(value = "/{id}", method = GET, headers="Accept=application/xml")
-	public T show(@PathVariable("id") T id) {
-		if (id == null) {
-			throw new DataRetrievalFailureException("requested entity not found.");
-		}
-		return id;
-	}
+    @ResponseStatus(CREATED)
+    @RequestMapping(method = POST, headers = "Accept=application/xml")
+    public abstract T create(@RequestBody T requestBody,
+            HttpServletResponse response);
 
-	/**
-	 * 
-	 * @param id
-	 * @param requestBody
-	 * @param response
-	 *            this parameter is necessary to prevent Spring MVC from trying
-	 *            to resolve a view. Alternatively, we could return @ResponseBody
-	 *            String
-	 */
-	@RequestMapping(value = "/{id}", method = PUT)
-	public abstract void update(@PathVariable("id") Long id, @RequestBody T requestBody, HttpServletResponse response);
-	
-	@ResponseStatus(NO_CONTENT)
-	@RequestMapping(value = "/{id}", method = DELETE)
-	public abstract void delete(@PathVariable("id") Long id, HttpServletResponse response);
+    @ResponseStatus(NO_CONTENT)
+    @RequestMapping(value = "/{id}", method = DELETE)
+    public abstract void delete(@PathVariable("id") Long id,
+            HttpServletResponse response);
+
+    @RequestMapping(method = GET, headers = "Accept=application/xml")
+    public abstract @ResponseBody
+    List<T> list();
+
+    @RequestMapping(value = "/{id}", method = GET, headers = "Accept=application/xml")
+    public T show(@PathVariable("id") T id) {
+        if (id == null) {
+            throw new DataRetrievalFailureException(
+                    "requested entity not found.");
+        }
+        return id;
+    }
+
+    /**
+     * 
+     * @param id
+     * @param requestBody
+     * @param response
+     *            this parameter is necessary to prevent Spring MVC from trying
+     *            to resolve a view. Alternatively, we could return @ResponseBody
+     *            String
+     */
+    @RequestMapping(value = "/{id}", method = PUT)
+    public abstract void update(@PathVariable("id") Long id,
+            @RequestBody T requestBody, HttpServletResponse response);
 }

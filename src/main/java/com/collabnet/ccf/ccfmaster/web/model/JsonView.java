@@ -12,20 +12,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class JsonView {
 
-    public static ModelAndView render(Object model, HttpServletResponse response)
-    {
+    public static ModelAndView render(Object model, HttpServletResponse response) {
         MappingJacksonHttpMessageConverter jsonConverter = new MappingJacksonHttpMessageConverter();
 
         MediaType jsonMimeType = MediaType.APPLICATION_JSON;
 
-
         try {
-            jsonConverter.write(model, jsonMimeType, new ServletServerHttpResponse(response));
+            jsonConverter.write(model, jsonMimeType,
+                    new ServletServerHttpResponse(response));
         } catch (HttpMessageNotWritableException e) {
             // we do not want a stack trace in our error log whenever a browser window closes
-        	// e.printStackTrace();
+            // e.printStackTrace();
         } catch (IOException e) {
-        	// we do not want a stack trace in our error log whenever a browser window closes
+            // we do not want a stack trace in our error log whenever a browser window closes
             //e.printStackTrace();
         }
 

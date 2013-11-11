@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class RepositoryMappingList extends ForwardingList<RepositoryMapping> {
 
-	private List<RepositoryMapping> participant;
+    private List<RepositoryMapping> participant;
 
-	public RepositoryMappingList() {
-		this(new ArrayList<RepositoryMapping>());
-	}
-	public RepositoryMappingList(List<RepositoryMapping> participants) {
-		this.setRepositoryMapping(participants);
-	}
+    public RepositoryMappingList() {
+        this(new ArrayList<RepositoryMapping>());
+    }
 
-	@Override
-	protected List<RepositoryMapping> delegate() {
-		return getRepositoryMapping();
-	}
+    public RepositoryMappingList(List<RepositoryMapping> participants) {
+        this.setRepositoryMapping(participants);
+    }
 
-	public void setRepositoryMapping(List<RepositoryMapping> participant) {
-		this.participant = participant;
-	}
+    public List<RepositoryMapping> getRepositoryMapping() {
+        return participant;
+    }
 
-	public List<RepositoryMapping> getRepositoryMapping() {
-		return participant;
-	}
+    public void setRepositoryMapping(List<RepositoryMapping> participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    protected List<RepositoryMapping> delegate() {
+        return getRepositoryMapping();
+    }
 
 }

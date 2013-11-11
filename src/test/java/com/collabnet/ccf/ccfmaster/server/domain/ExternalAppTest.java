@@ -10,8 +10,11 @@ public class ExternalAppTest {
     public void testMethod() {
         int expectedCount = 13;
         ExternalApp.countExternalApps();
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.expectReturn(expectedCount);
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.playback();
-        org.junit.Assert.assertEquals(expectedCount, ExternalApp.countExternalApps());
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .expectReturn(expectedCount);
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .playback();
+        org.junit.Assert.assertEquals(expectedCount,
+                ExternalApp.countExternalApps());
     }
 }

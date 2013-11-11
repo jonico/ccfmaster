@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class DirectionList extends ForwardingList<Direction> {
 
-	private List<Direction> participant;
+    private List<Direction> participant;
 
-	public DirectionList() {
-		this(new ArrayList<Direction>());
-	}
-	public DirectionList(List<Direction> participants) {
-		this.setDirection(participants);
-	}
+    public DirectionList() {
+        this(new ArrayList<Direction>());
+    }
 
-	@Override
-	protected List<Direction> delegate() {
-		return getDirection();
-	}
+    public DirectionList(List<Direction> participants) {
+        this.setDirection(participants);
+    }
 
-	public void setDirection(List<Direction> participant) {
-		this.participant = participant;
-	}
+    public List<Direction> getDirection() {
+        return participant;
+    }
 
-	public List<Direction> getDirection() {
-		return participant;
-	}
+    public void setDirection(List<Direction> participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    protected List<Direction> delegate() {
+        return getDirection();
+    }
 
 }

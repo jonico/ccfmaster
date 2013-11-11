@@ -17,27 +17,29 @@ import com.collabnet.ccf.core.utils.ValidatorUtils;
 
 public class ConfigValidator implements Validator {
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return CCFCorePropertyList.class.equals(clazz);
-	}
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return CCFCorePropertyList.class.equals(clazz);
+    }
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		CCFCorePropertyList ccfCoreProperties=(CCFCorePropertyList)target;
-		List<CCFCoreProperty> ccfPropertyList =ccfCoreProperties.getCcfCoreProperties();
-		for (int i = 0; i < ccfPropertyList.size(); i++) { 
-			String value = ccfPropertyList.get(i).getValue();
-			CCFCorePropertyType type = ccfPropertyList.get(i).getType();
-			if (StringUtils.isEmpty(value)) {
-				errors.rejectValue("ccfCoreProperties[" + i + "].value", VALIDATE_NOT_EMPTY_CCFCOREPROPERTIES_VALUE, DEFAULT_ERRORMSG_NOT_EMPTY_VALUE);
-			} else if(!ValidatorUtils.validateType( value, type )){
-				errors.rejectValue("ccfCoreProperties[" + i + "].value",VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC); // Numeric validation message will always be expected
-			}
-		}  
+    @Override
+    public void validate(Object target, Errors errors) {
+        CCFCorePropertyList ccfCoreProperties = (CCFCorePropertyList) target;
+        List<CCFCoreProperty> ccfPropertyList = ccfCoreProperties
+                .getCcfCoreProperties();
+        for (int i = 0; i < ccfPropertyList.size(); i++) {
+            String value = ccfPropertyList.get(i).getValue();
+            CCFCorePropertyType type = ccfPropertyList.get(i).getType();
+            if (StringUtils.isEmpty(value)) {
+                errors.rejectValue("ccfCoreProperties[" + i + "].value",
+                        VALIDATE_NOT_EMPTY_CCFCOREPROPERTIES_VALUE,
+                        DEFAULT_ERRORMSG_NOT_EMPTY_VALUE);
+            } else if (!ValidatorUtils.validateType(value, type)) {
+                errors.rejectValue("ccfCoreProperties[" + i + "].value",
+                        VALIDATE_TYPE_MIS_MATCH_CCFCOREPROPERTIES_NUMERIC); // Numeric validation message will always be expected
+            }
+        }
 
-	}
-	
-	
+    }
 
 }

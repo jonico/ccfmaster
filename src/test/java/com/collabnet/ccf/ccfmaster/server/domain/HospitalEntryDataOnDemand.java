@@ -6,9 +6,9 @@ import com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry;
 @RooDataOnDemand(entity = HospitalEntry.class)
 public class HospitalEntryDataOnDemand {
 
-	public boolean modifyHospitalEntry(HospitalEntry obj) {
-		obj.setErrorCode("changed");
-		obj.setOriginatingComponent("changed");
+    public boolean modifyHospitalEntry(HospitalEntry obj) {
+        obj.setErrorCode("changed");
+        obj.setOriginatingComponent("changed");
         return true;
     }
 }

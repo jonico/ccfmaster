@@ -17,28 +17,31 @@ import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
 @Controller
 @RequestMapping(value = Paths.CAPABILITIES)
 public class ApiCapabilitiesController {
-		
-	private CCFRuntimePropertyHolder runtimeProperties;
-		
-	private Capabilities capabilities;
 
-	@Autowired
-	public void setCapabilities(Capabilities capabilities) {
-		this.capabilities = capabilities;
-	}
+    private CCFRuntimePropertyHolder runtimeProperties;
 
-	@Autowired
-	public void setCCFRunTimeProperties(CCFRuntimePropertyHolder runtimeProperties) {
-		this.runtimeProperties = runtimeProperties;
-	}
+    private Capabilities             capabilities;
 
-	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody Capabilities get() {
-		String ccfhome = runtimeProperties.getCcfHome();
-		String landscapeDir = ControllerHelper.landscapeDirName(ccfhome);
-		Version coreVersion = CoreProperties.ofDirectory(new File(landscapeDir)).getVersion();
-		//To avoid race Conditions new instance of Capabilities initialized and returned.
-		return new Capabilities(capabilities.getVersion(),coreVersion);
-	}
-	
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody
+    Capabilities get() {
+        String ccfhome = runtimeProperties.getCcfHome();
+        String landscapeDir = ControllerHelper.landscapeDirName(ccfhome);
+        Version coreVersion = CoreProperties
+                .ofDirectory(new File(landscapeDir)).getVersion();
+        //To avoid race Conditions new instance of Capabilities initialized and returned.
+        return new Capabilities(capabilities.getVersion(), coreVersion);
+    }
+
+    @Autowired
+    public void setCapabilities(Capabilities capabilities) {
+        this.capabilities = capabilities;
+    }
+
+    @Autowired
+    public void setCCFRunTimeProperties(
+            CCFRuntimePropertyHolder runtimeProperties) {
+        this.runtimeProperties = runtimeProperties;
+    }
+
 }

@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class LogFileList extends ForwardingList<LogFile> {
 
-	private List<LogFile> logFile;
+    private List<LogFile> logFile;
 
-	public LogFileList() {
-		this(new ArrayList<LogFile>());
-	}
-	public LogFileList(List<LogFile> participants) {
-		this.setLogFile(participants);
-	}
+    public LogFileList() {
+        this(new ArrayList<LogFile>());
+    }
 
-	@Override
-	protected List<LogFile> delegate() {
-		return getLogFile();
-	}
+    public LogFileList(List<LogFile> participants) {
+        this.setLogFile(participants);
+    }
 
-	public void setLogFile(List<LogFile> logFile) {
-		this.logFile = logFile;
-	}
+    public List<LogFile> getLogFile() {
+        return logFile;
+    }
 
-	public List<LogFile> getLogFile() {
-		return logFile;
-	}
+    public void setLogFile(List<LogFile> logFile) {
+        this.logFile = logFile;
+    }
+
+    @Override
+    protected List<LogFile> delegate() {
+        return getLogFile();
+    }
 
 }

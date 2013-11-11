@@ -13,112 +13,111 @@ import com.collabnet.teamforge.api.tracker.TrackerDO;
 
 public class TFRepositoryIdBelongsToExternalAppListenerFactory implements RepositoryIdBelongsToExternalAppListenerFactory {
 
-	@Override
-	public RepositoryIdBelongsToExternalAppListener get() {
-		return new RepositoryIdBelongsToExternalAppListener() {
+    @Override
+    public RepositoryIdBelongsToExternalAppListener get() {
+        return new RepositoryIdBelongsToExternalAppListener() {
 
-			@Override
-			public void beforeCreate(RepositoryMapping rMapping) {
-				try{
-					verifyRepositoryIdBelongsToExternalApp(rMapping);
-				}
-				catch (Exception e){
-					throw new CoreConfigurationException(e);
-				}
-			}
+            @Override
+            public void beforeCreate(RepositoryMapping rMapping) {
+                try {
+                    verifyRepositoryIdBelongsToExternalApp(rMapping);
+                } catch (Exception e) {
+                    throw new CoreConfigurationException(e);
+                }
+            }
 
-			@Override
-			public void beforeMerge(RepositoryMapping rMapping) {
-				try{
-					verifyRepositoryIdBelongsToExternalApp(rMapping);
-				}
-				catch (Exception e){
-					throw new CoreConfigurationException(e);
-				}
-			}
+            @Override
+            public void beforeMerge(RepositoryMapping rMapping) {
+                try {
+                    verifyRepositoryIdBelongsToExternalApp(rMapping);
+                } catch (Exception e) {
+                    throw new CoreConfigurationException(e);
+                }
+            }
 
-		};
-	}
+        };
+    }
 
-	
-	/**
-	 * @param rMapping
-	 * @throws RemoteException
-	 */
-	private void verifyRepositoryIdBelongsToExternalApp(
-			RepositoryMapping rMapping) throws RemoteException {
-		Connection teamforgeConnection = getTeamForgeConnection();
-		String externalAppProjectId = getProjectIdFromExternalApp(rMapping, teamforgeConnection);
-		String projectId = getProjectIdFromObjectId(rMapping,teamforgeConnection);
-		if (!externalAppProjectId.equals(projectId)) {
-			throw new CoreConfigurationException("TeamForge Repository Id does not belong to the External App.");
-		}
-	}
-	
-	
-	/**
-	 * @param rMapping
-	 * @param teamforgeConnection
-	 * @return
-	 * @throws RemoteException
-	 */
-	private String getProjectIdFromObjectId(RepositoryMapping rMapping,
-			Connection teamforgeConnection) throws RemoteException {
-			String projectId=null; 
-		String tfRepositoryId = extractObjectIdFromTFRespositoryId(rMapping);  
-		if(RepositoryConnections.isTrackerRepository(tfRepositoryId)){
-			TrackerDO trackerData =teamforgeConnection.getTrackerClient().getTrackerData(tfRepositoryId);
-			projectId=trackerData.getProjectId();
-		}
-		else{
-			projectId=tfRepositoryId;
-		}
-		return projectId;
-	}
+    public Connection getTeamForgeConnection() throws RemoteException {
+        Object user = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        TFUserDetails tfUser = (TFUserDetails) user;
+        Connection teamforgeConnection = tfUser.getConnection();
+        return teamforgeConnection;
+    }
 
-	/**
-	 * @param rMapping
-	 * @param teamforgeConnection
-	 * @return
-	 * @throws RemoteException
-	 */
-	private String getProjectIdFromExternalApp(
-			RepositoryMapping rMapping, Connection teamforgeConnection)throws RemoteException {
-		ProjectDO projectDO=teamforgeConnection.getTeamForgeClient().getProjectDataByPath(rMapping.getExternalApp().getProjectPath());
-		return projectDO.getId();
-	}
+    /**
+     * @param repositoryMappingDirection
+     * @return
+     */
+    private String extractObjectIdFromTFRespositoryId(RepositoryMapping rMapping) {
+        String sourceRepositoryId = rMapping.getTeamForgeRepositoryId();
+        String tfRepositoryId = null;
+        if (RepositoryConnections.isTrackerRepository(sourceRepositoryId)) {
+            tfRepositoryId = sourceRepositoryId;
+        } else if (RepositoryConnections
+                .isPlanningFolderRepository(sourceRepositoryId)) {
+            tfRepositoryId = RepositoryConnections
+                    .extractProjectFromRepositoryId(sourceRepositoryId);
+        } else if (RepositoryConnections
+                .isTrackerMetaDataRepository(sourceRepositoryId)) {
+            tfRepositoryId = RepositoryConnections
+                    .extractTrackerFromMetaDataRepositoryId(sourceRepositoryId);
+        } else {
+            tfRepositoryId = sourceRepositoryId;
+        }
+        return tfRepositoryId;
+    }
 
-	
-	/**
-	 * @param repositoryMappingDirection
-	 * @return
-	 */
-	private String extractObjectIdFromTFRespositoryId(RepositoryMapping rMapping) {
-		String sourceRepositoryId =rMapping.getTeamForgeRepositoryId(); 
-		String tfRepositoryId=null;
-		if(RepositoryConnections.isTrackerRepository(sourceRepositoryId)){
-			tfRepositoryId=sourceRepositoryId;
-		}
-		else if (RepositoryConnections.isPlanningFolderRepository(sourceRepositoryId)) {
-			tfRepositoryId=RepositoryConnections.extractProjectFromRepositoryId(sourceRepositoryId);
-		}
-		else if (RepositoryConnections.isTrackerMetaDataRepository(sourceRepositoryId)) {
-			tfRepositoryId=RepositoryConnections.extractTrackerFromMetaDataRepositoryId(sourceRepositoryId);
-		}
-		else{
-			tfRepositoryId=sourceRepositoryId;
-		}
-		return tfRepositoryId;
-	}
+    /**
+     * @param rMapping
+     * @param teamforgeConnection
+     * @return
+     * @throws RemoteException
+     */
+    private String getProjectIdFromExternalApp(RepositoryMapping rMapping,
+            Connection teamforgeConnection) throws RemoteException {
+        ProjectDO projectDO = teamforgeConnection.getTeamForgeClient()
+                .getProjectDataByPath(
+                        rMapping.getExternalApp().getProjectPath());
+        return projectDO.getId();
+    }
 
+    /**
+     * @param rMapping
+     * @param teamforgeConnection
+     * @return
+     * @throws RemoteException
+     */
+    private String getProjectIdFromObjectId(RepositoryMapping rMapping,
+            Connection teamforgeConnection) throws RemoteException {
+        String projectId = null;
+        String tfRepositoryId = extractObjectIdFromTFRespositoryId(rMapping);
+        if (RepositoryConnections.isTrackerRepository(tfRepositoryId)) {
+            TrackerDO trackerData = teamforgeConnection.getTrackerClient()
+                    .getTrackerData(tfRepositoryId);
+            projectId = trackerData.getProjectId();
+        } else {
+            projectId = tfRepositoryId;
+        }
+        return projectId;
+    }
 
-	public Connection getTeamForgeConnection() throws RemoteException {
-		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		TFUserDetails tfUser=(TFUserDetails)user;
-		Connection teamforgeConnection=tfUser.getConnection();
-		return teamforgeConnection;
-	}
-
+    /**
+     * @param rMapping
+     * @throws RemoteException
+     */
+    private void verifyRepositoryIdBelongsToExternalApp(
+            RepositoryMapping rMapping) throws RemoteException {
+        Connection teamforgeConnection = getTeamForgeConnection();
+        String externalAppProjectId = getProjectIdFromExternalApp(rMapping,
+                teamforgeConnection);
+        String projectId = getProjectIdFromObjectId(rMapping,
+                teamforgeConnection);
+        if (!externalAppProjectId.equals(projectId)) {
+            throw new CoreConfigurationException(
+                    "TeamForge Repository Id does not belong to the External App.");
+        }
+    }
 
 }
-

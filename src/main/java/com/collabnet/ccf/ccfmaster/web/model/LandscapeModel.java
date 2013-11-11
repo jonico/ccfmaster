@@ -1,7 +1,5 @@
 package com.collabnet.ccf.ccfmaster.web.model;
 
-
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -18,208 +16,190 @@ import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.google.common.base.Strings;
 
 public class LandscapeModel extends AbstractGenericParticipantModel {
-	 
-	private static final Logger log = LoggerFactory.getLogger(LandscapeModel.class);
 
-	public LandscapeModel(){
-		landscape.setParticipant(participant);
-		landscape.setTeamForge(teamforge);
-		participantUrlParticipantConfig.setParticipant(participant);
-		participantUserNameLandscapeConfig.setLandscape(landscape);
-		participantPasswordLandscapeConfig.setLandscape(landscape);
-		participantResyncUserNameLandscapeConfig.setLandscape(landscape);
-		participantResyncPasswordLandscapeConfig.setLandscape(landscape);
-		tfUserNameLandscapeConfig.setLandscape(landscape);
-		tfPasswordLandscapeConfig.setLandscape(landscape);
-	}
-	
+    private static final Logger log                                      = LoggerFactory
+                                                                                 .getLogger(LandscapeModel.class);
 
-	public void normalizeParticipantUrl() {
-		if (participantUrlParticipantConfig == null ||
-			Strings.isNullOrEmpty(participantUrlParticipantConfig.getVal()) ||
-			participant == null) {
-			// do nothing.
-			return;
-		}
-		switch (participant.getSystemKind()) {
-		case SWP:
-			participantUrlParticipantConfig.setVal(normalizeSwpUrl(participantUrlParticipantConfig.getVal()));
-			break;
-		case QC:
-			participantUrlParticipantConfig.setVal(normalizeQcUrl(participantUrlParticipantConfig.getVal()));
-			break;
-		default:
-			log.warn("unexpected system kind ({}) specified for participant, ignoring.", participant.getSystemKind());
-			break;
-		}
-	}
-	
-	static String normalizeSwpUrl(String swpUrl) {
-		return normalizeUrl(swpUrl, "/scrumworks-api/api2/scrumworks?wsdl");
-	}
+    @Valid
+    private Landscape           landscape                                = new Landscape();
 
-	static String normalizeQcUrl(String qcUrl) {
-		return normalizeUrl(qcUrl, "/qcbin/");
-	}
+    //	@Valid
+    private LandscapeConfig     participantUserNameLandscapeConfig       = new LandscapeConfig();
 
+    private LandscapeConfig     participantPasswordLandscapeConfig       = new LandscapeConfig();
 
-	/**
-	 * Normalizes <code>participantUrl</code> to have <code>defaultPath</code> as the path component if none specified.
-	 * If <code>participantUrl</code> has a path component or is not a valid URL, it is returned unmodified.
-	 * 
-	 * @param participantUrl
-	 * @param defaultPath
-	 * @return the normalized URL.
-	 */
-	static String normalizeUrl(final String participantUrl,
-			final String defaultPath) {
-		String res = participantUrl;
-		try {
-			URL url = new URL(res);
-			final String path = url.getPath();
-			if (path.isEmpty() || "/".equals(path)) {
-				res = (new URL(url, defaultPath)).toString();
-			}
-		} catch (MalformedURLException ignored) {} 
-		return res;
-	}
+    private LandscapeConfig     participantResyncUserNameLandscapeConfig = new LandscapeConfig();
 
-	@Valid
-	private Landscape landscape=new Landscape();
-	
-//	@Valid
-	private LandscapeConfig participantUserNameLandscapeConfig=new LandscapeConfig();
+    private LandscapeConfig     participantResyncPasswordLandscapeConfig = new LandscapeConfig();
 
-	
-	private LandscapeConfig participantPasswordLandscapeConfig=new LandscapeConfig();
+    @Valid
+    private LandscapeConfig     tfUserNameLandscapeConfig                = new LandscapeConfig();
 
-	
-	private LandscapeConfig participantResyncUserNameLandscapeConfig=new LandscapeConfig();
+    @Valid
+    private LandscapeConfig     tfPasswordLandscapeConfig                = new LandscapeConfig();
 
-	
-	private LandscapeConfig participantResyncPasswordLandscapeConfig=new LandscapeConfig();
-	
-	@Valid
-	private LandscapeConfig tfUserNameLandscapeConfig=new LandscapeConfig();
+    private ParticipantConfig   participantUrlParticipantConfig          = new ParticipantConfig();
 
-	@Valid
-	private LandscapeConfig tfPasswordLandscapeConfig=new LandscapeConfig();
+    @Valid
+    private Participant         participant                              = new Participant();
 
-	
-	private ParticipantConfig participantUrlParticipantConfig=new ParticipantConfig();
-	
-	@Valid
-	private Participant participant=new Participant(); 
-	
-	
-	@Valid
-	private Participant teamforge=new Participant();
+    @Valid
+    private Participant         teamforge                                = new Participant();
 
+    public LandscapeModel() {
+        landscape.setParticipant(participant);
+        landscape.setTeamForge(teamforge);
+        participantUrlParticipantConfig.setParticipant(participant);
+        participantUserNameLandscapeConfig.setLandscape(landscape);
+        participantPasswordLandscapeConfig.setLandscape(landscape);
+        participantResyncUserNameLandscapeConfig.setLandscape(landscape);
+        participantResyncPasswordLandscapeConfig.setLandscape(landscape);
+        tfUserNameLandscapeConfig.setLandscape(landscape);
+        tfPasswordLandscapeConfig.setLandscape(landscape);
+    }
 
-	public Landscape getLandscape() {
-		return landscape;
-	}
+    public Landscape getLandscape() {
+        return landscape;
+    }
 
+    public Participant getParticipant() {
+        return participant;
+    }
 
-	public void setLandscape(Landscape landscape) {
-		this.landscape = landscape;
-	}
+    public LandscapeConfig getParticipantPasswordLandscapeConfig() {
+        return participantPasswordLandscapeConfig;
+    }
 
+    public LandscapeConfig getParticipantResyncPasswordLandscapeConfig() {
+        return participantResyncPasswordLandscapeConfig;
+    }
 
-	public LandscapeConfig getParticipantUserNameLandscapeConfig() {
-		return participantUserNameLandscapeConfig;
-	}
+    public LandscapeConfig getParticipantResyncUserNameLandscapeConfig() {
+        return participantResyncUserNameLandscapeConfig;
+    }
 
+    public ParticipantConfig getParticipantUrlParticipantConfig() {
+        return participantUrlParticipantConfig;
+    }
 
-	public void setParticipantUserNameLandscapeConfig(
-			LandscapeConfig participantUserNameLandscapeConfig) {
-		this.participantUserNameLandscapeConfig = participantUserNameLandscapeConfig;
-	}
+    public LandscapeConfig getParticipantUserNameLandscapeConfig() {
+        return participantUserNameLandscapeConfig;
+    }
 
+    public Participant getTeamforge() {
+        return teamforge;
+    }
 
-	public LandscapeConfig getParticipantPasswordLandscapeConfig() {
-		return participantPasswordLandscapeConfig;
-	}
+    public LandscapeConfig getTfPasswordLandscapeConfig() {
+        return tfPasswordLandscapeConfig;
+    }
 
+    public LandscapeConfig getTfUserNameLandscapeConfig() {
+        return tfUserNameLandscapeConfig;
+    }
 
-	public void setParticipantPasswordLandscapeConfig(
-			LandscapeConfig participantPasswordLandscapeConfig) {
-		this.participantPasswordLandscapeConfig = participantPasswordLandscapeConfig;
-	}
+    public void normalizeParticipantUrl() {
+        if (participantUrlParticipantConfig == null
+                || Strings.isNullOrEmpty(participantUrlParticipantConfig
+                        .getVal()) || participant == null) {
+            // do nothing.
+            return;
+        }
+        switch (participant.getSystemKind()) {
+            case SWP:
+                participantUrlParticipantConfig
+                        .setVal(normalizeSwpUrl(participantUrlParticipantConfig
+                                .getVal()));
+                break;
+            case QC:
+                participantUrlParticipantConfig
+                        .setVal(normalizeQcUrl(participantUrlParticipantConfig
+                                .getVal()));
+                break;
+            default:
+                log.warn(
+                        "unexpected system kind ({}) specified for participant, ignoring.",
+                        participant.getSystemKind());
+                break;
+        }
+    }
 
+    public void setLandscape(Landscape landscape) {
+        this.landscape = landscape;
+    }
 
-	public LandscapeConfig getParticipantResyncUserNameLandscapeConfig() {
-		return participantResyncUserNameLandscapeConfig;
-	}
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
 
+    public void setParticipantPasswordLandscapeConfig(
+            LandscapeConfig participantPasswordLandscapeConfig) {
+        this.participantPasswordLandscapeConfig = participantPasswordLandscapeConfig;
+    }
 
-	public void setParticipantResyncUserNameLandscapeConfig(
-			LandscapeConfig participantResyncUserNameLandscapeConfig) {
-		this.participantResyncUserNameLandscapeConfig = participantResyncUserNameLandscapeConfig;
-	}
+    public void setParticipantResyncPasswordLandscapeConfig(
+            LandscapeConfig participantResyncPasswordLandscapeConfig) {
+        this.participantResyncPasswordLandscapeConfig = participantResyncPasswordLandscapeConfig;
+    }
 
+    public void setParticipantResyncUserNameLandscapeConfig(
+            LandscapeConfig participantResyncUserNameLandscapeConfig) {
+        this.participantResyncUserNameLandscapeConfig = participantResyncUserNameLandscapeConfig;
+    }
 
-	public LandscapeConfig getParticipantResyncPasswordLandscapeConfig() {
-		return participantResyncPasswordLandscapeConfig;
-	}
+    public void setParticipantUrlParticipantConfig(
+            ParticipantConfig participantUrlParticipantConfig) {
+        this.participantUrlParticipantConfig = participantUrlParticipantConfig;
+    }
 
+    public void setParticipantUserNameLandscapeConfig(
+            LandscapeConfig participantUserNameLandscapeConfig) {
+        this.participantUserNameLandscapeConfig = participantUserNameLandscapeConfig;
+    }
 
-	public void setParticipantResyncPasswordLandscapeConfig(
-			LandscapeConfig participantResyncPasswordLandscapeConfig) {
-		this.participantResyncPasswordLandscapeConfig = participantResyncPasswordLandscapeConfig;
-	}
+    public void setTeamforge(Participant teamforge) {
+        this.teamforge = teamforge;
+    }
 
+    public void setTfPasswordLandscapeConfig(
+            LandscapeConfig tfPasswordLandscapeConfig) {
+        this.tfPasswordLandscapeConfig = tfPasswordLandscapeConfig;
+    }
 
-	public LandscapeConfig getTfUserNameLandscapeConfig() {
-		return tfUserNameLandscapeConfig;
-	}
+    public void setTfUserNameLandscapeConfig(
+            LandscapeConfig tfUserNameLandscapeConfig) {
+        this.tfUserNameLandscapeConfig = tfUserNameLandscapeConfig;
+    }
 
+    static String normalizeQcUrl(String qcUrl) {
+        return normalizeUrl(qcUrl, "/qcbin/");
+    }
 
-	public void setTfUserNameLandscapeConfig(
-			LandscapeConfig tfUserNameLandscapeConfig) {
-		this.tfUserNameLandscapeConfig = tfUserNameLandscapeConfig;
-	}
+    static String normalizeSwpUrl(String swpUrl) {
+        return normalizeUrl(swpUrl, "/scrumworks-api/api2/scrumworks?wsdl");
+    }
 
+    /**
+     * Normalizes <code>participantUrl</code> to have <code>defaultPath</code>
+     * as the path component if none specified. If <code>participantUrl</code>
+     * has a path component or is not a valid URL, it is returned unmodified.
+     * 
+     * @param participantUrl
+     * @param defaultPath
+     * @return the normalized URL.
+     */
+    static String normalizeUrl(final String participantUrl,
+            final String defaultPath) {
+        String res = participantUrl;
+        try {
+            URL url = new URL(res);
+            final String path = url.getPath();
+            if (path.isEmpty() || "/".equals(path)) {
+                res = (new URL(url, defaultPath)).toString();
+            }
+        } catch (MalformedURLException ignored) {
+        }
+        return res;
+    }
 
-	public LandscapeConfig getTfPasswordLandscapeConfig() {
-		return tfPasswordLandscapeConfig;
-	}
-
-
-	public void setTfPasswordLandscapeConfig(
-			LandscapeConfig tfPasswordLandscapeConfig) {
-		this.tfPasswordLandscapeConfig = tfPasswordLandscapeConfig;
-	}
-
-
-	public ParticipantConfig getParticipantUrlParticipantConfig() {
-		return participantUrlParticipantConfig;
-	}
-
-
-	public void setParticipantUrlParticipantConfig(
-			ParticipantConfig participantUrlParticipantConfig) {
-		this.participantUrlParticipantConfig = participantUrlParticipantConfig;
-	}
-
-
-	public Participant getParticipant() {
-		return participant;
-	}
-
-
-	public void setParticipant(Participant participant) {
-		this.participant = participant;
-	}
-
-
-	public Participant getTeamforge() {
-		return teamforge;
-	}
-
-
-	public void setTeamforge(Participant teamforge) {
-		this.teamforge = teamforge;
-	}
-	
 }

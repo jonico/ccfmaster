@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class HospitalEntryList extends ForwardingList<HospitalEntry> {
 
-	private List<HospitalEntry> participant;
+    private List<HospitalEntry> participant;
 
-	public HospitalEntryList() {
-		this(new ArrayList<HospitalEntry>());
-	}
-	public HospitalEntryList(List<HospitalEntry> participants) {
-		this.setHospitalEntry(participants);
-	}
+    public HospitalEntryList() {
+        this(new ArrayList<HospitalEntry>());
+    }
 
-	@Override
-	protected List<HospitalEntry> delegate() {
-		return getHospitalEntry();
-	}
+    public HospitalEntryList(List<HospitalEntry> participants) {
+        this.setHospitalEntry(participants);
+    }
 
-	public void setHospitalEntry(List<HospitalEntry> participant) {
-		this.participant = participant;
-	}
+    public List<HospitalEntry> getHospitalEntry() {
+        return participant;
+    }
 
-	public List<HospitalEntry> getHospitalEntry() {
-		return participant;
-	}
+    public void setHospitalEntry(List<HospitalEntry> participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    protected List<HospitalEntry> delegate() {
+        return getHospitalEntry();
+    }
 
 }

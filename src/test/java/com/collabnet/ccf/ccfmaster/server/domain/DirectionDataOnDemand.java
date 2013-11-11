@@ -8,15 +8,31 @@ import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 @RooDataOnDemand(entity = Direction.class)
 public class DirectionDataOnDemand {
 
-	private List<Direction> data;
+    private List<Direction>       data;
 
-	public void init() {
-        data = com.collabnet.ccf.ccfmaster.server.domain.Direction.findDirectionEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'Direction' illegally returned null");
+    @Autowired
+    private LandscapeDataOnDemand landscapeDataOnDemand;
+
+    public Direction getNewTransientDirection(int index) {
+        com.collabnet.ccf.ccfmaster.server.domain.Direction obj = new com.collabnet.ccf.ccfmaster.server.domain.Direction();
+        obj.setDescription("description_" + index);
+        obj.setDirection(com.collabnet.ccf.ccfmaster.server.domain.Directions.class
+                .getEnumConstants()[index % 2]);
+        obj.setShouldStartAutomatically(false);
+        obj.setLandscape(landscapeDataOnDemand.getRandomLandscape());
+        return obj;
+    }
+
+    public void init() {
+        data = com.collabnet.ccf.ccfmaster.server.domain.Direction
+                .findDirectionEntries(0, 10);
+        if (data == null)
+            throw new IllegalStateException(
+                    "Find entries implementation for 'Direction' illegally returned null");
         if (!data.isEmpty()) {
             return;
         }
-        
+
         data = new java.util.ArrayList<com.collabnet.ccf.ccfmaster.server.domain.Direction>();
         // unique key constraints on enum
         for (int i = 0; i < 2; i++) {
@@ -26,16 +42,4 @@ public class DirectionDataOnDemand {
             data.add(obj);
         }
     }
-
-	public Direction getNewTransientDirection(int index) {
-        com.collabnet.ccf.ccfmaster.server.domain.Direction obj = new com.collabnet.ccf.ccfmaster.server.domain.Direction();
-        obj.setDescription("description_" + index);
-        obj.setDirection(com.collabnet.ccf.ccfmaster.server.domain.Directions.class.getEnumConstants()[index % 2]);
-        obj.setShouldStartAutomatically(false);
-        obj.setLandscape(landscapeDataOnDemand.getRandomLandscape());
-        return obj;
-    }
-
-	@Autowired
-    private LandscapeDataOnDemand landscapeDataOnDemand;
 }

@@ -28,7 +28,32 @@ import org.xml.sax.SAXException;
 
 public class XmlWebHelper {
 
-	public static String xmlToString(Node node) throws TransformerException {
+    public static Document createDocument(String xmlString)
+            throws SAXException, IOException, ParserConfigurationException {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+                .newDocumentBuilder();
+        InputSource inStream = new InputSource();
+        inStream.setCharacterStream(new StringReader(xmlString));
+        Document doc = builder.parse(inStream);
+        return doc;
+    }
+
+    public static <T> void createJAXBExport(HttpServletResponse response,
+            String defaultFileName, T objectToMarshall, Class<T> cls)
+            throws IOException, JAXBException {
+        response.setHeader("Content-Disposition", "attachment; filename=\""
+                + defaultFileName + "\"");
+        response.setContentType("text/xml; charset=utf-8");
+        OutputStream out = response.getOutputStream();
+        JAXBContext xmlContext = JAXBContext.newInstance(cls);
+        Marshaller marshaller = xmlContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.marshal(objectToMarshall, out);
+        out.flush();
+        out.close();
+    }
+
+    public static String xmlToString(Node node) throws TransformerException {
         Source source = new DOMSource(node);
         StringWriter stringWriter = new StringWriter();
         Result result = new StreamResult(stringWriter);
@@ -38,28 +63,6 @@ public class XmlWebHelper {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(source, result);
         return stringWriter.getBuffer().toString();
-	}
-	 
-	public static Document createDocument(String xmlString) throws SAXException, IOException, ParserConfigurationException {
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		InputSource inStream = new InputSource();
-		inStream.setCharacterStream(new StringReader(xmlString));
-		Document doc = builder.parse(inStream);
-		return doc; 
-	}
-	
+    }
 
-	public static <T> void createJAXBExport(HttpServletResponse response,
-			String defaultFileName, T objectToMarshall, Class<T> cls) throws IOException, JAXBException {
-		response.setHeader("Content-Disposition", "attachment; filename=\""	+ defaultFileName + "\"");
-		response.setContentType("text/xml; charset=utf-8");
-		OutputStream out = response.getOutputStream();
-		JAXBContext xmlContext = JAXBContext.newInstance(cls);
-		Marshaller marshaller = xmlContext.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.marshal(objectToMarshall, out);
-		out.flush();
-		out.close();
-	}
-	
 }

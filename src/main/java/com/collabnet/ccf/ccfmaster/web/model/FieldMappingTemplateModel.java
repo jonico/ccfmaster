@@ -5,67 +5,58 @@ import java.util.List;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
 
-
-
-
-
 public class FieldMappingTemplateModel {
 
-	private List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate;
-	
-	private List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate;
-	
-	private String templateType="connector";
-	
-	private String fieldmappingName="";
-	
-	private boolean linktoTemplate=false;
+    private List<FieldMappingLandscapeTemplate>   fieldMappingLandscapeTemplate;
 
-	public List<FieldMappingLandscapeTemplate> getFieldMappingLandscapeTemplate() {
-		return fieldMappingLandscapeTemplate;
-	}
+    private List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate;
 
-	public void setFieldMappingLandscapeTemplate(
-			List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate) {
-		this.fieldMappingLandscapeTemplate = fieldMappingLandscapeTemplate;
-	}
+    private String                                templateType     = "connector";
 
-	public List<FieldMappingExternalAppTemplate> getFieldMappingExternalAppTemplate() {
-		return fieldMappingExternalAppTemplate;
-	}
+    private String                                fieldmappingName = "";
 
-	public void setFieldMappingExternalAppTemplate(
-			List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate) {
-		this.fieldMappingExternalAppTemplate = fieldMappingExternalAppTemplate;
-	}
+    private boolean                               linktoTemplate   = false;
 
-	public String getFieldmappingName() {
-		return fieldmappingName;
-	}
+    public List<FieldMappingExternalAppTemplate> getFieldMappingExternalAppTemplate() {
+        return fieldMappingExternalAppTemplate;
+    }
 
-	public void setFieldmappingName(String fieldmappingName) {
-		this.fieldmappingName = fieldmappingName;
-	}
+    public List<FieldMappingLandscapeTemplate> getFieldMappingLandscapeTemplate() {
+        return fieldMappingLandscapeTemplate;
+    }
 
-	public boolean isLinktoTemplate() {
-		return linktoTemplate;
-	}
+    public String getFieldmappingName() {
+        return fieldmappingName;
+    }
 
-	public void setLinktoTemplate(boolean linktoTemplate) {
-		this.linktoTemplate = linktoTemplate;
-	}
+    public String getTemplateType() {
+        return templateType;
+    }
 
-	public String getTemplateType() {
-		return templateType;
-	}
+    public boolean isLinktoTemplate() {
+        return linktoTemplate;
+    }
 
-	public void setTemplateType(String templateType) {
-		this.templateType = templateType;
-	}
+    public void setFieldMappingExternalAppTemplate(
+            List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate) {
+        this.fieldMappingExternalAppTemplate = fieldMappingExternalAppTemplate;
+    }
 
-	
-	
-	
-	
-	
+    public void setFieldMappingLandscapeTemplate(
+            List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate) {
+        this.fieldMappingLandscapeTemplate = fieldMappingLandscapeTemplate;
+    }
+
+    public void setFieldmappingName(String fieldmappingName) {
+        this.fieldmappingName = fieldmappingName;
+    }
+
+    public void setLinktoTemplate(boolean linktoTemplate) {
+        this.linktoTemplate = linktoTemplate;
+    }
+
+    public void setTemplateType(String templateType) {
+        this.templateType = templateType;
+    }
+
 }

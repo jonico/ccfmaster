@@ -24,73 +24,80 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
  * @author jnicolai
  * 
  */
-@Configurable(autowire = Autowire.BY_TYPE, preConstruction=true)
-public class SingleLandscapeDirectionCCFCoreInteractionStrategy extends
-		DirectionCCFCoreInteractionStrategy {
-	
-	@Autowired
-	private CoreConfigLoader coreConfigLoader;
-	
-	@Override
-	public void create(Direction context) {
-		File ccfLandscapeDirectory = new File(getCcfHome(), "landscape"
-				+ context.getLandscape().getId());
-		try {
-			FileUtils.forceMkdir(ccfLandscapeDirectory);
-		} catch (IOException e) {
-			throw new CoreConfigurationException("Could not create directory to write wrapper properties: " + e.getMessage(), e);
-		}
-		File directionWrapperFile = new File(ccfLandscapeDirectory,
-				getImmutableDirectionWrapperFileName(context));
+@Configurable(autowire = Autowire.BY_TYPE, preConstruction = true)
+public class SingleLandscapeDirectionCCFCoreInteractionStrategy extends DirectionCCFCoreInteractionStrategy {
 
-		createProperties(context, directionWrapperFile);
-		try {
-			createDefaultCoreConfig(context);
-		} catch (JAXBException e) {
-			throw new CoreConfigurationException("Could not parse the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
-		} catch (IOException e) {
-			throw new CoreConfigurationException("Could not read the ccfcoredefaultconfig xml file: " + e.getMessage(), e);
-		}
-	}
+    @Autowired
+    private CoreConfigLoader coreConfigLoader;
 
-	private void createDefaultCoreConfig(Direction context) throws JAXBException, IOException {
-		List<DirectionConfig> defaultCoreConfigList = coreConfigLoader.getAsDirectionConfigList(context);
-		for (DirectionConfig config : defaultCoreConfigList) {
-			config.persist();
-		}
-	}
+    @Override
+    public void create(Direction context) {
+        File ccfLandscapeDirectory = new File(getCcfHome(), "landscape"
+                + context.getLandscape().getId());
+        try {
+            FileUtils.forceMkdir(ccfLandscapeDirectory);
+        } catch (IOException e) {
+            throw new CoreConfigurationException(
+                    "Could not create directory to write wrapper properties: "
+                            + e.getMessage(), e);
+        }
+        File directionWrapperFile = new File(ccfLandscapeDirectory,
+                getImmutableDirectionWrapperFileName(context));
 
-	@Override
-	public void delete(Direction context) {
-		// do nothing so far
-	}
+        createProperties(context, directionWrapperFile);
+        try {
+            createDefaultCoreConfig(context);
+        } catch (JAXBException e) {
+            throw new CoreConfigurationException(
+                    "Could not parse the ccfcoredefaultconfig xml file: "
+                            + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CoreConfigurationException(
+                    "Could not read the ccfcoredefaultconfig xml file: "
+                            + e.getMessage(), e);
+        }
+    }
 
-	@Override
-	public synchronized void update(Direction context) {
-		File ccfLandscapeDirectory = new File(getCcfHome(), "landscape"
-				+ context.getLandscape().getId());
-		File directionWrapperFile = new File(ccfLandscapeDirectory,
-				getImmutableDirectionWrapperFileName(context));
+    private void createDefaultCoreConfig(Direction context)
+            throws JAXBException, IOException {
+        List<DirectionConfig> defaultCoreConfigList = coreConfigLoader
+                .getAsDirectionConfigList(context);
+        for (DirectionConfig config : defaultCoreConfigList) {
+            config.persist();
+        }
+    }
 
-		updateProperties(context, directionWrapperFile);
-	}
+    @Override
+    public void delete(Direction context) {
+        // do nothing so far
+    }
 
-	public String getImmutableDirectionWrapperFileName(Direction direction) {
-		String baseName = "immutable";
-		switch (direction.getDirection()) {
-		case FORWARD:
-			baseName += "%1$s2%2$s"; // e.g. TF2QC
-			break;
-		case REVERSE:
-			baseName += "%2$s2%1$s"; // e.g. QC2TF
-			break;
-		default:
-			throw new IllegalArgumentException("unknown direction: "
-					+ direction.getDirection());
-		}
-		final Landscape landscape = direction.getLandscape();
-		return String.format(baseName + ".conf",
-				landscape.getTeamForge().getSystemKind(),
-				landscape.getParticipant().getSystemKind()).toLowerCase();
-	}
+    @Override
+    public synchronized void update(Direction context) {
+        File ccfLandscapeDirectory = new File(getCcfHome(), "landscape"
+                + context.getLandscape().getId());
+        File directionWrapperFile = new File(ccfLandscapeDirectory,
+                getImmutableDirectionWrapperFileName(context));
+
+        updateProperties(context, directionWrapperFile);
+    }
+
+    public String getImmutableDirectionWrapperFileName(Direction direction) {
+        String baseName = "immutable";
+        switch (direction.getDirection()) {
+            case FORWARD:
+                baseName += "%1$s2%2$s"; // e.g. TF2QC
+                break;
+            case REVERSE:
+                baseName += "%2$s2%1$s"; // e.g. QC2TF
+                break;
+            default:
+                throw new IllegalArgumentException("unknown direction: "
+                        + direction.getDirection());
+        }
+        final Landscape landscape = direction.getLandscape();
+        return String.format(baseName + ".conf",
+                landscape.getTeamForge().getSystemKind(),
+                landscape.getParticipant().getSystemKind()).toLowerCase();
+    }
 }

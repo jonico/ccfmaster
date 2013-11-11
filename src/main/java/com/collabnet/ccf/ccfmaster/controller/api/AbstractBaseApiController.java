@@ -23,61 +23,63 @@ import com.collabnet.ccf.ccfmaster.util.HttpUtils;
 
 public class AbstractBaseApiController {
 
-	private static final Logger log = LoggerFactory.getLogger(AbstractBaseApiController.class);
-	
-	@Autowired
-	protected HttpServletRequest request;
-	protected String contextPath;
-	protected String contextUrl;
+    private static final Logger  log = LoggerFactory
+                                             .getLogger(AbstractBaseApiController.class);
 
-	
-	/**
-	 * because of Spring Bug https://jira.springsource.org/browse/SPR-3150 we
-	 * provide this default constructor and rely on autowiring instead of
-	 * constructor injection to set the request for us.
-	 * 
-	 * In addition, the @PostConstruct method setupContextUrl is
-	 * responsible for setting up instance variables based on the request.
-	 * 
-	 * Who needs OO design and final fields when we've got DI and frameworks  :-(.
-	 */
-	public AbstractBaseApiController() {
-		
-	}
+    @Autowired
+    protected HttpServletRequest request;
+    protected String             contextPath;
+    protected String             contextUrl;
 
-	public AbstractBaseApiController(HttpServletRequest request) {
-		this.request = request;
-		setupContextUrl();
-	}
-	
-	@PostConstruct
-	public void setupContextUrl() {
-		log.debug("setupContextUrl called.");
-		Assert.notNull(request);
-		this.contextPath = request.getContextPath();
-		this.contextUrl = HttpUtils.buildContextUrl(request);
-	}
+    /**
+     * because of Spring Bug https://jira.springsource.org/browse/SPR-3150 we
+     * provide this default constructor and rely on autowiring instead of
+     * constructor injection to set the request for us.
+     * 
+     * In addition, the @PostConstruct method setupContextUrl is responsible for
+     * setting up instance variables based on the request.
+     * 
+     * Who needs OO design and final fields when we've got DI and frameworks
+     * :-(.
+     */
+    public AbstractBaseApiController() {
 
-	@ExceptionHandler(value = { AccessDeniedException.class })
-	@ResponseStatus(FORBIDDEN)
-	public void permissionDenied(Exception ex, HttpServletResponse response) throws IOException {
-		log.debug("handling permission denied.", ex);
-		ex.printStackTrace(response.getWriter());
-	}
+    }
 
-	@ExceptionHandler(value = {
-			BadRequestException.class,
-			DataAccessException.class,
-			ConversionFailedException.class})
-	@ResponseStatus(BAD_REQUEST)
-	public void badRequest(Exception ex, HttpServletResponse response) throws IOException {
-		log.debug("handling bad request.", ex);
-		ex.printStackTrace(response.getWriter());
-	}
+    public AbstractBaseApiController(HttpServletRequest request) {
+        this.request = request;
+        setupContextUrl();
+    }
 
-	protected void setLocationHeader(HttpServletResponse response, String contextRelativePath) {
-		// FIXME: according to RFC1945, this should be an absolute URL.
-		response.setHeader("Location", contextUrl + contextRelativePath);
-	}
+    @ExceptionHandler(value = { BadRequestException.class,
+            DataAccessException.class, ConversionFailedException.class })
+    @ResponseStatus(BAD_REQUEST)
+    public void badRequest(Exception ex, HttpServletResponse response)
+            throws IOException {
+        log.debug("handling bad request.", ex);
+        ex.printStackTrace(response.getWriter());
+    }
+
+    @ExceptionHandler(value = { AccessDeniedException.class })
+    @ResponseStatus(FORBIDDEN)
+    public void permissionDenied(Exception ex, HttpServletResponse response)
+            throws IOException {
+        log.debug("handling permission denied.", ex);
+        ex.printStackTrace(response.getWriter());
+    }
+
+    @PostConstruct
+    public void setupContextUrl() {
+        log.debug("setupContextUrl called.");
+        Assert.notNull(request);
+        this.contextPath = request.getContextPath();
+        this.contextUrl = HttpUtils.buildContextUrl(request);
+    }
+
+    protected void setLocationHeader(HttpServletResponse response,
+            String contextRelativePath) {
+        // FIXME: according to RFC1945, this should be an absolute URL.
+        response.setHeader("Location", contextUrl + contextRelativePath);
+    }
 
 }

@@ -14,48 +14,52 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.collabnet.ccf.ccfmaster.authentication.LinkedAppAuthenticationFilter.LinkedAppCredentials;
 import com.collabnet.teamforge.api.Connection;
 
-public class LinkedAppUserDetailsService implements
-		AuthenticationUserDetailsService {
+public class LinkedAppUserDetailsService implements AuthenticationUserDetailsService {
 
-	private static final Logger log = LoggerFactory.getLogger(LinkedAppUserDetailsService.class);
-	
-	private Proxy proxy;
-	private String httpAuthUser;
-	private String httpAuthPass;
-	private String serverUrl;
+    private static final Logger log = LoggerFactory
+                                            .getLogger(LinkedAppUserDetailsService.class);
 
-	public LinkedAppUserDetailsService(String serverUrl) {
-		this(serverUrl, null, null, null);
-	}
-	public LinkedAppUserDetailsService(String serverUrl, Proxy proxy,
-			String httpAuthUser, String httpAuthPass) {
-		super();
-		this.serverUrl = serverUrl;
-		this.proxy = proxy;
-		this.httpAuthUser = httpAuthUser;
-		this.httpAuthPass = httpAuthPass;
-	}
+    private Proxy               proxy;
+    private String              httpAuthUser;
+    private String              httpAuthPass;
+    private String              serverUrl;
 
-	
-	@Override
-	public UserDetails loadUserDetails(Authentication token)
-			throws UsernameNotFoundException {
-		if(!(token.getCredentials() instanceof LinkedAppCredentials))
-			throw new BadCredentialsException("passed credentials had wrong type");
-		LinkedAppCredentials linkedAppCredentials = (LinkedAppCredentials) token.getCredentials();
-		final String oneTimeToken = linkedAppCredentials.getLoginToken(); 
-		final Connection.Builder builder = Connection.builder(serverUrl)
-			.oneTimeToken(linkedAppCredentials.getUserName(), oneTimeToken);
-		if (proxy != null) {
-			builder.proxy(proxy).httpAuth(httpAuthUser, httpAuthPass);
-		}
-		final Connection connection = builder.build();
-		try {
-			connection.login(); // sets connectionHelper.sessionId as a side-effect
-			return TFUserDetails.fromConnection(connection, oneTimeToken, token.getAuthorities());
-		} catch (RemoteException e) {
-			log.debug("exception logging in to TeamForge", e);
-			throw new BadCredentialsException("Bad credentials supplied: " + e.getMessage(), e);
-		}
-	}
+    public LinkedAppUserDetailsService(String serverUrl) {
+        this(serverUrl, null, null, null);
+    }
+
+    public LinkedAppUserDetailsService(String serverUrl, Proxy proxy,
+            String httpAuthUser, String httpAuthPass) {
+        super();
+        this.serverUrl = serverUrl;
+        this.proxy = proxy;
+        this.httpAuthUser = httpAuthUser;
+        this.httpAuthPass = httpAuthPass;
+    }
+
+    @Override
+    public UserDetails loadUserDetails(Authentication token)
+            throws UsernameNotFoundException {
+        if (!(token.getCredentials() instanceof LinkedAppCredentials))
+            throw new BadCredentialsException(
+                    "passed credentials had wrong type");
+        LinkedAppCredentials linkedAppCredentials = (LinkedAppCredentials) token
+                .getCredentials();
+        final String oneTimeToken = linkedAppCredentials.getLoginToken();
+        final Connection.Builder builder = Connection.builder(serverUrl)
+                .oneTimeToken(linkedAppCredentials.getUserName(), oneTimeToken);
+        if (proxy != null) {
+            builder.proxy(proxy).httpAuth(httpAuthUser, httpAuthPass);
+        }
+        final Connection connection = builder.build();
+        try {
+            connection.login(); // sets connectionHelper.sessionId as a side-effect
+            return TFUserDetails.fromConnection(connection, oneTimeToken,
+                    token.getAuthorities());
+        } catch (RemoteException e) {
+            log.debug("exception logging in to TeamForge", e);
+            throw new BadCredentialsException("Bad credentials supplied: "
+                    + e.getMessage(), e);
+        }
+    }
 }

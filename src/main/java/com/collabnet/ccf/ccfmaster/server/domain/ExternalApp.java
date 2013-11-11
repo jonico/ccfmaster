@@ -26,95 +26,119 @@ import com.collabnet.teamforge.api.main.TeamForgeClient;
 import com.collabnet.teamforge.api.pluggable.IntegratedApplicationClient;
 
 /**
- * This corresponds to an IAF integrated application.
- * TODO: rename this class to IntegratedApp
+ * This corresponds to an IAF integrated application. TODO: rename this class to
+ * IntegratedApp
+ * 
  * @author ctaylor
- *
+ * 
  */
 @RooJavaBean
 @RooToString
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "LANDSCAPE", "PROJECTPATH" }))
-@RooEntity(finders = { "findExternalAppsByLinkIdEquals", "findExternalAppsByLandscape" })
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "LANDSCAPE",
+        "PROJECTPATH" }))
+@RooEntity(finders = { "findExternalAppsByLinkIdEquals",
+        "findExternalAppsByLandscape" })
 public class ExternalApp {
+
+    public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, ExternalApp> {
+
+        @Override
+        public Long marshal(ExternalApp v) throws Exception {
+            return v.getId();
+        }
+
+        @Override
+        public ExternalApp unmarshal(Long v) throws Exception {
+            return findExternalApp(v);
+        }
+    }
 
     private static Logger log = LoggerFactory.getLogger(ExternalApp.class);
 
     @NotNull
     @Pattern(regexp = "^prpl\\d+$")
     @Column(unique = true)
-    private String linkId;
+    private String        linkId;
 
     @NotNull
     @Pattern(regexp = "^projects\\..*")
     @Index(name = "projectPathIndex")
-    private String projectPath;
+    private String        projectPath;
 
     @NotNull
     @XmlJavaTypeAdapter(Landscape.XmlAdapter.class)
-    @ManyToOne(cascade = {  })
+    @ManyToOne(cascade = {})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Landscape landscape;
+    private Landscape     landscape;
 
-    private String projectTitle;
+    private String        projectTitle;
 
-    public static ExternalApp createNewExternalApp(String linkId, final Connection connection) throws RemoteException {
-        final IntegratedApplicationClient integratedAppClient = connection.getIntegratedAppClient();
+    public static long countExternalAppsByLandscape(Landscape landscape) {
+        if (landscape == null)
+            throw new IllegalArgumentException(
+                    "The landscape argument is required");
+        EntityManager em = entityManager();
+        return em
+                .createQuery(
+                        "SELECT COUNT(externalapp) FROM ExternalApp AS externalapp WHERE externalapp.landscape = :landscape",
+                        Long.class).setParameter("landscape", landscape)
+                .getSingleResult();
+    }
+
+    public static ExternalApp createNewExternalApp(String linkId,
+            final Connection connection) throws RemoteException {
+        final IntegratedApplicationClient integratedAppClient = connection
+                .getIntegratedAppClient();
         final TeamForgeClient teamForgeClient = connection.getTeamForgeClient();
-        String projectPath = integratedAppClient.getProjectPathByIntegratedAppId(linkId);
+        String projectPath = integratedAppClient
+                .getProjectPathByIntegratedAppId(linkId);
         String baseURL = integratedAppClient.getBaseUrlByLinkId(linkId);
         String plugId = integratedAppClient.getPlugIdByBaseUrl(baseURL);
         ExternalApp externalApp = new ExternalApp();
         externalApp.setLinkId(linkId);
         externalApp.setProjectPath(projectPath);
         try {
-            externalApp.setLandscape(Landscape.findLandscapesByPlugIdEquals(plugId).getSingleResult());
+            externalApp.setLandscape(Landscape.findLandscapesByPlugIdEquals(
+                    plugId).getSingleResult());
         } catch (RuntimeException e) {
-        	log.error("Couldn't get Landscape while auto-creating externalApp", e);
-        	throw e;
+            log.error("Couldn't get Landscape while auto-creating externalApp",
+                    e);
+            throw e;
         }
         try {
-        	// if the user accessing CCFMaster does not have appropriate permissions to access the project data, do not set this value
-        	String projectTitle = teamForgeClient.getProjectDataByPath(projectPath).getTitle();
-        	externalApp.setProjectTitle(projectTitle);
+            // if the user accessing CCFMaster does not have appropriate permissions to access the project data, do not set this value
+            String projectTitle = teamForgeClient.getProjectDataByPath(
+                    projectPath).getTitle();
+            externalApp.setProjectTitle(projectTitle);
         } catch (Exception e) {
-        	log.warn("Unable to retrieve project title while auto-creating new ExternalApp with linkId={} and plugId={}: {}", new String [] {linkId, plugId, e.getMessage()});
+            log.warn(
+                    "Unable to retrieve project title while auto-creating new ExternalApp with linkId={} and plugId={}: {}",
+                    new String[] { linkId, plugId, e.getMessage() });
         }
-        log.info("auto-creating new ExternalApp with linkId={} and plugId={}", linkId, plugId);
-        
+        log.info("auto-creating new ExternalApp with linkId={} and plugId={}",
+                linkId, plugId);
+
         externalApp.persist();
         return externalApp;
     }
 
-    public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, ExternalApp> {
-
-        @Override
-        public ExternalApp unmarshal(Long v) throws Exception {
-            return findExternalApp(v);
-        }
-
-        @Override
-        public Long marshal(ExternalApp v) throws Exception {
-            return v.getId();
-        }
-    }
-
-    public static ExternalApp valueOf(String linkId) {
-        return findExternalAppsByLinkIdEquals(linkId).getSingleResult();
-    }
-
-    public static TypedQuery<ExternalApp> findExternalAppsByLandscape(Landscape landscape) {
-        if (landscape == null) throw new IllegalArgumentException("The landscape argument is required");
+    public static TypedQuery<ExternalApp> findExternalAppsByLandscape(
+            Landscape landscape) {
+        if (landscape == null)
+            throw new IllegalArgumentException(
+                    "The landscape argument is required");
         EntityManager em = entityManager();
-        TypedQuery<ExternalApp> q = em.createQuery("SELECT ExternalApp FROM ExternalApp AS externalapp WHERE externalapp.landscape = :landscape", ExternalApp.class);
+        TypedQuery<ExternalApp> q = em
+                .createQuery(
+                        "SELECT ExternalApp FROM ExternalApp AS externalapp WHERE externalapp.landscape = :landscape",
+                        ExternalApp.class);
         q.setParameter("landscape", landscape);
         return q;
     }
 
-    public static long countExternalAppsByLandscape(Landscape landscape) {
-        if (landscape == null) throw new IllegalArgumentException("The landscape argument is required");
-        EntityManager em = entityManager();
-        return em.createQuery("SELECT COUNT(externalapp) FROM ExternalApp AS externalapp WHERE externalapp.landscape = :landscape", Long.class).setParameter("landscape", landscape).getSingleResult();
+    public static ExternalApp valueOf(String linkId) {
+        return findExternalAppsByLinkIdEquals(linkId).getSingleResult();
     }
 }

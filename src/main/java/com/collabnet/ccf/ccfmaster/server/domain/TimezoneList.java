@@ -11,27 +11,28 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class TimezoneList extends ForwardingList<Timezone> {
 
-	private List<Timezone> timezone;
+    private List<Timezone> timezone;
 
-	public TimezoneList() {
-		this(new ArrayList<Timezone>());
-	}
-	public TimezoneList(List<Timezone> timezones) {
-		this.setTimezone(timezones);
-	}
+    public TimezoneList() {
+        this(new ArrayList<Timezone>());
+    }
 
-	@Override
-	protected List<Timezone> delegate() {
-		return getTimezone();
-	}
+    public TimezoneList(List<Timezone> timezones) {
+        this.setTimezone(timezones);
+    }
 
-	public void setTimezone(List<Timezone> timezone) {
-		this.timezone = timezone;
-	}
+    @XmlJavaTypeAdapter(Timezone.XmlAdapter.class)
+    public List<Timezone> getTimezone() {
+        return timezone;
+    }
 
-	@XmlJavaTypeAdapter(Timezone.XmlAdapter.class)
-	public List<Timezone> getTimezone() {
-		return timezone;
-	}
+    public void setTimezone(List<Timezone> timezone) {
+        this.timezone = timezone;
+    }
+
+    @Override
+    protected List<Timezone> delegate() {
+        return getTimezone();
+    }
 
 }

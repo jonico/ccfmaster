@@ -21,45 +21,51 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooEntity(finders = { "findParticipantConfigsByParticipant", "findParticipantConfigsByParticipantAndName" })
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"participant", "name"}))
+@RooEntity(finders = { "findParticipantConfigsByParticipant",
+        "findParticipantConfigsByParticipantAndName" })
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "participant",
+        "name" }))
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ParticipantConfig implements ConfigItem, PersistableConfigItem<ParticipantConfig> {
 
-	@ManyToOne(cascade={})
+    public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, ParticipantConfig> {
+
+        @Override
+        public Long marshal(ParticipantConfig v) throws Exception {
+            return v.getId();
+        }
+
+        @Override
+        public ParticipantConfig unmarshal(Long v) throws Exception {
+            return findParticipantConfig(v);
+        }
+    }
+
+    @ManyToOne(cascade = {})
     @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     @XmlJavaTypeAdapter(Participant.XmlAdapter.class)
     private Participant participant;
 
     @NotNull
-    private String name;
+    private String      name;
 
     @NotNull
     @NotBlank
     @Size(max = 10485760)
-    private String val;
+    private String      val;
 
-    public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, ParticipantConfig> {
-
-        @Override
-        public ParticipantConfig unmarshal(Long v) throws Exception {
-            return findParticipantConfig(v);
-        }
-
-        @Override
-        public Long marshal(ParticipantConfig v) throws Exception {
-            return v.getId();
-        }
-    }
-
-    
-    
-    public static long countParticipantConfigsByParticipant(Participant participant) {
-        if (participant == null) throw new IllegalArgumentException("The participant argument is required");
+    public static long countParticipantConfigsByParticipant(
+            Participant participant) {
+        if (participant == null)
+            throw new IllegalArgumentException(
+                    "The participant argument is required");
         EntityManager em = ParticipantConfig.entityManager();
-        TypedQuery<Long> q = em.createQuery("SELECT COUNT(participantconfig) FROM ParticipantConfig AS participantconfig WHERE participantconfig.participant = :participant", Long.class);
+        TypedQuery<Long> q = em
+                .createQuery(
+                        "SELECT COUNT(participantconfig) FROM ParticipantConfig AS participantconfig WHERE participantconfig.participant = :participant",
+                        Long.class);
         q.setParameter("participant", participant);
         return q.getSingleResult();
     }

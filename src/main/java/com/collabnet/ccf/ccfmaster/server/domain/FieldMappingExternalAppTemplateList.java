@@ -7,29 +7,32 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.collect.ForwardingList;
 
-@XmlRootElement(name="fieldMappingTemplateList")
+@XmlRootElement(name = "fieldMappingTemplateList")
 public class FieldMappingExternalAppTemplateList extends ForwardingList<FieldMappingExternalAppTemplate> {
 
-	private List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate;
+    private List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate;
 
-	public FieldMappingExternalAppTemplateList() {
-		this(new ArrayList<FieldMappingExternalAppTemplate>());
-	}
-	public FieldMappingExternalAppTemplateList(List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplates) {
-		this.setFieldMappingTemplate(fieldMappingExternalAppTemplates);
-	}
+    public FieldMappingExternalAppTemplateList() {
+        this(new ArrayList<FieldMappingExternalAppTemplate>());
+    }
 
-	@Override
-	protected List<FieldMappingExternalAppTemplate> delegate() {
-		return getFieldMappingTemplate();
-	}
+    public FieldMappingExternalAppTemplateList(
+            List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplates) {
+        this.setFieldMappingTemplate(fieldMappingExternalAppTemplates);
+    }
 
-	public void setFieldMappingTemplate(List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate) {
-		this.fieldMappingExternalAppTemplate = fieldMappingExternalAppTemplate;
-	}
+    public List<FieldMappingExternalAppTemplate> getFieldMappingTemplate() {
+        return fieldMappingExternalAppTemplate;
+    }
 
-	public List<FieldMappingExternalAppTemplate> getFieldMappingTemplate() {
-		return fieldMappingExternalAppTemplate;
-	}
+    public void setFieldMappingTemplate(
+            List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate) {
+        this.fieldMappingExternalAppTemplate = fieldMappingExternalAppTemplate;
+    }
+
+    @Override
+    protected List<FieldMappingExternalAppTemplate> delegate() {
+        return getFieldMappingTemplate();
+    }
 
 }

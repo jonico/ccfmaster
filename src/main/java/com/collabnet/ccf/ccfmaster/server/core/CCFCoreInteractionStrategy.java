@@ -13,93 +13,95 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 public abstract class CCFCoreInteractionStrategy<T> {
-	public abstract void create(T context);
+    private Map<String, String>  propertyMap = new HashMap<String, String>();
 
-	public abstract void delete(T context);
+    private SpelExpressionParser parser      = new SpelExpressionParser();
 
-	public abstract void update(T context);
+    private String               ccfHome;
 
-	public void setCcfHome(String ccfHome) {
-		this.ccfHome = ccfHome;
-	}
+    private String               isArchiveRequired;
 
-	public String getCcfHome() {
-		return ccfHome;
-	}
+    public abstract void create(T context);
 
-	protected void writeProperties(T context, Properties properties) {
-		for (String key : propertyMap.keySet()) {
-			String expressionValue = propertyMap.get(key);
-			Expression exp = parser.parseExpression(expressionValue);
-			StandardEvaluationContext evalContext = new StandardEvaluationContext();
-			evalContext.setRootObject(context);
-			String value = exp.getValue(evalContext).toString();
-			properties.put(key, value);
-		}
-	}
+    public abstract void delete(T context);
 
-	private Map<String, String> propertyMap = new HashMap<String, String>();
-	private SpelExpressionParser parser = new SpelExpressionParser();
+    public String getCcfHome() {
+        return ccfHome;
+    }
 
-	public void setPropertyMap(Map<String, String> propertyMap) {
-		this.propertyMap = propertyMap;
-	}
+    public String getIsArchiveRequired() {
+        return isArchiveRequired;
+    }
 
-	public Map<String, String> getPropertyMap() {
-		return propertyMap;
-	}
+    public Map<String, String> getPropertyMap() {
+        return propertyMap;
+    }
 
-	protected void updateProperties(T context, File propertyFile) {
-		FileOutputStream fos;
-		try {
-			Properties properties = new Properties();
-			FileInputStream fis = new FileInputStream(propertyFile);
-			try {
-				properties.load(fis);
-				writeProperties(context, properties);
-			} finally {
-				fis.close();
-			}
+    public void setCcfHome(String ccfHome) {
+        this.ccfHome = ccfHome;
+    }
 
-			fos = new FileOutputStream(propertyFile);
-			try {
-				properties.store(fos, "Updated properties");
-			} finally {
-				fos.close();
-			}
-		} catch (IOException e) {
-			throw new CoreConfigurationException("Could not update properties for "
-					+ context.toString() + ": " + e.getMessage(), e);
-		}
-	}
+    public void setIsArchiveRequired(String isArchiveRequired) {
+        this.isArchiveRequired = isArchiveRequired;
+    }
 
-	protected void createProperties(T context, File propertyFile) {
-		try {
-			FileOutputStream fos = new FileOutputStream(propertyFile);
-			Properties landscapeProperties = new Properties();
-	
-			writeProperties(context, landscapeProperties);
-			try {
-				landscapeProperties.store(fos,
-						"Initially created properties");
-			} finally {
-				fos.close();
-			}
-		} catch (IOException e) {
-			throw new CoreConfigurationException("Could not write properties for "
-					+ context.toString() + ": " + e.getMessage(), e);
-		}
-	}
+    public void setPropertyMap(Map<String, String> propertyMap) {
+        this.propertyMap = propertyMap;
+    }
 
-	private String ccfHome;
-	
-	private String isArchiveRequired;
+    public abstract void update(T context);
 
-	public String getIsArchiveRequired() {
-		return isArchiveRequired;
-	}
+    protected void createProperties(T context, File propertyFile) {
+        try {
+            FileOutputStream fos = new FileOutputStream(propertyFile);
+            Properties landscapeProperties = new Properties();
 
-	public void setIsArchiveRequired(String isArchiveRequired) {
-		this.isArchiveRequired = isArchiveRequired;
-	}
+            writeProperties(context, landscapeProperties);
+            try {
+                landscapeProperties.store(fos, "Initially created properties");
+            } finally {
+                fos.close();
+            }
+        } catch (IOException e) {
+            throw new CoreConfigurationException(
+                    "Could not write properties for " + context.toString()
+                            + ": " + e.getMessage(), e);
+        }
+    }
+
+    protected void updateProperties(T context, File propertyFile) {
+        FileOutputStream fos;
+        try {
+            Properties properties = new Properties();
+            FileInputStream fis = new FileInputStream(propertyFile);
+            try {
+                properties.load(fis);
+                writeProperties(context, properties);
+            } finally {
+                fis.close();
+            }
+
+            fos = new FileOutputStream(propertyFile);
+            try {
+                properties.store(fos, "Updated properties");
+            } finally {
+                fos.close();
+            }
+        } catch (IOException e) {
+            throw new CoreConfigurationException(
+                    "Could not update properties for " + context.toString()
+                            + ": " + e.getMessage(), e);
+        }
+    }
+
+    protected void writeProperties(T context, Properties properties) {
+        for (String key : propertyMap.keySet()) {
+            String expressionValue = propertyMap.get(key);
+            Expression exp = parser.parseExpression(expressionValue);
+            StandardEvaluationContext evalContext = new StandardEvaluationContext();
+            evalContext.setRootObject(context);
+            String value = exp.getValue(evalContext).toString();
+            properties.put(key, value);
+        }
+    }
 }

@@ -4,71 +4,68 @@ import com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry;
 import com.collabnet.ccf.ccfmaster.web.helper.RepositoryConnections.ArtifactDetail;
 import com.collabnet.ccf.ccfmaster.web.helper.RepositoryConnections.RepositoryDetail;
 
-
 public class HospitalModel {
 
-	private HospitalEntry hospitalEntry;
-	private RepositoryDetail repositoryDetail;
-	private ArtifactDetail artifactDetail;
-	
-	private String tfUrl;
-	 
-	public HospitalEntry getHospitalEntry() {
-		return hospitalEntry;
-	}
+    private HospitalEntry    hospitalEntry;
+    private RepositoryDetail repositoryDetail;
+    private ArtifactDetail   artifactDetail;
 
-	public void setHospitalEntry(HospitalEntry hospitalEntry) {
-		this.hospitalEntry = hospitalEntry;
-	}
+    private String           tfUrl;
 
-	public RepositoryDetail getRepositoryDetail() {
-		return repositoryDetail;
-	}
+    public String getArtifactData() {
+        return artifactDetail.getDescription();
+    }
 
-	public void setRepositoryDetail(RepositoryDetail repositoryDetail) {
-		this.repositoryDetail = repositoryDetail;
-	}
+    public ArtifactDetail getArtifactDetail() {
+        return artifactDetail;
+    }
 
-	public String getTfUrl() {
-		return tfUrl;
-	}
+    public String getArtifactIcon() {
+        return artifactDetail.getIcon();
+    }
 
-	public void setTfUrl(String tfUrl) {
-		this.tfUrl = tfUrl;
-	}
+    public String getArtifactId() {
+        return artifactDetail.getArtifactId();
+    }
 
-	public String getRepositoryId() {
-		return repositoryDetail.getRepositoryId();
-	}
+    public HospitalEntry getHospitalEntry() {
+        return hospitalEntry;
+    }
 
-	public String getRepositoryIcon() {
-		return repositoryDetail.getIcon();
-	}
+    public String getRepositoryData() {
+        return repositoryDetail.getDescription();
+    }
 
-	public String getRepositoryData() {
-		return repositoryDetail.getDescription();
-	}
+    public RepositoryDetail getRepositoryDetail() {
+        return repositoryDetail;
+    }
 
-	public ArtifactDetail getArtifactDetail() {
-		return artifactDetail;
-	}
+    public String getRepositoryIcon() {
+        return repositoryDetail.getIcon();
+    }
 
-	public void setArtifactDetail(ArtifactDetail artifactDetail) {
-		this.artifactDetail = artifactDetail;
-	}
+    public String getRepositoryId() {
+        return repositoryDetail.getRepositoryId();
+    }
 
-	public String getArtifactId() {
-		return artifactDetail.getArtifactId();
-	}
+    public String getTfUrl() {
+        return tfUrl;
+    }
 
-	public String getArtifactIcon() {
-		return artifactDetail.getIcon();
-	}
+    public void setArtifactDetail(ArtifactDetail artifactDetail) {
+        this.artifactDetail = artifactDetail;
+    }
 
-	public String getArtifactData() {
-		return artifactDetail.getDescription();
-	}
-	
-	
+    public void setHospitalEntry(HospitalEntry hospitalEntry) {
+        this.hospitalEntry = hospitalEntry;
+    }
+
+    public void setRepositoryDetail(RepositoryDetail repositoryDetail) {
+        this.repositoryDetail = repositoryDetail;
+    }
+
+    public void setTfUrl(String tfUrl) {
+        this.tfUrl = tfUrl;
+    }
+
 }
-

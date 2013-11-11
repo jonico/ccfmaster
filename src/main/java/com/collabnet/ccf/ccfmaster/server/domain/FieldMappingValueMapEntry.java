@@ -14,6 +14,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FieldMappingValueMapEntry {
-	public String source;
-	public String target;
+    public String source;
+    public String target;
 }

@@ -34,399 +34,417 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ArrayListMultimap;
 
 public class ConversionResult {
-	private static final Logger log = LoggerFactory
-			.getLogger(ConversionResult.class);
-	@Valid
-	private CustomXsl customXsl = null;
-	@Valid
-	private MapForce mapForce = null;
-	@Valid
-	private MappingRules mappingRules = null;
-	static final Transformer<FieldMappingRule, Element> xmlContent2Element = new Transformer<FieldMappingRule, Element>() {
-		@Override
-		public Element transform(FieldMappingRule t) {
-			try {
-				return DocumentHelper.parseText(t.getXmlContent())
-						.getRootElement();
-			} catch (DocumentException e) {
-				throw new CoreConfigurationException("unable to parse XML", e);
-			}
-		}
-	};
+    public static class CustomXsl {
+        private final Element xml;
 
-	public ConversionResult(CustomXsl customXsl) {
-		this.customXsl = customXsl;
-	}
+        public CustomXsl(final Mapping<?> mapping) {
+            Assert.isTrue(mapping.getKind() == FieldMappingKind.CUSTOM_XSLT,
+                    "bad mapping kind: " + mapping.getKind());
+            this.xml = getRuleByType(mapping.getRules(),
+                    FieldMappingRuleType.CUSTOM_XSLT_DOCUMENT).map(
+                    xmlContent2Element).getOrThrow(
+                    noRuleOfType(FieldMappingRuleType.CUSTOM_XSLT_DOCUMENT));
+        }
 
-	public ConversionResult(MapForce mapForce) {
-		this.mapForce = mapForce;
-	}
+        @VisibleForTesting
+        CustomXsl(final Element xml) {
+            this.xml = xml;
 
-	public ConversionResult(MappingRules mappingRules) {
-		this.mappingRules = mappingRules;
-	}
+        }
 
-	public Maybe<CustomXsl> customXsl() {
-		return maybe(customXsl);
-	}
+        @SafeXslt
+        public Element getXml() {
+            return xml;
+        }
 
-	public Maybe<MapForce> mapForce() {
-		return maybe(mapForce);
-	}
+    }
 
-	public Maybe<MappingRules> mappingRules() {
-		return maybe(mappingRules);
-	}
+    public static class MapForce {
+        private final Element preXml;
+        private final Element mainXml;
+        private final Element postXml;
 
-	static Maybe<FieldMappingRule> getRuleByType(List<FieldMappingRule> rules,
-			FieldMappingRuleType type) {
-		for (FieldMappingRule rule : rules) {
-			if (rule.getType() == type)
-				return some(rule);
-		}
-		return none();
-	}
+        public MapForce(Mapping<?> mapping) {
+            Assert.isTrue(mapping.getKind() == FieldMappingKind.MAPFORCE,
+                    "bad mapping kind: " + mapping.getKind());
+            final List<FieldMappingRule> rules = mapping.getRules();
+            this.preXml = getRuleByType(rules,
+                    FieldMappingRuleType.MAPFORCE_PRE)
+                    .map(xmlContent2Element)
+                    .getOrThrow(noRuleOfType(FieldMappingRuleType.MAPFORCE_PRE));
+            this.mainXml = getRuleByType(rules,
+                    FieldMappingRuleType.MAPFORCE_MAIN).map(xmlContent2Element)
+                    .getOrThrow(
+                            noRuleOfType(FieldMappingRuleType.MAPFORCE_MAIN));
+            this.postXml = getRuleByType(rules,
+                    FieldMappingRuleType.MAPFORCE_POST).map(xmlContent2Element)
+                    .getOrThrow(
+                            noRuleOfType(FieldMappingRuleType.MAPFORCE_POST));
+        }
 
-	static CoreConfigurationException noRuleOfType(FieldMappingRuleType type) {
-		final String msg = String.format("No rule of type %s found.", type);
-		return new CoreConfigurationException(msg);
-	}
+        @SafeXslt
+        public Element getMainXml() {
+            return mainXml;
+        }
 
-	public static class CustomXsl {
-		private final Element xml;
+        @SafeXslt
+        public Element getPostXml() {
+            return postXml;
+        }
 
-		public CustomXsl(final Mapping<?> mapping) {
-			Assert.isTrue(mapping.getKind() == FieldMappingKind.CUSTOM_XSLT,
-					"bad mapping kind: " + mapping.getKind());
-			this.xml = getRuleByType(mapping.getRules(),
-					FieldMappingRuleType.CUSTOM_XSLT_DOCUMENT).map(
-					xmlContent2Element).getOrThrow(
-					noRuleOfType(FieldMappingRuleType.CUSTOM_XSLT_DOCUMENT));
-		}
+        @SafeXslt
+        public Element getPreXml() {
+            return preXml;
+        }
+    }
 
-		@VisibleForTesting
-		CustomXsl(final Element xml) {
-			this.xml = xml;
+    public static class MappingRules {
+        static final String                                 XPATH_ELEMENT                            = "/xsl:stylesheet";
+        static final String                                 XPATH_TOP_LEVEL_ATTRIBUTE                = XPATH_ELEMENT;
+        static final String                                 XPATH_CONSTANT_ELEMENT                   = "//artifact";
+        static final String                                 XPATH_CONDITIONAL_CONSTANT_ELEMENT       = XPATH_ELEMENT;
+        static final String                                 XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE       = "//artifact/topLevelAttributes";
+        static final String                                 MAPPING_RULE_TEMPLATE_XSL                = "/mapping-rule-template.xsl";
+        static final String                                 XPATH_CUSTOM_SNIPPET_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
+        FieldMappingRuleConverterFactory                    converterFactory                         = new FieldMappingRuleConverterFactoryImpl();
 
-		}
+        private ArrayListMultimap<Source, FieldMappingRule> fields                                   = ArrayListMultimap
+                                                                                                             .create();
+        private ArrayListMultimap<Source, FieldMappingRule> topLevelAttributes                       = ArrayListMultimap
+                                                                                                             .create();
 
-		@SafeXslt
-		public Element getXml() {
-			return xml;
-		}
+        private ArrayList<FieldMappingRule>                 constantFields                           = new ArrayList<FieldMappingRule>();
+        private ArrayList<FieldMappingRule>                 constantTopLevelAttributes               = new ArrayList<FieldMappingRule>();
+        private ArrayList<FieldMappingRule>                 customSnippetTopLevelAttributes          = new ArrayList<FieldMappingRule>();
+        private Element                                     preXml;
+        private Element                                     postXml;
+        private Element                                     mainXml;
+        private Mapping<?>                                  mapping;
 
-	}
+        public MappingRules(final Mapping<?> mapping) {
+            this.mapping = mapping;
+            Assert.notNull(mapping);
+            Assert.isTrue(mapping.getKind() == FieldMappingKind.MAPPING_RULES,
+                    "bad mapping kind: " + mapping.getKind());
+            mappingRuleXsltHandler();
+        }
 
-	public static class MapForce {
-		private final Element preXml;
-		private final Element mainXml;
-		private final Element postXml;
+        @SafeXslt
+        public Element getPostXml() {
+            return postXml;
+        }
 
-		public MapForce(Mapping<?> mapping) {
-			Assert.isTrue(mapping.getKind() == FieldMappingKind.MAPFORCE,
-					"bad mapping kind: " + mapping.getKind());
-			final List<FieldMappingRule> rules = mapping.getRules();
-			this.preXml = getRuleByType(rules,
-					FieldMappingRuleType.MAPFORCE_PRE)
-					.map(xmlContent2Element)
-					.getOrThrow(noRuleOfType(FieldMappingRuleType.MAPFORCE_PRE));
-			this.mainXml = getRuleByType(rules,
-					FieldMappingRuleType.MAPFORCE_MAIN).map(xmlContent2Element)
-					.getOrThrow(
-							noRuleOfType(FieldMappingRuleType.MAPFORCE_MAIN));
-			this.postXml = getRuleByType(rules,
-					FieldMappingRuleType.MAPFORCE_POST).map(xmlContent2Element)
-					.getOrThrow(
-							noRuleOfType(FieldMappingRuleType.MAPFORCE_POST));
-		}
+        @SafeXslt
+        public Element getPreXml() {
+            return preXml;
+        }
 
-		@SafeXslt
-		public Element getPreXml() {
-			return preXml;
-		}
+        @SafeXslt
+        public Element getXml() {
+            if (this.mainXml == null) {
+                try {
+                    final SAXReader saxReader = new SAXReader();
+                    final InputStream in = getClass().getResourceAsStream(
+                            MAPPING_RULE_TEMPLATE_XSL);
+                    final Document template = saxReader.read(in);
+                    final Element result = template.getRootElement();
 
-		@SafeXslt
-		public Element getMainXml() {
-			return mainXml;
-		}
+                    final Element customSnippetTla = (Element) result
+                            .selectSingleNode(XPATH_CUSTOM_SNIPPET_TOP_LEVEL_ATTRIBUTE);
+                    for (FieldMappingRule r : customSnippetTopLevelAttributes) {
+                        final Element e = getElementForRule(r);
+                        Node n = (Node) e.clone();
+                        customSnippetTla.add(n.detach());
+                    }
 
-		@SafeXslt
-		public Element getPostXml() {
-			return postXml;
-		}
-	}
+                    final Element constantTla = (Element) result
+                            .selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
+                    for (FieldMappingRule r : constantTopLevelAttributes) {
+                        final Element e = getElementForRule(r);
+                        Node n = (Node) e.clone();
+                        constantTla.add(n.detach());
+                    }
+                    //<!-- This one is for rules that produce top level attributes based on fields -->
+                    //<xsl:apply-templates mode="topLevelAttribute" />
+                    Element applyTemplates = constantTla
+                            .addElement("xsl:apply-templates");
+                    applyTemplates.addAttribute("mode", "topLevelAttribute");
+                    constantTla.add(applyTemplates.detach());
+                    //<!-- This one is for rules that produce top level attributes based on top level attributes -->
+                    //<xsl:apply-templates mode="topLevelAttribute" select="topLevelAttributes/@*" />
+                    Element applyAndSelectTemplates = constantTla
+                            .addElement("xsl:apply-templates");
+                    applyAndSelectTemplates.addAttribute("mode",
+                            "topLevelAttribute");
+                    applyAndSelectTemplates.addAttribute("select",
+                            "topLevelAttributes/@*");
+                    constantTla.add(applyAndSelectTemplates.detach());
+                    final Element tla = (Element) result
+                            .selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
 
-	public static class Source {
-		String source = "";
-		Boolean isTopLevelAttribute = true;
-		private volatile int hashCode = 0;
-		
+                    for (Source source : topLevelAttributes.keySet()) {
+                        Element templateNode = createTemplateNode(source, true);
+                        for (FieldMappingRule r : topLevelAttributes
+                                .get(source)) {
+                            templateNode = addRuleToTemplateNode(templateNode,
+                                    r, source);
+                        }
+                        tla.add(templateNode.detach());
+                    }
 
-		public Source(String source, boolean isTopLevelAttribute) {
-			this.source = source;
-			this.isTopLevelAttribute = isTopLevelAttribute;
-		}
+                    final Element fld = (Element) result
+                            .selectSingleNode(XPATH_ELEMENT);
 
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if ((obj == null) || (obj.getClass() != this.getClass()))
-				return false;
-			Source test = (Source) obj;
-			return source.equals(test.source) && isTopLevelAttribute.equals(test.isTopLevelAttribute);
-		}
-		
-		public int hashCode() {
-			 final int multiplier = 23;
-			 if (hashCode == 0) {
-				 int code = 133;
-				 code = multiplier * code + (source == null ? 0 : source.hashCode());
-				 code = multiplier * code + (isTopLevelAttribute == null ? 0 : isTopLevelAttribute.hashCode());
-				 hashCode = code;
-			 }
-			 return hashCode;
-		}
-	}
+                    for (Source source : fields.keySet()) {
+                        Element templateNode = createTemplateNode(source, false);
+                        for (FieldMappingRule r : fields.get(source)) {
+                            templateNode = addRuleToTemplateNode(templateNode,
+                                    r, source);
+                        }
+                        fld.add(templateNode.detach());
+                    }
 
-	public static class MappingRules {
-		static final String XPATH_ELEMENT = "/xsl:stylesheet";
-		static final String XPATH_TOP_LEVEL_ATTRIBUTE = XPATH_ELEMENT;
-		static final String XPATH_CONSTANT_ELEMENT = "//artifact";
-		static final String XPATH_CONDITIONAL_CONSTANT_ELEMENT = XPATH_ELEMENT;
-		static final String XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
-		static final String MAPPING_RULE_TEMPLATE_XSL = "/mapping-rule-template.xsl";
-		static final String XPATH_CUSTOM_SNIPPET_TOP_LEVEL_ATTRIBUTE = "//artifact/topLevelAttributes";
-		FieldMappingRuleConverterFactory converterFactory = new FieldMappingRuleConverterFactoryImpl();
-	
-		private ArrayListMultimap<Source,FieldMappingRule> fields = ArrayListMultimap.create();
-		private ArrayListMultimap<Source,FieldMappingRule> topLevelAttributes = ArrayListMultimap.create();
-		
-		private ArrayList<FieldMappingRule> constantFields = new ArrayList<FieldMappingRule>();
-		private ArrayList<FieldMappingRule> constantTopLevelAttributes = new ArrayList<FieldMappingRule>();
-		private ArrayList<FieldMappingRule> customSnippetTopLevelAttributes = new ArrayList<FieldMappingRule>();
-		private Element preXml;
-		private Element postXml;
-		private Element mainXml;
-		private Mapping<?> mapping;
-		
+                    final Element constantFld = (Element) result
+                            .selectSingleNode(XPATH_CONSTANT_ELEMENT);
 
-		public MappingRules(final Mapping<?> mapping) {
-			this.mapping = mapping;
-			Assert.notNull(mapping);
-			Assert.isTrue(mapping.getKind() == FieldMappingKind.MAPPING_RULES,
-					"bad mapping kind: " + mapping.getKind());
-			mappingRuleXsltHandler();
-		}
+                    for (FieldMappingRule r : constantFields) {
+                        final Element e = getElementForRule(r);
+                        Node n = (Node) e.clone();
+                        constantFld.add(n.detach());
+                    }
 
-		private void mappingRuleXsltHandler() {
-			for (FieldMappingRule rule : mapping.getRules()) {
-				FieldMappingRuleConverter converter;
-				switch (rule.getType()) {
-				case SOURCE_REPOSITORY_LAYOUT:
-					converter = converterFactory.get(rule,
-							mapping.getValueMaps(),
-							getXsltDir((mapping.getMappingDirection())));
-					this.preXml = converter.asElement();
-					break;
-				case TARGET_REPOSITORY_LAYOUT:
-					converter = converterFactory.get(rule,
-							mapping.getValueMaps(),
-							getXsltDir((mapping.getMappingDirection())));
-					this.postXml = converter.asElement();
-					break;			
-				case CUSTOM_XSLT_DOCUMENT:
-					converter = converterFactory.get(rule,
-							mapping.getValueMaps(),
-							getXsltDir((mapping.getMappingDirection())));
-					this.mainXml = converter.asElement();
-					break;
-				default:
-					buildMainXsltAttribute(rule);
-					break;
-				}
-			}
-		}
+                    if (log.isDebugEnabled())
+                        log.debug(result.asXML());
 
-		private void addRuleToMap(ArrayListMultimap<Source,FieldMappingRule> map, FieldMappingRule rule, Source source) {
-			if (map.containsKey(source)) {
-				map.get(source).add(rule);
-			} else {
-				map.put(source, rule);
-			}
-		}
+                    return result;
+                } catch (DocumentException e) {
+                    throw new CoreConfigurationException(e);
+                }
+            } else {
+                return this.mainXml;
+            }
+        }
 
-		private void buildMainXsltAttribute(FieldMappingRule rule) {
-			List<FieldMappingRuleType> constantTypes = Arrays.asList(
-					FieldMappingRuleType.DIRECT_CONSTANT,
-					FieldMappingRuleType.CUSTOM_XSLT_SNIPPET);
-			if (rule.getType().equals(FieldMappingRuleType.CUSTOM_XSLT_SNIPPET)
-					&& rule.isTargetIsTopLevelAttribute()){
-				customSnippetTopLevelAttributes.add(rule);
-			} else {
-				Source source = new Source(rule.getSource(),
-						rule.isSourceIsTopLevelAttribute());
-				
-				if (rule.isTargetIsTopLevelAttribute()) {
-					if (constantTypes.contains(rule.getType())) 
-						constantTopLevelAttributes.add(rule);
-					else
-						addRuleToMap(topLevelAttributes, rule, source);
-				} else {
-					if (constantTypes.contains(rule.getType())) 
-						constantFields.add(rule);
-					else
-						addRuleToMap(fields, rule, source);
-				}
-			}
-		}
+        private void addRuleToMap(
+                ArrayListMultimap<Source, FieldMappingRule> map,
+                FieldMappingRule rule, Source source) {
+            if (map.containsKey(source)) {
+                map.get(source).add(rule);
+            } else {
+                map.put(source, rule);
+            }
+        }
 
-		public static String getXsltDir(Directions direction) {
-			String dir = "";
-			switch (direction) {
-			case FORWARD:
-				dir = String.format("%sxslt%sTF2QC", File.separator,
-						File.separator);
-				break;
-			case REVERSE:
-				dir = String.format("%sxslt%sQC2TF", File.separator,
-						File.separator);
-				break;
-			}
-			return dir;
-		}
+        private Element addRuleToTemplateNode(Element template,
+                FieldMappingRule rule, Source source) {
+            final Element e = getElementForRule(rule);
+            Node n = (Node) e.clone();
+            template.add(n.detach());
+            return template;
+        }
 
-		private Element createTemplateNode(Source source, Boolean isTargetIsTopLevelAttribute) {
-			Element template = DocumentHelper
-					.createElement(FieldMappingRuleConverter.XSL_TEMPLATE);
-			if (source.isTopLevelAttribute){
-				template.addAttribute("match", "topLevelAttributes/@" + source.source);
-			} else {
-				template.addAttribute("match", source.source);
-			}
-			if (isTargetIsTopLevelAttribute) {
-				template.addAttribute("mode", "topLevelAttribute");
-			} else{
-				template.addAttribute("mode", "element");
-			}
-			Element variable = DocumentHelper
-					.createElement(FieldMappingRuleConverter.XSL_VARIABLE);
-			variable.addAttribute("name", "input");
-			Element valueof = DocumentHelper
-					.createElement(FieldMappingRuleConverter.XSL_VALUE_OF);
-			valueof.addAttribute("select", ".");
-			variable.add(valueof);
-			template.add(variable);
-			return template;
-		}
-		
-	
-		
-		private Element addRuleToTemplateNode(Element template, FieldMappingRule rule, Source source){
-			final Element e = getElementForRule(rule);
-			Node n = (Node) e.clone();
-			template.add(n.detach());
-			return template;
-		}
+        private void buildMainXsltAttribute(FieldMappingRule rule) {
+            List<FieldMappingRuleType> constantTypes = Arrays.asList(
+                    FieldMappingRuleType.DIRECT_CONSTANT,
+                    FieldMappingRuleType.CUSTOM_XSLT_SNIPPET);
+            if (rule.getType().equals(FieldMappingRuleType.CUSTOM_XSLT_SNIPPET)
+                    && rule.isTargetIsTopLevelAttribute()) {
+                customSnippetTopLevelAttributes.add(rule);
+            } else {
+                Source source = new Source(rule.getSource(),
+                        rule.isSourceIsTopLevelAttribute());
 
-		private Element getElementForRule(FieldMappingRule rule) {
-			return converterFactory.get(rule, mapping.getValueMaps()).asElement();
-		}
-		
-		@SafeXslt
-		public Element getXml() {
-			if (this.mainXml == null){
-				try {
-					final SAXReader saxReader = new SAXReader();
-					final InputStream in = getClass().getResourceAsStream(
-							MAPPING_RULE_TEMPLATE_XSL);
-					final Document template = saxReader.read(in);
-					final Element result = template.getRootElement();
-	
-					final Element customSnippetTla = (Element) result.selectSingleNode(XPATH_CUSTOM_SNIPPET_TOP_LEVEL_ATTRIBUTE);
-					for (FieldMappingRule r : customSnippetTopLevelAttributes) {
-						final Element e = getElementForRule(r);
-						Node n = (Node) e.clone();
-						customSnippetTla.add(n.detach());
-					}		
-					
-					final Element constantTla = (Element) result
-							.selectSingleNode(XPATH_CONSTANT_TOP_LEVEL_ATTRIBUTE);
-					for (FieldMappingRule r : constantTopLevelAttributes) {
-						final Element e = getElementForRule(r);
-						Node n = (Node) e.clone();
-						constantTla.add(n.detach());
-					}
-					//<!-- This one is for rules that produce top level attributes based on fields -->
-					//<xsl:apply-templates mode="topLevelAttribute" />
-					Element applyTemplates = constantTla.addElement("xsl:apply-templates");
-					applyTemplates.addAttribute("mode","topLevelAttribute");
-					constantTla.add(applyTemplates.detach());
-					//<!-- This one is for rules that produce top level attributes based on top level attributes -->
-					//<xsl:apply-templates mode="topLevelAttribute" select="topLevelAttributes/@*" />
-					Element applyAndSelectTemplates = constantTla.addElement("xsl:apply-templates");
-					applyAndSelectTemplates.addAttribute("mode","topLevelAttribute");
-					applyAndSelectTemplates.addAttribute("select","topLevelAttributes/@*");
-					constantTla.add(applyAndSelectTemplates.detach());
-					final Element tla = (Element) result
-							.selectSingleNode(XPATH_TOP_LEVEL_ATTRIBUTE);
-					
-					for (Source source : topLevelAttributes.keySet()) {
-						Element templateNode = createTemplateNode(source, true);
-						for (FieldMappingRule r : topLevelAttributes.get(source)) {
-							templateNode = addRuleToTemplateNode(templateNode, r, source);
-						}
-						tla.add(templateNode.detach());
-					}
-	
-					final Element fld = (Element) result
-							.selectSingleNode(XPATH_ELEMENT);
-					
-					for (Source source : fields.keySet()) {
-						Element templateNode = createTemplateNode(source, false);
-						for (FieldMappingRule r : fields.get(source)) {
-							templateNode = addRuleToTemplateNode(templateNode, r, source);
-						}
-						fld.add(templateNode.detach());
-					}
-					
+                if (rule.isTargetIsTopLevelAttribute()) {
+                    if (constantTypes.contains(rule.getType()))
+                        constantTopLevelAttributes.add(rule);
+                    else
+                        addRuleToMap(topLevelAttributes, rule, source);
+                } else {
+                    if (constantTypes.contains(rule.getType()))
+                        constantFields.add(rule);
+                    else
+                        addRuleToMap(fields, rule, source);
+                }
+            }
+        }
 
-				
+        private Element createTemplateNode(Source source,
+                Boolean isTargetIsTopLevelAttribute) {
+            Element template = DocumentHelper
+                    .createElement(FieldMappingRuleConverter.XSL_TEMPLATE);
+            if (source.isTopLevelAttribute) {
+                template.addAttribute("match", "topLevelAttributes/@"
+                        + source.source);
+            } else {
+                template.addAttribute("match", source.source);
+            }
+            if (isTargetIsTopLevelAttribute) {
+                template.addAttribute("mode", "topLevelAttribute");
+            } else {
+                template.addAttribute("mode", "element");
+            }
+            Element variable = DocumentHelper
+                    .createElement(FieldMappingRuleConverter.XSL_VARIABLE);
+            variable.addAttribute("name", "input");
+            Element valueof = DocumentHelper
+                    .createElement(FieldMappingRuleConverter.XSL_VALUE_OF);
+            valueof.addAttribute("select", ".");
+            variable.add(valueof);
+            template.add(variable);
+            return template;
+        }
 
-					
-	
-					final Element constantFld = (Element) result
-							.selectSingleNode(XPATH_CONSTANT_ELEMENT);
-					
-					for (FieldMappingRule r : constantFields) {
-						final Element e = getElementForRule(r);
-						Node n = (Node) e.clone();
-						constantFld.add(n.detach());
-					}
-					
-					
-					if (log.isDebugEnabled())
-						log.debug(result.asXML());
-					
-					
-					
-					return result;
-				} catch (DocumentException e) {
-					throw new CoreConfigurationException(e);
-				}
-			} else {
-				return this.mainXml;
-			}
-		}
+        private Element getElementForRule(FieldMappingRule rule) {
+            return converterFactory.get(rule, mapping.getValueMaps())
+                    .asElement();
+        }
 
-		@SafeXslt
-		public Element getPreXml() {
-			return preXml;
-		}
+        private void mappingRuleXsltHandler() {
+            for (FieldMappingRule rule : mapping.getRules()) {
+                FieldMappingRuleConverter converter;
+                switch (rule.getType()) {
+                    case SOURCE_REPOSITORY_LAYOUT:
+                        converter = converterFactory.get(rule,
+                                mapping.getValueMaps(),
+                                getXsltDir((mapping.getMappingDirection())));
+                        this.preXml = converter.asElement();
+                        break;
+                    case TARGET_REPOSITORY_LAYOUT:
+                        converter = converterFactory.get(rule,
+                                mapping.getValueMaps(),
+                                getXsltDir((mapping.getMappingDirection())));
+                        this.postXml = converter.asElement();
+                        break;
+                    case CUSTOM_XSLT_DOCUMENT:
+                        converter = converterFactory.get(rule,
+                                mapping.getValueMaps(),
+                                getXsltDir((mapping.getMappingDirection())));
+                        this.mainXml = converter.asElement();
+                        break;
+                    default:
+                        buildMainXsltAttribute(rule);
+                        break;
+                }
+            }
+        }
 
-		@SafeXslt
-		public Element getPostXml() {
-			return postXml;
-		}
+        public static String getXsltDir(Directions direction) {
+            String dir = "";
+            switch (direction) {
+                case FORWARD:
+                    dir = String.format("%sxslt%sTF2QC", File.separator,
+                            File.separator);
+                    break;
+                case REVERSE:
+                    dir = String.format("%sxslt%sQC2TF", File.separator,
+                            File.separator);
+                    break;
+            }
+            return dir;
+        }
 
-	}
+    }
+
+    public static class Source {
+        String               source              = "";
+        Boolean              isTopLevelAttribute = true;
+        private volatile int hashCode            = 0;
+
+        public Source(String source, boolean isTopLevelAttribute) {
+            this.source = source;
+            this.isTopLevelAttribute = isTopLevelAttribute;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if ((obj == null) || (obj.getClass() != this.getClass()))
+                return false;
+            Source test = (Source) obj;
+            return source.equals(test.source)
+                    && isTopLevelAttribute.equals(test.isTopLevelAttribute);
+        }
+
+        public int hashCode() {
+            final int multiplier = 23;
+            if (hashCode == 0) {
+                int code = 133;
+                code = multiplier * code
+                        + (source == null ? 0 : source.hashCode());
+                code = multiplier
+                        * code
+                        + (isTopLevelAttribute == null ? 0
+                                : isTopLevelAttribute.hashCode());
+                hashCode = code;
+            }
+            return hashCode;
+        }
+    }
+
+    private static final Logger                         log                = LoggerFactory
+                                                                                   .getLogger(ConversionResult.class);
+
+    @Valid
+    private CustomXsl                                   customXsl          = null;
+
+    @Valid
+    private MapForce                                    mapForce           = null;
+
+    @Valid
+    private MappingRules                                mappingRules       = null;
+
+    static final Transformer<FieldMappingRule, Element> xmlContent2Element = new Transformer<FieldMappingRule, Element>() {
+                                                                               @Override
+                                                                               public Element transform(
+                                                                                       FieldMappingRule t) {
+                                                                                   try {
+                                                                                       return DocumentHelper
+                                                                                               .parseText(
+                                                                                                       t.getXmlContent())
+                                                                                               .getRootElement();
+                                                                                   } catch (DocumentException e) {
+                                                                                       throw new CoreConfigurationException(
+                                                                                               "unable to parse XML",
+                                                                                               e);
+                                                                                   }
+                                                                               }
+                                                                           };
+
+    public ConversionResult(CustomXsl customXsl) {
+        this.customXsl = customXsl;
+    }
+
+    public ConversionResult(MapForce mapForce) {
+        this.mapForce = mapForce;
+    }
+
+    public ConversionResult(MappingRules mappingRules) {
+        this.mappingRules = mappingRules;
+    }
+
+    public Maybe<CustomXsl> customXsl() {
+        return maybe(customXsl);
+    }
+
+    public Maybe<MapForce> mapForce() {
+        return maybe(mapForce);
+    }
+
+    public Maybe<MappingRules> mappingRules() {
+        return maybe(mappingRules);
+    }
+
+    static Maybe<FieldMappingRule> getRuleByType(List<FieldMappingRule> rules,
+            FieldMappingRuleType type) {
+        for (FieldMappingRule rule : rules) {
+            if (rule.getType() == type)
+                return some(rule);
+        }
+        return none();
+    }
+
+    static CoreConfigurationException noRuleOfType(FieldMappingRuleType type) {
+        final String msg = String.format("No rule of type %s found.", type);
+        return new CoreConfigurationException(msg);
+    }
 }

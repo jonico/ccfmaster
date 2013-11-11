@@ -4,5 +4,6 @@ import com.collabnet.ccf.ccfmaster.server.core.Persister;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 
 public interface FieldMappingExternalAppTemplatePersisterFactory {
-	Persister<FieldMappingExternalAppTemplate> get(ConversionResult conversionResult);
+    Persister<FieldMappingExternalAppTemplate> get(
+            ConversionResult conversionResult);
 }

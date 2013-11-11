@@ -16,28 +16,28 @@ import com.google.common.base.Preconditions;
 @RequestMapping("/" + UpdateCoreController.UPDATE_CORE_PREFIX + "/{more}")
 public class UpdateCoreController {
 
-	static final String UPDATE_CORE_PREFIX = "update-core";
+    static final String UPDATE_CORE_PREFIX = "update-core";
 
-	@RequestMapping(method=RequestMethod.GET)
-	public String get(@PathVariable("more") String more) {
-		return UPDATE_CORE_PREFIX + "/" + more;
-	}
-	
-	@ModelAttribute("landscape")
-	public Landscape populateLandscape() {
-		List<Landscape> landscapes = Landscape.findAllLandscapes();
-		Preconditions.checkState(!landscapes.isEmpty(), "no landscape exists");
-		return landscapes.get(0);
-	}
-	
-	@ModelAttribute("participant")
-	public Participant populateParticipant() {
-		Landscape landscape = populateLandscape();
-		return landscape.getParticipant();
-	}
-	
-	@ModelAttribute("selectedLink")
-	public String populateSelectedLink() {
-		return "status";
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String get(@PathVariable("more") String more) {
+        return UPDATE_CORE_PREFIX + "/" + more;
+    }
+
+    @ModelAttribute("landscape")
+    public Landscape populateLandscape() {
+        List<Landscape> landscapes = Landscape.findAllLandscapes();
+        Preconditions.checkState(!landscapes.isEmpty(), "no landscape exists");
+        return landscapes.get(0);
+    }
+
+    @ModelAttribute("participant")
+    public Participant populateParticipant() {
+        Landscape landscape = populateLandscape();
+        return landscape.getParticipant();
+    }
+
+    @ModelAttribute("selectedLink")
+    public String populateSelectedLink() {
+        return "status";
+    }
 }

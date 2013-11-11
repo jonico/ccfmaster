@@ -7,30 +7,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.collect.ForwardingList;
 
-
 @XmlRootElement
 public class DirectionConfigList extends ForwardingList<DirectionConfig> {
 
-	private List<DirectionConfig> directionConfig;
+    private List<DirectionConfig> directionConfig;
 
-	public DirectionConfigList() {
-		this(new ArrayList<DirectionConfig>());
-	}
-	public DirectionConfigList(List<DirectionConfig> directionConfigs) {
-		this.setDirectionConfig(directionConfigs);
-	}
+    public DirectionConfigList() {
+        this(new ArrayList<DirectionConfig>());
+    }
 
-	@Override
-	protected List<DirectionConfig> delegate() {
-		return getDirectionConfig();
-	}
+    public DirectionConfigList(List<DirectionConfig> directionConfigs) {
+        this.setDirectionConfig(directionConfigs);
+    }
 
-	public void setDirectionConfig(List<DirectionConfig> directionConfig) {
-		this.directionConfig = directionConfig;
-	}
+    public List<DirectionConfig> getDirectionConfig() {
+        return directionConfig;
+    }
 
-	public List<DirectionConfig> getDirectionConfig() {
-		return directionConfig;
-	}
+    public void setDirectionConfig(List<DirectionConfig> directionConfig) {
+        this.directionConfig = directionConfig;
+    }
+
+    @Override
+    protected List<DirectionConfig> delegate() {
+        return getDirectionConfig();
+    }
 
 }

@@ -24,63 +24,99 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate
 @RequestMapping(value = Paths.LINKID_FIELD_MAPPING_EXTERNAL_APP_TEMPLATE)
 public class LinkIdApiFieldMappingExternalAppTemplateController extends AbstractApiLinkIdController<FieldMappingExternalAppTemplate> {
 
-	@Override
-	public @ResponseBody FieldMappingExternalAppTemplate create(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @RequestBody FieldMappingExternalAppTemplate requestBody, HttpServletResponse response) {
-		validateFieldMappingExternalAppTemplate(requestBody);
-		requestBody.persist();
-		setLocationHeader(response, Paths.LINKID_FIELD_MAPPING_EXTERNAL_APP_TEMPLATE.replace("{linkId}", ea.getLinkId()) + "/" + requestBody.getId());
-		return requestBody;
-	}
+    @Override
+    public @ResponseBody
+    FieldMappingExternalAppTemplate create(
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea,
+            @RequestBody FieldMappingExternalAppTemplate requestBody,
+            HttpServletResponse response) {
+        validateFieldMappingExternalAppTemplate(requestBody);
+        requestBody.persist();
+        setLocationHeader(
+                response,
+                Paths.LINKID_FIELD_MAPPING_EXTERNAL_APP_TEMPLATE.replace(
+                        "{linkId}", ea.getLinkId()) + "/" + requestBody.getId());
+        return requestBody;
+    }
 
-	@Override
-	public @ResponseBody FieldMappingExternalAppTemplateList list(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
-		return new FieldMappingExternalAppTemplateList(FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParent(ea).getResultList());
-	}
+    @Override
+    public void delete(
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea,
+            @PathVariable("id") Long id, HttpServletResponse response) {
+        FieldMappingExternalAppTemplate rm = FieldMappingExternalAppTemplate
+                .findFieldMappingExternalAppTemplate(id);
+        validateFieldMappingExternalAppTemplate(rm);
+        rm.remove();
+    }
 
-	@RequestMapping(value = "/{direction}/", method = GET)
-	public @ResponseBody FieldMappingExternalAppTemplateList fieldMappingExternalAppTemplateDirectionScope(@PathVariable("direction") Directions direction, @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
-		return new FieldMappingExternalAppTemplateList(FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplatesByParentAndDirection(ea, direction).getResultList());
-	}
+    @RequestMapping(value = "/{direction}/", method = GET)
+    public @ResponseBody
+    FieldMappingExternalAppTemplateList fieldMappingExternalAppTemplateDirectionScope(
+            @PathVariable("direction") Directions direction,
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
+        return new FieldMappingExternalAppTemplateList(
+                FieldMappingExternalAppTemplate
+                        .findFieldMappingExternalAppTemplatesByParentAndDirection(
+                                ea, direction).getResultList());
+    }
 
-	@Override
-	public @ResponseBody FieldMappingExternalAppTemplate show(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id) {
-		FieldMappingExternalAppTemplate rm = FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplate(id);
-		validateFieldMappingExternalAppTemplate(rm);
-		return rm;
-	}
+    @Override
+    public @ResponseBody
+    FieldMappingExternalAppTemplateList list(
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
+        return new FieldMappingExternalAppTemplateList(
+                FieldMappingExternalAppTemplate
+                        .findFieldMappingExternalAppTemplatesByParent(ea)
+                        .getResultList());
+    }
 
-	@Override
-	public void update(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id, @RequestBody FieldMappingExternalAppTemplate requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		validateFieldMappingExternalAppTemplate(requestBody);
-		requestBody.merge();
-	}
+    @Override
+    public @ResponseBody
+    FieldMappingExternalAppTemplate show(
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea,
+            @PathVariable("id") Long id) {
+        FieldMappingExternalAppTemplate rm = FieldMappingExternalAppTemplate
+                .findFieldMappingExternalAppTemplate(id);
+        validateFieldMappingExternalAppTemplate(rm);
+        return rm;
+    }
 
-	@Override
-	public void delete(@ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea, @PathVariable("id") Long id, HttpServletResponse response) {
-		FieldMappingExternalAppTemplate rm = FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplate(id);
-		validateFieldMappingExternalAppTemplate(rm);
-		rm.remove();
-	}
-	
-	private void validateRequestBody(Long id, FieldMappingExternalAppTemplate requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != requestBody.id (%s)", id, requestBody.getId()));
-		}
-		// now retrieve original object to figure out whether reparenting attempt took place
-		FieldMappingExternalAppTemplate original = FieldMappingExternalAppTemplate.findFieldMappingExternalAppTemplate(id);
-		if (!original.getParent().equals(requestBody.getParent())) {
-			throw new AccessDeniedException("requestBody.parent != original entity's external app.");
-		}
-	}
+    @Override
+    public void update(
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea,
+            @PathVariable("id") Long id,
+            @RequestBody FieldMappingExternalAppTemplate requestBody,
+            HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        validateFieldMappingExternalAppTemplate(requestBody);
+        requestBody.merge();
+    }
 
-	private void validateFieldMappingExternalAppTemplate(FieldMappingExternalAppTemplate requestBody) {
-		if (requestBody == null) {
-			throw new DataRetrievalFailureException("requested entity not found.");
-		}
-		if (!externalApp.equals(requestBody.getParent())) {
-			throw new AccessDeniedException("requestBody.externalApp != current external app.");
-		}
-	}
+    private void validateFieldMappingExternalAppTemplate(
+            FieldMappingExternalAppTemplate requestBody) {
+        if (requestBody == null) {
+            throw new DataRetrievalFailureException(
+                    "requested entity not found.");
+        }
+        if (!externalApp.equals(requestBody.getParent())) {
+            throw new AccessDeniedException(
+                    "requestBody.externalApp != current external app.");
+        }
+    }
+
+    private void validateRequestBody(Long id,
+            FieldMappingExternalAppTemplate requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
+        }
+        // now retrieve original object to figure out whether reparenting attempt took place
+        FieldMappingExternalAppTemplate original = FieldMappingExternalAppTemplate
+                .findFieldMappingExternalAppTemplate(id);
+        if (!original.getParent().equals(requestBody.getParent())) {
+            throw new AccessDeniedException(
+                    "requestBody.parent != original entity's external app.");
+        }
+    }
 
 }

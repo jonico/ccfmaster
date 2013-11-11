@@ -21,97 +21,95 @@ import org.junit.Test;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
-public class LogFileTest{
+public class LogFileTest {
 
-	private static final String LOG_FILE = "persistence.xml";
+    private static final String LOG_FILE       = "persistence.xml";
 
-	private static final String EMPTY_LOG_FILE = "empty.log";
+    private static final String EMPTY_LOG_FILE = "empty.log";
 
-	private File ccfHome;
-	private File logDir;
+    private File                ccfHome;
+    private File                logDir;
 
-	/* a sample landscape for us to play around with. not persisted */
-	private Participant tf;
-	private Participant swp;
-	private Landscape landscape;
-	private Direction direction;
+    /* a sample landscape for us to play around with. not persisted */
+    private Participant         tf;
+    private Participant         swp;
+    private Landscape           landscape;
+    private Direction           direction;
 
-	
-	@Before
-	public void setup() throws IOException {
-		tf = new Participant();
-		tf.setSystemKind(SystemKind.TF);
-		swp = new Participant();
-		swp.setSystemKind(SystemKind.SWP);
-		landscape = new Landscape();
-		landscape.setId(1L);
-		landscape.setTeamForge(tf);
-		landscape.setParticipant(swp);
-		direction = new Direction();
-		direction.setDirection(Directions.FORWARD);
-		direction.setLandscape(landscape);
-		
-		ccfHome = Files.createTempDir();
-		logDir = new File(ccfHome, "landscape1/samples/TFSWP/TF2SWP/logs");
-		logDir.mkdirs();
-		Files.touch(new File(logDir, EMPTY_LOG_FILE));
-		final FileOutputStream to = new FileOutputStream(new File(logDir, LOG_FILE));
-		Resources.copy(
-				Resources.getResource("META-INF/"+LOG_FILE),
-				to);
-		to.close();
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void nullFileNameThrows() throws IOException {
-		new LogFile(ccfHome, direction, null);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void directoryTraversalThrows() throws IOException {
-		new LogFile(ccfHome, direction, "../logs");
-	}
+    @After
+    public void cleanup() throws IOException {
+        FileUtils.deleteQuietly(ccfHome);
+    }
 
-	@Test(expected=FileNotFoundException.class)
-	public void fileNotFoundThrows() throws IOException {
-		new LogFile(ccfHome, direction, "doesNotExist.txt");
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void directoryTraversalThrows() throws IOException {
+        new LogFile(ccfHome, direction, "../logs");
+    }
 
-	@Test
-	public void validEmptyLogFile() throws IOException {
-		LogFile logFile = new LogFile(ccfHome, direction, EMPTY_LOG_FILE);
-		assertEquals(EMPTY_LOG_FILE, logFile.getName());
-		assertSame(direction, logFile.getDirection());
-		assertEquals(0L, logFile.getSize());
-		LineIterator it = logFile.lines();
-		try {
-			assertFalse(it.hasNext());
-			it.nextLine();
-			fail("NoSuchElementException wasn't thrown at nextLine()");
-		} catch (NoSuchElementException expected) {
-		} finally {
-			it.close();
-		}
-	}
+    @Test(expected = FileNotFoundException.class)
+    public void fileNotFoundThrows() throws IOException {
+        new LogFile(ccfHome, direction, "doesNotExist.txt");
+    }
 
-	@Test
-	public void validLogFile() throws IOException {
-		LogFile logFile = new LogFile(ccfHome, direction, LOG_FILE);
-		assertEquals(LOG_FILE, logFile.getName());
-		assertSame(direction, logFile.getDirection());
-		assertFalse("file " + LOG_FILE + " was empty", 0L == logFile.getSize());
-		LineIterator it = logFile.lines();
-		try {
-			assertTrue(it.hasNext());
-			it.nextLine();
-		} catch (NoSuchElementException expected) {
-		} finally {
-			it.close();
-		}
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void nullFileNameThrows() throws IOException {
+        new LogFile(ccfHome, direction, null);
+    }
 
-	@After
-	public void cleanup() throws IOException {
-		FileUtils.deleteQuietly(ccfHome);
-	}
+    @Before
+    public void setup() throws IOException {
+        tf = new Participant();
+        tf.setSystemKind(SystemKind.TF);
+        swp = new Participant();
+        swp.setSystemKind(SystemKind.SWP);
+        landscape = new Landscape();
+        landscape.setId(1L);
+        landscape.setTeamForge(tf);
+        landscape.setParticipant(swp);
+        direction = new Direction();
+        direction.setDirection(Directions.FORWARD);
+        direction.setLandscape(landscape);
+
+        ccfHome = Files.createTempDir();
+        logDir = new File(ccfHome, "landscape1/samples/TFSWP/TF2SWP/logs");
+        logDir.mkdirs();
+        Files.touch(new File(logDir, EMPTY_LOG_FILE));
+        final FileOutputStream to = new FileOutputStream(new File(logDir,
+                LOG_FILE));
+        Resources.copy(Resources.getResource("META-INF/" + LOG_FILE), to);
+        to.close();
+    }
+
+    @Test
+    public void validEmptyLogFile() throws IOException {
+        LogFile logFile = new LogFile(ccfHome, direction, EMPTY_LOG_FILE);
+        assertEquals(EMPTY_LOG_FILE, logFile.getName());
+        assertSame(direction, logFile.getDirection());
+        assertEquals(0L, logFile.getSize());
+        LineIterator it = logFile.lines();
+        try {
+            assertFalse(it.hasNext());
+            it.nextLine();
+            fail("NoSuchElementException wasn't thrown at nextLine()");
+        } catch (NoSuchElementException expected) {
+        } finally {
+            it.close();
+        }
+    }
+
+    @Test
+    public void validLogFile() throws IOException {
+        LogFile logFile = new LogFile(ccfHome, direction, LOG_FILE);
+        assertEquals(LOG_FILE, logFile.getName());
+        assertSame(direction, logFile.getDirection());
+        assertFalse("file " + LOG_FILE + " was empty", 0L == logFile.getSize());
+        LineIterator it = logFile.lines();
+        try {
+            assertTrue(it.hasNext());
+            it.nextLine();
+        } catch (NoSuchElementException expected) {
+        } finally {
+            it.close();
+        }
+    }
 }

@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class ExternalAppList extends ForwardingList<ExternalApp> {
 
-	private List<ExternalApp> participant;
+    private List<ExternalApp> participant;
 
-	public ExternalAppList() {
-		this(new ArrayList<ExternalApp>());
-	}
-	public ExternalAppList(List<ExternalApp> participants) {
-		this.setExternalApp(participants);
-	}
+    public ExternalAppList() {
+        this(new ArrayList<ExternalApp>());
+    }
 
-	@Override
-	protected List<ExternalApp> delegate() {
-		return getExternalApp();
-	}
+    public ExternalAppList(List<ExternalApp> participants) {
+        this.setExternalApp(participants);
+    }
 
-	public void setExternalApp(List<ExternalApp> participant) {
-		this.participant = participant;
-	}
+    public List<ExternalApp> getExternalApp() {
+        return participant;
+    }
 
-	public List<ExternalApp> getExternalApp() {
-		return participant;
-	}
+    public void setExternalApp(List<ExternalApp> participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    protected List<ExternalApp> delegate() {
+        return getExternalApp();
+    }
 
 }

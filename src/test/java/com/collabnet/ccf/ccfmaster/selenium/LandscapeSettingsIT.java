@@ -4,11 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(SeleniumSuite.class)
-@SuiteClasses({
-	GeneratedApi.class,
-	QCSettings.class,
-	SWPSettings.class,
-	TFRespositoryIdBelongstoExternalAppVerify.class
-})
+@SuiteClasses({ GeneratedApi.class, QCSettings.class, SWPSettings.class,
+        TFRespositoryIdBelongstoExternalAppVerify.class })
 public class LandscapeSettingsIT {
 }

@@ -9,40 +9,40 @@ import org.junit.Test;
 
 import com.collabnet.ccf.ccfmaster.selenium.Util;
 
+public class ProjectScopeHospitalRoleLogin extends ProjectScopeTestBase {
 
-public class ProjectScopeHospitalRoleLogin extends ProjectScopeTestBase{
+    public ProjectScopeHospitalRoleLogin() {
+        super();
+        LoginInfo user = LoginInfo.projectHospitalScopeFromSystemProperties();
+        user.login(selenium);
+    }
 
-	public ProjectScopeHospitalRoleLogin() {
-		super();
-		LoginInfo user = LoginInfo.projectHospitalScopeFromSystemProperties();
-		user.login(selenium);
-	}
-	
-	
-	@Test
-	public void checkRoles() {
-		IndexPage index = new IndexPage(driver);
-		final List<String> roles = index.getRoles();
-		assertThat(roles, hasItems("ROLE_HOSPITAL", "ROLE_IAF_USER","ROLE_TF_USER"));
-	}
-	
-	@Test
-	public void checkHospital() {
-		driver.get(Util.baseUrl() + "/CCFMaster/project/hospitalentrys?direction=FORWARD&size=1");
-		assertEquals("Failed Shipments", activeMenuEntry().getText());
-		navigateFailedShipmentTabs();
-		Util.testFailedShipmentOperations(selenium);
-		Util.testFailedShipmentFilter(selenium, "artf1785");
-		Util.testFailedShipmentRemoveFilter(selenium);
-		Util.testFailedShipmentDelete(selenium);
-	}
-	
-	private void navigateFailedShipmentTabs(){
-		selenium.click("link=Failed Shipments");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("link="+RepositoryMappingsPage.QC_2_TF_LABEL);
-		selenium.waitForPageToLoad("30000");
-		selenium.click("link="+RepositoryMappingsPage.TF_2_QC_LABEL);
-		selenium.waitForPageToLoad("30000");
-	}
+    @Test
+    public void checkHospital() {
+        driver.get(Util.baseUrl()
+                + "/CCFMaster/project/hospitalentrys?direction=FORWARD&size=1");
+        assertEquals("Failed Shipments", activeMenuEntry().getText());
+        navigateFailedShipmentTabs();
+        Util.testFailedShipmentOperations(selenium);
+        Util.testFailedShipmentFilter(selenium, "artf1785");
+        Util.testFailedShipmentRemoveFilter(selenium);
+        Util.testFailedShipmentDelete(selenium);
+    }
+
+    @Test
+    public void checkRoles() {
+        IndexPage index = new IndexPage(driver);
+        final List<String> roles = index.getRoles();
+        assertThat(roles,
+                hasItems("ROLE_HOSPITAL", "ROLE_IAF_USER", "ROLE_TF_USER"));
+    }
+
+    private void navigateFailedShipmentTabs() {
+        selenium.click("link=Failed Shipments");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=" + RepositoryMappingsPage.QC_2_TF_LABEL);
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=" + RepositoryMappingsPage.TF_2_QC_LABEL);
+        selenium.waitForPageToLoad("30000");
+    }
 }

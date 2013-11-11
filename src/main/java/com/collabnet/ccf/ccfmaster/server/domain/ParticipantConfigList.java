@@ -7,30 +7,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.collect.ForwardingList;
 
-
 @XmlRootElement
 public class ParticipantConfigList extends ForwardingList<ParticipantConfig> {
 
-	private List<ParticipantConfig> participantConfig;
+    private List<ParticipantConfig> participantConfig;
 
-	public ParticipantConfigList() {
-		this(new ArrayList<ParticipantConfig>());
-	}
-	public ParticipantConfigList(List<ParticipantConfig> participantConfigs) {
-		this.setParticipantConfig(participantConfigs);
-	}
+    public ParticipantConfigList() {
+        this(new ArrayList<ParticipantConfig>());
+    }
 
-	@Override
-	protected List<ParticipantConfig> delegate() {
-		return getParticipantConfig();
-	}
+    public ParticipantConfigList(List<ParticipantConfig> participantConfigs) {
+        this.setParticipantConfig(participantConfigs);
+    }
 
-	public void setParticipantConfig(List<ParticipantConfig> participantConfig) {
-		this.participantConfig = participantConfig;
-	}
+    public List<ParticipantConfig> getParticipantConfig() {
+        return participantConfig;
+    }
 
-	public List<ParticipantConfig> getParticipantConfig() {
-		return participantConfig;
-	}
+    public void setParticipantConfig(List<ParticipantConfig> participantConfig) {
+        this.participantConfig = participantConfig;
+    }
+
+    @Override
+    protected List<ParticipantConfig> delegate() {
+        return getParticipantConfig();
+    }
 
 }

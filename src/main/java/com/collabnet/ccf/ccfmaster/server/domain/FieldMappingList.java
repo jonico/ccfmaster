@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class FieldMappingList extends ForwardingList<FieldMapping> {
 
-	private List<FieldMapping> fieldMapping;
+    private List<FieldMapping> fieldMapping;
 
-	public FieldMappingList() {
-		this(new ArrayList<FieldMapping>());
-	}
-	public FieldMappingList(List<FieldMapping> fieldMappings) {
-		this.setFieldMapping(fieldMappings);
-	}
+    public FieldMappingList() {
+        this(new ArrayList<FieldMapping>());
+    }
 
-	@Override
-	protected List<FieldMapping> delegate() {
-		return getFieldMapping();
-	}
+    public FieldMappingList(List<FieldMapping> fieldMappings) {
+        this.setFieldMapping(fieldMappings);
+    }
 
-	public void setFieldMapping(List<FieldMapping> fieldMapping) {
-		this.fieldMapping = fieldMapping;
-	}
+    public List<FieldMapping> getFieldMapping() {
+        return fieldMapping;
+    }
 
-	public List<FieldMapping> getFieldMapping() {
-		return fieldMapping;
-	}
+    public void setFieldMapping(List<FieldMapping> fieldMapping) {
+        this.fieldMapping = fieldMapping;
+    }
+
+    @Override
+    protected List<FieldMapping> delegate() {
+        return getFieldMapping();
+    }
 
 }

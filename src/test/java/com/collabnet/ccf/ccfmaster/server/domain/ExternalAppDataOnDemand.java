@@ -8,8 +8,8 @@ import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
 public class ExternalAppDataOnDemand {
     @Autowired
     private LandscapeDataOnDemand landscapeDataOnDemand;
-    
-	public ExternalApp getNewTransientExternalApp(int index) {
+
+    public ExternalApp getNewTransientExternalApp(int index) {
         com.collabnet.ccf.ccfmaster.server.domain.ExternalApp obj = new com.collabnet.ccf.ccfmaster.server.domain.ExternalApp();
         obj.setLandscape(landscapeDataOnDemand.getRandomLandscape());
         obj.setLinkId("prpl" + index);

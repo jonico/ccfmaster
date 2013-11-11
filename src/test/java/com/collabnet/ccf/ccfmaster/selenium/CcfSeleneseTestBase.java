@@ -14,29 +14,38 @@ import com.thoughtworks.selenium.Selenium;
 
 public class CcfSeleneseTestBase extends SeleneseTestBase {
 
-	private static final String SCREENSHOT_MESSAGE = "copy the following line to your driver address-bar to see the screenshot:";
-	protected static final Logger log = LoggerFactory.getLogger(CcfSeleneseTestBase.class);
+    private static final String   SCREENSHOT_MESSAGE = "copy the following line to your driver address-bar to see the screenshot:";
+    protected static final Logger log                = LoggerFactory
+                                                             .getLogger(CcfSeleneseTestBase.class);
 
-	/**
-	 * @param selenium
-	 */
-	protected static void logScreenshot(Selenium selenium) {
-		Util.logScreenshot(SCREENSHOT_MESSAGE, selenium);
-	}
+    protected final WebDriver     driver             = SeleniumSuite
+                                                             .getDriver();
 
-	protected final WebDriver driver = SeleniumSuite.getDriver();
-	protected final Selenium selenium = SeleniumSuite.getSelenium();
-	
-	@Rule
-	public TestWatchman logScreens = new TestWatchman() {
-		@Override
-		public void failed(Throwable e, FrameworkMethod method) {
-			log.error("Test {} failed.", method.getName());
-			if (driver instanceof TakesScreenshot) {
-				log.error(SCREENSHOT_MESSAGE +
-						 "\ndata:image/png;base64,{}",
-						((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64));
-			}
-		}
-	};
+    protected final Selenium      selenium           = SeleniumSuite
+                                                             .getSelenium();
+    @Rule
+    public TestWatchman           logScreens         = new TestWatchman() {
+                                                         @Override
+                                                         public void failed(
+                                                                 Throwable e,
+                                                                 FrameworkMethod method) {
+                                                             log.error(
+                                                                     "Test {} failed.",
+                                                                     method.getName());
+                                                             if (driver instanceof TakesScreenshot) {
+                                                                 log.error(
+                                                                         SCREENSHOT_MESSAGE
+                                                                                 + "\ndata:image/png;base64,{}",
+                                                                         ((TakesScreenshot) driver)
+                                                                                 .getScreenshotAs(OutputType.BASE64));
+                                                             }
+                                                         }
+                                                     };
+
+    /**
+     * @param selenium
+     */
+    protected static void logScreenshot(Selenium selenium) {
+        Util.logScreenshot(SCREENSHOT_MESSAGE, selenium);
+    }
 }

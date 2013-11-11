@@ -7,23 +7,26 @@ import com.collabnet.ccf.ccfmaster.server.core.Persister;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 
 public class MockFieldMappingExternalAppTemplatePersisterFactory implements FieldMappingExternalAppTemplatePersisterFactory {
-	private static Logger log = LoggerFactory.getLogger(MockFieldMappingExternalAppTemplatePersisterFactory.class);
-	public boolean calledSave = false;
-	@Override
-	public Persister<FieldMappingExternalAppTemplate> get(ConversionResult conversionResult) {
-		return new Persister<FieldMappingExternalAppTemplate>() {
-			
-			@Override
-			public void save(FieldMappingExternalAppTemplate cfg) {
-				calledSave = true;
-				log.debug("called save({})", cfg);
-			}
-			
-			@Override
-			public void delete(FieldMappingExternalAppTemplate cfg) {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
+    private static Logger log        = LoggerFactory
+                                             .getLogger(MockFieldMappingExternalAppTemplatePersisterFactory.class);
+    public boolean        calledSave = false;
+
+    @Override
+    public Persister<FieldMappingExternalAppTemplate> get(
+            ConversionResult conversionResult) {
+        return new Persister<FieldMappingExternalAppTemplate>() {
+
+            @Override
+            public void delete(FieldMappingExternalAppTemplate cfg) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void save(FieldMappingExternalAppTemplate cfg) {
+                calledSave = true;
+                log.debug("called save({})", cfg);
+            }
+        };
+    }
 
 }

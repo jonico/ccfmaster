@@ -13,25 +13,25 @@ import com.google.common.collect.ImmutableList.Builder;
 @XmlRootElement
 public class ParticipantSystemKinds extends ForwardingList<SystemKind> {
 
-	private final List<SystemKind> systemKinds;
-	
-	public ParticipantSystemKinds() {
-		Builder<SystemKind> builder = ImmutableList.builder();
-		if (SystemUtils.IS_OS_WINDOWS) {
-			builder.add(SystemKind.QC);
-		}
-		builder.add(SystemKind.GENERIC);// Adding generic participantSystemKind
-		builder.add(SystemKind.SWP);
-		systemKinds = builder.build();
-	}
+    private final List<SystemKind> systemKinds;
 
-	@Override
-	protected List<SystemKind> delegate() {
-		return getSystemKind();
-	}
+    public ParticipantSystemKinds() {
+        Builder<SystemKind> builder = ImmutableList.builder();
+        if (SystemUtils.IS_OS_WINDOWS) {
+            builder.add(SystemKind.QC);
+        }
+        builder.add(SystemKind.GENERIC);// Adding generic participantSystemKind
+        builder.add(SystemKind.SWP);
+        systemKinds = builder.build();
+    }
 
-	public List<SystemKind> getSystemKind() {
-		return systemKinds;
-	}
-	
+    public List<SystemKind> getSystemKind() {
+        return systemKinds;
+    }
+
+    @Override
+    protected List<SystemKind> delegate() {
+        return getSystemKind();
+    }
+
 }

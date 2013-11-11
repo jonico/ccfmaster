@@ -10,8 +10,11 @@ public class ParticipantConfigTest {
     public void testMethod() {
         int expectedCount = 13;
         ParticipantConfig.countParticipantConfigs();
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.expectReturn(expectedCount);
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.playback();
-        org.junit.Assert.assertEquals(expectedCount, ParticipantConfig.countParticipantConfigs());
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .expectReturn(expectedCount);
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .playback();
+        org.junit.Assert.assertEquals(expectedCount,
+                ParticipantConfig.countParticipantConfigs());
     }
 }

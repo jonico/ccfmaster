@@ -16,38 +16,45 @@ import com.collabnet.ccf.ccfmaster.server.domain.ExternalAppList;
 @Scope("request")
 @RequestMapping(value = Paths.EXTERNAL_APP)
 public class ApiExternalAppController extends AbstractApiController<ExternalApp> {
-	
-	@Override
-	public @ResponseBody ExternalApp create(@RequestBody ExternalApp requestBody, HttpServletResponse response) {
-		requestBody.persist();
-		setLocationHeader(response, Paths.EXTERNAL_APP + "/" + requestBody.getId());
-		return requestBody;
-	}
-	
-	@Override
-	public @ResponseBody ExternalAppList list() {
-		return new ExternalAppList(ExternalApp.findAllExternalApps());
-	}
-	
-	@Override
-	public @ResponseBody ExternalApp show(@PathVariable("id") ExternalApp id) {
-		return super.show(id);
-	}
-	
-	@Override
-	public void update(@PathVariable("id") Long id, @RequestBody ExternalApp requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		requestBody.merge();
-	}
 
-	private void validateRequestBody(Long id, ExternalApp requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != requestBody.id (%s)", id, requestBody.getId()));
-		}
-	}
+    @Override
+    public @ResponseBody
+    ExternalApp create(@RequestBody ExternalApp requestBody,
+            HttpServletResponse response) {
+        requestBody.persist();
+        setLocationHeader(response,
+                Paths.EXTERNAL_APP + "/" + requestBody.getId());
+        return requestBody;
+    }
 
-	@Override
-	public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
-		ExternalApp.findExternalApp(id).remove();
-	}
+    @Override
+    public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
+        ExternalApp.findExternalApp(id).remove();
+    }
+
+    @Override
+    public @ResponseBody
+    ExternalAppList list() {
+        return new ExternalAppList(ExternalApp.findAllExternalApps());
+    }
+
+    @Override
+    public @ResponseBody
+    ExternalApp show(@PathVariable("id") ExternalApp id) {
+        return super.show(id);
+    }
+
+    @Override
+    public void update(@PathVariable("id") Long id,
+            @RequestBody ExternalApp requestBody, HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        requestBody.merge();
+    }
+
+    private void validateRequestBody(Long id, ExternalApp requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
+        }
+    }
 }

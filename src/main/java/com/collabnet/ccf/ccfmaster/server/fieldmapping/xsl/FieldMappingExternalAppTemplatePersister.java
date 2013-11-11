@@ -7,21 +7,21 @@ import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.Template;
 
-public class FieldMappingExternalAppTemplatePersister extends AbstractPersister<Template<ExternalApp>> implements Persister<FieldMappingExternalAppTemplate>{
+public class FieldMappingExternalAppTemplatePersister extends AbstractPersister<Template<ExternalApp>> implements Persister<FieldMappingExternalAppTemplate> {
 
-	
-	public FieldMappingExternalAppTemplatePersister(File baseDir, ConversionResult conversionResult) {
-		super(baseDir, conversionResult);
-	}
+    public FieldMappingExternalAppTemplatePersister(File baseDir,
+            ConversionResult conversionResult) {
+        super(baseDir, conversionResult);
+    }
 
-	@Override
-	public void save(FieldMappingExternalAppTemplate cfg) {
-		doSave(cfg);
-	}
-	
-	@Override
-	public void delete(FieldMappingExternalAppTemplate cfg) {
-		throw new UnsupportedOperationException();
-	}
-	
+    @Override
+    public void delete(FieldMappingExternalAppTemplate cfg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void save(FieldMappingExternalAppTemplate cfg) {
+        doSave(cfg);
+    }
+
 }

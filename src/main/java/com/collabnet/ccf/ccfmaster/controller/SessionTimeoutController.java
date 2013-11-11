@@ -12,21 +12,22 @@ import com.collabnet.ccf.ccfmaster.config.CCFRuntimePropertyHolder;
 @RequestMapping(SessionTimeoutController.SESSION_TIMEOUT_PATH)
 public class SessionTimeoutController {
 
-	private static final String SESSION_TIMEOUT_NAME = "sessionTimeout";
-	public static final String SESSION_TIMEOUT_PATH = "/" + SESSION_TIMEOUT_NAME;
+    private static final String     SESSION_TIMEOUT_NAME   = "sessionTimeout";
+    public static final String      SESSION_TIMEOUT_PATH   = "/"
+                                                                   + SESSION_TIMEOUT_NAME;
 
-	private static final String TF_URL_MODEL_ATTRIBUTE = "tfUrl";
-	
-	@Autowired
-	public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
-	
-	@RequestMapping(method=RequestMethod.GET)
-	public String sessionTimeout() {
-		return SESSION_TIMEOUT_NAME;
-	}
-	
-	@ModelAttribute(TF_URL_MODEL_ATTRIBUTE)
-	public String populateTfUrl() {
-		return ccfRuntimePropertyHolder.getTfUrl();
-	}
+    private static final String     TF_URL_MODEL_ATTRIBUTE = "tfUrl";
+
+    @Autowired
+    public CCFRuntimePropertyHolder ccfRuntimePropertyHolder;
+
+    @ModelAttribute(TF_URL_MODEL_ATTRIBUTE)
+    public String populateTfUrl() {
+        return ccfRuntimePropertyHolder.getTfUrl();
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String sessionTimeout() {
+        return SESSION_TIMEOUT_NAME;
+    }
 }

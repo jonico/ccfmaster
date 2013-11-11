@@ -4,22 +4,22 @@ import com.collabnet.ccf.ccfmaster.server.core.CoreConfigurationException;
 
 public class CoreUpdateException extends CoreConfigurationException {
 
-	public CoreUpdateException() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public CoreUpdateException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CoreUpdateException() {
+        super();
+    }
 
-	public CoreUpdateException(Throwable cause) {
-		super(cause);
-	}
+    public CoreUpdateException(String string) {
+        super(string);
+    }
 
-	public CoreUpdateException(String string) {
-		super(string);
-	}
+    public CoreUpdateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	private static final long serialVersionUID = 1L;
+    public CoreUpdateException(Throwable cause) {
+        super(cause);
+    }
 
 }

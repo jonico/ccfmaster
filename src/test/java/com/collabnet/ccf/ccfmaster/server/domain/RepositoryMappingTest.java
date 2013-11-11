@@ -10,8 +10,11 @@ public class RepositoryMappingTest {
     public void testMethod() {
         int expectedCount = 13;
         RepositoryMapping.countRepositoryMappings();
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.expectReturn(expectedCount);
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.playback();
-        org.junit.Assert.assertEquals(expectedCount, RepositoryMapping.countRepositoryMappings());
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .expectReturn(expectedCount);
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .playback();
+        org.junit.Assert.assertEquals(expectedCount,
+                RepositoryMapping.countRepositoryMappings());
     }
 }

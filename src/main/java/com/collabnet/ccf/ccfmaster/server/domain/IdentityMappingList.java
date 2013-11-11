@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class IdentityMappingList extends ForwardingList<IdentityMapping> {
 
-	private List<IdentityMapping> participant;
+    private List<IdentityMapping> participant;
 
-	public IdentityMappingList() {
-		this(new ArrayList<IdentityMapping>());
-	}
-	public IdentityMappingList(List<IdentityMapping> participants) {
-		this.setIdentityMapping(participants);
-	}
+    public IdentityMappingList() {
+        this(new ArrayList<IdentityMapping>());
+    }
 
-	@Override
-	protected List<IdentityMapping> delegate() {
-		return getIdentityMapping();
-	}
+    public IdentityMappingList(List<IdentityMapping> participants) {
+        this.setIdentityMapping(participants);
+    }
 
-	public void setIdentityMapping(List<IdentityMapping> participant) {
-		this.participant = participant;
-	}
+    public List<IdentityMapping> getIdentityMapping() {
+        return participant;
+    }
 
-	public List<IdentityMapping> getIdentityMapping() {
-		return participant;
-	}
+    public void setIdentityMapping(List<IdentityMapping> participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    protected List<IdentityMapping> delegate() {
+        return getIdentityMapping();
+    }
 
 }

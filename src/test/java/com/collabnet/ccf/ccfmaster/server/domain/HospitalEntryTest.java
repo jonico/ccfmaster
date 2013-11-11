@@ -10,8 +10,11 @@ public class HospitalEntryTest {
     public void testMethod() {
         int expectedCount = 13;
         HospitalEntry.countHospitalEntrys();
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.expectReturn(expectedCount);
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.playback();
-        org.junit.Assert.assertEquals(expectedCount, HospitalEntry.countHospitalEntrys());
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .expectReturn(expectedCount);
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .playback();
+        org.junit.Assert.assertEquals(expectedCount,
+                HospitalEntry.countHospitalEntrys());
     }
 }

@@ -1,14 +1,18 @@
 package com.collabnet.ccf.ccfmaster.server.domain;
 
-
 import java.io.File;
 import java.util.List;
 
 public interface Mapping<ParentType> {
-	public ParentType getParent();
-	public FieldMappingKind getKind();
-	public List<FieldMappingRule> getRules();
-	public List<FieldMappingValueMap> getValueMaps();
-	public File getStorageDirectory(File baseDir);
-	public Directions getMappingDirection();
+    public FieldMappingKind getKind();
+
+    public Directions getMappingDirection();
+
+    public ParentType getParent();
+
+    public List<FieldMappingRule> getRules();
+
+    public File getStorageDirectory(File baseDir);
+
+    public List<FieldMappingValueMap> getValueMaps();
 }

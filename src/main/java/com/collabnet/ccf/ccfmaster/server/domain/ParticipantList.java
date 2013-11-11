@@ -10,26 +10,27 @@ import com.google.common.collect.ForwardingList;
 @XmlRootElement
 public class ParticipantList extends ForwardingList<Participant> {
 
-	private List<Participant> participant;
+    private List<Participant> participant;
 
-	public ParticipantList() {
-		this(new ArrayList<Participant>());
-	}
-	public ParticipantList(List<Participant> participants) {
-		this.setParticipant(participants);
-	}
+    public ParticipantList() {
+        this(new ArrayList<Participant>());
+    }
 
-	@Override
-	protected List<Participant> delegate() {
-		return getParticipant();
-	}
+    public ParticipantList(List<Participant> participants) {
+        this.setParticipant(participants);
+    }
 
-	public void setParticipant(List<Participant> participant) {
-		this.participant = participant;
-	}
+    public List<Participant> getParticipant() {
+        return participant;
+    }
 
-	public List<Participant> getParticipant() {
-		return participant;
-	}
+    public void setParticipant(List<Participant> participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    protected List<Participant> delegate() {
+        return getParticipant();
+    }
 
 }

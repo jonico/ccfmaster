@@ -10,21 +10,22 @@ import org.junit.Test;
 
 public class ProjectIndexPage extends ProjectScopeTestBase {
 
-	public ProjectIndexPage() {
-		super();
-		user.login(selenium);
-	}
+    public ProjectIndexPage() {
+        super();
+        user.login(selenium);
+    }
 
-	@Test
-	public void welcomeMessage() {
-		IndexPage index = new IndexPage(driver);
-		assertThat(index.getWelcomeMessage(), containsString("Welcome to TeamForge Connector Server"));
-	}
-	
-	@Test
-	public void checkRoles() {
-		IndexPage index = new IndexPage(driver);
-		final List<String> roles = index.getRoles();
-		assertThat(roles, hasItems("ROLE_TF_USER","ROLE_IAF_USER"));
-	}
+    @Test
+    public void checkRoles() {
+        IndexPage index = new IndexPage(driver);
+        final List<String> roles = index.getRoles();
+        assertThat(roles, hasItems("ROLE_TF_USER", "ROLE_IAF_USER"));
+    }
+
+    @Test
+    public void welcomeMessage() {
+        IndexPage index = new IndexPage(driver);
+        assertThat(index.getWelcomeMessage(),
+                containsString("Welcome to TeamForge Connector Server"));
+    }
 }

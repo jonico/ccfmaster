@@ -10,15 +10,15 @@ package com.collabnet.ccf.core.utils;
  * code in CCFMaster by uploading a malicious stylesheet.
  */
 public class GATransformerUtil {
-	public static String stripHTML(String original) {
-		throw new UnsupportedOperationException();
-	}
+    public static String encodeHTMLToEntityReferences(String html) {
+        throw new UnsupportedOperationException();
+    }
 
-	public static String trim(String stringToTrim) {
-		throw new UnsupportedOperationException();
-	}
+    public static String stripHTML(String original) {
+        throw new UnsupportedOperationException();
+    }
 
-	public static String encodeHTMLToEntityReferences(String html) {
-		throw new UnsupportedOperationException();
-	}
+    public static String trim(String stringToTrim) {
+        throw new UnsupportedOperationException();
+    }
 }

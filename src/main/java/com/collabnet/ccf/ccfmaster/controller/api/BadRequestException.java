@@ -1,23 +1,23 @@
 package com.collabnet.ccf.ccfmaster.controller.api;
 
 public class BadRequestException extends RuntimeException {
-	
-	private static final long serialVersionUID = 1L;
 
-	BadRequestException() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	BadRequestException(Throwable cause) {
-		super(cause);
-	}
+    public BadRequestException(String message) {
+        super(message);
+    }
 
-	public BadRequestException(String message) {
-		super(message);
-	}
+    BadRequestException() {
+        super();
+    }
 
-	BadRequestException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    BadRequestException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    BadRequestException(Throwable cause) {
+        super(cause);
+    }
 
 }

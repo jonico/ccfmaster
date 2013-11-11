@@ -19,45 +19,54 @@ import com.collabnet.ccf.ccfmaster.server.domain.ParticipantList;
 @Scope("request")
 @RequestMapping(value = Paths.PARTICIPANT)
 public class ApiParticipantController extends AbstractApiController<Participant> {
-	
-	@RequestMapping(value = "/{id}/participantconfigs", method=RequestMethod.GET)
-	public @ResponseBody ParticipantConfigList participantConfigs(@PathVariable("id") Participant participant) {
-		return new ParticipantConfigList(ParticipantConfig.findParticipantConfigsByParticipant(participant).getResultList());
-	}
-	
-	@Override
-	public @ResponseBody Participant create(@RequestBody Participant requestBody, HttpServletResponse response) {
-		requestBody.persist();
-		setLocationHeader(response, Paths.PARTICIPANT + "/" + requestBody.getId());
-		return requestBody;
-	}
-	
-	@Override
-	public @ResponseBody ParticipantList list() {
-		return new ParticipantList(Participant.findAllParticipants());
-	}
-	
-	@Override
-	public @ResponseBody Participant show(@PathVariable("id") Participant id) {
-		return super.show(id);
-	}
-	
-	@Override
-	public void update(@PathVariable("id") Long id, @RequestBody Participant requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		requestBody.merge();
-	}
 
+    @Override
+    public @ResponseBody
+    Participant create(@RequestBody Participant requestBody,
+            HttpServletResponse response) {
+        requestBody.persist();
+        setLocationHeader(response,
+                Paths.PARTICIPANT + "/" + requestBody.getId());
+        return requestBody;
+    }
 
-	@Override
-	public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
-		Participant.findParticipant(id).remove();
-	}
+    @Override
+    public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
+        Participant.findParticipant(id).remove();
+    }
 
+    @Override
+    public @ResponseBody
+    ParticipantList list() {
+        return new ParticipantList(Participant.findAllParticipants());
+    }
 
-	private void validateRequestBody(Long id, Participant requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != requestBody.id (%s)", id, requestBody.getId()));
-		}
-	}
+    @RequestMapping(value = "/{id}/participantconfigs", method = RequestMethod.GET)
+    public @ResponseBody
+    ParticipantConfigList participantConfigs(
+            @PathVariable("id") Participant participant) {
+        return new ParticipantConfigList(ParticipantConfig
+                .findParticipantConfigsByParticipant(participant)
+                .getResultList());
+    }
+
+    @Override
+    public @ResponseBody
+    Participant show(@PathVariable("id") Participant id) {
+        return super.show(id);
+    }
+
+    @Override
+    public void update(@PathVariable("id") Long id,
+            @RequestBody Participant requestBody, HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        requestBody.merge();
+    }
+
+    private void validateRequestBody(Long id, Participant requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
+        }
+    }
 }

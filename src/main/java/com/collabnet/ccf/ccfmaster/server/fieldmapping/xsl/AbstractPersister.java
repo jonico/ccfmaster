@@ -25,107 +25,122 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
 public abstract class AbstractPersister<T extends Mapping<?>> {
-	public static final String FILENAME_RULES = "rules.xsl";
-	public static final String FILENAME_PREXML_RULES = "preprocessingrules.xsl";
-	public static final String FILENAME_POSTXML_RULES = "postprocessingrules.xsl";
-	public static final String FILENAME_MAPFORCE_PRE = "GenericArtifactFormatToMapForce.xsl";
-	public static final String FILENAME_MAPFORCE_MAIN = "MapForceMain.xsl";
-	public static final String FILENAME_MAPFORCE_POST = "MapForceToGenericArtifactFormat.xsl";
-	public static final String FILENAME_MAPFORCE_MFD = "MapForceMFD.xsl";
-	public static final String FILENAME_CUSTOM_XSL = "custom.xsl";
+    public static final String       FILENAME_RULES         = "rules.xsl";
+    public static final String       FILENAME_PREXML_RULES  = "preprocessingrules.xsl";
+    public static final String       FILENAME_POSTXML_RULES = "postprocessingrules.xsl";
+    public static final String       FILENAME_MAPFORCE_PRE  = "GenericArtifactFormatToMapForce.xsl";
+    public static final String       FILENAME_MAPFORCE_MAIN = "MapForceMain.xsl";
+    public static final String       FILENAME_MAPFORCE_POST = "MapForceToGenericArtifactFormat.xsl";
+    public static final String       FILENAME_MAPFORCE_MFD  = "MapForceMFD.xsl";
+    public static final String       FILENAME_CUSTOM_XSL    = "custom.xsl";
 
-	protected final ConversionResult result;
-	protected final File baseDir;
-	final static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    protected final ConversionResult result;
+    protected final File             baseDir;
+    final static Validator           validator              = Validation
+                                                                    .buildDefaultValidatorFactory()
+                                                                    .getValidator();
 
-	public AbstractPersister(final File baseDir, final ConversionResult conversionResult) {
-		Assert.notNull(baseDir, "baseDir must not be null");
-		Assert.notNull(conversionResult, "conversionResult must not be null");
-		Assert.isTrue(baseDir.exists(), "baseDir must exist");
-		Assert.isTrue(baseDir.isDirectory(), "baseDir must be a directory");
-		this.baseDir = baseDir;
-		this.result = conversionResult;
-	}
+    public AbstractPersister(final File baseDir,
+            final ConversionResult conversionResult) {
+        Assert.notNull(baseDir, "baseDir must not be null");
+        Assert.notNull(conversionResult, "conversionResult must not be null");
+        Assert.isTrue(baseDir.exists(), "baseDir must exist");
+        Assert.isTrue(baseDir.isDirectory(), "baseDir must be a directory");
+        this.baseDir = baseDir;
+        this.result = conversionResult;
+    }
 
-	protected void saveTo(File directory) throws IOException {
-		Assert.isTrue(directory.isDirectory(), "not a directory: " + directory);
-		Assert.isTrue(directory.exists(), directory + "doesn't exist");
-		// use Maybe as an Iterable to simulate
-		// pattern matching and case classes
-		for (CustomXsl customXsl : result.customXsl()) {
-			File outFile = new File(directory, FILENAME_CUSTOM_XSL);
-			writeXml(customXsl.getXml(), outFile);
-			return;
-		}
-		for (MapForce mapForce : result.mapForce()) {
-			writeXml(mapForce.getPreXml(),
-					new File(directory, FILENAME_MAPFORCE_PRE));
-			writeXml(mapForce.getMainXml(),
-					new File(directory, FILENAME_MAPFORCE_MAIN));
-			writeXml(mapForce.getPostXml(),
-					new File(directory, FILENAME_MAPFORCE_POST));
-			return;
-		}
-		for (MappingRules mappingRules : result.mappingRules()) {
-			writeXml(mappingRules.getXml(), new File(directory, FILENAME_RULES));
-			writeXml(mappingRules.getPreXml(), new File(directory, FILENAME_PREXML_RULES));
-			writeXml(mappingRules.getPostXml(), new File(directory, FILENAME_POSTXML_RULES));
-			return;
-		}
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * validates and saves <code>cfg</code>.
+     * 
+     * @param cfg
+     * @throws CoreConfigurationException
+     *             if the mapping is invalid or if an IO error occurs while
+     *             saving.
+     */
+    public final void doSave(T cfg) {
+        validate(result);
+        try {
+            File directory = cfg.getStorageDirectory(baseDir);
+            if (!directory.exists() && !directory.mkdirs()) {
+                throw new CoreConfigurationException(
+                        "error creating directory " + directory);
+            }
+            saveTo(directory);
+        } catch (IOException e) {
+            throw new CoreConfigurationException(e);
+        }
+    }
 
-	/**
-	 * validates and saves <code>cfg</code>.
-	 * @param cfg
-	 * @throws CoreConfigurationException if the mapping is invalid or if an IO error occurs while saving.
-	 */
-	public final void doSave(T cfg) {
-		validate(result);
-		try {
-			File directory = cfg.getStorageDirectory(baseDir);
-			if (!directory.exists() && !directory.mkdirs()) {
-				throw new CoreConfigurationException("error creating directory " + directory);
-			}
-			saveTo(directory);
-		} catch (IOException e) {
-			throw new CoreConfigurationException(e);
-		}
-	}
+    protected void saveTo(File directory) throws IOException {
+        Assert.isTrue(directory.isDirectory(), "not a directory: " + directory);
+        Assert.isTrue(directory.exists(), directory + "doesn't exist");
+        // use Maybe as an Iterable to simulate
+        // pattern matching and case classes
+        for (CustomXsl customXsl : result.customXsl()) {
+            File outFile = new File(directory, FILENAME_CUSTOM_XSL);
+            writeXml(customXsl.getXml(), outFile);
+            return;
+        }
+        for (MapForce mapForce : result.mapForce()) {
+            writeXml(mapForce.getPreXml(), new File(directory,
+                    FILENAME_MAPFORCE_PRE));
+            writeXml(mapForce.getMainXml(), new File(directory,
+                    FILENAME_MAPFORCE_MAIN));
+            writeXml(mapForce.getPostXml(), new File(directory,
+                    FILENAME_MAPFORCE_POST));
+            return;
+        }
+        for (MappingRules mappingRules : result.mappingRules()) {
+            writeXml(mappingRules.getXml(), new File(directory, FILENAME_RULES));
+            writeXml(mappingRules.getPreXml(), new File(directory,
+                    FILENAME_PREXML_RULES));
+            writeXml(mappingRules.getPostXml(), new File(directory,
+                    FILENAME_POSTXML_RULES));
+            return;
+        }
+        throw new UnsupportedOperationException();
+    }
 
-	@VisibleForTesting
-	static void validate(ConversionResult result) throws CoreConfigurationException {
-		Set<ConstraintViolation<ConversionResult>> errors = validator.validate(result);
-		if (!errors.isEmpty()) {
-			throw new CoreConfigurationException(String.format("invalid XSLT for field mapping: %s", buildErrorMessage(errors)));
-		}
-	}
+    private static String buildErrorMessage(
+            Set<ConstraintViolation<ConversionResult>> errors) {
+        final Function<ConstraintViolation<?>, String> constraintViolationMessage = new Function<ConstraintViolation<?>, String>() {
 
-	static void writeXml(Element xml, File file) throws IOException {
-		if (xml == null)
-			return;
-		XMLWriter writer = null;
-		try {
-			writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
-			writer.write(xml);
-		} finally {
-			if (writer != null)
-				writer.close();
-		}
-	}
+            @Override
+            public String apply(ConstraintViolation<?> input) {
+                return input.getMessage();
+            }
+        };
+        Iterable<String> messages = Iterables.transform(errors,
+                constraintViolationMessage);
+        String errMsg = Joiner.on("; ").join(messages);
+        return errMsg;
+    }
 
-	private static String buildErrorMessage(Set<ConstraintViolation<ConversionResult>> errors) {
-		final Function<ConstraintViolation<?>,String> constraintViolationMessage = new Function<ConstraintViolation<?>,String>() {
+    @VisibleForTesting
+    static void validate(ConversionResult result)
+            throws CoreConfigurationException {
+        Set<ConstraintViolation<ConversionResult>> errors = validator
+                .validate(result);
+        if (!errors.isEmpty()) {
+            throw new CoreConfigurationException(String.format(
+                    "invalid XSLT for field mapping: %s",
+                    buildErrorMessage(errors)));
+        }
+    }
 
-			@Override
-			public String apply(ConstraintViolation<?> input) {
-				return input.getMessage();
-			}
-		};
-		Iterable<String> messages = Iterables.transform(errors, constraintViolationMessage);
-		String errMsg = Joiner.on("; ").join(messages);
-		return errMsg;
-	}
+    static void writeXml(Element xml, File file) throws IOException {
+        if (xml == null)
+            return;
+        XMLWriter writer = null;
+        try {
+            writer = new XMLWriter(new OutputStreamWriter(new FileOutputStream(
+                    file), "UTF-8"));
+            writer.write(xml);
+        } finally {
+            if (writer != null)
+                writer.close();
+        }
+    }
 
-	
 }

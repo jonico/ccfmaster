@@ -17,43 +17,59 @@ import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionList;
 @Scope("request")
 @RequestMapping(value = Paths.REPOSITORY_MAPPING_DIRECTION)
 public class ApiRepositoryMappingDirectionController extends AbstractApiController<RepositoryMappingDirection> {
-	
-	@Override
-	public @ResponseBody RepositoryMappingDirection create(@RequestBody RepositoryMappingDirection requestBody, HttpServletResponse response) {
-		requestBody.persist();
-		setLocationHeader(response, Paths.REPOSITORY_MAPPING_DIRECTION + "/" + requestBody.getId());
-		return requestBody;
-	}
-	
-	@Override
-	public @ResponseBody RepositoryMappingDirectionList list() {
-		return new RepositoryMappingDirectionList(RepositoryMappingDirection.findAllRepositoryMappingDirections());
-	}
-	
-	@Override
-	public @ResponseBody RepositoryMappingDirection show(@PathVariable("id") RepositoryMappingDirection id) {
-		return super.show(id);
-	}
-	
-	@Override
-	public void update(@PathVariable("id") Long id, @RequestBody RepositoryMappingDirection requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		requestBody.merge();
-	}
 
-	private void validateRequestBody(Long id, RepositoryMappingDirection requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != requestBody.id (%s)", id, requestBody.getId()));
-		}
-	}
+    @Override
+    public @ResponseBody
+    RepositoryMappingDirection create(
+            @RequestBody RepositoryMappingDirection requestBody,
+            HttpServletResponse response) {
+        requestBody.persist();
+        setLocationHeader(response, Paths.REPOSITORY_MAPPING_DIRECTION + "/"
+                + requestBody.getId());
+        return requestBody;
+    }
 
-	@Override
-	public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
-		RepositoryMappingDirection.findRepositoryMappingDirection(id).remove();
-	}
-	
-	@RequestMapping(value = "/{direction}/")
-	public @ResponseBody RepositoryMappingDirectionList repositoryMappingDirections(@PathVariable("direction") Directions direction) {
-		return new RepositoryMappingDirectionList(RepositoryMappingDirection.findRepositoryMappingDirectionsByDirection(direction).getResultList());
-	}
+    @Override
+    public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
+        RepositoryMappingDirection.findRepositoryMappingDirection(id).remove();
+    }
+
+    @Override
+    public @ResponseBody
+    RepositoryMappingDirectionList list() {
+        return new RepositoryMappingDirectionList(
+                RepositoryMappingDirection.findAllRepositoryMappingDirections());
+    }
+
+    @RequestMapping(value = "/{direction}/")
+    public @ResponseBody
+    RepositoryMappingDirectionList repositoryMappingDirections(
+            @PathVariable("direction") Directions direction) {
+        return new RepositoryMappingDirectionList(RepositoryMappingDirection
+                .findRepositoryMappingDirectionsByDirection(direction)
+                .getResultList());
+    }
+
+    @Override
+    public @ResponseBody
+    RepositoryMappingDirection show(
+            @PathVariable("id") RepositoryMappingDirection id) {
+        return super.show(id);
+    }
+
+    @Override
+    public void update(@PathVariable("id") Long id,
+            @RequestBody RepositoryMappingDirection requestBody,
+            HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        requestBody.merge();
+    }
+
+    private void validateRequestBody(Long id,
+            RepositoryMappingDirection requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
+        }
+    }
 }

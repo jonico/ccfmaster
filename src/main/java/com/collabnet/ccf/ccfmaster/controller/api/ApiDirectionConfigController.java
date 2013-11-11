@@ -16,40 +16,47 @@ import com.collabnet.ccf.ccfmaster.server.domain.DirectionConfigList;
 @Scope("request")
 @RequestMapping(value = Paths.DIRECTION_CONFIG)
 public class ApiDirectionConfigController extends AbstractApiController<DirectionConfig> {
-	
-	@Override
-	public @ResponseBody DirectionConfig create(@RequestBody DirectionConfig requestBody, HttpServletResponse response) {
-		requestBody.persist();
-		setLocationHeader(response, Paths.DIRECTION_CONFIG + "/" + requestBody.getId());
-		return requestBody;
-	}
-	
-	@Override
-	public @ResponseBody DirectionConfigList list() {
-		return new DirectionConfigList(DirectionConfig.findAllDirectionConfigs());
-	}
-	
-	@Override
-	public @ResponseBody DirectionConfig show(@PathVariable("id") DirectionConfig id) {
-		return super.show(id);
-	}
-	
-	@Override
-	public void update(@PathVariable("id") Long id, @RequestBody DirectionConfig requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		requestBody.merge();
-	}
 
+    @Override
+    public @ResponseBody
+    DirectionConfig create(@RequestBody DirectionConfig requestBody,
+            HttpServletResponse response) {
+        requestBody.persist();
+        setLocationHeader(response,
+                Paths.DIRECTION_CONFIG + "/" + requestBody.getId());
+        return requestBody;
+    }
 
-	@Override
-	public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
-		DirectionConfig.findDirectionConfig(id).remove();
-	}
+    @Override
+    public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
+        DirectionConfig.findDirectionConfig(id).remove();
+    }
 
+    @Override
+    public @ResponseBody
+    DirectionConfigList list() {
+        return new DirectionConfigList(
+                DirectionConfig.findAllDirectionConfigs());
+    }
 
-	private void validateRequestBody(Long id, DirectionConfig requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != requestBody.id (%s)", id, requestBody.getId()));
-		}
-	}
+    @Override
+    public @ResponseBody
+    DirectionConfig show(@PathVariable("id") DirectionConfig id) {
+        return super.show(id);
+    }
+
+    @Override
+    public void update(@PathVariable("id") Long id,
+            @RequestBody DirectionConfig requestBody,
+            HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        requestBody.merge();
+    }
+
+    private void validateRequestBody(Long id, DirectionConfig requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
+        }
+    }
 }

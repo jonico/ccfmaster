@@ -23,137 +23,144 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class MockServletClientHttpRequestFactory implements
-		ClientHttpRequestFactory {
-	
-	private static final Logger log = LoggerFactory.getLogger(MockServletClientHttpRequestFactory.class);
-	
-	public class MockServletClientHttpResponse implements ClientHttpResponse {
-		
-		private MockHttpServletResponse response;
-		
-		public MockServletClientHttpResponse (MockHttpServletResponse response) {
-			this.response = response;
-		}
+public class MockServletClientHttpRequestFactory implements ClientHttpRequestFactory {
 
-		@Override
-		public InputStream getBody() throws IOException {
-			byte[] byteArray = response.getContentAsByteArray();
-			if (log.isDebugEnabled()) {
-				log.debug("Received payload: " + new String(byteArray));
-			}
-			return new ByteArrayInputStream(byteArray);
-		}
+    public class MockServletClientHttpRequest extends AbstractClientHttpRequest {
 
-		@Override
-		public HttpHeaders getHeaders() {
-			HttpHeaders headers = new HttpHeaders();
-			for(String headerName: response.getHeaderNames()) {
-				for (Object headerValue: response.getHeaders(headerName)) {
-					headers.add(headerName, headerValue.toString());
-				}
-			}
-			return headers;
-		}
+        private Servlet    servlet;
+        private URI        uri;
+        private HttpMethod httpMethod;
+        private String     servletName;
 
-		@Override
-		public HttpStatus getStatusCode() throws IOException {
-			return HttpStatus.valueOf(response.getStatus()); 
-		}
+        public MockServletClientHttpRequest(URI uri, HttpMethod httpMethod,
+                Servlet servlet, String servletName) {
+            this.servlet = servlet;
+            this.uri = uri;
+            this.httpMethod = httpMethod;
+            this.servletName = servletName;
+        }
 
-		@Override
-		public String getStatusText() throws IOException {
-			return HttpStatus.valueOf(response.getStatus()).toString(); 
-		}
+        @Override
+        public HttpMethod getMethod() {
+            return httpMethod;
+        }
 
-		@Override
-		public void close() {
-			// do nothing
-		}
-	}
+        @Override
+        public URI getURI() {
+            return uri;
+        }
 
-	public class MockServletClientHttpRequest extends AbstractClientHttpRequest {
-		
-		private Servlet servlet;
-		private URI uri;
-		private HttpMethod httpMethod;
-		private String servletName;
-		
-		public MockServletClientHttpRequest(URI uri, HttpMethod httpMethod,
-				Servlet servlet, String servletName) {
-			this.servlet = servlet;
-			this.uri = uri;
-			this.httpMethod = httpMethod;
-			this.servletName = servletName;
-		}
+        @Override
+        protected ClientHttpResponse executeInternal(HttpHeaders headers,
+                byte[] bufferedOutput) throws IOException {
+            // removes servlet path from the request path
+            String requestPath = uri.getPath().substring(
+                    uri.getPath().indexOf(servletName) + servletName.length());
 
-		@Override
-		public HttpMethod getMethod() {
-			return httpMethod;
-		}
+            // figure out whether URI contained a query
+            String query = uri.getRawQuery();
 
-		@Override
-		public URI getURI() {
-			return uri;
-		}
+            MockHttpServletRequest request = new MockHttpServletRequest(
+                    httpMethod.toString(), requestPath);
+            Set<Entry<String, List<String>>> headerEntries = getHeaders()
+                    .entrySet();
+            for (Entry<String, List<String>> entry : headerEntries) {
+                String headerName = entry.getKey();
+                for (String headerValue : entry.getValue()) {
+                    request.addHeader(headerName, headerValue);
+                }
+            }
 
-		@Override
-		protected ClientHttpResponse executeInternal(HttpHeaders headers,
-				byte[] bufferedOutput) throws IOException {
-			// removes servlet path from the request path
-			String requestPath = uri.getPath().substring(uri.getPath().indexOf(servletName) + servletName.length());
-			
-			// figure out whether URI contained a query
-			String query = uri.getRawQuery();
-			
-			MockHttpServletRequest request = new MockHttpServletRequest(httpMethod.toString(), requestPath);
-			Set<Entry<String, List<String>>> headerEntries = getHeaders().entrySet();
-			for (Entry<String, List<String>> entry : headerEntries) {
-				String headerName = entry.getKey();
-				for (String headerValue : entry.getValue()) {
-					request.addHeader(headerName, headerValue);
-				}
-			}
-			
-			// now add query parameters
-			if (query != null) {
-				String params[] = query.split("&");
-			    for (String param : params) {
-			       String temp[] = param.split("=");
-			       if (temp.length == 2) {
-			    	   request.addParameter(temp[0], java.net.URLDecoder.decode(temp[1], "UTF-8"));
-			       }
-			    }
-			}
-			request.setContent(bufferedOutput);
-			
-			if (log.isDebugEnabled()) {
-				log.debug("Going to send payload: " + new String(bufferedOutput));
-			}
-			
-			MockHttpServletResponse response = new MockHttpServletResponse();
-			try {
-				servlet.service(request, response);
-			} catch (ServletException e) {
-				throw new IOException(e.getMessage());
-			}
-			
-			return new MockServletClientHttpResponse(response);
-		}
-	}
+            // now add query parameters
+            if (query != null) {
+                String params[] = query.split("&");
+                for (String param : params) {
+                    String temp[] = param.split("=");
+                    if (temp.length == 2) {
+                        request.addParameter(temp[0],
+                                java.net.URLDecoder.decode(temp[1], "UTF-8"));
+                    }
+                }
+            }
+            request.setContent(bufferedOutput);
 
-	private Servlet servlet;
-	private String servletName;
+            if (log.isDebugEnabled()) {
+                log.debug("Going to send payload: "
+                        + new String(bufferedOutput));
+            }
 
-	public MockServletClientHttpRequestFactory (Servlet servlet, String servletName) {
-		this.servlet = servlet;
-		this.servletName = servletName;
-	}
-	
-	@Override
-	public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod)
-			throws IOException {
-		return new MockServletClientHttpRequestFactory.MockServletClientHttpRequest(uri, httpMethod, servlet, servletName);
-	}
+            MockHttpServletResponse response = new MockHttpServletResponse();
+            try {
+                servlet.service(request, response);
+            } catch (ServletException e) {
+                throw new IOException(e.getMessage());
+            }
+
+            return new MockServletClientHttpResponse(response);
+        }
+    }
+
+    public class MockServletClientHttpResponse implements ClientHttpResponse {
+
+        private MockHttpServletResponse response;
+
+        public MockServletClientHttpResponse(MockHttpServletResponse response) {
+            this.response = response;
+        }
+
+        @Override
+        public void close() {
+            // do nothing
+        }
+
+        @Override
+        public InputStream getBody() throws IOException {
+            byte[] byteArray = response.getContentAsByteArray();
+            if (log.isDebugEnabled()) {
+                log.debug("Received payload: " + new String(byteArray));
+            }
+            return new ByteArrayInputStream(byteArray);
+        }
+
+        @Override
+        public HttpHeaders getHeaders() {
+            HttpHeaders headers = new HttpHeaders();
+            for (String headerName : response.getHeaderNames()) {
+                for (Object headerValue : response.getHeaders(headerName)) {
+                    headers.add(headerName, headerValue.toString());
+                }
+            }
+            return headers;
+        }
+
+        @Override
+        public HttpStatus getStatusCode() throws IOException {
+            return HttpStatus.valueOf(response.getStatus());
+        }
+
+        @Override
+        public String getStatusText() throws IOException {
+            return HttpStatus.valueOf(response.getStatus()).toString();
+        }
+    }
+
+    private static final Logger log = LoggerFactory
+                                            .getLogger(MockServletClientHttpRequestFactory.class);
+
+    private Servlet             servlet;
+    private String              servletName;
+
+    public MockServletClientHttpRequestFactory(Servlet servlet,
+            String servletName) {
+        this.servlet = servlet;
+        this.servletName = servletName;
+    }
+
+    @Override
+    public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod)
+            throws IOException {
+        return new MockServletClientHttpRequestFactory.MockServletClientHttpRequest(
+                uri, httpMethod, servlet, servletName);
+    }
 
 }

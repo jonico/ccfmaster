@@ -16,25 +16,26 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FieldMappingRule {
-	private String name;
-	private String description;
-	
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private FieldMappingRuleType type;
-	
-	private String source;
-	private boolean sourceIsTopLevelAttribute;
-	
-	private String target;
-	private boolean targetIsTopLevelAttribute;
+    private String               name;
+    private String               description;
 
-	@Size(max=1024)
-	private String condition;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private FieldMappingRuleType type;
 
-	private String valueMapName;
+    private String               source;
+    private boolean              sourceIsTopLevelAttribute;
 
-	@Size(max=10485760) // 10MB should be enough - same as *Config.val
-	private String xmlContent;
+    private String               target;
+    private boolean              targetIsTopLevelAttribute;
+
+    @Size(max = 1024)
+    private String               condition;
+
+    private String               valueMapName;
+
+    @Size(max = 10485760)
+    // 10MB should be enough - same as *Config.val
+    private String               xmlContent;
 
 }

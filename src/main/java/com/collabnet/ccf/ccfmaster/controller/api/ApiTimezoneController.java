@@ -15,9 +15,9 @@ import com.collabnet.ccf.ccfmaster.server.domain.TimezoneList;
 @RequestMapping(Paths.TIMEZONES)
 public class ApiTimezoneController {
 
-
-	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody List<Timezone> list() {
-		return new TimezoneList(Arrays.asList(Timezone.values()));
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody
+    List<Timezone> list() {
+        return new TimezoneList(Arrays.asList(Timezone.values()));
+    }
 }

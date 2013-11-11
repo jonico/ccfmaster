@@ -6,93 +6,92 @@ import com.collabnet.ccf.ccfmaster.web.helper.RepositoryConnections.RepositoryDe
 
 public class RepositoryMappingsModel {
 
-	private RepositoryMappingDirection repositoryMappingDirection;
-	
-    private long hospitalCount;
-    private long identityMappingCount;
-    private RepositoryDetail repositoryDetail;
-    private ArtifactDetail artifactDetail;
-    
-    private String tfUrl;
-    
-    private String artifatTFUrl;
+    private RepositoryMappingDirection repositoryMappingDirection;
 
-	public RepositoryMappingDirection getRepositoryMappingDirection() {
-		return repositoryMappingDirection;
-	}
+    private long                       hospitalCount;
+    private long                       identityMappingCount;
+    private RepositoryDetail           repositoryDetail;
+    private ArtifactDetail             artifactDetail;
 
-	public void setRepositoryMappingDirection(
-			RepositoryMappingDirection repositoryMappingDirection) {
-		this.repositoryMappingDirection = repositoryMappingDirection;
-	}
+    private String                     tfUrl;
 
-	public Long getHospitalCount() {
-		return hospitalCount;
-	}
+    private String                     artifatTFUrl;
 
-	public void setHospitalCount(Long hospitalCount) {
-		this.hospitalCount = hospitalCount;
-	}
+    public String getArtifactData() {
+        return artifactDetail.getDescription();
+    }
 
-	
-	public long getIdentityMappingCount() {
-		return identityMappingCount;
-	}
+    public ArtifactDetail getArtifactDetail() {
+        return artifactDetail;
+    }
 
-	public void setIdentityMappingCount(long identityMappingCount) {
-		this.identityMappingCount = identityMappingCount;
-	}
+    public String getArtifactIcon() {
+        return artifactDetail.getIcon();
+    }
 
-	public void setRepositoryDetail(RepositoryDetail detail) {
-		this.repositoryDetail = detail;
-	}
+    public String getArtifactId() {
+        return artifactDetail.getArtifactId();
+    }
 
-	public String getRepositoryId() {
-		return repositoryDetail.getRepositoryId();
-	}
+    public String getArtifatTFUrl() {
+        return artifatTFUrl;
+    }
 
-	public String getRepositoryIcon() {
-		return repositoryDetail.getIcon();
-	}
+    public Long getHospitalCount() {
+        return hospitalCount;
+    }
 
-	public String getRepositoryData() {
-		return repositoryDetail.getDescription();
-	}
+    public long getIdentityMappingCount() {
+        return identityMappingCount;
+    }
 
-	public String getTfUrl() {
-		return tfUrl + "/sf/go/" + getRepositoryId();
-	}
+    public String getRepositoryData() {
+        return repositoryDetail.getDescription();
+    }
 
-	public void setTfUrl(String tfUrl) {
-		this.tfUrl = tfUrl;
-	}
-	public ArtifactDetail getArtifactDetail() {
-		return artifactDetail;
-	}
+    public String getRepositoryIcon() {
+        return repositoryDetail.getIcon();
+    }
 
-	public void setArtifactDetail(ArtifactDetail artifactDetail) {
-		this.artifactDetail = artifactDetail;
-	}
+    public String getRepositoryId() {
+        return repositoryDetail.getRepositoryId();
+    }
 
-	public String getArtifactId() {
-		return artifactDetail.getArtifactId();
-	}
+    public RepositoryMappingDirection getRepositoryMappingDirection() {
+        return repositoryMappingDirection;
+    }
 
-	public String getArtifactIcon() {
-		return artifactDetail.getIcon();
-	}
+    public String getTfUrl() {
+        return tfUrl + "/sf/go/" + getRepositoryId();
+    }
 
-	public String getArtifactData() {
-		return artifactDetail.getDescription();
-	}
+    public void setArtifactDetail(ArtifactDetail artifactDetail) {
+        this.artifactDetail = artifactDetail;
+    }
 
-	public String getArtifatTFUrl() {
-		return artifatTFUrl;
-	}
+    public void setArtifatTFUrl(String artifatTFUrl) {
+        this.artifatTFUrl = artifatTFUrl;
+    }
 
-	public void setArtifatTFUrl(String artifatTFUrl) {
-		this.artifatTFUrl = artifatTFUrl;
-	}
-	
-	
+    public void setHospitalCount(Long hospitalCount) {
+        this.hospitalCount = hospitalCount;
+    }
+
+    public void setIdentityMappingCount(long identityMappingCount) {
+        this.identityMappingCount = identityMappingCount;
+    }
+
+    public void setRepositoryDetail(RepositoryDetail detail) {
+        this.repositoryDetail = detail;
+    }
+
+    public void setRepositoryMappingDirection(
+            RepositoryMappingDirection repositoryMappingDirection) {
+        this.repositoryMappingDirection = repositoryMappingDirection;
+    }
+
+    public void setTfUrl(String tfUrl) {
+        this.tfUrl = tfUrl;
+    }
+
 }

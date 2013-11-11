@@ -22,39 +22,39 @@ import com.collabnet.ccf.ccfmaster.server.domain.SystemKind;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Participant {
 
-    @NotNull
-    private String description;
-
-    @NotNull
-    @Size(max = 128)
-    @Column(unique = true)
-    private String systemId;
-
-    @Size(max = 128)
-    private String encoding;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @XmlJavaTypeAdapter(Timezone.XmlAdapter.class)
-    private Timezone timezone;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private SystemKind systemKind;
-
-    private String prefix;
-
     public static class XmlAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<Long, Participant> {
+
+        @Override
+        public Long marshal(Participant v) throws Exception {
+            return v.getId();
+        }
 
         @Override
         public Participant unmarshal(Long v) throws Exception {
             Participant res = findParticipant(v);
             return res;
         }
-
-        @Override
-        public Long marshal(Participant v) throws Exception {
-            return v.getId();
-        }
     }
+
+    @NotNull
+    private String     description;
+
+    @NotNull
+    @Size(max = 128)
+    @Column(unique = true)
+    private String     systemId;
+
+    @Size(max = 128)
+    private String     encoding;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @XmlJavaTypeAdapter(Timezone.XmlAdapter.class)
+    private Timezone   timezone;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private SystemKind systemKind;
+
+    private String     prefix;
 }

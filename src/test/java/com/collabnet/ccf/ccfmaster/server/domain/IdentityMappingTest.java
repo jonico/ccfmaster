@@ -10,8 +10,11 @@ public class IdentityMappingTest {
     public void testMethod() {
         int expectedCount = 13;
         IdentityMapping.countIdentityMappings();
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.expectReturn(expectedCount);
-        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl.playback();
-        org.junit.Assert.assertEquals(expectedCount, IdentityMapping.countIdentityMappings());
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .expectReturn(expectedCount);
+        org.springframework.mock.staticmock.AnnotationDrivenStaticEntityMockingControl
+                .playback();
+        org.junit.Assert.assertEquals(expectedCount,
+                IdentityMapping.countIdentityMappings());
     }
 }

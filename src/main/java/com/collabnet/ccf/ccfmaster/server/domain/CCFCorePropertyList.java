@@ -14,29 +14,31 @@ import org.apache.commons.collections.list.LazyList;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CCFCorePropertyList {
-	
-	private transient Direction direction;  
 
-	//LazyList is used for dynamic binding values from JSP
-	@SuppressWarnings("unchecked")
-	@XmlElement(name = "ccfcoreproperty")
-	private List<CCFCoreProperty> ccfCoreProperties = LazyList.decorate(
-			new ArrayList<CCFCoreProperty>(),
-			FactoryUtils.instantiateFactory(CCFCoreProperty.class));
+    private transient Direction   direction;
 
-	public List<CCFCoreProperty> getCcfCoreProperties() {
-		return ccfCoreProperties;
-	}
+    //LazyList is used for dynamic binding values from JSP
+    @SuppressWarnings("unchecked")
+    @XmlElement(name = "ccfcoreproperty")
+    private List<CCFCoreProperty> ccfCoreProperties = LazyList
+                                                            .decorate(
+                                                                    new ArrayList<CCFCoreProperty>(),
+                                                                    FactoryUtils
+                                                                            .instantiateFactory(CCFCoreProperty.class));
 
-	public void setCcfCoreProperties(List<CCFCoreProperty> ccfCoreProperties) {
-		this.ccfCoreProperties = ccfCoreProperties;
-	}
+    public List<CCFCoreProperty> getCcfCoreProperties() {
+        return ccfCoreProperties;
+    }
 
-	public Direction getDirection() {
-		return direction;
-	}
+    public Direction getDirection() {
+        return direction;
+    }
 
-	public void setDirection(Direction direction) {
-		this.direction = direction;
-	}
+    public void setCcfCoreProperties(List<CCFCoreProperty> ccfCoreProperties) {
+        this.ccfCoreProperties = ccfCoreProperties;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 }

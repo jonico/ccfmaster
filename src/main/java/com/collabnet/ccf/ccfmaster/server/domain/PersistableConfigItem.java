@@ -15,11 +15,11 @@ import com.collabnet.ccf.ccfmaster.server.core.Persister;
  * @param <T>
  */
 public interface PersistableConfigItem<T> extends ConfigItem {
-	public Persister<T> getPersister();
+    public Persister<T> getPersister();
 
-	public void persist();
+    public PersistableConfigItem<T> merge();
 
-	public PersistableConfigItem<T> merge();
+    public void persist();
 
-	public void remove();
+    public void remove();
 }

@@ -22,177 +22,214 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeDataOnDemand;
 
 @ContextConfiguration()
-public class SingleLandscapeCCFCoreInteractionStrategyTest extends
-		AbstractTransactionalJUnit4SpringContextTests {
-	
-	private String[] propertyNames = {
-			SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_DRIVER,
-			SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_PASSWORD,
-			SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_URL,
-			SingleLandscapeCCFCoreInteractionStrategy.CCF_FORWARD_JMX_PORT,
-			SingleLandscapeCCFCoreInteractionStrategy.CCF_REVERSE_JMX_PORT,
-			SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_USERNAME 
-	};
+public class SingleLandscapeCCFCoreInteractionStrategyTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-	@Autowired
-	private LandscapeDataOnDemand dod;
+    private String[]                                  propertyNames = {
+            SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_DRIVER,
+            SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_PASSWORD,
+            SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_URL,
+            SingleLandscapeCCFCoreInteractionStrategy.CCF_FORWARD_JMX_PORT,
+            SingleLandscapeCCFCoreInteractionStrategy.CCF_REVERSE_JMX_PORT,
+            SingleLandscapeCCFCoreInteractionStrategy.CCF_DB_USERNAME };
 
-	private Landscape landscape;
+    @Autowired
+    private LandscapeDataOnDemand                     dod;
 
-	File directoryToDelete;
+    private Landscape                                 landscape;
 
-	private File ccfHomeDirectory;
+    File                                              directoryToDelete;
 
-	private SingleLandscapeCCFCoreInteractionStrategy strategy;
+    private File                                      ccfHomeDirectory;
 
-	@Before
-	public void setDirectoryToDeleteToNull() {
-		directoryToDelete = null;
-	}
+    private SingleLandscapeCCFCoreInteractionStrategy strategy;
 
-	@After
-	public void deleteDirectoryIfNecessary() throws IOException {
-		if (directoryToDelete != null) {
-			FileUtils.deleteDirectory(directoryToDelete);
-		}
-	}
+    @Autowired
+    SingleLandscapeCCFCoreInteractionStrategy         wiredInStrategy;
 
-	@Test
-	public void testCreateWithoutDB() throws IOException {
-		landscape = dod.getNewTransientLandscape(0);
-		landscape.setId(42L);
-		ccfHomeDirectory = File.createTempFile("ccfhome", null);
-		ccfHomeDirectory.delete();
-		ccfHomeDirectory.mkdir();
-		directoryToDelete = ccfHomeDirectory;
+    private File                                      landscapePropertiesFile;
 
-		strategy = new SingleLandscapeCCFCoreInteractionStrategy();
-		strategy.setCcfHome(ccfHomeDirectory.getAbsolutePath());
-		strategy.create(landscape);
+    @After
+    public void deleteDirectoryIfNecessary() throws IOException {
+        if (directoryToDelete != null) {
+            FileUtils.deleteDirectory(directoryToDelete);
+        }
+    }
 
-		File samplesDirectory = new File(ccfHomeDirectory, "landscape"
-				+ landscape.getId() + File.separator + "samples");
-		landscapePropertiesFile = new File(ccfHomeDirectory, "landscape"
-				+ landscape.getId() + File.separator
-				+ strategy.getImmutableLandscapePropertyFileName());
-		assertTrue(samplesDirectory + " doesn't exist.",
-				samplesDirectory.exists());
-		Properties landscapeIdProperties = new Properties();
-		FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
-		landscapeIdProperties.load(inStream);
-		inStream.close();
-		assertEquals(landscape.getId().toString(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
-		assertEquals(landscape.getPlugId(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
-		assertEquals(landscape.getName(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
-		
-		for (String propertyName : propertyNames) {
-			assertTrue(propertyName.equals(landscapeIdProperties.get(propertyName)));
-		}
-		
-	}
+    @Before
+    public void setDirectoryToDeleteToNull() {
+        directoryToDelete = null;
+    }
 
-	@Autowired
-	SingleLandscapeCCFCoreInteractionStrategy wiredInStrategy;
+    @Test
+    public void testCreateWithDB() throws IOException {
+        landscape = dod.getNewTransientLandscape(0);
+        landscape.persist();
+        ccfHomeDirectory = new File(wiredInStrategy.getCcfHome());
+        directoryToDelete = ccfHomeDirectory;
+        File samplesDirectory = new File(ccfHomeDirectory, "landscape"
+                + landscape.getId() + File.separator + "samples");
+        landscapePropertiesFile = new File(ccfHomeDirectory, "landscape"
+                + landscape.getId() + File.separator
+                + wiredInStrategy.getImmutableLandscapePropertyFileName());
+        assertTrue(samplesDirectory + " doesn't exist.",
+                samplesDirectory.exists());
+        Properties landscapeIdProperties = new Properties();
+        FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
+        landscapeIdProperties.load(inStream);
+        inStream.close();
+        assertEquals(
+                landscape.getId().toString(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
+        assertEquals(
+                landscape.getPlugId(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
+        assertEquals(
+                landscape.getName(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
 
-	private File landscapePropertiesFile;
+        for (String propertyName : propertyNames) {
+            assertEquals(propertyName, landscapeIdProperties.get(propertyName));
+        }
 
-	@Test
-	public void testCreateWithDB() throws IOException {
-		landscape = dod.getNewTransientLandscape(0);
-		landscape.persist();
-		ccfHomeDirectory = new File(wiredInStrategy.getCcfHome());
-		directoryToDelete = ccfHomeDirectory;
-		File samplesDirectory = new File(ccfHomeDirectory, "landscape"
-				+ landscape.getId() + File.separator + "samples");
-		landscapePropertiesFile = new File(ccfHomeDirectory, "landscape"
-				+ landscape.getId() + File.separator
-				+ wiredInStrategy.getImmutableLandscapePropertyFileName());
-		assertTrue(samplesDirectory + " doesn't exist.",
-				samplesDirectory.exists());
-		Properties landscapeIdProperties = new Properties();
-		FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
-		landscapeIdProperties.load(inStream);
-		inStream.close();
-		assertEquals(landscape.getId().toString(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
-		assertEquals(landscape.getPlugId(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
-		assertEquals(landscape.getName(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
-		
-		for (String propertyName : propertyNames) {
-			assertEquals(propertyName, landscapeIdProperties.get(propertyName));
-		}
-		
-		// TODO Find a better test for field mapping landscape template creation 
-		assertEquals(94, FieldMappingRule.findAllFieldMappingRules().size());
-	}
+        // TODO Find a better test for field mapping landscape template creation 
+        assertEquals(94, FieldMappingRule.findAllFieldMappingRules().size());
+    }
 
-	@Test
-	public void testDeleteWithoutDB() throws IOException {
-		testCreateWithoutDB();
-		strategy.delete(landscape);
-		// File samplesDirectory = new File (ccfHomeDirectory, "landscape" +
-		// landscape.getId() + File.separator + "samples");
-		// assertTrue(samplesDirectory + " does still exist.",
-		// samplesDirectory.exists());
-		File archivedSamplesDirectory = new File(ccfHomeDirectory, "archive"
-				+ File.separator + "landscape" + landscape.getId()
-				+ File.separator + "samples");
-		assertTrue(archivedSamplesDirectory + " doesn't exist.",
-				archivedSamplesDirectory.exists());
-	}
+    @Test
+    public void testCreateWithoutDB() throws IOException {
+        landscape = dod.getNewTransientLandscape(0);
+        landscape.setId(42L);
+        ccfHomeDirectory = File.createTempFile("ccfhome", null);
+        ccfHomeDirectory.delete();
+        ccfHomeDirectory.mkdir();
+        directoryToDelete = ccfHomeDirectory;
 
-	@Test
-	public void testUpdateWithoutDB() throws IOException {
-		testCreateWithoutDB();
-		landscape.setName("Updated description");
-		landscape.setPlugId("plug1234");
-		Map<String, String> propertyMap = strategy.getPropertyMap();
-		for (String propertyName : propertyNames) {
-			propertyMap.put(propertyName, "'Updated'+" + propertyMap.get(propertyName));
-		}
+        strategy = new SingleLandscapeCCFCoreInteractionStrategy();
+        strategy.setCcfHome(ccfHomeDirectory.getAbsolutePath());
+        strategy.create(landscape);
 
-		strategy.update(landscape);
-		FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
-		Properties landscapeIdProperties = new Properties();
-		landscapeIdProperties.load(inStream);
-		inStream.close();
-		assertEquals(landscape.getId().toString(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
-		assertEquals(landscape.getPlugId(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
-		assertEquals(landscape.getName(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
-		
-		for (String propertyName : propertyNames) {
-			assertEquals("Updated" + propertyName, landscapeIdProperties.get(propertyName));
-		}
-		
-	}
+        File samplesDirectory = new File(ccfHomeDirectory, "landscape"
+                + landscape.getId() + File.separator + "samples");
+        landscapePropertiesFile = new File(ccfHomeDirectory, "landscape"
+                + landscape.getId() + File.separator
+                + strategy.getImmutableLandscapePropertyFileName());
+        assertTrue(samplesDirectory + " doesn't exist.",
+                samplesDirectory.exists());
+        Properties landscapeIdProperties = new Properties();
+        FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
+        landscapeIdProperties.load(inStream);
+        inStream.close();
+        assertEquals(
+                landscape.getId().toString(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
+        assertEquals(
+                landscape.getPlugId(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
+        assertEquals(
+                landscape.getName(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
 
-	@Test
-	public void testUpdateWithDB() throws IOException {
-		testCreateWithDB();
-		landscape.setName("Updated description");
-		landscape.setPlugId("plug1234");
-		landscape.merge();
-		FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
-		Properties landscapeIdProperties = new Properties();
-		landscapeIdProperties.load(inStream);
-		inStream.close();
-		assertEquals(landscape.getId().toString(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
-		assertEquals(landscape.getPlugId(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
-		assertEquals(landscape.getName(), landscapeIdProperties.get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
-	}
+        for (String propertyName : propertyNames) {
+            assertTrue(propertyName.equals(landscapeIdProperties
+                    .get(propertyName)));
+        }
 
-	@Test
-	public void testDeleteWithDB() throws IOException {
-		testCreateWithDB();
-		landscape.remove();
-		// File samplesDirectory = new File (ccfHomeDirectory, "landscape" +
-		// landscape.getId() + File.separator + "samples");
-		// assertTrue(samplesDirectory + " does still exist.",
-		// samplesDirectory.exists());
-		File archivedSamplesDirectory = new File(ccfHomeDirectory, "archive"
-				+ File.separator + "landscape" + landscape.getId()
-				+ File.separator + "samples");
-		assertTrue(archivedSamplesDirectory + " doesn't exist.",
-				archivedSamplesDirectory.exists());
-	}
+    }
+
+    @Test
+    public void testDeleteWithDB() throws IOException {
+        testCreateWithDB();
+        landscape.remove();
+        // File samplesDirectory = new File (ccfHomeDirectory, "landscape" +
+        // landscape.getId() + File.separator + "samples");
+        // assertTrue(samplesDirectory + " does still exist.",
+        // samplesDirectory.exists());
+        File archivedSamplesDirectory = new File(ccfHomeDirectory, "archive"
+                + File.separator + "landscape" + landscape.getId()
+                + File.separator + "samples");
+        assertTrue(archivedSamplesDirectory + " doesn't exist.",
+                archivedSamplesDirectory.exists());
+    }
+
+    @Test
+    public void testDeleteWithoutDB() throws IOException {
+        testCreateWithoutDB();
+        strategy.delete(landscape);
+        // File samplesDirectory = new File (ccfHomeDirectory, "landscape" +
+        // landscape.getId() + File.separator + "samples");
+        // assertTrue(samplesDirectory + " does still exist.",
+        // samplesDirectory.exists());
+        File archivedSamplesDirectory = new File(ccfHomeDirectory, "archive"
+                + File.separator + "landscape" + landscape.getId()
+                + File.separator + "samples");
+        assertTrue(archivedSamplesDirectory + " doesn't exist.",
+                archivedSamplesDirectory.exists());
+    }
+
+    @Test
+    public void testUpdateWithDB() throws IOException {
+        testCreateWithDB();
+        landscape.setName("Updated description");
+        landscape.setPlugId("plug1234");
+        landscape.merge();
+        FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
+        Properties landscapeIdProperties = new Properties();
+        landscapeIdProperties.load(inStream);
+        inStream.close();
+        assertEquals(
+                landscape.getId().toString(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
+        assertEquals(
+                landscape.getPlugId(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
+        assertEquals(
+                landscape.getName(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
+    }
+
+    @Test
+    public void testUpdateWithoutDB() throws IOException {
+        testCreateWithoutDB();
+        landscape.setName("Updated description");
+        landscape.setPlugId("plug1234");
+        Map<String, String> propertyMap = strategy.getPropertyMap();
+        for (String propertyName : propertyNames) {
+            propertyMap.put(propertyName,
+                    "'Updated'+" + propertyMap.get(propertyName));
+        }
+
+        strategy.update(landscape);
+        FileInputStream inStream = new FileInputStream(landscapePropertiesFile);
+        Properties landscapeIdProperties = new Properties();
+        landscapeIdProperties.load(inStream);
+        inStream.close();
+        assertEquals(
+                landscape.getId().toString(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_ID));
+        assertEquals(
+                landscape.getPlugId(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_PLUG_ID));
+        assertEquals(
+                landscape.getName(),
+                landscapeIdProperties
+                        .get(SingleLandscapeCCFCoreInteractionStrategy.CCF_LANDSCAPE_DESCRIPTION));
+
+        for (String propertyName : propertyNames) {
+            assertEquals("Updated" + propertyName,
+                    landscapeIdProperties.get(propertyName));
+        }
+
+    }
 
 }

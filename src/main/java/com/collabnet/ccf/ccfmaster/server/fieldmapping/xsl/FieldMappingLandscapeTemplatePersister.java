@@ -7,22 +7,21 @@ import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.Template;
 
-public class FieldMappingLandscapeTemplatePersister extends AbstractPersister<Template<Landscape>> implements Persister<FieldMappingLandscapeTemplate>{
+public class FieldMappingLandscapeTemplatePersister extends AbstractPersister<Template<Landscape>> implements Persister<FieldMappingLandscapeTemplate> {
 
-	
-	public FieldMappingLandscapeTemplatePersister(File baseDir, ConversionResult conversionResult) {
-		super(baseDir, conversionResult);
-	}
+    public FieldMappingLandscapeTemplatePersister(File baseDir,
+            ConversionResult conversionResult) {
+        super(baseDir, conversionResult);
+    }
 
-	@Override
-	public void save(FieldMappingLandscapeTemplate cfg) {
-		doSave(cfg);
-	}
-	
-	@Override
-	public void delete(FieldMappingLandscapeTemplate cfg) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void delete(FieldMappingLandscapeTemplate cfg) {
+        throw new UnsupportedOperationException();
+    }
 
-	
+    @Override
+    public void save(FieldMappingLandscapeTemplate cfg) {
+        doSave(cfg);
+    }
+
 }

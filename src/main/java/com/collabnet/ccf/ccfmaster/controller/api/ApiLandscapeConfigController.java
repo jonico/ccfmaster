@@ -16,40 +16,47 @@ import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfigList;
 @Scope("request")
 @RequestMapping(value = Paths.LANDSCAPE_CONFIG)
 public class ApiLandscapeConfigController extends AbstractApiController<LandscapeConfig> {
-	
-	@Override
-	public @ResponseBody LandscapeConfig create(@RequestBody LandscapeConfig requestBody, HttpServletResponse response) {
-		requestBody.persist();
-		setLocationHeader(response, Paths.LANDSCAPE_CONFIG + "/" + requestBody.getId());
-		return requestBody;
-	}
-	
-	@Override
-	public @ResponseBody LandscapeConfigList list() {
-		return new LandscapeConfigList(LandscapeConfig.findAllLandscapeConfigs());
-	}
-	
-	@Override
-	public @ResponseBody LandscapeConfig show(@PathVariable("id") LandscapeConfig id) {
-		return super.show(id);
-	}
-	
-	@Override
-	public void update(@PathVariable("id") Long id, @RequestBody LandscapeConfig requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		requestBody.merge();
-	}
 
+    @Override
+    public @ResponseBody
+    LandscapeConfig create(@RequestBody LandscapeConfig requestBody,
+            HttpServletResponse response) {
+        requestBody.persist();
+        setLocationHeader(response,
+                Paths.LANDSCAPE_CONFIG + "/" + requestBody.getId());
+        return requestBody;
+    }
 
-	@Override
-	public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
-		LandscapeConfig.findLandscapeConfig(id).remove();
-	}
+    @Override
+    public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
+        LandscapeConfig.findLandscapeConfig(id).remove();
+    }
 
+    @Override
+    public @ResponseBody
+    LandscapeConfigList list() {
+        return new LandscapeConfigList(
+                LandscapeConfig.findAllLandscapeConfigs());
+    }
 
-	private void validateRequestBody(Long id, LandscapeConfig requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != requestBody.id (%s)", id, requestBody.getId()));
-		}
-	}
+    @Override
+    public @ResponseBody
+    LandscapeConfig show(@PathVariable("id") LandscapeConfig id) {
+        return super.show(id);
+    }
+
+    @Override
+    public void update(@PathVariable("id") Long id,
+            @RequestBody LandscapeConfig requestBody,
+            HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        requestBody.merge();
+    }
+
+    private void validateRequestBody(Long id, LandscapeConfig requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
+        }
+    }
 }

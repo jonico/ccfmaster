@@ -9,22 +9,22 @@ package com.collabnet.ccf.ccfmaster.server.core;
  */
 public class CoreConfigurationException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CoreConfigurationException() {
-		super();
-	}
+    public CoreConfigurationException() {
+        super();
+    }
 
-	public CoreConfigurationException(String message) {
-		super(message);
-	}
+    public CoreConfigurationException(String message) {
+        super(message);
+    }
 
-	public CoreConfigurationException(Throwable cause) {
-		super(cause);
-	}
+    public CoreConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public CoreConfigurationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CoreConfigurationException(Throwable cause) {
+        super(cause);
+    }
 
 }

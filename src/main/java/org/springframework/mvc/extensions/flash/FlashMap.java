@@ -16,118 +16,120 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public final class FlashMap {
 
-	static final String FLASH_MAP_ATTRIBUTE = FlashMap.class.getName();
+    public static class Message extends MessageCode {
+        private final String message;
 
-	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getCurrent(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		Map<String, Object> flash = (Map<String, Object>) session.getAttribute(FLASH_MAP_ATTRIBUTE);
-		if (flash == null) {
-			flash = new HashMap<String, Object>();
-			session.setAttribute(FLASH_MAP_ATTRIBUTE, flash);
-		}
-		return flash;
-	}
+        public Message(MessageType messageType, String messageCode) {
+            this(messageType, messageCode, "");
+        }
 
-	private FlashMap() {
-	}
+        public Message(MessageType messageType, String messageCode,
+                String message) {
+            super(messageType, messageCode);
+            this.message = message;
+        }
 
-	public static void put(String key, Object value) {
-		getCurrent(getRequest(RequestContextHolder.currentRequestAttributes()))
-				.put(key, value);
-	}
+        public String getMessage() {
+            return message;
+        }
 
-	public static void setInfoMessage(String info) {
-		put(MESSAGE_KEY, new Message(MessageType.info, info));
-	}
+        public String toString() {
+            return String.format("%s (%s)", super.toString(), message);
+        }
+    }
 
-	public static void setWarningMessage(String warning) {
-		put(MESSAGE_KEY, new Message(MessageType.warning, warning));
-	}
+    public static class MessageCode {
 
-	public static void setErrorMessage(String error) {
-		put(MESSAGE_KEY, new Message(MessageType.error, error));
-	}
+        private final MessageType type;
 
-	public static void setSuccessMessage(String success) {
-		put(MESSAGE_KEY, new Message(MessageType.success, success));
-	}
+        private final String      messageCode;
 
-	public static void setInfoMessage(String info, String message) {
-		put(MESSAGE_KEY, new Message(MessageType.info, info, message));
-	}
+        public MessageCode(MessageType type, String text) {
+            this.type = type;
+            this.messageCode = text;
+        }
 
-	public static void setWarningMessage(String warning, String message) {
-		put(MESSAGE_KEY, new Message(MessageType.warning, warning, message));
-	}
+        public String getCssClass() {
+            return (type == MessageType.error) ? "errorMessage" : "greenText";
+        }
 
-	public static void setErrorMessage(String error, String message) {
-		put(MESSAGE_KEY, new Message(MessageType.error, error, message));
-	}
+        public String getMessageCode() {
+            return messageCode;
+        }
 
-	private static HttpServletRequest getRequest(
-			RequestAttributes requestAttributes) {
-		return ((ServletRequestAttributes) requestAttributes).getRequest();
-	}
+        public MessageType getType() {
+            return type;
+        }
 
-	public static void setSuccessMessage(String success, String message) {
-		put(MESSAGE_KEY, new Message(MessageType.success, success, message));
-	}
+        public String toString() {
+            return type + ": " + messageCode;
+        }
 
-	private static final String MESSAGE_KEY = "message";
+    }
 
-	public static class MessageCode {
+    public static enum MessageType {
+        info, success, warning, error
+    }
 
-		private final MessageType type;
+    static final String         FLASH_MAP_ATTRIBUTE = FlashMap.class.getName();
 
-		private final String messageCode;
+    private static final String MESSAGE_KEY         = "message";
 
-		public MessageCode(MessageType type, String text) {
-			this.type = type;
-			this.messageCode = text;
-		}
+    private FlashMap() {
+    }
 
-		public MessageType getType() {
-			return type;
-		}
-		
-		public String getCssClass() {
-			return (type == MessageType.error) ? "errorMessage" : "greenText";
-		}
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> getCurrent(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> flash = (Map<String, Object>) session
+                .getAttribute(FLASH_MAP_ATTRIBUTE);
+        if (flash == null) {
+            flash = new HashMap<String, Object>();
+            session.setAttribute(FLASH_MAP_ATTRIBUTE, flash);
+        }
+        return flash;
+    }
 
-		public String getMessageCode() {
-			return messageCode;
-		}
+    public static void put(String key, Object value) {
+        getCurrent(getRequest(RequestContextHolder.currentRequestAttributes()))
+                .put(key, value);
+    }
 
-		public String toString() {
-			return type + ": " + messageCode;
-		}
+    public static void setErrorMessage(String error) {
+        put(MESSAGE_KEY, new Message(MessageType.error, error));
+    }
 
-	}
-	
-	public static class Message extends MessageCode {
-		private final String message;
-		
-		public Message(MessageType messageType, String messageCode) {
-			this(messageType, messageCode, "");
-		}
-		
-		public Message(MessageType messageType, String messageCode, String message) {
-			super(messageType, messageCode);
-			this.message = message;
-		}
-		
-		public String getMessage() {
-			return message;
-		}
-		
-		public String toString() {
-			return String.format("%s (%s)", super.toString(), message);
-		}
-	}
+    public static void setErrorMessage(String error, String message) {
+        put(MESSAGE_KEY, new Message(MessageType.error, error, message));
+    }
 
-	public static enum MessageType {
-		info, success, warning, error
-	}
+    public static void setInfoMessage(String info) {
+        put(MESSAGE_KEY, new Message(MessageType.info, info));
+    }
+
+    public static void setInfoMessage(String info, String message) {
+        put(MESSAGE_KEY, new Message(MessageType.info, info, message));
+    }
+
+    public static void setSuccessMessage(String success) {
+        put(MESSAGE_KEY, new Message(MessageType.success, success));
+    }
+
+    public static void setSuccessMessage(String success, String message) {
+        put(MESSAGE_KEY, new Message(MessageType.success, success, message));
+    }
+
+    public static void setWarningMessage(String warning) {
+        put(MESSAGE_KEY, new Message(MessageType.warning, warning));
+    }
+
+    public static void setWarningMessage(String warning, String message) {
+        put(MESSAGE_KEY, new Message(MessageType.warning, warning, message));
+    }
+
+    private static HttpServletRequest getRequest(
+            RequestAttributes requestAttributes) {
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
+    }
 
 }

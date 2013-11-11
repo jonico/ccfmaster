@@ -12,17 +12,20 @@ import org.springframework.roo.addon.dod.RooDataOnDemand;
 @RooDataOnDemand(entity = FieldMappingExternalAppTemplate.class)
 public class FieldMappingExternalAppTemplateDataOnDemand {
 
-	@Autowired
+    @Autowired
     private ExternalAppDataOnDemand externalAppDataOnDemand;
-	private Random rnd = new java.security.SecureRandom();
+    private Random                  rnd = new java.security.SecureRandom();
 
-	public FieldMappingExternalAppTemplate getNewTransientFieldMappingExternalAppTemplate(int index) {
+    public FieldMappingExternalAppTemplate getNewTransientFieldMappingExternalAppTemplate(
+            int index) {
         com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate obj = new com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate();
         obj.setParent(externalAppDataOnDemand.getRandomExternalApp());
         obj.setName("name_" + index);
-        Directions dir = Directions.values()[rnd.nextInt(Directions.values().length)];
+        Directions dir = Directions.values()[rnd
+                .nextInt(Directions.values().length)];
         obj.setDirection(dir);
-		FieldMappingKind kind = FieldMappingKind.values()[rnd.nextInt(FieldMappingKind.values().length)];
+        FieldMappingKind kind = FieldMappingKind.values()[rnd
+                .nextInt(FieldMappingKind.values().length)];
         obj.setKind(kind);
         FieldMappingDataOnDemand.processMappingKind(obj);
         return obj;

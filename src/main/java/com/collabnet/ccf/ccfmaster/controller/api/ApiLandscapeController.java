@@ -33,105 +33,148 @@ import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingList;
 @Controller
 @Scope("request")
 @RequestMapping(value = Paths.LANDSCAPE)
-public class ApiLandscapeController extends AbstractApiController<Landscape>{
-	
-	private static final Logger log = LoggerFactory.getLogger(ApiLandscapeController.class);
-		
-	@Override	
-	public @ResponseBody Landscape create(@RequestBody Landscape requestBody, HttpServletResponse response) {
-		requestBody.persist();
-		setLocationHeader(response, Paths.LANDSCAPE + "/" + requestBody.getId());
-		return requestBody;
-	}
-	
-	@Override	
-	public @ResponseBody LandscapeList list() {
-		return new LandscapeList(Landscape.findAllLandscapes());
-	}
-	
-	@RequestMapping(value = "/{id}/landscapeconfigs", method=RequestMethod.GET)
-	public @ResponseBody LandscapeConfigList landscapeConfigs(@PathVariable("id") Landscape landscape) {
-		return new LandscapeConfigList(LandscapeConfig.findLandscapeConfigsByLandscape(landscape).getResultList());
-	}
+public class ApiLandscapeController extends AbstractApiController<Landscape> {
 
-	@RequestMapping(value = "/{id}/externalapps", method=RequestMethod.GET)
-	public @ResponseBody ExternalAppList externalapps(@PathVariable("id") Landscape landscape) {
-		return new ExternalAppList(ExternalApp.findExternalAppsByLandscape(landscape).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/repositorymappings", method=RequestMethod.GET)
-	public @ResponseBody RepositoryMappingList repositoryMappings(@PathVariable("id") Landscape landscape) {
-		return new RepositoryMappingList(RepositoryMapping.findRepositoryMappingsByLandscape(landscape).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/repositorymappingdirections", method=RequestMethod.GET)
-	public @ResponseBody RepositoryMappingDirectionList repositoryMappingDirections(@PathVariable("id") Landscape landscape) {
-		return new RepositoryMappingDirectionList(RepositoryMappingDirection.findRepositoryMappingDirectionsByLandscape(landscape).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/repositorymappingdirections/{direction}", method=RequestMethod.GET)
-	public @ResponseBody RepositoryMappingDirectionList repositoryMappingDirections(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
-		//log.debug("direction: {} landscape: {}", direction, landscape);
-		return new RepositoryMappingDirectionList(RepositoryMappingDirection.findRepositoryMappingDirectionsByLandscapeAndDirection(landscape, direction).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/hospitalentrys", method=RequestMethod.GET)
-	public @ResponseBody HospitalEntryList hospitalEntrys(@PathVariable("id") Landscape landscape) {
-		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByLandscape(landscape).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/hospitalentrys/count", method=RequestMethod.GET)
-	public @ResponseBody String hospitalEntrysCount(@PathVariable("id") Landscape landscape) {
-		return Long.toString(HospitalEntry.countHospitalEntrysByLandscape(landscape));
-	}
-	
-	@RequestMapping(value = "/{id}/hospitalentrys/{direction}", method=RequestMethod.GET)
-	public @ResponseBody HospitalEntryList hospitalEntrys(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
-		//log.debug("direction: {} landscape: {}", direction, landscape);
-		return new HospitalEntryList(HospitalEntry.findHospitalEntrysByLandscapeAndDirection(landscape, direction).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/hospitalentrys/{direction}/count", method=RequestMethod.GET)
-	public @ResponseBody String hospitalEntrysCount(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
-		//log.debug("direction: {} landscape: {}", direction, landscape);
-		return Long.toString(HospitalEntry.countHospitalEntrysByLandscapeAndDirection(landscape, direction));
-	}
-	
-	@RequestMapping(value = "/{id}/identitymappings", method=RequestMethod.GET)
-	public @ResponseBody IdentityMappingList identityMappings(@PathVariable("id") Landscape landscape) {
-		return new IdentityMappingList(IdentityMapping.findIdentityMappingsByLandscape(landscape).getResultList());
-	}
-		
-	@RequestMapping(value = "/{id}/directions", method=RequestMethod.GET)
-	public @ResponseBody DirectionList directions(@PathVariable("id") Landscape landscape) {
-		return new DirectionList(Direction.findDirectionsByLandscapeEquals(landscape).getResultList());
-	}
-	
-	@RequestMapping(value = "/{id}/directions/{direction}", method=RequestMethod.GET)
-	public @ResponseBody DirectionList directions(@PathVariable("id") Landscape landscape, @PathVariable("direction") Directions direction) {
-		log.debug("direction: {} landscape: {}", direction, landscape);
-		return new DirectionList(Direction.findDirectionsByLandscapeEqualsAndDirectionEquals(landscape, direction).getResultList());
-	}
-	
-	@Override	
-	public @ResponseBody Landscape show(@PathVariable("id") Landscape id) {
-		return super.show(id);
-	}
-	
-	@Override	
-	public void update(@PathVariable("id") Long id, @RequestBody Landscape requestBody, HttpServletResponse response) {
-		validateRequestBody(id, requestBody);
-		requestBody.merge();
-	}
+    private static final Logger log = LoggerFactory
+                                            .getLogger(ApiLandscapeController.class);
 
-	@Override
-	public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
-		Landscape.findLandscape(id).remove();
-	}
+    @Override
+    public @ResponseBody
+    Landscape create(@RequestBody Landscape requestBody,
+            HttpServletResponse response) {
+        requestBody.persist();
+        setLocationHeader(response, Paths.LANDSCAPE + "/" + requestBody.getId());
+        return requestBody;
+    }
 
-	private void validateRequestBody(Long id, Landscape requestBody) {
-		if (id == null || !id.equals(requestBody.getId())) {
-			throw new BadRequestException(String.format("id (%s) != landscape.id (%s)", id, requestBody.getId()));
-		}
-	}
+    @Override
+    public void delete(@PathVariable("id") Long id, HttpServletResponse response) {
+        Landscape.findLandscape(id).remove();
+    }
+
+    @RequestMapping(value = "/{id}/directions", method = RequestMethod.GET)
+    public @ResponseBody
+    DirectionList directions(@PathVariable("id") Landscape landscape) {
+        return new DirectionList(Direction.findDirectionsByLandscapeEquals(
+                landscape).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/directions/{direction}", method = RequestMethod.GET)
+    public @ResponseBody
+    DirectionList directions(@PathVariable("id") Landscape landscape,
+            @PathVariable("direction") Directions direction) {
+        log.debug("direction: {} landscape: {}", direction, landscape);
+        return new DirectionList(Direction
+                .findDirectionsByLandscapeEqualsAndDirectionEquals(landscape,
+                        direction).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/externalapps", method = RequestMethod.GET)
+    public @ResponseBody
+    ExternalAppList externalapps(@PathVariable("id") Landscape landscape) {
+        return new ExternalAppList(ExternalApp.findExternalAppsByLandscape(
+                landscape).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/hospitalentrys", method = RequestMethod.GET)
+    public @ResponseBody
+    HospitalEntryList hospitalEntrys(@PathVariable("id") Landscape landscape) {
+        return new HospitalEntryList(HospitalEntry
+                .findHospitalEntrysByLandscape(landscape).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/hospitalentrys/{direction}", method = RequestMethod.GET)
+    public @ResponseBody
+    HospitalEntryList hospitalEntrys(@PathVariable("id") Landscape landscape,
+            @PathVariable("direction") Directions direction) {
+        //log.debug("direction: {} landscape: {}", direction, landscape);
+        return new HospitalEntryList(
+                HospitalEntry.findHospitalEntrysByLandscapeAndDirection(
+                        landscape, direction).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/hospitalentrys/count", method = RequestMethod.GET)
+    public @ResponseBody
+    String hospitalEntrysCount(@PathVariable("id") Landscape landscape) {
+        return Long.toString(HospitalEntry
+                .countHospitalEntrysByLandscape(landscape));
+    }
+
+    @RequestMapping(value = "/{id}/hospitalentrys/{direction}/count", method = RequestMethod.GET)
+    public @ResponseBody
+    String hospitalEntrysCount(@PathVariable("id") Landscape landscape,
+            @PathVariable("direction") Directions direction) {
+        //log.debug("direction: {} landscape: {}", direction, landscape);
+        return Long.toString(HospitalEntry
+                .countHospitalEntrysByLandscapeAndDirection(landscape,
+                        direction));
+    }
+
+    @RequestMapping(value = "/{id}/identitymappings", method = RequestMethod.GET)
+    public @ResponseBody
+    IdentityMappingList identityMappings(@PathVariable("id") Landscape landscape) {
+        return new IdentityMappingList(IdentityMapping
+                .findIdentityMappingsByLandscape(landscape).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/landscapeconfigs", method = RequestMethod.GET)
+    public @ResponseBody
+    LandscapeConfigList landscapeConfigs(@PathVariable("id") Landscape landscape) {
+        return new LandscapeConfigList(LandscapeConfig
+                .findLandscapeConfigsByLandscape(landscape).getResultList());
+    }
+
+    @Override
+    public @ResponseBody
+    LandscapeList list() {
+        return new LandscapeList(Landscape.findAllLandscapes());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappingdirections", method = RequestMethod.GET)
+    public @ResponseBody
+    RepositoryMappingDirectionList repositoryMappingDirections(
+            @PathVariable("id") Landscape landscape) {
+        return new RepositoryMappingDirectionList(RepositoryMappingDirection
+                .findRepositoryMappingDirectionsByLandscape(landscape)
+                .getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappingdirections/{direction}", method = RequestMethod.GET)
+    public @ResponseBody
+    RepositoryMappingDirectionList repositoryMappingDirections(
+            @PathVariable("id") Landscape landscape,
+            @PathVariable("direction") Directions direction) {
+        //log.debug("direction: {} landscape: {}", direction, landscape);
+        return new RepositoryMappingDirectionList(RepositoryMappingDirection
+                .findRepositoryMappingDirectionsByLandscapeAndDirection(
+                        landscape, direction).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappings", method = RequestMethod.GET)
+    public @ResponseBody
+    RepositoryMappingList repositoryMappings(
+            @PathVariable("id") Landscape landscape) {
+        return new RepositoryMappingList(RepositoryMapping
+                .findRepositoryMappingsByLandscape(landscape).getResultList());
+    }
+
+    @Override
+    public @ResponseBody
+    Landscape show(@PathVariable("id") Landscape id) {
+        return super.show(id);
+    }
+
+    @Override
+    public void update(@PathVariable("id") Long id,
+            @RequestBody Landscape requestBody, HttpServletResponse response) {
+        validateRequestBody(id, requestBody);
+        requestBody.merge();
+    }
+
+    private void validateRequestBody(Long id, Landscape requestBody) {
+        if (id == null || !id.equals(requestBody.getId())) {
+            throw new BadRequestException(String.format(
+                    "id (%s) != landscape.id (%s)", id, requestBody.getId()));
+        }
+    }
 }

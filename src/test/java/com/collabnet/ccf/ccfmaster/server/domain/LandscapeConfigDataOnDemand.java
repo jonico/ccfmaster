@@ -10,10 +10,11 @@ public class LandscapeConfigDataOnDemand {
     @Autowired
     private LandscapeDataOnDemand landscapeDataOnDemand;
 
-	public LandscapeConfig getNewTransientLandscapeConfig(int index) {
+    public LandscapeConfig getNewTransientLandscapeConfig(int index) {
         com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig obj = new com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig();
         obj.setLandscape(landscapeDataOnDemand.getRandomLandscape());
-        obj.setName(PropertiesLandscapeConfigPersisterFactory.PREFIX + "name_" + index);
+        obj.setName(PropertiesLandscapeConfigPersisterFactory.PREFIX + "name_"
+                + index);
         obj.setVal("val_" + index);
         return obj;
     }

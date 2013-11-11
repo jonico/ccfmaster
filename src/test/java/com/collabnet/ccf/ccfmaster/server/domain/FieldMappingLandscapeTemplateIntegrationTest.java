@@ -14,33 +14,39 @@ import com.collabnet.ccf.ccfmaster.server.fieldmapping.xsl.MockFieldMappingLands
 @RooIntegrationTest(entity = FieldMappingLandscapeTemplate.class)
 public class FieldMappingLandscapeTemplateIntegrationTest {
 
-	@Autowired FieldMappingLandscapeTemplateDataOnDemand fmltdod;
-	
-	@Test(expected=ConstraintViolationException.class)
-	public void throwsWhenBadName() {
-		FieldMappingLandscapeTemplate fmlt = fmltdod.getNewTransientFieldMappingLandscapeTemplate(42);
-		fmlt.setName("$!@invalid");
-		fmlt.persist();
-	}
-	
-	@Test
-	public void savesOnPersistAndMerge() {
-		FieldMappingLandscapeTemplate fmlt = fmltdod.getNewTransientFieldMappingLandscapeTemplate(42);
-		MockFieldMappingLandscapeTemplatePersisterFactory mockFmltpf = new MockFieldMappingLandscapeTemplatePersisterFactory();
-		fmlt.setPersisterFactory(mockFmltpf);
-		fmlt.persist();
-		assertTrue("save wasn't called on persist().", mockFmltpf.calledSave);
+    @Autowired
+    FieldMappingLandscapeTemplateDataOnDemand fmltdod;
 
-		mockFmltpf = new MockFieldMappingLandscapeTemplatePersisterFactory();
-		fmlt = FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplate(fmlt.getId());
-		assertNotNull("couldn't find fieldMappingLandscapeTemplate after persist.", fmlt);
-		fmlt.setPersisterFactory(mockFmltpf);
-		fmlt = fmlt.merge();
-		assertTrue("save wasn't called on merge().", mockFmltpf.calledSave);
-		
-	}
-	
+    @Test
+    public void savesOnPersistAndMerge() {
+        FieldMappingLandscapeTemplate fmlt = fmltdod
+                .getNewTransientFieldMappingLandscapeTemplate(42);
+        MockFieldMappingLandscapeTemplatePersisterFactory mockFmltpf = new MockFieldMappingLandscapeTemplatePersisterFactory();
+        fmlt.setPersisterFactory(mockFmltpf);
+        fmlt.persist();
+        assertTrue("save wasn't called on persist().", mockFmltpf.calledSave);
+
+        mockFmltpf = new MockFieldMappingLandscapeTemplatePersisterFactory();
+        fmlt = FieldMappingLandscapeTemplate
+                .findFieldMappingLandscapeTemplate(fmlt.getId());
+        assertNotNull(
+                "couldn't find fieldMappingLandscapeTemplate after persist.",
+                fmlt);
+        fmlt.setPersisterFactory(mockFmltpf);
+        fmlt = fmlt.merge();
+        assertTrue("save wasn't called on merge().", mockFmltpf.calledSave);
+
+    }
+
     @Test
     public void testMarkerMethod() {
+    }
+
+    @Test(expected = ConstraintViolationException.class)
+    public void throwsWhenBadName() {
+        FieldMappingLandscapeTemplate fmlt = fmltdod
+                .getNewTransientFieldMappingLandscapeTemplate(42);
+        fmlt.setName("$!@invalid");
+        fmlt.persist();
     }
 }

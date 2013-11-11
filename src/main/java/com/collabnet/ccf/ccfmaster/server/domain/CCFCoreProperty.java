@@ -7,157 +7,148 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CCFCoreProperty {
-	
-	@NotNull
-	@XmlAttribute(required=true)
-	private String name;
-	
-	@XmlAttribute(required=true)
-	private String value;
-	
-	@XmlAttribute
-	private Directions direction;
-	
-	@NotNull
-	@XmlAttribute(required=true)
-	private SystemKind systemKind;
-	
-	@XmlAttribute
-	private String category;
-	
-	@NotNull
-	@XmlAttribute(required= true)
-	private String labelName;
-	
-	@XmlAttribute
-	private String toolTip;
-	
-	@XmlAttribute
-	private  CCFCorePropertyType type;
-	
-	@XmlAttribute
-	private boolean displayInHTML;
-	
-	@XmlAttribute
-	private String conditionalRegex;
-	
-	public CCFCoreProperty() {	}
-	
-	
-	public Directions getDirection() {
-		return direction;
-	}
 
-	public void setDirection(Directions directions) {
-		this.direction = directions;
-	}
-	
-	public SystemKind getSystemKind() {
-		return systemKind;
-	}
-	public void setSystemKind(SystemKind systemKind) {
-		this.systemKind = systemKind;
-	}
-	
-	public String getCategory() {
-		return category;
-	}
+    @NotNull
+    @XmlAttribute(required = true)
+    private String              name;
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    @XmlAttribute(required = true)
+    private String              value;
 
-	public String getName() {
-		return name;
-	}
+    @XmlAttribute
+    private Directions          direction;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @NotNull
+    @XmlAttribute(required = true)
+    private SystemKind          systemKind;
 
-	public String getValue() {
-		return value;
-	}
+    @XmlAttribute
+    private String              category;
 
+    @NotNull
+    @XmlAttribute(required = true)
+    private String              labelName;
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    @XmlAttribute
+    private String              toolTip;
 
+    @XmlAttribute
+    private CCFCorePropertyType type;
 
-	public String getLabelName() {
-		return labelName;
-	}
+    @XmlAttribute
+    private boolean             displayInHTML;
 
+    @XmlAttribute
+    private String              conditionalRegex;
 
-	public void setLabelName(String labelName) {
-		this.labelName = labelName;
-	}
-	
-	
-	public String getToolTip() {
-		return toolTip;
-	}
+    public CCFCoreProperty() {
+    }
 
+    public String getCategory() {
+        return category;
+    }
 
-	public void setToolTip(String toolTip) {
-		this.toolTip = toolTip;
-	}
+    public String getConditionalRegex() {
+        return conditionalRegex;
+    }
 
+    public Directions getDirection() {
+        return direction;
+    }
 
-	public CCFCorePropertyType getType() {
-		return type;
-	}
+    public String getLabelName() {
+        return labelName;
+    }
 
+    public String getName() {
+        return name;
+    }
 
-	public void setType(CCFCorePropertyType type) {
-		this.type = type;
-	}
+    public SystemKind getSystemKind() {
+        return systemKind;
+    }
 
-	public boolean isDisplayInHTML() {
-		return displayInHTML;
-	}
+    public String getToolTip() {
+        return toolTip;
+    }
 
-	public void setDisplayInHTML(boolean displayInHTML) {
-		this.displayInHTML = displayInHTML;
-	}
+    public CCFCorePropertyType getType() {
+        return type;
+    }
 
+    public String getValue() {
+        return value;
+    }
 
-	public String getConditionalRegex() {
-		return conditionalRegex;
-	}
+    public boolean isDisplayInHTML() {
+        return displayInHTML;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setConditionalRegex(String conditionalRegex) {
-		this.conditionalRegex = conditionalRegex;
-	}
+    public void setConditionalRegex(String conditionalRegex) {
+        this.conditionalRegex = conditionalRegex;
+    }
 
+    public void setDirection(Directions directions) {
+        this.direction = directions;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CCFCoreProperty [name=");
-		builder.append(name);
-		builder.append(", value=");
-		builder.append(value);
-		builder.append(", direction=");
-		builder.append(direction);
-		builder.append(", systemKind=");
-		builder.append(systemKind);
-		builder.append(", category=");
-		builder.append(category);
-		builder.append(", labelName=");
-		builder.append(labelName);
-		builder.append(", toolTip=");
-		builder.append(toolTip);
-		builder.append(", type=");
-		builder.append(type);
-		builder.append(", displayInHTML=");
-		builder.append(displayInHTML);
-		builder.append(", conditionalRegex=");
-		builder.append(conditionalRegex);
-		builder.append("]");
-		return builder.toString();
-	}
-	
+    public void setDisplayInHTML(boolean displayInHTML) {
+        this.displayInHTML = displayInHTML;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSystemKind(SystemKind systemKind) {
+        this.systemKind = systemKind;
+    }
+
+    public void setToolTip(String toolTip) {
+        this.toolTip = toolTip;
+    }
+
+    public void setType(CCFCorePropertyType type) {
+        this.type = type;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("CCFCoreProperty [name=");
+        builder.append(name);
+        builder.append(", value=");
+        builder.append(value);
+        builder.append(", direction=");
+        builder.append(direction);
+        builder.append(", systemKind=");
+        builder.append(systemKind);
+        builder.append(", category=");
+        builder.append(category);
+        builder.append(", labelName=");
+        builder.append(labelName);
+        builder.append(", toolTip=");
+        builder.append(toolTip);
+        builder.append(", type=");
+        builder.append(type);
+        builder.append(", displayInHTML=");
+        builder.append(displayInHTML);
+        builder.append(", conditionalRegex=");
+        builder.append(conditionalRegex);
+        builder.append("]");
+        return builder.toString();
+    }
+
 }

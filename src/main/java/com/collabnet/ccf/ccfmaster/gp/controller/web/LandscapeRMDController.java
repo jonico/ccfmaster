@@ -32,120 +32,145 @@ import com.collabnet.ccf.ccfmaster.web.helper.TeamForgeMetadataHelper;
 import com.collabnet.teamforge.api.Connection;
 
 /**
- * LandscapeRMDController - admin scope request to create Repository Mapping Direction
+ * LandscapeRMDController - admin scope request to create Repository Mapping
+ * Direction
  * 
  * @author kbalaji
- *
+ * 
  */
 @RequestMapping("/admin/**")
 @Controller
 public class LandscapeRMDController extends AbstractLandscapeController {
-	
-	private static final Logger log = LoggerFactory.getLogger(LandscapeRMDController.class);
-	
-	private CreateRMDHelper createRMDHelper = new CreateRMDHelper();
-	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE, method=RequestMethod.POST)
-	public String intializeRMDSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel, HttpServletRequest request){
-		populateModel(model);
-		return UIPathConstants.RMD_CONFIGURE;		
-	}
-	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_TFSETTINGS, method=RequestMethod.POST)
-	public String intializeTFSettings(Model model,@ModelAttribute(value="rmdModel")RMDModel rmdmodel){
-		populateModel(model);
-		return UIPathConstants.RMD_CONFIGURE_TFSETTINGS;
-	}
-	
-	@RequestMapping(value="/"+UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS, method=RequestMethod.POST)
-	public String intializeParticipantSettings(Model model, @ModelAttribute(value="rmdModel")RMDModel rmdmodel){
-		if(genericParticipant != null && rmdmodel.getParticipantSelectorFieldList() == null){
-			rmdmodel.setParticipantSelectorFieldList(genericParticipant.getGenericParticipantRMDFactory().getParticipantSelectorFieldList());
-		}
-		populateModel(model);
-		return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
-	}
 
-	@RequestMapping(value="/"+UIPathConstants.RMD_SAVE, method=RequestMethod.POST)
-	public String saveRMD(@ModelAttribute(value="rmdModel")RMDModel rmdmodel,BindingResult bindingResult, Model model, HttpServletRequest request){		
-		createRMDHelper.populateConfigMaps(rmdmodel);
-		createRMDHelper.validateRMD(rmdmodel, bindingResult,model);
-		if(bindingResult.hasErrors()){
-			populateModel(model);
-			return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
-		}
-		try {
-			String direction = rmdmodel.getDirection();
-			String projectId = rmdmodel.getTeamforgeProjectId();
-			Landscape landscape = ControllerHelper.findLandscape();
-			Connection connection = TeamForgeConnectionHelper.teamForgeConnection();
-			String linkId = TeamForgeMetadataHelper.getTFLinkId(connection,landscape.getPlugId(),projectId);
-			ExternalApp externalApp = createRMDHelper.getExternalApp(landscape,projectId, linkId,connection);
-			createRMDHelper.createAndPersistRMD(rmdmodel, model, direction, externalApp);
-			
-		} catch (RemoteException e) {
-			log.debug("TeamForge request to check for its connection to retrieve linkid info got failed ", e);
-		}
-		populateModel(model);
-		return UIPathConstants.RMD_SAVE;		
-	}
-	
-	@RequestMapping(value="/admin/teamForge/trackerList",method= RequestMethod.POST)
-	public @ResponseBody String getAllTrackerInfo(@RequestParam String projectId){
-		return createRMDHelper.getAllTrackerInfo(projectId);
-	}
-	
-	@ModelAttribute(value="tfConflictPolicies")
-	protected String[] getConfilictPolicies(){
-		ConflictResolutionPolicy[]  conflictValues = ConflictResolutionPolicy.values();
-		String[] conflictPolicyArray = new String[conflictValues.length];
-		for(int i=0;i<conflictValues.length;i++){
-			conflictPolicyArray[i]= conflictValues[i].toString();
-		}
-		return conflictPolicyArray;
-	}
-	
-	@ModelAttribute(value="gpConflictPolicies")
-	protected String[] getParticipantConfilictPolicies(){
-		if(genericParticipant != null){
-			ICustomizeRMDParticipant customizeParticipantRMDInfo = genericParticipant.getGenericParticipantRMDFactory().getCustomParticipantRMD();
-			if(customizeParticipantRMDInfo!= null){
-				return customizeParticipantRMDInfo.getCustomConflictResolutionPolicy();
-			}
-		}
-		return new String[]{};
-	}	
-	
-	@ModelAttribute(value="teamForgeProjects")
-	protected Map<String, String> getAllTeamForgeProjects(){
-		Map<String,String> teamForgeProject = new HashMap<String,String>();
-		try {
-			teamForgeProject =  TeamForgeMetadataHelper.getAllTeamForgeProjects();
-		} catch (RemoteException e) { } //ignore the remote exception
-		return teamForgeProject;
-	}
-	
-	@ModelAttribute(value="directions")
-	protected String[] getDirectionList(){
-		return new String[]{"FORWARD","REVERSE","BOTH"};
-	}
-	
-	@ModelAttribute(value="teamForgeMappingType")	
-	protected String[] getTeamForgeMappingType(){
-		return new String[] {"PlanningFolders","Tracker","MetaData"};
-	}
-	
-	@ModelAttribute(value="forwardFieldMappingTemplateNames")
-	protected List<String> getForwardFieldMappingTemplateNames(){
-		return createRMDHelper.getFieldMappingTemplateNames(Directions.FORWARD);
-	}
-	
-	@ModelAttribute(value="reverseFieldMappingTemplateNames")
-	protected List<String> getReverseFieldMappingTemplateNames(){
-		return createRMDHelper.getFieldMappingTemplateNames(Directions.REVERSE);
-	}
-	
-	protected void populateModel(Model model){
-		model.addAttribute("selectedLink", "repositorymappings");
-	}
+    private static final Logger log             = LoggerFactory
+                                                        .getLogger(LandscapeRMDController.class);
+
+    private CreateRMDHelper     createRMDHelper = new CreateRMDHelper();
+
+    @RequestMapping(value = "/admin/teamForge/trackerList", method = RequestMethod.POST)
+    public @ResponseBody
+    String getAllTrackerInfo(@RequestParam String projectId) {
+        return createRMDHelper.getAllTrackerInfo(projectId);
+    }
+
+    @RequestMapping(value = "/"
+            + UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS, method = RequestMethod.POST)
+    public String intializeParticipantSettings(Model model,
+            @ModelAttribute(value = "rmdModel") RMDModel rmdmodel) {
+        if (genericParticipant != null
+                && rmdmodel.getParticipantSelectorFieldList() == null) {
+            rmdmodel.setParticipantSelectorFieldList(genericParticipant
+                    .getGenericParticipantRMDFactory()
+                    .getParticipantSelectorFieldList());
+        }
+        populateModel(model);
+        return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
+    }
+
+    @RequestMapping(value = "/" + UIPathConstants.RMD_CONFIGURE, method = RequestMethod.POST)
+    public String intializeRMDSettings(Model model,
+            @ModelAttribute(value = "rmdModel") RMDModel rmdmodel,
+            HttpServletRequest request) {
+        populateModel(model);
+        return UIPathConstants.RMD_CONFIGURE;
+    }
+
+    @RequestMapping(value = "/" + UIPathConstants.RMD_CONFIGURE_TFSETTINGS, method = RequestMethod.POST)
+    public String intializeTFSettings(Model model,
+            @ModelAttribute(value = "rmdModel") RMDModel rmdmodel) {
+        populateModel(model);
+        return UIPathConstants.RMD_CONFIGURE_TFSETTINGS;
+    }
+
+    @RequestMapping(value = "/" + UIPathConstants.RMD_SAVE, method = RequestMethod.POST)
+    public String saveRMD(
+            @ModelAttribute(value = "rmdModel") RMDModel rmdmodel,
+            BindingResult bindingResult, Model model, HttpServletRequest request) {
+        createRMDHelper.populateConfigMaps(rmdmodel);
+        createRMDHelper.validateRMD(rmdmodel, bindingResult, model);
+        if (bindingResult.hasErrors()) {
+            populateModel(model);
+            return UIPathConstants.RMD_CONFIGURE_PARTICIPANT_SETTINGS;
+        }
+        try {
+            String direction = rmdmodel.getDirection();
+            String projectId = rmdmodel.getTeamforgeProjectId();
+            Landscape landscape = ControllerHelper.findLandscape();
+            Connection connection = TeamForgeConnectionHelper
+                    .teamForgeConnection();
+            String linkId = TeamForgeMetadataHelper.getTFLinkId(connection,
+                    landscape.getPlugId(), projectId);
+            ExternalApp externalApp = createRMDHelper.getExternalApp(landscape,
+                    projectId, linkId, connection);
+            createRMDHelper.createAndPersistRMD(rmdmodel, model, direction,
+                    externalApp);
+
+        } catch (RemoteException e) {
+            log.debug(
+                    "TeamForge request to check for its connection to retrieve linkid info got failed ",
+                    e);
+        }
+        populateModel(model);
+        return UIPathConstants.RMD_SAVE;
+    }
+
+    @ModelAttribute(value = "teamForgeProjects")
+    protected Map<String, String> getAllTeamForgeProjects() {
+        Map<String, String> teamForgeProject = new HashMap<String, String>();
+        try {
+            teamForgeProject = TeamForgeMetadataHelper
+                    .getAllTeamForgeProjects();
+        } catch (RemoteException e) {
+        } //ignore the remote exception
+        return teamForgeProject;
+    }
+
+    @ModelAttribute(value = "tfConflictPolicies")
+    protected String[] getConfilictPolicies() {
+        ConflictResolutionPolicy[] conflictValues = ConflictResolutionPolicy
+                .values();
+        String[] conflictPolicyArray = new String[conflictValues.length];
+        for (int i = 0; i < conflictValues.length; i++) {
+            conflictPolicyArray[i] = conflictValues[i].toString();
+        }
+        return conflictPolicyArray;
+    }
+
+    @ModelAttribute(value = "directions")
+    protected String[] getDirectionList() {
+        return new String[] { "FORWARD", "REVERSE", "BOTH" };
+    }
+
+    @ModelAttribute(value = "forwardFieldMappingTemplateNames")
+    protected List<String> getForwardFieldMappingTemplateNames() {
+        return createRMDHelper.getFieldMappingTemplateNames(Directions.FORWARD);
+    }
+
+    @ModelAttribute(value = "gpConflictPolicies")
+    protected String[] getParticipantConfilictPolicies() {
+        if (genericParticipant != null) {
+            ICustomizeRMDParticipant customizeParticipantRMDInfo = genericParticipant
+                    .getGenericParticipantRMDFactory()
+                    .getCustomParticipantRMD();
+            if (customizeParticipantRMDInfo != null) {
+                return customizeParticipantRMDInfo
+                        .getCustomConflictResolutionPolicy();
+            }
+        }
+        return new String[] {};
+    }
+
+    @ModelAttribute(value = "reverseFieldMappingTemplateNames")
+    protected List<String> getReverseFieldMappingTemplateNames() {
+        return createRMDHelper.getFieldMappingTemplateNames(Directions.REVERSE);
+    }
+
+    @ModelAttribute(value = "teamForgeMappingType")
+    protected String[] getTeamForgeMappingType() {
+        return new String[] { "PlanningFolders", "Tracker", "MetaData" };
+    }
+
+    protected void populateModel(Model model) {
+        model.addAttribute("selectedLink", "repositorymappings");
+    }
 }

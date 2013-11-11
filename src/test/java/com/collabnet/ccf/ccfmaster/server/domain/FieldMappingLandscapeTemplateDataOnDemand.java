@@ -11,19 +11,22 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
 
 @RooDataOnDemand(entity = FieldMappingLandscapeTemplate.class)
 public class FieldMappingLandscapeTemplateDataOnDemand {
-	@Autowired
-	private LandscapeDataOnDemand landscapeDataOnDemand;
-	private Random rnd = new java.security.SecureRandom();
-	
-	public FieldMappingLandscapeTemplate getNewTransientFieldMappingLandscapeTemplate(int index) {
+    @Autowired
+    private LandscapeDataOnDemand landscapeDataOnDemand;
+    private Random                rnd = new java.security.SecureRandom();
+
+    public FieldMappingLandscapeTemplate getNewTransientFieldMappingLandscapeTemplate(
+            int index) {
         com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate obj = new com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate();
         obj.setParent(landscapeDataOnDemand.getRandomLandscape());
         obj.setName("name_" + index);
-        Directions dir = Directions.values()[rnd.nextInt(Directions.values().length)];
+        Directions dir = Directions.values()[rnd
+                .nextInt(Directions.values().length)];
         obj.setDirection(dir);
-		FieldMappingKind kind = FieldMappingKind.values()[rnd.nextInt(FieldMappingKind.values().length)];
+        FieldMappingKind kind = FieldMappingKind.values()[rnd
+                .nextInt(FieldMappingKind.values().length)];
         obj.setKind(kind);
         FieldMappingDataOnDemand.processMappingKind(obj);
         return obj;
-	}
+    }
 }

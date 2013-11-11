@@ -24,55 +24,69 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-@XmlRootElement(name="fieldMappingTemplate")
+@XmlRootElement(name = "fieldMappingTemplate")
 @RooJavaBean
 @RooToString
 @XmlAccessorType(XmlAccessType.FIELD)
-@RooEntity(finders = { "findFieldMappingLandscapeTemplatesByParentAndNameAndDirection", "findFieldMappingLandscapeTemplatesByParent", "findFieldMappingLandscapeTemplatesByParentAndDirection", "findFieldMappingLandscapeTemplatesByDirection","countFieldMappingLandscapeTemplatesByDirection"})
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "PARENT", "NAME", "DIRECTION" }))
+@RooEntity(finders = {
+        "findFieldMappingLandscapeTemplatesByParentAndNameAndDirection",
+        "findFieldMappingLandscapeTemplatesByParent",
+        "findFieldMappingLandscapeTemplatesByParentAndDirection",
+        "findFieldMappingLandscapeTemplatesByDirection",
+        "countFieldMappingLandscapeTemplatesByDirection" })
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "PARENT", "NAME",
+        "DIRECTION" }))
 public class FieldMappingLandscapeTemplate implements Template<Landscape> {
 
     @NotNull
-    @ManyToOne(cascade = {  })
+    @ManyToOne(cascade = {})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @XmlJavaTypeAdapter(Landscape.XmlAdapter.class)
-    private Landscape parent;
+    private Landscape                  parent;
 
     @NotNull
     @Pattern(regexp = "[\\w\\s]+")
-    private String name;
+    private String                     name;
 
     @NotNull
     @Enumerated
-    private Directions direction;
+    private Directions                 direction;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private FieldMappingKind kind;
+    private FieldMappingKind           kind;
 
     @OneToMany(cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
-    private List<FieldMappingRule> rules = new ArrayList<FieldMappingRule>();
+    private List<FieldMappingRule>     rules     = new ArrayList<FieldMappingRule>();
 
     @OneToMany(cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
     private List<FieldMappingValueMap> valueMaps = new ArrayList<FieldMappingValueMap>();
 
     @Override
+    public Directions getMappingDirection() {
+        return getDirection();
+    }
+
+    @Override
     public File getStorageDirectory(File baseDir) {
         Landscape landscape = getParent();
-        final File dir = new File(baseDir, String.format("landscape%d/fieldmappings/%s/landscape/%s", landscape.getId(), getDirection(), getName()));
+        final File dir = new File(baseDir, String.format(
+                "landscape%d/fieldmappings/%s/landscape/%s", landscape.getId(),
+                getDirection(), getName()));
         return dir;
     }
-    
-    @Override
-    public Directions getMappingDirection() {
-    	return getDirection();
-    }
-    
-    public static long countFieldMappingLandscapeTemplatesByDirection(Directions direction) {
-    	if (direction == null) throw new IllegalArgumentException("The direction argument is required");
-    	TypedQuery<Long> q = entityManager().createQuery("SELECT COUNT(o) FROM FieldMappingLandscapeTemplate o WHERE o.direction = :direction", Long.class);
+
+    public static long countFieldMappingLandscapeTemplatesByDirection(
+            Directions direction) {
+        if (direction == null)
+            throw new IllegalArgumentException(
+                    "The direction argument is required");
+        TypedQuery<Long> q = entityManager()
+                .createQuery(
+                        "SELECT COUNT(o) FROM FieldMappingLandscapeTemplate o WHERE o.direction = :direction",
+                        Long.class);
         q.setParameter("direction", direction);
         return q.getSingleResult();
     }
-    
+
 }

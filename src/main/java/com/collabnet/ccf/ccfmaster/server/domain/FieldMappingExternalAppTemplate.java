@@ -25,100 +25,136 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-
-@XmlRootElement(name="fieldMappingTemplate")
+@XmlRootElement(name = "fieldMappingTemplate")
 @RooJavaBean
 @RooToString
 @XmlAccessorType(XmlAccessType.FIELD)
-@RooEntity(finders = { "findFieldMappingExternalAppTemplatesByParentAndNameAndDirection", "findFieldMappingExternalAppTemplatesByParentAndDirection", "findFieldMappingExternalAppTemplatesByParent" })
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "PARENT", "NAME", "DIRECTION" }))
+@RooEntity(finders = {
+        "findFieldMappingExternalAppTemplatesByParentAndNameAndDirection",
+        "findFieldMappingExternalAppTemplatesByParentAndDirection",
+        "findFieldMappingExternalAppTemplatesByParent" })
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "PARENT", "NAME",
+        "DIRECTION" }))
 public class FieldMappingExternalAppTemplate implements Template<ExternalApp> {
 
-	@ManyToOne(cascade={})
+    @ManyToOne(cascade = {})
     @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     @XmlJavaTypeAdapter(ExternalApp.XmlAdapter.class)
-    private ExternalApp parent;
+    private ExternalApp                parent;
 
     @NotNull
-    @Pattern(regexp="[\\w\\s]+")
-    private String name;
-    
+    @Pattern(regexp = "[\\w\\s]+")
+    private String                     name;
+
     @NotNull
     @Enumerated
-    private Directions direction;
+    private Directions                 direction;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private FieldMappingKind kind;
+    private FieldMappingKind           kind;
 
-    @OneToMany(cascade=javax.persistence.CascadeType.ALL, orphanRemoval=true)
-    private List<FieldMappingRule> rules = new ArrayList<FieldMappingRule>();
+    @OneToMany(cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    private List<FieldMappingRule>     rules     = new ArrayList<FieldMappingRule>();
 
-    @OneToMany(cascade=javax.persistence.CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
     private List<FieldMappingValueMap> valueMaps = new ArrayList<FieldMappingValueMap>();
-    
-    @Override
-    public File getStorageDirectory(File baseDir) {
-		final ExternalApp ea = getParent();
-		final Landscape landscape = ea.getLandscape();
-		final File dir = new File(baseDir, String.format(
-				"landscape%d/fieldmappings/%s/%s/%s",
-				landscape.getId(),
-				getDirection(),
-				ea.getLinkId(),
-				getName()));
-		return dir;
-    }
-    
+
     @Override
     public Directions getMappingDirection() {
-    	return getDirection();
+        return getDirection();
     }
-    
-    public static long countFieldMappingExternalAppTemplatesByParent(ExternalApp externalApp) {
-        if (externalApp == null) throw new IllegalArgumentException("The externalApp argument is required");
+
+    @Override
+    public File getStorageDirectory(File baseDir) {
+        final ExternalApp ea = getParent();
+        final Landscape landscape = ea.getLandscape();
+        final File dir = new File(baseDir, String.format(
+                "landscape%d/fieldmappings/%s/%s/%s", landscape.getId(),
+                getDirection(), ea.getLinkId(), getName()));
+        return dir;
+    }
+
+    public static long countFieldMappingExternalAppTemplatesByParent(
+            ExternalApp externalApp) {
+        if (externalApp == null)
+            throw new IllegalArgumentException(
+                    "The externalApp argument is required");
         EntityManager em = entityManager();
-        TypedQuery<Long> q = em.createQuery("SELECT COUNT(fieldmappingexternalapptemplate) FROM FieldMappingExternalAppTemplate AS fieldmappingexternalapptemplate WHERE fieldmappingexternalapptemplate.parent = :externalApp", Long.class);
+        TypedQuery<Long> q = em
+                .createQuery(
+                        "SELECT COUNT(fieldmappingexternalapptemplate) FROM FieldMappingExternalAppTemplate AS fieldmappingexternalapptemplate WHERE fieldmappingexternalapptemplate.parent = :externalApp",
+                        Long.class);
         q.setParameter("externalApp", externalApp);
         return q.getSingleResult();
     }
 
-    public static long countFieldMappingExternalAppTemplatesByParentAndDirection(ExternalApp externalApp, Directions direction) {
-        if (externalApp == null) throw new IllegalArgumentException("The externalApp argument is required");
-        if (direction == null) throw new IllegalArgumentException("The direction argument is required");
+    public static long countFieldMappingExternalAppTemplatesByParentAndDirection(
+            ExternalApp externalApp, Directions direction) {
+        if (externalApp == null)
+            throw new IllegalArgumentException(
+                    "The externalApp argument is required");
+        if (direction == null)
+            throw new IllegalArgumentException(
+                    "The direction argument is required");
         EntityManager em = entityManager();
-        TypedQuery<Long> q = em.createQuery("SELECT COUNT(fieldmappingexternalapptemplate) FROM FieldMappingExternalAppTemplate AS fieldmappingexternalapptemplate WHERE fieldmappingexternalapptemplate.parent = :externalApp AND fieldmappingexternalapptemplate.direction = :direction", Long.class);
+        TypedQuery<Long> q = em
+                .createQuery(
+                        "SELECT COUNT(fieldmappingexternalapptemplate) FROM FieldMappingExternalAppTemplate AS fieldmappingexternalapptemplate WHERE fieldmappingexternalapptemplate.parent = :externalApp AND fieldmappingexternalapptemplate.direction = :direction",
+                        Long.class);
         q.setParameter("externalApp", externalApp);
         q.setParameter("direction", direction);
         return q.getSingleResult();
     }
 
-
-	public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParent(ExternalApp parent) {
-        if (parent == null) throw new IllegalArgumentException("The parent argument is required");
+    public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParent(
+            ExternalApp parent) {
+        if (parent == null)
+            throw new IllegalArgumentException(
+                    "The parent argument is required");
         EntityManager em = FieldMappingExternalAppTemplate.entityManager();
-        TypedQuery<FieldMappingExternalAppTemplate> q = em.createQuery("SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent ORDER BY o.id", FieldMappingExternalAppTemplate.class);
+        TypedQuery<FieldMappingExternalAppTemplate> q = em
+                .createQuery(
+                        "SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent ORDER BY o.id",
+                        FieldMappingExternalAppTemplate.class);
         q.setParameter("parent", parent);
         return q;
     }
 
-	public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParentAndDirection(ExternalApp parent, Directions direction) {
-        if (parent == null) throw new IllegalArgumentException("The parent argument is required");
-        if (direction == null) throw new IllegalArgumentException("The direction argument is required");
+    public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParentAndDirection(
+            ExternalApp parent, Directions direction) {
+        if (parent == null)
+            throw new IllegalArgumentException(
+                    "The parent argument is required");
+        if (direction == null)
+            throw new IllegalArgumentException(
+                    "The direction argument is required");
         EntityManager em = FieldMappingExternalAppTemplate.entityManager();
-        TypedQuery<FieldMappingExternalAppTemplate> q = em.createQuery("SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent AND o.direction = :direction ORDER BY o.id", FieldMappingExternalAppTemplate.class);
+        TypedQuery<FieldMappingExternalAppTemplate> q = em
+                .createQuery(
+                        "SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent AND o.direction = :direction ORDER BY o.id",
+                        FieldMappingExternalAppTemplate.class);
         q.setParameter("parent", parent);
         q.setParameter("direction", direction);
         return q;
     }
 
-	public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParentAndNameAndDirection(ExternalApp parent, String name, Directions direction) {
-        if (parent == null) throw new IllegalArgumentException("The parent argument is required");
-        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
-        if (direction == null) throw new IllegalArgumentException("The direction argument is required");
+    public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParentAndNameAndDirection(
+            ExternalApp parent, String name, Directions direction) {
+        if (parent == null)
+            throw new IllegalArgumentException(
+                    "The parent argument is required");
+        if (name == null || name.length() == 0)
+            throw new IllegalArgumentException("The name argument is required");
+        if (direction == null)
+            throw new IllegalArgumentException(
+                    "The direction argument is required");
         EntityManager em = FieldMappingExternalAppTemplate.entityManager();
-        TypedQuery<FieldMappingExternalAppTemplate> q = em.createQuery("SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent AND o.name = :name AND o.direction = :direction ORDER BY o.id", FieldMappingExternalAppTemplate.class);
+        TypedQuery<FieldMappingExternalAppTemplate> q = em
+                .createQuery(
+                        "SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent AND o.name = :name AND o.direction = :direction ORDER BY o.id",
+                        FieldMappingExternalAppTemplate.class);
         q.setParameter("parent", parent);
         q.setParameter("name", name);
         q.setParameter("direction", direction);
