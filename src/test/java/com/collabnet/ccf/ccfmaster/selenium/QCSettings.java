@@ -10,8 +10,72 @@ import com.thoughtworks.selenium.Wait.WaitTimedOutException;
 
 public class QCSettings extends CcfAuthenticatedTestBase {
 
+    @Before
+    public void goToAdminUrl() {
+        selenium.open("/CCFMaster/admin/ccfmaster");
+    }
+
     @Test
-    public void ccfProperties() {
+    public void test01() {
+        qcSettings();
+    }
+
+    @Test
+    public void test02() {
+        tfSettings();
+    }
+
+    @Test
+    public void test03() {
+        ccfProperties();
+    }
+
+    @Test
+    public void test04() {
+        repositoryMappings();
+    }
+
+    @Test
+    public void test05() {
+        createFieldMapping();
+    }
+
+    @Test
+    public void test06() {
+        exportFieldMappingTemplates();
+    }
+
+    @Test
+    public void test07() {
+        mergeFieldMappingTemplates();
+    }
+
+    @Test
+    public void test08() {
+        importFieldMappingTemplates();
+    }
+
+    @Test
+    public void test09() {
+        displayAndDeleteFieldMappingTemplate();
+    }
+
+    @Test
+    public void test10() {
+        failedShipments();
+    }
+
+    @Test
+    public void test11() {
+        connectorStatusAndLogs();
+    }
+
+    @Test
+    public void test12() {
+        connectorUpgrade();
+    }
+
+    private void ccfProperties() {
         selenium.click("link=Connector Properties");
         selenium.waitForPageToLoad("30000");
         selenium.type(
@@ -41,8 +105,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         verifyConnectorBehaviorValidation();
     }
 
-    @Test
-    public void connectorStatusAndLogs() {
+    private void connectorStatusAndLogs() {
         try {
             boolean needRerun = false;
             selenium.click("link=Status");
@@ -62,8 +125,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         }
     }
 
-    @Test
-    public void connectorUpgrade() {
+    private void connectorUpgrade() {
         selenium.click("link=Status");
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Connector Upgrade");
@@ -113,15 +175,13 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         //		verifyTrue(selenium.isTextPresent("Core update succeeded"));
     }
 
-    @Test
-    public void createFieldMapping() {
+    private void createFieldMapping() {
         Util.testcreateFieldMapping(selenium);
         Util.testcreateLinkFieldMapping(selenium);
         Util.testAssociateFieldMapping(selenium);
     }
 
-    @Test
-    public void displayAndDeleteFieldMappingTemplate() {
+    private void displayAndDeleteFieldMappingTemplate() {
         selenium.click("link=Field Mapping Templates");
         selenium.click("link=Field Mapping Templates QC to TF");
         selenium.waitForPageToLoad("30000");
@@ -136,8 +196,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
                 selenium.getText("css=div.greenText"));
     }
 
-    @Test
-    public void exportFieldMappingTemplates() {
+    private void exportFieldMappingTemplates() {
         selenium.click("link=Field Mapping Templates");
         selenium.waitForPageToLoad("30000");
         selenium.click("name=fmtid");
@@ -145,21 +204,14 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         selenium.click("link=Export");
     }
 
-    @Test
-    public void failedShipments() {
+    private void failedShipments() {
         navigateFailedShipmentTabs();
         Util.testFailedShipments(selenium);
         Util.testDeleteRepositoryMappings(selenium);
 
     }
 
-    @Before
-    public void goToAdminUrl() {
-        selenium.open("/CCFMaster/admin/ccfmaster");
-    }
-
-    @Test
-    public void importFieldMappingTemplates() {
+    private void importFieldMappingTemplates() {
         selenium.click("link=Field Mapping Templates");
         selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
         selenium.waitForPageToLoad("30000");
@@ -179,8 +231,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
                 .isElementPresent("new Default TF Planning Folder to QC Requirement"));
     }
 
-    @Test
-    public void mergeFieldMappingTemplates() {
+    private void mergeFieldMappingTemplates() {
         selenium.click("link=Field Mapping Templates");
         selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
         selenium.waitForPageToLoad("30000");
@@ -195,59 +246,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         selenium.click("link=Import Selected");
         selenium.waitForPageToLoad("30000");
         verifyTrue(selenium.isElementPresent("Updated Successfully"));
-    }
-
-    @Test
-    public void qcSettings() {
-        selenium.type("participantUrlParticipantConfig.val", "");
-        selenium.click("link=Save");
-        selenium.click("//button[2]");// clicks saveonly button
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium
-                .isElementPresent("id=participantUrlParticipantConfig.val.errors"));
-        verifyTrue(selenium
-                .isTextPresent("Enter a valid HPQC url ends with qcbin/"));
-        selenium.type("participantUrlParticipantConfig.val",
-                "www.hpurl.com.qcbin/");
-        selenium.type("participantPasswordLandscapeConfig.val", "admin123");
-        selenium.click("link=Save");
-        selenium.click("//button[2]");// clicks saveonly button
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium.isElementPresent("css=div.greenText"));
-        Util.applyParticipantSaveAndRestartOptions(selenium);
-        validateQcUserCredentials();
-    }
-
-    @Test
-    public void repositoryMappings() {
-        navigateRespositoryMappingTabs();
-        Util.testRepositoryMappings(selenium);
-        Util.testFailedShipmentCount(selenium);
-
-    }
-
-    public void testQcLogs() {
-        selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=Logs QC to TF");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=Logs TF to QC");
-        selenium.waitForPageToLoad("30000");
-        selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=ccf-info.log");
-        selenium.waitForPageToLoad("30000");
-        /*
-         * for(int i=0 ; i<15000 ;i++){// this will invoke ajax request-to load
-         * tail log file content
-         * assertTrue(selenium.isElementPresent("//*[@id='fileContentDiv']")); }
-         */
-    }
-
-    @Test
-    public void tfSettings() {
-        Util.testTeamforgeSettings(selenium);
-
     }
 
     private void navigateFailedShipmentTabs() {
@@ -268,6 +266,56 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Repository Mappings TF to QC");
         selenium.waitForPageToLoad("30000");
+    }
+
+    private void qcSettings() {
+        selenium.type("participantUrlParticipantConfig.val", "");
+        selenium.click("link=Save");
+        selenium.click("//button[2]");// clicks saveonly button
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium
+                .isElementPresent("id=participantUrlParticipantConfig.val.errors"));
+        verifyTrue(selenium
+                .isTextPresent("Enter a valid HPQC url ends with qcbin/"));
+        selenium.type("participantUrlParticipantConfig.val",
+                "www.hpurl.com.qcbin/");
+        selenium.type("participantPasswordLandscapeConfig.val", "admin123");
+        selenium.click("link=Save");
+        selenium.click("//button[2]");// clicks saveonly button
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium.isElementPresent("css=div.greenText"));
+        Util.applyParticipantSaveAndRestartOptions(selenium);
+        validateQcUserCredentials();
+    }
+
+    private void repositoryMappings() {
+        navigateRespositoryMappingTabs();
+        Util.testRepositoryMappings(selenium);
+        Util.testFailedShipmentCount(selenium);
+
+    }
+
+    private void testQcLogs() {
+        selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Logs QC to TF");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Logs TF to QC");
+        selenium.waitForPageToLoad("30000");
+        selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=ccf-info.log");
+        selenium.waitForPageToLoad("30000");
+        /*
+         * for(int i=0 ; i<15000 ;i++){// this will invoke ajax request-to load
+         * tail log file content
+         * assertTrue(selenium.isElementPresent("//*[@id='fileContentDiv']")); }
+         */
+    }
+
+    private void tfSettings() {
+        Util.testTeamforgeSettings(selenium);
+
     }
 
     private void validateQcUserCredentials() {
