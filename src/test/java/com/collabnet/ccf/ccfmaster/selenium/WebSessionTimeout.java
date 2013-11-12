@@ -1,16 +1,16 @@
 package com.collabnet.ccf.ccfmaster.selenium;
 
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
-
 public class WebSessionTimeout extends CcfSeleneseTestBase {
 
     @Test
-    public void errorPageOnTimeout() {
+    public void test01ErrorPageOnTimeout() {
         Util.login(selenium, "admin", "admin");
         driver.get(Util.baseUrl() + "/CCFMaster/chuck/killSession");
         WebElement h3 = driver.findElement(By.tagName("h3"));

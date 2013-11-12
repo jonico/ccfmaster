@@ -10,20 +10,14 @@ public class ProjectIdentityMappingsPage extends ProjectScopeTestBase {
         user.login(selenium);
     }
 
-    @Test
-    public void deleteIdentityMappings() {
-        selenium.click("link=Identity Mappings");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("name=mappingid");
-        selenium.chooseOkOnNextConfirmation();
-        selenium.click("link=Delete");
-        selenium.waitForPageToLoad("30000");
-        assertEquals("Selected Identity Mapping deleted successfully",
-                selenium.getText("css=div.greenText"));
+    @Before
+    public void openPage() {
+        selenium.open("/CCFMaster/project/identitymappings?direction=FORWARD&size=1");
+
     }
 
     @Test
-    public void editIdentityMappings() {
+    public void test01EditIdentityMappings() {
         selenium.click("css=img[alt=\"Details\"]");
         selenium.waitForPageToLoad("30000");
         selenium.type("id=targetArtifactVersion", "125");
@@ -36,7 +30,7 @@ public class ProjectIdentityMappingsPage extends ProjectScopeTestBase {
     }
 
     @Test
-    public void filterIdentityMappings() {
+    public void test02FilterIdentityMappings() {
         final String sourceArtifactId_id = "artf1053";
         selenium.click("link=Identity Mappings");
         selenium.type("id=sourcefilterartifactid", sourceArtifactId_id);
@@ -46,10 +40,16 @@ public class ProjectIdentityMappingsPage extends ProjectScopeTestBase {
         selenium.waitForPageToLoad("30000");
     }
 
-    @Before
-    public void openPage() {
-        selenium.open("/CCFMaster/project/identitymappings?direction=FORWARD&size=1");
-
+    @Test
+    public void test03DeleteIdentityMappings() {
+        selenium.click("link=Identity Mappings");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("name=mappingid");
+        selenium.chooseOkOnNextConfirmation();
+        selenium.click("link=Delete");
+        selenium.waitForPageToLoad("30000");
+        assertEquals("Selected Identity Mapping deleted successfully",
+                selenium.getText("css=div.greenText"));
     }
 
 }

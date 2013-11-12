@@ -11,7 +11,7 @@ import com.thoughtworks.selenium.Selenium;
 public class TFRespositoryIdBelongstoExternalAppVerify extends CcfAuthenticatedTestBase {
 
     @Test
-    public void verifyTFRepositoryIdBelongsToExternalApp() {
+    public void test01VerifyTFRepositoryIdBelongsToExternalApp() {
         final String description = "Repo 2";
         final String tfRepoId = "tracker1032";
         final String partRepoId = "12";

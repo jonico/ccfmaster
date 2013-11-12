@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 public class TFSessionTimeout extends CcfSeleneseTestBase {
 
     @Test
-    public void errorPageOnTimeout() {
+    public void test01ErrorPageOnTimeout() {
         Util.login(selenium, "admin", "admin");
         driver.get(Util.baseUrl() + "/CCFMaster/chuck/timeout");
         //WebElement h3 = driver.findElement(By.tagName("h3"));

@@ -16,49 +16,37 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void test01() {
-        swpSettings();
+    public void test01SwpSettings() {
+        selenium.type("participantUserNameLandscapeConfig.val", "");
+        selenium.type("participantPasswordLandscapeConfig.val", "");
+        selenium.click("link=Save");
+        selenium.click("//button[2]");// clicks saveonly button
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium
+                .isElementPresent("id=participantUserNameLandscapeConfig.val.errors"));
+        verifyTrue(selenium
+                .isElementPresent("id=participantPasswordLandscapeConfig.val.errors"));
+        selenium.type("participantUserNameLandscapeConfig.val", "ccfuser");
+        selenium.type("participantPasswordLandscapeConfig.val", "ccfuser");
+        selenium.click("link=Save");
+        selenium.click("//button[2]");// clicks saveonly button
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium.isElementPresent("css=div.greenText"));
+
+        Util.applyParticipantSaveAndRestartOptions(selenium);
+        validateCcfUserCredentials();
+        validateCcfResyncUserCredentials();
+        validateInvalidSwpSettings();
     }
 
     @Test
-    public void test02() {
-        tfSettings();
+    public void test02TfSettings() {
+        Util.testTeamforgeSettings(selenium);
+
     }
 
     @Test
-    public void test03() {
-        ccfProperties();
-    }
-
-    @Test
-    public void test04() {
-        repositoryMappings();
-    }
-
-    @Test
-    public void test05() {
-        failedShipments();
-    }
-
-    @Test
-    public void test06() {
-        connectorStatusAndLogs();
-    }
-
-    public void testSwpLogs() {
-        selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=Logs SWP to TF");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=Logs TF to SWP");
-        selenium.waitForPageToLoad("30000");
-        selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=ccf-info.log");
-        selenium.waitForPageToLoad("30000");
-    }
-
-    private void ccfProperties() {
+    public void test03CCFProperties() {
         selenium.click("link=Connector Properties");
         selenium.waitForPageToLoad("30000");
         navigateCcfPropertiesTab();
@@ -84,7 +72,24 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
         resumeConnectorSwptoTfService();
     }
 
-    private void connectorStatusAndLogs() {
+    @Test
+    public void test04RepositoryMappings() {
+        navigateSwpRespositoryMappingTab();
+        Util.testRepositoryMappings(selenium);
+        Util.testFailedShipmentCount(selenium);
+
+    }
+
+    @Test
+    public void test05FailedShipments() {
+        navigateSwpFailedShipmentTab();
+        Util.testFailedShipments(selenium);
+        Util.testDeleteRepositoryMappings(selenium);
+
+    }
+
+    @Test
+    public void test06ConnectorStatusAndLogs() {
         try {
             boolean needRerun = false;
             selenium.click("link=Status");
@@ -104,11 +109,17 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
         }
     }
 
-    private void failedShipments() {
-        navigateSwpFailedShipmentTab();
-        Util.testFailedShipments(selenium);
-        Util.testDeleteRepositoryMappings(selenium);
-
+    public void testSwpLogs() {
+        selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Logs SWP to TF");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Logs TF to SWP");
+        selenium.waitForPageToLoad("30000");
+        selenium.open("/CCFMaster/admin/downloadlogfile?filename=ccf-info.log&direction=forward");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=ccf-info.log");
+        selenium.waitForPageToLoad("30000");
     }
 
     private void navigateCcfPropertiesTab() {
@@ -142,13 +153,6 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Repository Mappings TF to SWP");
         selenium.waitForPageToLoad("30000");
-    }
-
-    private void repositoryMappings() {
-        navigateSwpRespositoryMappingTab();
-        Util.testRepositoryMappings(selenium);
-        Util.testFailedShipmentCount(selenium);
-
     }
 
     private void resumeConnectorSwptoTfService() {
@@ -187,34 +191,6 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
         selenium.waitForPageToLoad("30000");
         verifyTrue(selenium
                 .isTextPresent("Connector Behavior settings saved successfully"));
-    }
-
-    private void swpSettings() {
-        selenium.type("participantUserNameLandscapeConfig.val", "");
-        selenium.type("participantPasswordLandscapeConfig.val", "");
-        selenium.click("link=Save");
-        selenium.click("//button[2]");// clicks saveonly button
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium
-                .isElementPresent("id=participantUserNameLandscapeConfig.val.errors"));
-        verifyTrue(selenium
-                .isElementPresent("id=participantPasswordLandscapeConfig.val.errors"));
-        selenium.type("participantUserNameLandscapeConfig.val", "ccfuser");
-        selenium.type("participantPasswordLandscapeConfig.val", "ccfuser");
-        selenium.click("link=Save");
-        selenium.click("//button[2]");// clicks saveonly button
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium.isElementPresent("css=div.greenText"));
-
-        Util.applyParticipantSaveAndRestartOptions(selenium);
-        validateCcfUserCredentials();
-        validateCcfResyncUserCredentials();
-        validateInvalidSwpSettings();
-    }
-
-    private void tfSettings() {
-        Util.testTeamforgeSettings(selenium);
-
     }
 
     private void validateCcfResyncUserCredentials() {

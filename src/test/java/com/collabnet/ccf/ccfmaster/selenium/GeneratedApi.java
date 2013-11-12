@@ -9,7 +9,74 @@ import com.thoughtworks.selenium.Selenium;
 public class GeneratedApi extends CcfAuthenticatedTestBase {
 
     @Test
-    public void apiGetCcfCoreStatus() {
+    public void test01ApiGetLogFile() {
+        selenium.open("/CCFMaster/api/logfiles/");
+        verifyTrue(selenium.isElementPresent("//logFileList"));
+        if (selenium.isElementPresent("//logFileList/logFile/id")) {
+            String entityId = selenium.getText("//logFile/id[1]");
+            selenium.open("/CCFMaster/api/logfiles/" + entityId);
+            verifyTrue(selenium.isElementPresent("//logFile/id"));
+        }
+        selenium.open("/CCFMaster/api/logfiles");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test02ApiGetLandscapeConfig() {
+        selenium.open("/CCFMaster/api/landscapeconfigs/");
+        verifyTrue(selenium.isElementPresent("//landscapeConfigList"));
+        if (selenium
+                .isElementPresent("//landscapeConfigList/landscapeConfig/id")) {
+            String entityId = selenium.getText("//landscapeConfig/id[1]");
+            selenium.open("/CCFMaster/api/landscapeconfigs/" + entityId);
+            verifyTrue(selenium.isElementPresent("//landscapeConfig/id"));
+        }
+        selenium.open("/CCFMaster/api/landscapeconfigs");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test03ApiGetIdentityMapping() {
+        selenium.open("/CCFMaster/api/identitymappings/");
+        verifyTrue(selenium.isElementPresent("//identityMappingList"));
+        if (selenium
+                .isElementPresent("//identityMappingList/identityMapping/id")) {
+            String entityId = selenium.getText("//identityMapping/id[1]");
+            selenium.open("/CCFMaster/api/identitymappings/" + entityId);
+            verifyTrue(selenium.isElementPresent("//identityMapping/id"));
+        }
+        selenium.open("/CCFMaster/api/identitymappings");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test04ApiGetLandscape() {
+        selenium.open("/CCFMaster/api/landscapes/");
+        verifyTrue(selenium.isElementPresent("//landscapeList"));
+        if (selenium.isElementPresent("//landscapeList/landscape/id")) {
+            String entityId = selenium.getText("//landscape/id[1]");
+            selenium.open("/CCFMaster/api/landscapes/" + entityId);
+            verifyTrue(selenium.isElementPresent("//landscape/id"));
+        }
+        selenium.open("/CCFMaster/api/landscapes");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test05ApiGetFieldMapping() {
+        selenium.open("/CCFMaster/api/fieldmappings/");
+        verifyTrue(selenium.isElementPresent("//fieldMappingList"));
+        if (selenium.isElementPresent("//fieldMappingList/fieldMapping/id")) {
+            String entityId = selenium.getText("//fieldMapping/id[1]");
+            selenium.open("/CCFMaster/api/fieldmappings/" + entityId);
+            verifyTrue(selenium.isElementPresent("//fieldMapping/id"));
+        }
+        selenium.open("/CCFMaster/api/fieldmappings");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test06ApiGetCcfCoreStatus() {
         selenium.open("/CCFMaster/api/ccfcorestatuses/");
         verifyTrue(selenium.isElementPresent("//ccfCoreStatusList"));
         if (selenium.isElementPresent("//ccfCoreStatusList/ccfCoreStatus/id")) {
@@ -22,20 +89,7 @@ public class GeneratedApi extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void apiGetDirection() {
-        selenium.open("/CCFMaster/api/directions/");
-        verifyTrue(selenium.isElementPresent("//directionList"));
-        if (selenium.isElementPresent("//directionList/direction/id")) {
-            String entityId = selenium.getText("//direction/id[1]");
-            selenium.open("/CCFMaster/api/directions/" + entityId);
-            verifyTrue(selenium.isElementPresent("//direction/id"));
-        }
-        selenium.open("/CCFMaster/api/directions");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetDirectionConfig() {
+    public void test07ApiGetDirectionConfig() {
         selenium.open("/CCFMaster/api/directionconfigs/");
         verifyTrue(selenium.isElementPresent("//directionConfigList"));
         if (selenium
@@ -49,7 +103,66 @@ public class GeneratedApi extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void apiGetExternalApp() {
+    public void test08ApiGetParticipantConfig() {
+        selenium.open("/CCFMaster/api/participantconfigs/");
+        verifyTrue(selenium.isElementPresent("//participantConfigList"));
+        if (selenium
+                .isElementPresent("//participantConfigList/participantConfig/id")) {
+            String entityId = selenium.getText("//participantConfig/id[1]");
+            selenium.open("/CCFMaster/api/participantconfigs/" + entityId);
+            verifyTrue(selenium.isElementPresent("//participantConfig/id"));
+        }
+        selenium.open("/CCFMaster/api/participantconfigs");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test09ApiGetHospitalEntry() {
+        selenium.open("/CCFMaster/api/hospitalentrys/");
+        verifyTrue(selenium.isElementPresent("//hospitalEntryList"));
+        if (selenium.isElementPresent("//hospitalEntryList/hospitalEntry/id")) {
+            String entityId = selenium.getText("//hospitalEntry/id[1]");
+            selenium.open("/CCFMaster/api/hospitalentrys/" + entityId);
+            verifyTrue(selenium.isElementPresent("//hospitalEntry/id"));
+        }
+        selenium.open("/CCFMaster/api/hospitalentrys");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test10ApiGetRepositoryMapping() {
+        selenium.open("/CCFMaster/api/repositorymappings/");
+        verifyTrue(selenium.isElementPresent("//repositoryMappingList"));
+        if (selenium
+                .isElementPresent("//repositoryMappingList/repositoryMapping/id")) {
+            String entityId = selenium.getText("//repositoryMapping/id[1]");
+            selenium.open("/CCFMaster/api/repositorymappings/" + entityId);
+            verifyTrue(selenium.isElementPresent("//repositoryMapping/id"));
+        }
+        selenium.open("/CCFMaster/api/repositorymappings");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test11ApiGetRepositoryMappingDirection() {
+        selenium.open("/CCFMaster/api/repositorymappingdirections/");
+        verifyTrue(selenium
+                .isElementPresent("//repositoryMappingDirectionList"));
+        if (selenium
+                .isElementPresent("//repositoryMappingDirectionList/repositoryMappingDirection/id")) {
+            String entityId = selenium
+                    .getText("//repositoryMappingDirection/id[1]");
+            selenium.open("/CCFMaster/api/repositorymappingdirections/"
+                    + entityId);
+            verifyTrue(selenium
+                    .isElementPresent("//repositoryMappingDirection/id"));
+        }
+        selenium.open("/CCFMaster/api/repositorymappingdirections");
+        verifyTrue(selenium.isElementPresent("//h1"));
+    }
+
+    @Test
+    public void test12ApiGetExternalApp() {
         selenium.open("/CCFMaster/api/externalapps/");
         verifyTrue(selenium.isElementPresent("//externalAppList"));
         if (selenium.isElementPresent("//externalAppList/externalApp/id")) {
@@ -62,20 +175,7 @@ public class GeneratedApi extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void apiGetFieldMapping() {
-        selenium.open("/CCFMaster/api/fieldmappings/");
-        verifyTrue(selenium.isElementPresent("//fieldMappingList"));
-        if (selenium.isElementPresent("//fieldMappingList/fieldMapping/id")) {
-            String entityId = selenium.getText("//fieldMapping/id[1]");
-            selenium.open("/CCFMaster/api/fieldmappings/" + entityId);
-            verifyTrue(selenium.isElementPresent("//fieldMapping/id"));
-        }
-        selenium.open("/CCFMaster/api/fieldmappings");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetFieldMappingExternalAppTemplate() {
+    public void test13ApiGetFieldMappingExternalAppTemplate() {
         selenium.open("/CCFMaster/api/fieldmappingexternalapptemplates/");
         verifyTrue(selenium
                 .isElementPresent("//fieldMappingExternalAppTemplateList"));
@@ -93,7 +193,7 @@ public class GeneratedApi extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void apiGetFieldMappingLandscapeTemplate() {
+    public void test14ApiGetFieldMappingLandscapeTemplate() {
         selenium.open("/CCFMaster/api/fieldmappinglandscapetemplates/");
         verifyTrue(selenium
                 .isElementPresent("//fieldMappingLandscapeTemplateList"));
@@ -111,74 +211,7 @@ public class GeneratedApi extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void apiGetHospitalEntry() {
-        selenium.open("/CCFMaster/api/hospitalentrys/");
-        verifyTrue(selenium.isElementPresent("//hospitalEntryList"));
-        if (selenium.isElementPresent("//hospitalEntryList/hospitalEntry/id")) {
-            String entityId = selenium.getText("//hospitalEntry/id[1]");
-            selenium.open("/CCFMaster/api/hospitalentrys/" + entityId);
-            verifyTrue(selenium.isElementPresent("//hospitalEntry/id"));
-        }
-        selenium.open("/CCFMaster/api/hospitalentrys");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetIdentityMapping() {
-        selenium.open("/CCFMaster/api/identitymappings/");
-        verifyTrue(selenium.isElementPresent("//identityMappingList"));
-        if (selenium
-                .isElementPresent("//identityMappingList/identityMapping/id")) {
-            String entityId = selenium.getText("//identityMapping/id[1]");
-            selenium.open("/CCFMaster/api/identitymappings/" + entityId);
-            verifyTrue(selenium.isElementPresent("//identityMapping/id"));
-        }
-        selenium.open("/CCFMaster/api/identitymappings");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetLandscape() {
-        selenium.open("/CCFMaster/api/landscapes/");
-        verifyTrue(selenium.isElementPresent("//landscapeList"));
-        if (selenium.isElementPresent("//landscapeList/landscape/id")) {
-            String entityId = selenium.getText("//landscape/id[1]");
-            selenium.open("/CCFMaster/api/landscapes/" + entityId);
-            verifyTrue(selenium.isElementPresent("//landscape/id"));
-        }
-        selenium.open("/CCFMaster/api/landscapes");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetLandscapeConfig() {
-        selenium.open("/CCFMaster/api/landscapeconfigs/");
-        verifyTrue(selenium.isElementPresent("//landscapeConfigList"));
-        if (selenium
-                .isElementPresent("//landscapeConfigList/landscapeConfig/id")) {
-            String entityId = selenium.getText("//landscapeConfig/id[1]");
-            selenium.open("/CCFMaster/api/landscapeconfigs/" + entityId);
-            verifyTrue(selenium.isElementPresent("//landscapeConfig/id"));
-        }
-        selenium.open("/CCFMaster/api/landscapeconfigs");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetLogFile() {
-        selenium.open("/CCFMaster/api/logfiles/");
-        verifyTrue(selenium.isElementPresent("//logFileList"));
-        if (selenium.isElementPresent("//logFileList/logFile/id")) {
-            String entityId = selenium.getText("//logFile/id[1]");
-            selenium.open("/CCFMaster/api/logfiles/" + entityId);
-            verifyTrue(selenium.isElementPresent("//logFile/id"));
-        }
-        selenium.open("/CCFMaster/api/logfiles");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetParticipant() {
+    public void test15ApiGetParticipant() {
         selenium.open("/CCFMaster/api/participants/");
         verifyTrue(selenium.isElementPresent("//participantList"));
         if (selenium.isElementPresent("//participantList/participant/id")) {
@@ -191,48 +224,15 @@ public class GeneratedApi extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void apiGetParticipantConfig() {
-        selenium.open("/CCFMaster/api/participantconfigs/");
-        verifyTrue(selenium.isElementPresent("//participantConfigList"));
-        if (selenium
-                .isElementPresent("//participantConfigList/participantConfig/id")) {
-            String entityId = selenium.getText("//participantConfig/id[1]");
-            selenium.open("/CCFMaster/api/participantconfigs/" + entityId);
-            verifyTrue(selenium.isElementPresent("//participantConfig/id"));
+    public void test16ApiGetDirection() {
+        selenium.open("/CCFMaster/api/directions/");
+        verifyTrue(selenium.isElementPresent("//directionList"));
+        if (selenium.isElementPresent("//directionList/direction/id")) {
+            String entityId = selenium.getText("//direction/id[1]");
+            selenium.open("/CCFMaster/api/directions/" + entityId);
+            verifyTrue(selenium.isElementPresent("//direction/id"));
         }
-        selenium.open("/CCFMaster/api/participantconfigs");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetRepositoryMapping() {
-        selenium.open("/CCFMaster/api/repositorymappings/");
-        verifyTrue(selenium.isElementPresent("//repositoryMappingList"));
-        if (selenium
-                .isElementPresent("//repositoryMappingList/repositoryMapping/id")) {
-            String entityId = selenium.getText("//repositoryMapping/id[1]");
-            selenium.open("/CCFMaster/api/repositorymappings/" + entityId);
-            verifyTrue(selenium.isElementPresent("//repositoryMapping/id"));
-        }
-        selenium.open("/CCFMaster/api/repositorymappings");
-        verifyTrue(selenium.isElementPresent("//h1"));
-    }
-
-    @Test
-    public void apiGetRepositoryMappingDirection() {
-        selenium.open("/CCFMaster/api/repositorymappingdirections/");
-        verifyTrue(selenium
-                .isElementPresent("//repositoryMappingDirectionList"));
-        if (selenium
-                .isElementPresent("//repositoryMappingDirectionList/repositoryMappingDirection/id")) {
-            String entityId = selenium
-                    .getText("//repositoryMappingDirection/id[1]");
-            selenium.open("/CCFMaster/api/repositorymappingdirections/"
-                    + entityId);
-            verifyTrue(selenium
-                    .isElementPresent("//repositoryMappingDirection/id"));
-        }
-        selenium.open("/CCFMaster/api/repositorymappingdirections");
+        selenium.open("/CCFMaster/api/directions");
         verifyTrue(selenium.isElementPresent("//h1"));
     }
 

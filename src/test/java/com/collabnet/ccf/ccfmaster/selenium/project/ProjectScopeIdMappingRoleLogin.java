@@ -4,6 +4,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 import java.util.List;
+
 import org.junit.Test;
 
 import com.collabnet.ccf.ccfmaster.selenium.Util;
@@ -18,23 +19,7 @@ public class ProjectScopeIdMappingRoleLogin extends ProjectScopeTestBase {
     }
 
     @Test
-    public void checkFieldMappingRoles() {
-        IndexPage index = new IndexPage(driver);
-        final List<String> roles = index.getRoles();
-        assertThat(
-                roles,
-                hasItems("ROLE_MAPPING_RULE_TEMPLATES", "ROLE_IAF_USER",
-                        "ROLE_TF_USER"));
-    }
-
-    @Test
-    public void checkFieldMappingTemplates() {
-        driver.get(Util.baseUrl() + "/CCFMaster/project/fieldmappingtemplates");
-        assertEquals("Field Mapping Templates", activeMenuEntry().getText());
-    }
-
-    @Test
-    public void checkIdMappingRoles() {
+    public void test01CheckIdMappingRoles() {
         IndexPage index = new IndexPage(driver);
         final List<String> roles = index.getRoles();
         assertThat(
@@ -44,8 +29,24 @@ public class ProjectScopeIdMappingRoleLogin extends ProjectScopeTestBase {
     }
 
     @Test
-    public void checkIdMappings() {
+    public void test02CheckFieldMappingRoles() {
+        IndexPage index = new IndexPage(driver);
+        final List<String> roles = index.getRoles();
+        assertThat(
+                roles,
+                hasItems("ROLE_MAPPING_RULE_TEMPLATES", "ROLE_IAF_USER",
+                        "ROLE_TF_USER"));
+    }
+
+    @Test
+    public void test03CheckIdMappings() {
         driver.get(Util.baseUrl() + "/CCFMaster/project/identitymappings");
         assertEquals("Identity Mappings", activeMenuEntry().getText());
+    }
+
+    @Test
+    public void test04CheckFieldMappingTemplates() {
+        driver.get(Util.baseUrl() + "/CCFMaster/project/fieldmappingtemplates");
+        assertEquals("Field Mapping Templates", activeMenuEntry().getText());
     }
 }

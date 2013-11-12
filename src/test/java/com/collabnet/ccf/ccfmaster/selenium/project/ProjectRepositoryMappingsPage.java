@@ -31,7 +31,19 @@ public class ProjectRepositoryMappingsPage extends ProjectScopeTestBase {
     }
 
     @Test
-    public void pagination() {
+    public void test01TabsPresent() {
+        assertThat(page.getDirection(), is(Directions.FORWARD));
+
+        List<WebElement> tabs = page.getTabs();
+        assertThat(tabs.size(), equalTo(2));
+        assertThat(tabs.get(0).getText(),
+                equalTo(RepositoryMappingsPage.TF_2_QC_LABEL));
+        assertThat(tabs.get(1).getText(),
+                equalTo(RepositoryMappingsPage.QC_2_TF_LABEL));
+    }
+
+    @Test
+    public void test02Pagination() {
         PaginatedPage pagination = new PaginatedPage(driver);
         assertThat(pagination.getPageNumber(), equalTo(1));
         validatePagination(pagination);
@@ -46,19 +58,7 @@ public class ProjectRepositoryMappingsPage extends ProjectScopeTestBase {
     }
 
     @Test
-    public void tabsPresent() {
-        assertThat(page.getDirection(), is(Directions.FORWARD));
-
-        List<WebElement> tabs = page.getTabs();
-        assertThat(tabs.size(), equalTo(2));
-        assertThat(tabs.get(0).getText(),
-                equalTo(RepositoryMappingsPage.TF_2_QC_LABEL));
-        assertThat(tabs.get(1).getText(),
-                equalTo(RepositoryMappingsPage.QC_2_TF_LABEL));
-    }
-
-    @Test
-    public void testRepositoryMappingOperation() {
+    public void test03RepositoryMappingOperation() {
         Util.testRepositoryMappings(selenium);
         Util.testFailedShipmentCount(selenium);
         Util.testcreateFieldMapping(selenium);

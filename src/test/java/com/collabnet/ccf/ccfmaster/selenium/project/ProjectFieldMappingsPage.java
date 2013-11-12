@@ -10,23 +10,6 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
         user.login(selenium);
     }
 
-    @Test
-    public void exportAndDeleteFieldMappingTemplate() {
-        exportFieldMappingTemplates();
-        selenium.click("link=Field Mapping Templates");
-        selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=REVERSE");
-        selenium.waitForPageToLoad("30000");
-        selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=FORWARD");
-        selenium.waitForPageToLoad("30000");
-        //selenium.check("name=fmtid value=new Default TF Planning Folder to QC Requirement");
-        selenium.click("xpath=(//input[@type='checkbox'])[last()]");
-        selenium.chooseOkOnNextConfirmation();
-        selenium.click("link=Delete");
-        selenium.waitForPageToLoad("30000");
-        assertEquals("Selected Field Mapping Templates deleted successfully",
-                selenium.getText("css=div.greenText"));
-    }
-
     public void exportFieldMappingTemplates() {
         selenium.click("link=Field Mapping Templates");
         selenium.waitForPageToLoad("30000");
@@ -35,8 +18,14 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
         selenium.click("link=Export");
     }
 
+    @Before
+    public void openPage() {
+        selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=FORWARD&size=1");
+
+    }
+
     @Test
-    public void importFieldMappingTemplates() {
+    public void test01ImportFieldMappingTemplates() {
         selenium.click("link=Field Mapping Templates");
         selenium.open("/CCFMaster/project/fieldmappingtemplates/upload?direction=FORWARD");
         selenium.waitForPageToLoad("30000");
@@ -55,7 +44,7 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
     }
 
     @Test
-    public void mergeFieldMappingTemplates() {
+    public void test02mergeFieldMappingTemplates() {
         selenium.click("link=Field Mapping Templates");
         selenium.open("/CCFMaster/project/fieldmappingtemplates/upload?direction=FORWARD");
         selenium.waitForPageToLoad("30000");
@@ -72,10 +61,21 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
         verifyTrue(selenium.isElementPresent("Updated Successfully"));
     }
 
-    @Before
-    public void openPage() {
-        selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=FORWARD&size=1");
-
+    @Test
+    public void test03ExportAndDeleteFieldMappingTemplate() {
+        exportFieldMappingTemplates();
+        selenium.click("link=Field Mapping Templates");
+        selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=REVERSE");
+        selenium.waitForPageToLoad("30000");
+        selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=FORWARD");
+        selenium.waitForPageToLoad("30000");
+        //selenium.check("name=fmtid value=new Default TF Planning Folder to QC Requirement");
+        selenium.click("xpath=(//input[@type='checkbox'])[last()]");
+        selenium.chooseOkOnNextConfirmation();
+        selenium.click("link=Delete");
+        selenium.waitForPageToLoad("30000");
+        assertEquals("Selected Field Mapping Templates deleted successfully",
+                selenium.getText("css=div.greenText"));
     }
 
 }

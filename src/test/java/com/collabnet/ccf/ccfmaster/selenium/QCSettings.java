@@ -16,66 +16,34 @@ public class QCSettings extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void test01() {
-        qcSettings();
+    public void test01QcSettings() {
+        selenium.type("participantUrlParticipantConfig.val", "");
+        selenium.click("link=Save");
+        selenium.click("//button[2]");// clicks saveonly button
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium
+                .isElementPresent("id=participantUrlParticipantConfig.val.errors"));
+        verifyTrue(selenium
+                .isTextPresent("Enter a valid HPQC url ends with qcbin/"));
+        selenium.type("participantUrlParticipantConfig.val",
+                "www.hpurl.com.qcbin/");
+        selenium.type("participantPasswordLandscapeConfig.val", "admin123");
+        selenium.click("link=Save");
+        selenium.click("//button[2]");// clicks saveonly button
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium.isElementPresent("css=div.greenText"));
+        Util.applyParticipantSaveAndRestartOptions(selenium);
+        validateQcUserCredentials();
     }
 
     @Test
-    public void test02() {
-        tfSettings();
+    public void test02TfSettings() {
+        Util.testTeamforgeSettings(selenium);
+
     }
 
     @Test
-    public void test03() {
-        ccfProperties();
-    }
-
-    @Test
-    public void test04() {
-        repositoryMappings();
-    }
-
-    @Test
-    public void test05() {
-        createFieldMapping();
-    }
-
-    @Test
-    public void test06() {
-        exportFieldMappingTemplates();
-    }
-
-    @Test
-    public void test07() {
-        mergeFieldMappingTemplates();
-    }
-
-    @Test
-    public void test08() {
-        importFieldMappingTemplates();
-    }
-
-    @Test
-    public void test09() {
-        displayAndDeleteFieldMappingTemplate();
-    }
-
-    @Test
-    public void test10() {
-        failedShipments();
-    }
-
-    @Test
-    public void test11() {
-        connectorStatusAndLogs();
-    }
-
-    @Test
-    public void test12() {
-        connectorUpgrade();
-    }
-
-    private void ccfProperties() {
+    public void test03CCFProperties() {
         selenium.click("link=Connector Properties");
         selenium.waitForPageToLoad("30000");
         selenium.type(
@@ -105,7 +73,95 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         verifyConnectorBehaviorValidation();
     }
 
-    private void connectorStatusAndLogs() {
+    @Test
+    public void test04RepositoryMappings() {
+        navigateRespositoryMappingTabs();
+        Util.testRepositoryMappings(selenium);
+        Util.testFailedShipmentCount(selenium);
+
+    }
+
+    @Test
+    public void test05CreateFieldMapping() {
+        Util.testcreateFieldMapping(selenium);
+        Util.testcreateLinkFieldMapping(selenium);
+        Util.testAssociateFieldMapping(selenium);
+    }
+
+    @Test
+    public void test06ExportFieldMappingTemplates() {
+        selenium.click("link=Field Mapping Templates");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("name=fmtid");
+        selenium.chooseOkOnNextConfirmation();
+        selenium.click("link=Export");
+    }
+
+    @Test
+    public void test07MergeFieldMappingTemplates() {
+        selenium.click("link=Field Mapping Templates");
+        selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
+        selenium.waitForPageToLoad("30000");
+        //XML file should be stored on below path in the machine where the selenium tests is running.
+        //TODO check if we can export the field mapping template to the below path 
+        selenium.type("id=file",
+                "C:\\Selenium automated\\Default TF Planning Folder to QC Requirement.xml");
+        selenium.click("link=Next");
+        selenium.waitForPageToLoad("30000");
+        selenium.type("id=textbox",
+                "Default TF Planning Folder to QC Requirement");
+        selenium.click("link=Import Selected");
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium.isElementPresent("Updated Successfully"));
+    }
+
+    @Test
+    public void test08ImportFieldMappingTemplates() {
+        selenium.click("link=Field Mapping Templates");
+        selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
+        selenium.waitForPageToLoad("30000");
+        //XML file should be stored on below path in the machine where the selenium tests is running.
+        //TODO check if we can export the field mapping template to the below path 
+        selenium.type("id=file",
+                "C:\\Selenium automated\\Default TF Planning Folder to QC Requirement.xml");
+        selenium.click("link=Next");
+        selenium.waitForPageToLoad("30000");
+        selenium.type("id=textbox",
+                "new Default TF Planning Folder to QC Requirement");
+        selenium.click("link=Import Selected");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Return");
+        selenium.waitForPageToLoad("30000");
+        verifyTrue(selenium
+                .isElementPresent("new Default TF Planning Folder to QC Requirement"));
+    }
+
+    @Test
+    public void test09DisplayAndDeleteFieldMappingTemplate() {
+        selenium.click("link=Field Mapping Templates");
+        selenium.click("link=Field Mapping Templates QC to TF");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Field Mapping Templates TF to QC");
+        selenium.waitForPageToLoad("30000");
+        //selenium.check("name=fmtid value=new Default TF Planning Folder to QC Requirement");
+        selenium.click("xpath=(//input[@type='checkbox'])[last()]");
+        selenium.chooseOkOnNextConfirmation();
+        selenium.click("link=Delete");
+        selenium.waitForPageToLoad("30000");
+        assertEquals("Selected Field Mapping Templates deleted successfully",
+                selenium.getText("css=div.greenText"));
+    }
+
+    @Test
+    public void test10FailedShipments() {
+        navigateFailedShipmentTabs();
+        Util.testFailedShipments(selenium);
+        Util.testDeleteRepositoryMappings(selenium);
+
+    }
+
+    @Test
+    public void test11ConnectorStatusAndLogs() {
         try {
             boolean needRerun = false;
             selenium.click("link=Status");
@@ -125,7 +181,8 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         }
     }
 
-    private void connectorUpgrade() {
+    @Test
+    public void test12ConnectorUpgrade() {
         selenium.click("link=Status");
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Connector Upgrade");
@@ -175,79 +232,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         //		verifyTrue(selenium.isTextPresent("Core update succeeded"));
     }
 
-    private void createFieldMapping() {
-        Util.testcreateFieldMapping(selenium);
-        Util.testcreateLinkFieldMapping(selenium);
-        Util.testAssociateFieldMapping(selenium);
-    }
-
-    private void displayAndDeleteFieldMappingTemplate() {
-        selenium.click("link=Field Mapping Templates");
-        selenium.click("link=Field Mapping Templates QC to TF");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=Field Mapping Templates TF to QC");
-        selenium.waitForPageToLoad("30000");
-        //selenium.check("name=fmtid value=new Default TF Planning Folder to QC Requirement");
-        selenium.click("xpath=(//input[@type='checkbox'])[last()]");
-        selenium.chooseOkOnNextConfirmation();
-        selenium.click("link=Delete");
-        selenium.waitForPageToLoad("30000");
-        assertEquals("Selected Field Mapping Templates deleted successfully",
-                selenium.getText("css=div.greenText"));
-    }
-
-    private void exportFieldMappingTemplates() {
-        selenium.click("link=Field Mapping Templates");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("name=fmtid");
-        selenium.chooseOkOnNextConfirmation();
-        selenium.click("link=Export");
-    }
-
-    private void failedShipments() {
-        navigateFailedShipmentTabs();
-        Util.testFailedShipments(selenium);
-        Util.testDeleteRepositoryMappings(selenium);
-
-    }
-
-    private void importFieldMappingTemplates() {
-        selenium.click("link=Field Mapping Templates");
-        selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
-        selenium.waitForPageToLoad("30000");
-        //XML file should be stored on below path in the machine where the selenium tests is running.
-        //TODO check if we can export the field mapping template to the below path 
-        selenium.type("id=file",
-                "C:\\Selenium automated\\Default TF Planning Folder to QC Requirement.xml");
-        selenium.click("link=Next");
-        selenium.waitForPageToLoad("30000");
-        selenium.type("id=textbox",
-                "new Default TF Planning Folder to QC Requirement");
-        selenium.click("link=Import Selected");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("link=Return");
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium
-                .isElementPresent("new Default TF Planning Folder to QC Requirement"));
-    }
-
-    private void mergeFieldMappingTemplates() {
-        selenium.click("link=Field Mapping Templates");
-        selenium.open("/CCFMaster/admin/uploadfieldmappingtemplate?direction=forward");
-        selenium.waitForPageToLoad("30000");
-        //XML file should be stored on below path in the machine where the selenium tests is running.
-        //TODO check if we can export the field mapping template to the below path 
-        selenium.type("id=file",
-                "C:\\Selenium automated\\Default TF Planning Folder to QC Requirement.xml");
-        selenium.click("link=Next");
-        selenium.waitForPageToLoad("30000");
-        selenium.type("id=textbox",
-                "Default TF Planning Folder to QC Requirement");
-        selenium.click("link=Import Selected");
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium.isElementPresent("Updated Successfully"));
-    }
-
     private void navigateFailedShipmentTabs() {
         selenium.click("link=Failed Shipments");
         selenium.waitForPageToLoad("30000");
@@ -268,33 +252,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
         selenium.waitForPageToLoad("30000");
     }
 
-    private void qcSettings() {
-        selenium.type("participantUrlParticipantConfig.val", "");
-        selenium.click("link=Save");
-        selenium.click("//button[2]");// clicks saveonly button
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium
-                .isElementPresent("id=participantUrlParticipantConfig.val.errors"));
-        verifyTrue(selenium
-                .isTextPresent("Enter a valid HPQC url ends with qcbin/"));
-        selenium.type("participantUrlParticipantConfig.val",
-                "www.hpurl.com.qcbin/");
-        selenium.type("participantPasswordLandscapeConfig.val", "admin123");
-        selenium.click("link=Save");
-        selenium.click("//button[2]");// clicks saveonly button
-        selenium.waitForPageToLoad("30000");
-        verifyTrue(selenium.isElementPresent("css=div.greenText"));
-        Util.applyParticipantSaveAndRestartOptions(selenium);
-        validateQcUserCredentials();
-    }
-
-    private void repositoryMappings() {
-        navigateRespositoryMappingTabs();
-        Util.testRepositoryMappings(selenium);
-        Util.testFailedShipmentCount(selenium);
-
-    }
-
     private void testQcLogs() {
         selenium.open("/CCFMaster/admin/displaytftoparticipantlogs");
         selenium.waitForPageToLoad("30000");
@@ -311,11 +268,6 @@ public class QCSettings extends CcfAuthenticatedTestBase {
          * tail log file content
          * assertTrue(selenium.isElementPresent("//*[@id='fileContentDiv']")); }
          */
-    }
-
-    private void tfSettings() {
-        Util.testTeamforgeSettings(selenium);
-
     }
 
     private void validateQcUserCredentials() {

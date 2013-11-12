@@ -1,10 +1,10 @@
 package com.collabnet.ccf.ccfmaster.selenium.project;
 
 import static org.junit.Assert.assertThat;
-
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 import java.util.List;
+
 import org.junit.Test;
 
 import com.collabnet.ccf.ccfmaster.selenium.Util;
@@ -18,7 +18,15 @@ public class ProjectScopeHospitalRoleLogin extends ProjectScopeTestBase {
     }
 
     @Test
-    public void checkHospital() {
+    public void test01CheckRoles() {
+        IndexPage index = new IndexPage(driver);
+        final List<String> roles = index.getRoles();
+        assertThat(roles,
+                hasItems("ROLE_HOSPITAL", "ROLE_IAF_USER", "ROLE_TF_USER"));
+    }
+
+    @Test
+    public void test02CheckHospital() {
         driver.get(Util.baseUrl()
                 + "/CCFMaster/project/hospitalentrys?direction=FORWARD&size=1");
         assertEquals("Failed Shipments", activeMenuEntry().getText());
@@ -27,14 +35,6 @@ public class ProjectScopeHospitalRoleLogin extends ProjectScopeTestBase {
         Util.testFailedShipmentFilter(selenium, "artf1785");
         Util.testFailedShipmentRemoveFilter(selenium);
         Util.testFailedShipmentDelete(selenium);
-    }
-
-    @Test
-    public void checkRoles() {
-        IndexPage index = new IndexPage(driver);
-        final List<String> roles = index.getRoles();
-        assertThat(roles,
-                hasItems("ROLE_HOSPITAL", "ROLE_IAF_USER", "ROLE_TF_USER"));
     }
 
     private void navigateFailedShipmentTabs() {
