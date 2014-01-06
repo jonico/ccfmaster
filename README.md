@@ -34,4 +34,4 @@ For new developers:
 			Types,Fields,Static Fields,Initializers,Static Initializers,Constructor,Methods,Static Methods
 		4.Also in Member Sort Order dialog window enable "Sort members in same category by visibility" option and correct the order as given below.
 			Public,Protected,Private,Default  
-		5.By default we have configured to format the code, when we save the code changes.					
+		5.By default we have configured to format the code,when we save the code changes.					
