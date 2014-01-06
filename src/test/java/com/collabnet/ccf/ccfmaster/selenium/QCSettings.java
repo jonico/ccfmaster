@@ -137,7 +137,7 @@ public class QCSettings extends CcfAuthenticatedTestBase {
     }
 
     @Test
-    public void test09DisplayAndDeleteFieldMappingTemplate() {
+    public void test09ViewAndDeleteFieldMappingTemplate() {
         selenium.click("link=Field Mapping Templates");
         selenium.click("link=Field Mapping Templates QC to TF");
         selenium.waitForPageToLoad("30000");
@@ -276,9 +276,9 @@ public class QCSettings extends CcfAuthenticatedTestBase {
             selenium.click("link=HP Quality Center");
             selenium.waitForPageToLoad("30000");
             selenium.type("id=participantUrlParticipantConfig",
-                    "http://cu117.cloud.sp.collab.net:8080/qcbin");
-            selenium.type("id=participantUserNameLandscapeConfig", "CCFUser");
-            selenium.type("id=participantPasswordLandscapeConfig", "CCFUser");
+                    "http://hpqualitycenter:8080/qcbin/");
+            selenium.type("id=participantUserNameLandscapeConfig", "ccfuser");
+            selenium.type("id=participantPasswordLandscapeConfig", "ccfuser");
             selenium.click("css=input[type=\"button\"]");
             Util.waitUntilTextPresent(selenium, text);
             verifyTrue(selenium.isTextPresent(text));

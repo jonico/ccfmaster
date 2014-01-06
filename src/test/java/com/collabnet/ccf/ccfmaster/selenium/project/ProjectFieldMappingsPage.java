@@ -10,13 +10,12 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
         user.login(selenium);
     }
 
-    public void exportFieldMappingTemplates() {
-        selenium.click("link=Field Mapping Templates");
-        selenium.waitForPageToLoad("30000");
-        selenium.click("name=fmtid");
-        selenium.chooseOkOnNextConfirmation();
-        selenium.click("link=Export");
-    }
+    /*
+     * public void exportFieldMappingTemplates() {
+     * selenium.click("link=Field Mapping Templates");
+     * selenium.waitForPageToLoad("30000"); selenium.click("name=fmtid");
+     * selenium.chooseOkOnNextConfirmation(); selenium.click("link=Export"); }
+     */
 
     @Before
     public void openPage() {
@@ -62,8 +61,13 @@ public class ProjectFieldMappingsPage extends ProjectScopeTestBase {
     }
 
     @Test
-    public void test03ExportAndDeleteFieldMappingTemplate() {
-        exportFieldMappingTemplates();
+    public void test03ExportFieldMappingTemplate() {
+        //exportFieldMappingTemplates();
+        selenium.click("link=Field Mapping Templates");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("name=fmtid");
+        selenium.chooseOkOnNextConfirmation();
+        selenium.click("link=Export");
         selenium.click("link=Field Mapping Templates");
         selenium.open("/CCFMaster/project/fieldmappingtemplates?direction=REVERSE");
         selenium.waitForPageToLoad("30000");
