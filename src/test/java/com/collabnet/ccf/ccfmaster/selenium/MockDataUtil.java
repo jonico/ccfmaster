@@ -48,7 +48,7 @@ public class MockDataUtil {
         final String originatingComponent = "QCwriter";
         final String dataType = "String";
         final String data = "plain data";
-        final String sourceArtifactId = "artf1207";
+        final String sourceArtifactId = "artf1127";
         final String targetArtifactId = "12";
         final String errorCode = "404 error";
         final Date sourceLastModificationTime = new Date();
@@ -71,7 +71,7 @@ public class MockDataUtil {
 
     public static void createIdentityMapping(Selenium selenium) {
         final String description = "idmap 1";
-        final String sourceArtifactId_id = "artf1207";
+        final String sourceArtifactId_id = "artf1127";
         final String targetArtifactId_id = "12";
         final Date sourceLastModificationTime = new Date();
         final Date targetLastModificationTime = new Date();
@@ -103,13 +103,13 @@ public class MockDataUtil {
     public static void createRepositoryMappingAndRepositoryMappingDirection(
             Selenium selenium) {
         final String description = "Repo 1";
-        final String tfRepoId = "tracker1041";
+        final String tfRepoId = "tracker1023";
         final String partRepoId = "12";
         createRepositoryMapping(selenium, description, tfRepoId, partRepoId);
 
         final Directions direction = Directions.FORWARD;
         final String lastSourceArtifactVersion = "132";
-        final String lastSourceArtifactId = "artf1207";
+        final String lastSourceArtifactId = "artf1127";
         final Date lastSourceArtifactModificationDate = new Date();
         createRepositoryMappingDirection(selenium, direction,
                 lastSourceArtifactVersion, lastSourceArtifactId,
