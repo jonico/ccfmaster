@@ -13,7 +13,7 @@ public class TFRespositoryIdBelongstoExternalAppVerify extends CcfAuthenticatedT
     @Test
     public void test01VerifyTFRepositoryIdBelongsToExternalApp() {
         final String description = "Repo 2";
-        final String tfRepoId = "tracker1023";
+        final String tfRepoId = "tracker1032";
         final String partRepoId = "12";
         selenium.open("/CCFMaster/repositorymappings/?form");
         selenium.waitForPageToLoad("30000");
