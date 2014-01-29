@@ -48,7 +48,7 @@ public class FieldMappingTemplateModel {
     }
 
     public void setFieldmappingName(String fieldmappingName) {
-        this.fieldmappingName = fieldmappingName;
+        this.fieldmappingName = fieldmappingName.trim();
     }
 
     public void setLinktoTemplate(boolean linktoTemplate) {
