@@ -169,7 +169,7 @@
 				if (document.getElementById("fmTemplateForm").elements[i].checked) {
 					var chkboxvalue=document.getElementById("fmTemplateForm").elements[i].value;
 					var subSection = chkboxvalue.substring(7,0);
-					if(subSection == "Default" || document.getElementById("fmTemplateForm").selectall.checked==true ){
+					if(subSection == "Default"){
 						hasdefault=true;
 						break;
 					}		
@@ -185,10 +185,7 @@
 				document.getElementById("fmTemplateForm").action=url;
 		  		document.getElementById("fmTemplateForm").submit();
 				}
-				
 			}
-	  		
-			
 		}
 	
 		
