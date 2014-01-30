@@ -5,7 +5,7 @@ Project:
 
 For new developers:
 
-	How to setup source code:
+	How to setup source code :
 
 		1.CCFMaster project development uses Spring Tool Suite(STS) eclipse(version 2.8 or greater).
 			Download Link -> https://sagan-production.cfapps.io/tools
