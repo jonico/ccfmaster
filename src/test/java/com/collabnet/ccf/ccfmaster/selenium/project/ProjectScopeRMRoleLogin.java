@@ -1,14 +1,17 @@
 package com.collabnet.ccf.ccfmaster.selenium.project;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.hasItems;
 
 import java.util.List;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.collabnet.ccf.ccfmaster.selenium.Util;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProjectScopeRMRoleLogin extends ProjectScopeTestBase {
 
     public static final String TF_2_QC_LABEL = "TF \u21D2 QC";

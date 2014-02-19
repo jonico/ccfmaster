@@ -1,7 +1,10 @@
 package com.collabnet.ccf.ccfmaster.selenium;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 
@@ -24,7 +27,7 @@ public final class Util {
 
     private static final String xpath_Stopped_elemLocator             = "//input[@name='currentStatus' and @value='STOPPED']";
 
-    private static final String xpath_EditFM_elemLocator              = "//img[@alt='Associated Field Mappings']";
+    //    private static final String xpath_EditFM_elemLocator              = "//img[@alt='Associated Field Mappings']";
 
     private static final String tfBackup_SuccesMsg                    = "Backup is created successfully";
 

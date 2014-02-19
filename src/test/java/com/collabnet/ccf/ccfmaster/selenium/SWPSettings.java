@@ -3,11 +3,13 @@ package com.collabnet.ccf.ccfmaster.selenium;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.thoughtworks.selenium.Selenium;
-import com.thoughtworks.selenium.Wait.WaitTimedOutException;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SWPSettings extends CcfAuthenticatedTestBase {
 
     @Before
@@ -193,66 +195,52 @@ public class SWPSettings extends CcfAuthenticatedTestBase {
                 .isTextPresent("Connector Behavior settings saved successfully"));
     }
 
-    private void validateCcfResyncUserCredentials() {
-        try {
-            final String text = "ScrumWorks Pro : Test Connection Success.";
-            selenium.refresh();
-            selenium.type("id=participantUrlParticipantConfig",
-                    "http://cu137.cloud.sp.collab.net:8080/scrumworks-api/api2/scrumworks?wsdl"); // need to externalize the input values
-            selenium.type("id=participantResyncUserNameLandscapeConfig",
-                    "CCFResync");
-            selenium.type("id=participantResyncPasswordLandscapeConfig",
-                    "CCFResync");
-            selenium.click("//input[@value='Test Connection' and @value='Test Connection' and @type='button' and @onclick=\"doAjaxResyncPost('/CCFMaster/admin/swptestconnection?resync=true')\"]");
-            Util.waitUntilTextPresent(selenium, text);
-            verifyTrue(selenium.isTextPresent(text));
-            selenium.click("id=save");
-            selenium.click("//button[2]");
-            selenium.waitForPageToLoad("30000");
-        } catch (WaitTimedOutException e) {
-            final String msg = "Timed out exception occured while validating CCF resync user credentials";
-            Util.logScreenshot(msg, selenium);
-            throw e;
-        }
-    }
-
-    private void validateCcfUserCredentials() {
-        try {
-            final String text = "ScrumWorks Pro : Test Connection Success.";
-            selenium.waitForPageToLoad("30000");
-            selenium.type("id=participantUrlParticipantConfig",
-                    "http://cu137.cloud.sp.collab.net:8080/scrumworks-api/api2/scrumworks?wsdl"); // need to externalize the input values
-            selenium.type("id=participantUserNameLandscapeConfig", "CCFUser");
-            selenium.type("id=participantPasswordLandscapeConfig", "CCFUser");
-            selenium.click("css=input[type=\"button\"]");
-            Util.waitUntilTextPresent(selenium, text);
-            verifyTrue(selenium.isTextPresent(text));
-            selenium.click("id=save");
-            selenium.click("//button[2]");
-            selenium.waitForPageToLoad("30000");
-        } catch (WaitTimedOutException e) {
-            final String msg = "Timed out exception occured while validating CCF user credentials";
-            Util.logScreenshot(msg, selenium);
-            throw e;
-        }
-    }
-
-    private void validateInvalidSwpSettings() {
-        selenium.type("id=participantUrlParticipantConfig", "");
-        selenium.type("id=participantUserNameLandscapeConfig", "");
-        selenium.type("id=participantPasswordLandscapeConfig", "");
-        selenium.type("id=participantResyncUserNameLandscapeConfig", "");
-        selenium.type("id=participantResyncPasswordLandscapeConfig", "");
-        selenium.click("id=save");
-        selenium.click("//button[2]");
-        selenium.waitForPageToLoad("30000");
-        selenium.type("id=participantUrlParticipantConfig", "test");
-        selenium.type("id=participantResyncUserNameLandscapeConfig", "test");
-        selenium.type("id=participantResyncPasswordLandscapeConfig", "test");
-        selenium.click("id=save");
-        selenium.click("//button[2]");
-        selenium.waitForPageToLoad("30000");
-    }
+    /*
+     * private void validateCcfResyncUserCredentials() { try { final String text
+     * = "ScrumWorks Pro : Test Connection Success."; selenium.refresh();
+     * selenium.type("id=participantUrlParticipantConfig",
+     * "http://cu137.cloud.sp.collab.net:8080/scrumworks-api/api2/scrumworks?wsdl"
+     * ); // need to externalize the input values
+     * selenium.type("id=participantResyncUserNameLandscapeConfig",
+     * "CCFResync");
+     * selenium.type("id=participantResyncPasswordLandscapeConfig",
+     * "CCFResync"); selenium.click(
+     * "//input[@value='Test Connection' and @value='Test Connection' and @type='button' and @onclick=\"doAjaxResyncPost('/CCFMaster/admin/swptestconnection?resync=true')\"]"
+     * ); Util.waitUntilTextPresent(selenium, text);
+     * verifyTrue(selenium.isTextPresent(text)); selenium.click("id=save");
+     * selenium.click("//button[2]"); selenium.waitForPageToLoad("30000"); }
+     * catch (WaitTimedOutException e) { final String msg =
+     * "Timed out exception occured while validating CCF resync user credentials"
+     * ; Util.logScreenshot(msg, selenium); throw e; } } private void
+     * validateCcfUserCredentials() { try { final String text =
+     * "ScrumWorks Pro : Test Connection Success.";
+     * selenium.waitForPageToLoad("30000");
+     * selenium.type("id=participantUrlParticipantConfig",
+     * "http://cu137.cloud.sp.collab.net:8080/scrumworks-api/api2/scrumworks?wsdl"
+     * ); // need to externalize the input values
+     * selenium.type("id=participantUserNameLandscapeConfig", "CCFUser");
+     * selenium.type("id=participantPasswordLandscapeConfig", "CCFUser");
+     * selenium.click("css=input[type=\"button\"]");
+     * Util.waitUntilTextPresent(selenium, text);
+     * verifyTrue(selenium.isTextPresent(text)); selenium.click("id=save");
+     * selenium.click("//button[2]"); selenium.waitForPageToLoad("30000"); }
+     * catch (WaitTimedOutException e) { final String msg =
+     * "Timed out exception occured while validating CCF user credentials";
+     * Util.logScreenshot(msg, selenium); throw e; } } private void
+     * validateInvalidSwpSettings() {
+     * selenium.type("id=participantUrlParticipantConfig", "");
+     * selenium.type("id=participantUserNameLandscapeConfig", "");
+     * selenium.type("id=participantPasswordLandscapeConfig", "");
+     * selenium.type("id=participantResyncUserNameLandscapeConfig", "");
+     * selenium.type("id=participantResyncPasswordLandscapeConfig", "");
+     * selenium.click("id=save"); selenium.click("//button[2]");
+     * selenium.waitForPageToLoad("30000");
+     * selenium.type("id=participantUrlParticipantConfig", "test");
+     * selenium.type("id=participantResyncUserNameLandscapeConfig", "test");
+     * selenium.type("id=participantResyncPasswordLandscapeConfig", "test");
+     * selenium.click("id=save"); selenium.click("//button[2]");
+     * selenium.waitForPageToLoad("30000"); }
+     */
 
     @BeforeClass
     public static void createLandscape() {

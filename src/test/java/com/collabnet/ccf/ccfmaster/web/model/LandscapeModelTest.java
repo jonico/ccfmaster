@@ -1,9 +1,12 @@
 package com.collabnet.ccf.ccfmaster.web.model;
 
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
-import static org.hamcrest.CoreMatchers.*;
-import static com.collabnet.ccf.ccfmaster.web.model.LandscapeModel.*;
+import static com.collabnet.ccf.ccfmaster.web.model.LandscapeModel.normalizeQcUrl;
+import static com.collabnet.ccf.ccfmaster.web.model.LandscapeModel.normalizeSwpUrl;
+import static com.collabnet.ccf.ccfmaster.web.model.LandscapeModel.normalizeUrl;
+import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 

@@ -1,18 +1,18 @@
 package com.collabnet.ccf.ccfmaster.rest;
 
-import junit.framework.Assert;
 import mockit.Mocked;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.collabnet.ccf.ccfmaster.server.core.CoreStateMachine;
 import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus;
+import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus.CoreState;
 import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatusDataOnDemand;
 import com.collabnet.ccf.ccfmaster.server.domain.Direction;
 import com.collabnet.ccf.ccfmaster.server.domain.DirectionDataOnDemand;
-import com.collabnet.ccf.ccfmaster.server.domain.CcfCoreStatus.CoreState;
 
 public class CcfCoreStatusAPIIntegrationTest extends AbstractAPIIntegrationTest {
 

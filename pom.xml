@@ -15,7 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-security.version>3.0.2.RELEASE</spring-security.version>
 		<skipUnitTests>false</skipUnitTests>
-		<selenium.version>2.0.0</selenium.version>
+		<selenium.version>2.37.0</selenium.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -39,7 +39,6 @@
 			<url>http://download.java.net/maven/2/</url>
 			<layout>default</layout>
 		</repository>
-
 		<repository>
 			<id>JBoss Repo</id>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
@@ -48,6 +47,11 @@
 		<repository>
 			<id>ccf-repo</id>
 			<url>http://ccf.open.collab.net/mvnrepo</url>
+		</repository>
+		<repository>
+			<id>repo.maven.apache.org</id>
+			<name>repo.maven.apache.org</name>
+			<url>https://repository.apache.org/content/repositories/releases</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -67,6 +71,20 @@
 			<url>http://spring-roo-repository.springsource.org/release</url>
 		</pluginRepository>
 	</pluginRepositories>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>15.0</version>
+			</dependency>
+			<dependency>
+				<groupId>xml-apis</groupId>
+				<artifactId>xml-apis</artifactId>
+				<version>1.4.01</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<!-- General dependencies for standard applications -->
 		<dependency>
@@ -78,7 +96,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -446,7 +464,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.1-alpha2</version>
+			<version>4.3.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 			<exclusions>

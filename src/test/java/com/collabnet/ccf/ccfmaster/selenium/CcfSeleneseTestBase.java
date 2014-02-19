@@ -1,8 +1,8 @@
 package com.collabnet.ccf.ccfmaster.selenium;
 
 import org.junit.Rule;
-import org.junit.rules.TestWatchman;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -24,14 +24,15 @@ public class CcfSeleneseTestBase extends SeleneseTestBase {
     protected final Selenium      selenium           = SeleniumSuite
                                                              .getSelenium();
     @Rule
-    public TestWatchman           logScreens         = new TestWatchman() {
+    public TestWatcher            logScreens         = new TestWatcher() {
                                                          @Override
-                                                         public void failed(
+                                                         protected void failed(
                                                                  Throwable e,
-                                                                 FrameworkMethod method) {
+                                                                 Description description) {
                                                              log.error(
                                                                      "Test {} failed.",
-                                                                     method.getName());
+                                                                     description
+                                                                             .getMethodName());
                                                              if (driver instanceof TakesScreenshot) {
                                                                  log.error(
                                                                          SCREENSHOT_MESSAGE

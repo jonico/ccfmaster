@@ -8,8 +8,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMapping;

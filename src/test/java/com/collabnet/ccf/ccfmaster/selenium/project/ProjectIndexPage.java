@@ -1,13 +1,16 @@
 package com.collabnet.ccf.ccfmaster.selenium.project;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.containsString;
-import static org.junit.matchers.JUnitMatchers.hasItems;
 
 import java.util.List;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProjectIndexPage extends ProjectScopeTestBase {
 
     public ProjectIndexPage() {

@@ -1,5 +1,8 @@
 package com.collabnet.ccf.ccfmaster.selenium.project;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -15,9 +18,6 @@ import com.collabnet.ccf.ccfmaster.selenium.MockDataUtil;
 import com.collabnet.ccf.ccfmaster.selenium.SeleniumSuite;
 import com.collabnet.ccf.ccfmaster.selenium.Util;
 import com.thoughtworks.selenium.Selenium;
-
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
 
 @RunWith(SeleniumSuite.class)
 @SuiteClasses({ ProjectIndexPage.class, ProjectScopeHospitalRoleLogin.class,

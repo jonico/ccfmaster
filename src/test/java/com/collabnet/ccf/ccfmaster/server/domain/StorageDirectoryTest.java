@@ -1,6 +1,6 @@
 package com.collabnet.ccf.ccfmaster.server.domain;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;

@@ -7,12 +7,15 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebElement;
 
 import com.collabnet.ccf.ccfmaster.selenium.Util;
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProjectRepositoryMappingsPage extends ProjectScopeTestBase {
 
     private RepositoryMappingsPage page;

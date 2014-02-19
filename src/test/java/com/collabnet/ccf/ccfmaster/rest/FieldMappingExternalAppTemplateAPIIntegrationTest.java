@@ -2,16 +2,15 @@ package com.collabnet.ccf.ccfmaster.rest;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingKind;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplateDataOnDemand;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplateList;
+import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingKind;
 
 public class FieldMappingExternalAppTemplateAPIIntegrationTest extends AbstractAPIIntegrationTest {
 

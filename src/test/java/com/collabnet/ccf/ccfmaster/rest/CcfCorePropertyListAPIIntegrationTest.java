@@ -4,8 +4,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;

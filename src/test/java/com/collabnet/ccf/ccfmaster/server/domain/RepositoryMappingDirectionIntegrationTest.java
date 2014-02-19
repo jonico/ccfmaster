@@ -1,6 +1,6 @@
 package com.collabnet.ccf.ccfmaster.server.domain;
 
-import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

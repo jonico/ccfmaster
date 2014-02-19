@@ -3,11 +3,14 @@ package com.collabnet.ccf.ccfmaster.selenium;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.Wait.WaitTimedOutException;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class QCSettings extends CcfAuthenticatedTestBase {
 
     @Before
