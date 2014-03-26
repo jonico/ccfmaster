@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig" items="${repositorymappingdirectionconfigs}" z="8hSmw30SMIkb3CQhgYatB9l9sr8=">
+        <table:table data="${repositorymappingdirectionconfigs}" id="l_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig" path="/repositorymappingdirectionconfigs" z="2EZa+dulPxb2MDk8UxKC7D6+dFc=">
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig_repositoryMappingDirection" property="repositoryMappingDirection" z="rNRVImoJw3VRF/t7dCRhgMMNQPk="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig_name" property="name" z="/KZTLs8nqt+CMoOwR0ahFI6ef84="/>
+            <table:column id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig_val" property="val" z="ROg/QwjlNw/oPFuvwoZBrrQtGC8="/>
+        </table:table>
+    </page:list>
+</div>

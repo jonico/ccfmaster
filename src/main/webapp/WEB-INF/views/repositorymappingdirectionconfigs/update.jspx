@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig" modelAttribute="repositoryMappingDirectionConfig" path="/repositorymappingdirectionconfigs" versionField="Version" z="5/AqIM2RIGSGpFj/XCtjnUTHZzQ=">
+        <field:select field="repositoryMappingDirection" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig_repositoryMappingDirection" itemValue="id" items="${repositorymappingdirections}" path="/repositorymappingdirections" required="true" z="Webuy/GCdKTPQR7sOSW6ZCjNwv0="/>
+        <field:input field="name" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig_name" required="true" z="m8T+cjvFs2tYHeEPZrKi+GoqNGY="/>
+        <field:textarea field="val" id="c_com_collabnet_ccf_ccfmaster_server_domain_RepositoryMappingDirectionConfig_val" required="true" z="vEFhUOikQ5x5op5rjUEs9HBoZIA="/>
+    </form:update>
+</div>
