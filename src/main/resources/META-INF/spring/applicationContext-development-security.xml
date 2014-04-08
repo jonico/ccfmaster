@@ -155,6 +155,7 @@
 		<intercept-url pattern="/participantconfigs/**" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url pattern="/repositorymappings/**" access="ROLE_TF_SUPER_USER" />
 		<intercept-url pattern="/repositorymappingdirections/**" access="ROLE_TF_SUPER_USER" />
+		<intercept-url pattern="/repositorymappingdirectionconfigs/**" access="ROLE_TF_SUPER_USER" />
 		<intercept-url pattern="/selenium/**" access="ROLE_TF_SUPER_USER" />
 		<intercept-url pattern="/sampleflow/**" access="ROLE_TF_SUPER_USER" />
 		
@@ -261,6 +262,12 @@
 		<intercept-url method="POST" pattern="/api/repositorymappingdirections/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="PUT" pattern="/api/repositorymappingdirections/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="DELETE" pattern="/api/repositorymappingdirections/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappingdirectionconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappingdirectionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="POST" pattern="/api/repositorymappingdirectionconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="PUT" pattern="/api/repositorymappingdirectionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="DELETE" pattern="/api/repositorymappingdirectionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		
 
 		<!-- regular user access (accept some POST requests)-->
 		<intercept-url method="GET" pattern="/api/capabilities" access="ROLE_TF_USER"/>

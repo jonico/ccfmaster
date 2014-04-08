@@ -61,6 +61,8 @@ public final class Paths {
                                                                                   + "/ccfcorestatuses";
     static final String        CCF_CORE_PROPERTIES                        = API_PREFIX
                                                                                   + "/ccfcoreproperties";
+    static final String        REPOSITORY_MAPPING_DIRECTION_CONFIG        = API_PREFIX
+                                                                                  + "/repositorymappingdirectionconfigs";
 
     static final String        LINKID_IDENTITY_MAPPING                    = LINKID_PREFIX
                                                                                   + "/identitymappings";

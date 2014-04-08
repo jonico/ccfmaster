@@ -37,6 +37,7 @@
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.DirectionConfig"/>
+    <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig"/>
     <!-- field mapping related entities -->
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.FieldMapping"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate"/>
@@ -56,6 +57,7 @@
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfigList"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfigList"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.DirectionConfigList"/>
+    <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.FieldMappingList"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplateList"/>
     <oxm:class-to-be-bound name="com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplateList"/>

@@ -43,7 +43,7 @@ public class RepositoryMappingDirectionConfig {
     @ManyToOne(cascade = {})
     @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @XmlJavaTypeAdapter(Direction.XmlAdapter.class)
+    @XmlJavaTypeAdapter(RepositoryMappingDirection.XmlAdapter.class)
     private RepositoryMappingDirection repositoryMappingDirection;
 
     @NotNull
