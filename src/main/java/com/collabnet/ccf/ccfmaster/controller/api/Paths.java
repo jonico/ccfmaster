@@ -76,7 +76,10 @@ public final class Paths {
                                                                                   + "/fieldmappings";
     static final String        LINKID_FIELD_MAPPING_EXTERNAL_APP_TEMPLATE = LINKID_PREFIX
                                                                                   + "/fieldmappingexternalapptemplates";
+    static final String        LINKID_REPOSITORY_MAPPING_DIRECTION_CONFIG = LINKID_PREFIX
+                                                                                  + "/repositorymappingdirectionconfigs";
 
+    
     /** prevent instantiation */
     private Paths() {
     }

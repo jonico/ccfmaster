@@ -21,6 +21,8 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingList;
 import com.collabnet.ccf.ccfmaster.server.domain.HospitalEntry;
 import com.collabnet.ccf.ccfmaster.server.domain.HospitalEntryList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionList;
 
 @Controller
@@ -60,6 +62,18 @@ public class LinkIdApiRepositoryMappingDirectionController extends AbstractApiLi
         return new RepositoryMappingDirectionList(RepositoryMappingDirection
                 .findRepositoryMappingDirectionsByExternalApp(ea)
                 .getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappingdirectionconfigs/", method = GET)
+    public @ResponseBody
+    RepositoryMappingDirectionConfigList repositoryMappingDirectionDirectionConfigScope(
+            @PathVariable("id") RepositoryMappingDirection repositoryMappingDirection,
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea) {
+        validateRepositoryMappingDirection(repositoryMappingDirection);
+        return new RepositoryMappingDirectionConfigList(
+                RepositoryMappingDirectionConfig
+                        .findRepositoryMappingDirectionConfigByExternalAppAndRepositoryMappingDirection(
+                                ea, repositoryMappingDirection).getResultList());
     }
 
     @RequestMapping(value = "/{direction}/", method = GET)

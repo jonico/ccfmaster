@@ -119,6 +119,11 @@
         <menu:category id="c_flows" z="5igpkb/e+HPIN8iUErvmM38Eqqk=">
                 <menu:item id="i_flows_sampleflow" messageCode="webflow_menu_enter" url="/sampleflow" z="JMM+dAVQySYHXliwJ5d5AQocPfk="/>
             </menu:category>
+             <menu:category id="c_repositorymappingdirectionconfig" z="z4OmcpLXASXY3hclojcR/Y2Kziw=">
+                <menu:item id="i_repositorymappingdirectionconfig_new" messageCode="global_menu_new" url="/repositorymappingdirectionconfigs?form" z="BXVW/wk3xs89aufSB7ckDmA+sUk="/>
+            	<menu:item id="i_repositorymappingdirectionconfig_list" messageCode="global_menu_list" url="/repositorymappingdirectionconfigs?page=1&amp;size=${empty param.size ? 10 : param.size}" z="PXWAk/W1rdbYigeyctBxXPXpla8="/>
+            	<menu:item id="fi_repositorymappingdirectionconfig_repositorymappingdirection" messageCode="global_menu_find" url="/repositorymappingdirectionconfigs?find=ByRepositoryMappingDirection&amp;form" z="5C70PHotdqamwWH09CdGquMGF20="/>
+            </menu:category>
         </menu:menu>
 </sec:authorize>
 </div>

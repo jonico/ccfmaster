@@ -22,6 +22,8 @@ import com.collabnet.ccf.ccfmaster.server.domain.IdentityMapping;
 import com.collabnet.ccf.ccfmaster.server.domain.IdentityMappingList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMapping;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingList;
 
@@ -130,6 +132,18 @@ public class LinkIdApiRepositoryMappingController extends AbstractApiLinkIdContr
         validateRepositoryMapping(rm);
         return new IdentityMappingList(IdentityMapping
                 .findIdentityMappingsByRepositoryMapping(rm).getResultList());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappingdirectionconfigs/", method = GET)
+    public @ResponseBody
+    RepositoryMappingDirectionConfigList showRepositoryMappingDirectionConfigsRepositoryMappingScope(
+            @ModelAttribute(EXTERNAL_APP_MODELATTRIBUTE_NAME) ExternalApp ea,
+            @PathVariable("id") RepositoryMapping repositoryMapping) {
+        validateRepositoryMapping(repositoryMapping);
+        return new RepositoryMappingDirectionConfigList(
+                RepositoryMappingDirectionConfig
+                        .findRepositoryMappingDirectionConfigByExternalAppAndRepositoryMapping(
+                                ea, repositoryMapping).getResultList());
     }
 
     @RequestMapping(value = "/{id}/repositorymappingdirections", method = GET)

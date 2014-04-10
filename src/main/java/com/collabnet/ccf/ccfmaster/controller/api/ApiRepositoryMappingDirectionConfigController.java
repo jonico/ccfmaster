@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList;
 
@@ -41,16 +40,6 @@ public class ApiRepositoryMappingDirectionConfigController extends AbstractApiCo
         return new RepositoryMappingDirectionConfigList(
                 RepositoryMappingDirectionConfig
                         .findAllRepositoryMappingDirectionConfigs());
-    }
-
-    @RequestMapping(value = "/{repositoryMappingDirection}/")
-    public @ResponseBody
-    RepositoryMappingDirectionConfigList repositoryMappingDirectionConfigs(
-            @PathVariable("repositoryMappingDirection") RepositoryMappingDirection repositoryMappingDirection) {
-        return new RepositoryMappingDirectionConfigList(
-                RepositoryMappingDirectionConfig
-                        .findRepositoryMappingDirectionConfigsByRepositoryMappingDirection(
-                                repositoryMappingDirection).getResultList());
     }
 
     @Override

@@ -264,6 +264,8 @@
 		<intercept-url method="DELETE" pattern="/api/repositorymappingdirections/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/repositorymappingdirectionconfigs/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="GET" pattern="/api/repositorymappingdirectionconfigs/*" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappingdirections/{id}/repositorymappingdirectionconfigs/" access="ROLE_TF_SUPER_USER"/>
+		<intercept-url method="GET" pattern="/api/repositorymappings/{id}/repositorymappingdirectionconfigs/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="POST" pattern="/api/repositorymappingdirectionconfigs/" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="PUT" pattern="/api/repositorymappingdirectionconfigs/*" access="ROLE_TF_SUPER_USER"/>
 		<intercept-url method="DELETE" pattern="/api/repositorymappingdirectionconfigs/*" access="ROLE_TF_SUPER_USER"/>
@@ -345,6 +347,14 @@
 		<intercept-url method="POST" pattern="/api/linkid/{linkId}/repositorymappingdirections/" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
 		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/repositorymappingdirections/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
 		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/repositorymappingdirections/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirectionconfigs/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirectionconfigs/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+	    <intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappings/{id}/repositorymappingdirectionconfigs/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="GET" pattern="/api/linkid/{linkId}/repositorymappingdirections/{id}/repositorymappingdirectionconfigs/" access="INTEGRATED_APPLICATION_CHECK,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="POST" pattern="/api/linkid/{linkId}/repositorymappingdirectionconfigs/" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="PUT" pattern="/api/linkid/{linkId}/repositorymappingdirectionconfigs/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES,ROLE_REPOSITORY_MAPPINGS"/>
+		<intercept-url method="DELETE" pattern="/api/linkid/{linkId}/repositorymappingdirectionconfigs/*" access="INTEGRATED_APPLICATION_CHECK,ROLE_RESET_SYNCHRONIZATION_STATUS,ROLE_PAUSE_SYNCHRONIZATION,ROLE_MAPPING_RULES,ROLE_REPOSITORY_MAPPINGS"/>
+
 		<intercept-url method="GET" pattern="/api/timezones/" access="ROLE_TF_USER"/>
 		
 		<!-- block all other API calls -->

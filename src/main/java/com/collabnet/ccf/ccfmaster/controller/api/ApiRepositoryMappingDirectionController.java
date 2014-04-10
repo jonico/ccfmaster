@@ -1,5 +1,7 @@
 package com.collabnet.ccf.ccfmaster.controller.api;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.collabnet.ccf.ccfmaster.server.domain.Directions;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionList;
 
 @Controller
@@ -39,6 +43,16 @@ public class ApiRepositoryMappingDirectionController extends AbstractApiControll
     RepositoryMappingDirectionList list() {
         return new RepositoryMappingDirectionList(
                 RepositoryMappingDirection.findAllRepositoryMappingDirections());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappingdirectionconfigs/", method = GET)
+    public @ResponseBody
+    RepositoryMappingDirectionConfigList repositoryMappingDirectionConfigs(
+            @PathVariable("id") RepositoryMappingDirection repositoryMappingDirection) {
+        return new RepositoryMappingDirectionConfigList(
+                RepositoryMappingDirectionConfig
+                        .findRepositoryMappingDirectionConfigsByRepositoryMappingDirection(
+                                repositoryMappingDirection).getResultList());
     }
 
     @RequestMapping(value = "/{direction}/")
@@ -72,4 +86,5 @@ public class ApiRepositoryMappingDirectionController extends AbstractApiControll
                     "id (%s) != requestBody.id (%s)", id, requestBody.getId()));
         }
     }
+
 }

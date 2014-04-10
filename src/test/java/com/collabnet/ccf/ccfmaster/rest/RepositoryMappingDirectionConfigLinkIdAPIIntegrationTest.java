@@ -7,30 +7,42 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
+import com.collabnet.ccf.ccfmaster.server.domain.ExternalAppDataOnDemand;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigDataOnDemand;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList;
 
-public class RepositoryMappingDirectionConfigAPIIntegrationTest extends AbstractAPIIntegrationTest {
+public class RepositoryMappingDirectionConfigLinkIdAPIIntegrationTest extends AbstractAPIIntegrationTest {
 
     @Autowired
-    private RepositoryMappingDirectionConfigDataOnDemand rdod;
+    private RepositoryMappingDirectionConfigDataOnDemand dodRMDC;
+
+    @Autowired
+    private ExternalAppDataOnDemand                      dodEA;
 
     @Test
-    public void testCount() {
+    public void testCountByRepositoryMappingDirectionScope() {
+        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = dodRMDC
+                .getRandomRepositoryMappingDirectionConfig();
         org.junit.Assert
                 .assertNotNull(
                         "Data on demand for 'RepositoryMappingDirectionConfig' failed to initialize correctly",
-                        rdod.getRandomRepositoryMappingDirectionConfig());
+                        obj);
         long count = com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig
-                .countRepositoryMappingDirectionConfigs();
-        org.junit.Assert
-                .assertNotNull(
-                        "Data on demand for 'RepositoryMappingDirectionConfig' failed to initialize correctly",
-                        rdod.getRandomRepositoryMappingDirectionConfig());
+                .countRepositoryMappingDirectionConfigsByExternalAppAndRepositoryMappingDirection(
+                        obj.getRepositoryMappingDirection()
+                                .getRepositoryMapping().getExternalApp(),
+                        obj.getRepositoryMappingDirection());
+
+        String linkIdPathSegment = "/linkid/"
+                + obj.getRepositoryMappingDirection().getRepositoryMapping()
+                        .getExternalApp().getLinkId()
+                + "/repositorymappingdirections/"
+                + obj.getRepositoryMappingDirection().getId()
+                + "/repositorymappingdirectionconfigs/";
         List<RepositoryMappingDirectionConfig> result = restTemplate
-                .getForObject(
-                        ccfAPIUrl + "/repositorymappingdirectionconfigs/",
+                .getForObject(ccfAPIUrl + linkIdPathSegment,
                         RepositoryMappingDirectionConfigList.class);
         org.junit.Assert
                 .assertTrue(
@@ -48,32 +60,29 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
 
     @Test
     public void testCreate() {
-        org.junit.Assert
-                .assertNotNull(
-                        "Data on demand for 'RepositoryMappingDirectionConfig' failed to initialize correctly",
-                        rdod.getRandomRepositoryMappingDirectionConfig());
-        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = rdod
+        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig randomconfigObject = dodRMDC
                 .getNewTransientRepositoryMappingDirectionConfig(Integer.MAX_VALUE);
         org.junit.Assert
                 .assertNotNull(
-                        "Data on demand for 'RepositoryMappingDirectionConfig' failed to provide a new transient entity",
-                        obj);
-        org.junit.Assert
-                .assertNull(
-                        "Expected 'RepositoryMappingDirectionConfig' identifier to be null",
-                        obj.getId());
-        obj = restTemplate.postForObject(ccfAPIUrl
-                + "/repositorymappingdirectionconfigs/", obj,
+                        "Data on demand for 'RepositoryMappingDirectionConfig' failed to initialize correctly",
+                        randomconfigObject);
+        String linkIdPathSegment = "/linkid/"
+                + randomconfigObject.getRepositoryMappingDirection()
+                        .getRepositoryMapping().getExternalApp().getLinkId()
+                + "/repositorymappingdirectionconfigs/";
+
+        randomconfigObject = restTemplate.postForObject(ccfAPIUrl
+                + linkIdPathSegment, randomconfigObject,
                 RepositoryMappingDirectionConfig.class);
         org.junit.Assert
                 .assertNotNull(
                         "Expected 'RepositoryMappingDirectionConfig' identifier to no longer be null",
-                        obj.getId());
+                        randomconfigObject.getId());
     }
 
     @Test
     public void testFind() {
-        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = rdod
+        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = dodRMDC
                 .getRandomRepositoryMappingDirectionConfig();
         org.junit.Assert
                 .assertNotNull(
@@ -84,8 +93,12 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
                 .assertNotNull(
                         "Data on demand for 'RepositoryMappingDirectionConfig' failed to provide an identifier",
                         id);
-        obj = restTemplate.getForObject(ccfAPIUrl
-                + "/repositorymappingdirectionconfigs/" + id,
+        // figure out linkId path segment
+        String linkIdPathSegment = "/linkid/"
+                + obj.getRepositoryMappingDirection().getRepositoryMapping()
+                        .getExternalApp().getLinkId()
+                + "/repositorymappingdirectionconfigs/";
+        obj = restTemplate.getForObject(ccfAPIUrl + linkIdPathSegment + id,
                 RepositoryMappingDirectionConfig.class);
         org.junit.Assert
                 .assertNotNull(
@@ -99,7 +112,7 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
 
     @Test(expected = HttpClientErrorException.class)
     public void testRemove() {
-        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = rdod
+        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = dodRMDC
                 .getRandomRepositoryMappingDirectionConfig();
         org.junit.Assert
                 .assertNotNull(
@@ -110,11 +123,13 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
                 .assertNotNull(
                         "Data on demand for 'RepositoryMappingDirectionConfig' failed to provide an identifier",
                         id);
-        restTemplate.delete(ccfAPIUrl + "/repositorymappingdirectionconfigs/"
-                + id);
+        String linkIdPathSegment = "/linkid/"
+                + obj.getRepositoryMappingDirection().getRepositoryMapping()
+                        .getExternalApp().getLinkId()
+                + "/repositorymappingdirectionconfigs/";
+        restTemplate.delete(ccfAPIUrl + linkIdPathSegment + id);
         try {
-            obj = restTemplate.getForObject(ccfAPIUrl
-                    + "/repositorymappingdirectionconfigs/" + id,
+            obj = restTemplate.getForObject(ccfAPIUrl + linkIdPathSegment + id,
                     RepositoryMappingDirectionConfig.class);
         } catch (HttpClientErrorException e) {
             Assert.assertEquals("Expected 404", 404, e.getStatusCode().value());
@@ -124,7 +139,7 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
 
     @Test
     public void testUpdate() {
-        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = rdod
+        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = dodRMDC
                 .getRandomRepositoryMappingDirectionConfig();
         org.junit.Assert
                 .assertNotNull(
@@ -143,10 +158,13 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
                 .assertNotNull(
                         "Find method for 'RepositoryMappingDirectionConfig' illegally returned null for id '"
                                 + id + "'", obj);
-        boolean modified = rdod.modifyRepositoryMappingDirectionConfig(obj);
-        restTemplate.put(ccfAPIUrl + "/repositorymappingdirectionconfigs/" + id, obj);
-        obj = restTemplate.getForObject(ccfAPIUrl
-                + "/repositorymappingdirectionconfigs/" + id,
+        boolean modified = dodRMDC.modifyRepositoryMappingDirectionConfig(obj);
+        String linkIdPathSegment = "/linkid/"
+                + obj.getRepositoryMappingDirection().getRepositoryMapping()
+                        .getExternalApp().getLinkId()
+                + "/repositorymappingdirectionconfigs/";
+        restTemplate.put(ccfAPIUrl + linkIdPathSegment + id, obj);
+        obj = restTemplate.getForObject(ccfAPIUrl + linkIdPathSegment + id,
                 RepositoryMappingDirectionConfig.class);
         org.junit.Assert
                 .assertTrue(
@@ -156,8 +174,8 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
     }
 
     @Test(expected = HttpClientErrorException.class)
-    public void testWrongUpdate() {
-        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = rdod
+    public void testWithWrongGrandparentIdInPath() {
+        com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig obj = dodRMDC
                 .getRandomRepositoryMappingDirectionConfig();
         org.junit.Assert
                 .assertNotNull(
@@ -175,10 +193,17 @@ public class RepositoryMappingDirectionConfigAPIIntegrationTest extends Abstract
                 .assertNotNull(
                         "Find method for 'RepositoryMappingDirectionConfig' illegally returned null for id '"
                                 + id + "'", obj);
-        rdod.modifyRepositoryMappingDirectionConfig(obj);
-        //put to ressource with wrong id
-        restTemplate.put(ccfAPIUrl + "/repositorymappingdirectionconfigs/" + id
-                + 42, obj);
+        ExternalApp ea = dodEA.getNewTransientExternalApp(42);
+        ea.persist();
+        String linkIdPathSegment = "/linkid/" + ea.getLinkId()
+                + "/repositorymappingdirectionconfigs/";
 
+        try {
+            restTemplate.put(ccfAPIUrl + linkIdPathSegment + id, obj);
+        } catch (HttpClientErrorException e) {
+            Assert.assertEquals("Expected 403", 403, e.getStatusCode().value());
+            throw e;
+        }
     }
+
 }

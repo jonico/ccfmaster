@@ -1,5 +1,7 @@
 package com.collabnet.ccf.ccfmaster.controller.api;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMapping;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfig;
+import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirectionConfigList;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingList;
 
 @Controller
@@ -37,6 +41,16 @@ public class ApiRepositoryMappingController extends AbstractApiController<Reposi
     RepositoryMappingList list() {
         return new RepositoryMappingList(
                 RepositoryMapping.findAllRepositoryMappings());
+    }
+
+    @RequestMapping(value = "/{id}/repositorymappingdirectionconfigs/", method = GET)
+    public @ResponseBody
+    RepositoryMappingDirectionConfigList repositoryMappingDirectionConfigs(
+            @PathVariable("id") RepositoryMapping repositoryMapping) {
+        return new RepositoryMappingDirectionConfigList(
+                RepositoryMappingDirectionConfig
+                        .findRepositoryMappingDirectionConfigByRepositoryMapping(
+                                repositoryMapping).getResultList());
     }
 
     @Override
