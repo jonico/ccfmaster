@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -38,9 +39,10 @@ import com.google.common.io.CharStreams;
 
 public class IafMenu extends TagSupport {
 
-    private static final long   serialVersionUID = 1L;
-    private static final Logger log              = LoggerFactory
-                                                         .getLogger(IafMenu.class);
+    private static final long   serialVersionUID  = 1L;
+    private static final Logger log               = LoggerFactory
+                                                          .getLogger(IafMenu.class);
+    private static final String CTF71_API_VERSION = "6.3.0.0";
 
     @Override
     public int doEndTag() throws JspException {
@@ -54,8 +56,20 @@ public class IafMenu extends TagSupport {
             IafUserDetails user = (IafUserDetails) auth.getPrincipal();
             HttpServletRequest request = (HttpServletRequest) pageContext
                     .getRequest();
-            pageContext.getOut().write(getBanner(user, request));
-            pageContext.getOut().flush();
+            Connection connection = user.getConnection();
+            String apiVersion = connection.getTeamForgeClient().getApiVersion();
+            //From TF 7.2 use the default code implementation of topinclude (http://<>/sf/sfmain/do/topInclude/projects.xxxx?linkId=prplxxxx)
+            if (apiVersion.compareTo(CTF71_API_VERSION) > 0) {
+                URI uri = constructURI(user);
+                HttpServletResponse servletresponse = (HttpServletResponse) pageContext
+                        .getResponse();
+                servletresponse.sendRedirect(uri.toString());
+            } else {
+                //Older version of TF less than 7.2 still use the custom implementation where we hide the jumptoId box.
+                pageContext.getOut().write(getBanner(user, request));
+                pageContext.getOut().flush();
+            }
+
             return EVAL_PAGE;
         } catch (RemoteException e) {
             throw new JspException("Error communicating with TeamForge", e);
@@ -72,6 +86,20 @@ public class IafMenu extends TagSupport {
         return SKIP_BODY;
     }
 
+    private URI constructURI(IafUserDetails user) throws IOException,
+            URISyntaxException {
+        final String serverUrl = user.getConnection().getServerUrl();
+        final URI tfUri = new URI(serverUrl);
+        final String linkId = user.getLinkId();
+        final String projectPath = user.getProjectPath();
+        List<NameValuePair> qparams = new ArrayList<NameValuePair>();
+        qparams.add(new BasicNameValuePair("linkId", linkId));
+        URI uri = URIUtils.createURI(tfUri.getScheme(), tfUri.getHost(),
+                tfUri.getPort(), makePath(projectPath),
+                URLEncodedUtils.format(qparams, "UTF-8"), null);
+        return uri;
+    }
+
     private String cssInclude(String serverUrl) {
         return String.format(
                 "<link rel=\"stylesheet\" type=\"text/css\" href=\"%s\" />%n",
@@ -84,21 +112,12 @@ public class IafMenu extends TagSupport {
 
     private String getBanner(IafUserDetails user, HttpServletRequest request)
             throws ClientProtocolException, IOException, URISyntaxException {
-        //final String sessionId = request.getSession().getId();
-        final String serverUrl = user.getConnection().getServerUrl();
-        final URI tfUri = new URI(serverUrl);
-        final String linkId = user.getLinkId();
-        final String projectPath = user.getProjectPath();
         final Connection conn = user.getConnection();
+        final String serverUrl = conn.getServerUrl();
         TeamForgeClient tfc = conn.getTeamForgeClient();
         final String sessionId = tfc.getWebSessionId();
-
         HttpClient httpclient = new DefaultHttpClient();
-        List<NameValuePair> qparams = new ArrayList<NameValuePair>();
-        qparams.add(new BasicNameValuePair("linkId", linkId));
-        URI uri = URIUtils.createURI(tfUri.getScheme(), tfUri.getHost(),
-                tfUri.getPort(), makePath(projectPath),
-                URLEncodedUtils.format(qparams, "UTF-8"), null);
+        URI uri = constructURI(user);
         HttpGet httpget = new HttpGet(uri);
         httpget.setHeaders(new Header[] {
                 // new BasicHeader("View", lastSeenObject),
@@ -109,6 +128,7 @@ public class IafMenu extends TagSupport {
                         "Mozilla/5.0 (Windows; U; WinNT4.0; en-US; rv:1.7.5) BloodRedSun/0.5"), });
         HttpResponse response = httpclient.execute(httpget);
         InputStream is = response.getEntity().getContent();
+
         InputStreamReader isr = new InputStreamReader(is, Charsets.UTF_8);
         StringBuffer buf = new StringBuffer();
         /*
@@ -158,7 +178,9 @@ public class IafMenu extends TagSupport {
                 .append("    document.body.onselectstart=function(){return false}")
                 .append("</script>").toString();
         buf.append("</body></html>");
+
         return buf.toString();
+
     }
 
     private String jsIncludes(String serverUrl) {
