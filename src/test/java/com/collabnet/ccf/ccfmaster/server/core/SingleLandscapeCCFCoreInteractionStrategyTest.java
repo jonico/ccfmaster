@@ -1,7 +1,7 @@
 package com.collabnet.ccf.ccfmaster.server.core;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -146,30 +146,24 @@ public class SingleLandscapeCCFCoreInteractionStrategyTest extends AbstractTrans
     public void testDeleteWithDB() throws IOException {
         testCreateWithDB();
         landscape.remove();
-        // File samplesDirectory = new File (ccfHomeDirectory, "landscape" +
-        // landscape.getId() + File.separator + "samples");
-        // assertTrue(samplesDirectory + " does still exist.",
-        // samplesDirectory.exists());
-        File archivedSamplesDirectory = new File(ccfHomeDirectory, "archive"
-                + File.separator + "landscape" + landscape.getId()
-                + File.separator + "samples");
-        assertTrue(archivedSamplesDirectory + " doesn't exist.",
-                archivedSamplesDirectory.exists());
+        File archiveDir = new File(ccfHomeDirectory, "archive");
+        File archiveLandscapeDir = archiveDir.listFiles()[0];
+        File archivedSamplesDir = new File(archiveLandscapeDir, File.separator
+                + "samples");
+        assertTrue(archivedSamplesDir.getName() + " doesn't exist.",
+                archivedSamplesDir.exists());
     }
 
     @Test
     public void testDeleteWithoutDB() throws IOException {
         testCreateWithoutDB();
         strategy.delete(landscape);
-        // File samplesDirectory = new File (ccfHomeDirectory, "landscape" +
-        // landscape.getId() + File.separator + "samples");
-        // assertTrue(samplesDirectory + " does still exist.",
-        // samplesDirectory.exists());
-        File archivedSamplesDirectory = new File(ccfHomeDirectory, "archive"
-                + File.separator + "landscape" + landscape.getId()
-                + File.separator + "samples");
-        assertTrue(archivedSamplesDirectory + " doesn't exist.",
-                archivedSamplesDirectory.exists());
+        File archiveDir = new File(ccfHomeDirectory, "archive");
+        File archiveLandscapeDir = archiveDir.listFiles()[0];
+        File archivedSamplesDir = new File(archiveLandscapeDir, File.separator
+                + "samples");
+        assertTrue(archivedSamplesDir.getName() + " doesn't exist.",
+                archivedSamplesDir.exists());
     }
 
     @Test

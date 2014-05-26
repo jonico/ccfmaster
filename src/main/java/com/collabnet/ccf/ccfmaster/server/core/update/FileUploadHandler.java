@@ -3,6 +3,8 @@ package com.collabnet.ccf.ccfmaster.server.core.update;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -49,11 +51,12 @@ public class FileUploadHandler extends MultiAction implements Serializable {
     /*
      * transient because of https://jira.springsource.org/browse/SWF-1083 and
      * http
-     * ://forum.springsource.org/showthread.php?54466-Multipart-File-Upload/page2
-     * If the file is large enough to not be stored in RAM, web flow removes the
-     * temp file before serializing the object and then can't restore it later.
-     * Since we call transferTo() inside CoreZipFile.fromMultipartFile(file), we
-     * don't need the object after the first transition anyway.
+     * ://forum.springsource.org/showthread.php?54466-Multipart-File-Upload/
+     * page2 If the file is large enough to not be stored in RAM, web flow
+     * removes the temp file before serializing the object and then can't
+     * restore it later. Since we call transferTo() inside
+     * CoreZipFile.fromMultipartFile(file), we don't need the object after the
+     * first transition anyway.
      */
     private transient MultipartFile    file;
     private boolean                    needDefaultCoreToRun;
@@ -121,8 +124,11 @@ public class FileUploadHandler extends MultiAction implements Serializable {
     public Event createBackup(RequestContext context) {
         Event ret = error();
         final File archiveDir = new File(ccfHome(), "archive");
-        // e.g. 20110931-235959-landscape27
-        String backupDirName = timestamp() + "-" + landscapeDirectory.getName();
+        // e.g. backup-core-2011-09-31 235959-landscape27
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hhmmssS");
+        String dirName = String.format("backup-core-%s-",
+                dateFormat.format(new Date()));
+        String backupDirName = dirName + landscapeDirectory.getName();
         final File backupDir = new File(archiveDir, backupDirName);
         try {
             Preconditions.checkState(!backupDir.exists(), "core.backup.exists");

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -97,10 +99,13 @@ public class SingleLandscapeCCFCoreInteractionStrategy extends LandscapeCCFCoreI
 
     @Override
     public void delete(Landscape context) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hhmmssS");
+        String dirName = String.format("backup-%s-",
+                dateFormat.format(new Date()));
         File ccfLandscapeDirectory = new File(getCcfHome() + File.separator
                 + LANDSCAPE_DIRECTORY_PREFIX + context.getId());
         File ccfLandscapeArchiveDirectory = new File(getCcfHome()
-                + File.separator + "archive" + File.separator
+                + File.separator + "archive" + File.separator + dirName
                 + LANDSCAPE_DIRECTORY_PREFIX + context.getId());
         try {
             if (Boolean.parseBoolean(getIsArchiveRequired())) { // archiving of landscape based on isArchiveRequired property  
