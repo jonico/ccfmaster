@@ -94,6 +94,8 @@ public class IafMenu extends TagSupport {
         final String projectPath = user.getProjectPath();
         List<NameValuePair> qparams = new ArrayList<NameValuePair>();
         qparams.add(new BasicNameValuePair("linkId", linkId));
+        //added base parameter,needed on switching menubar icon for IE atleast
+        qparams.add(new BasicNameValuePair("base", serverUrl));
         URI uri = URIUtils.createURI(tfUri.getScheme(), tfUri.getHost(),
                 tfUri.getPort(), makePath(projectPath),
                 URLEncodedUtils.format(qparams, "UTF-8"), null);
