@@ -9,6 +9,7 @@ import com.collabnet.ccf.ccfmaster.controller.web.ControllerConstants;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.LandscapeConfig;
 import com.collabnet.ccf.ccfmaster.server.domain.Participant;
+import com.collabnet.ccf.ccfmaster.server.domain.ParticipantConfig;
 import com.collabnet.ccf.ccfmaster.util.Obfuscator;
 import com.collabnet.ccf.ccfmaster.web.model.TFSettingsModel;
 
@@ -78,6 +79,10 @@ public class TFSettingsHelper {
      */
     private void makeTFSettingsModel(TFSettingsModel tfSettingsModel,
             Landscape landscape, Participant teamforge) {
+        ParticipantConfig tfUrlParticipantConfig = ParticipantConfig
+                .findParticipantConfigsByParticipantAndName(teamforge,
+                        ControllerConstants.CCF_PARTICIPANT_TF_URL)
+                .getSingleResult();
         LandscapeConfig tfUserNameLandscapeConfig = LandscapeConfig
                 .findLandscapeConfigsByLandscapeAndName(landscape,
                         ControllerConstants.CCF_LANDSCAPE_TF_USERNAME)
@@ -88,6 +93,7 @@ public class TFSettingsHelper {
                 .getSingleResult();
         tfPasswordLandscapeConfig.setVal(Obfuscator
                 .decodePassword(tfPasswordLandscapeConfig.getVal()));
+        tfSettingsModel.setTfUrlParticipantConfig(tfUrlParticipantConfig);
         tfSettingsModel.setTeamforge(teamforge);
         tfSettingsModel.setLandscape(landscape);
         tfSettingsModel.setTfUserNameLandscapeConfig(tfUserNameLandscapeConfig);

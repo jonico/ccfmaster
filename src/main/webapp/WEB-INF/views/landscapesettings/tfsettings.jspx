@@ -1,6 +1,7 @@
 <div xmlns:spring="http://www.springframework.org/tags"  xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:fn="http://java.sun.com/jsp/jstl/functions"	xmlns:form="http://www.springframework.org/tags/form" xmlns:sec="http://www.springframework.org/security/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
   <jsp:output omit-xml-declaration="yes" />
 
+<spring:message code="tfurl" var="tfurllabel" htmlEscape="false"/>
 <spring:message code="tftimezone" var="tftimezonelabel" htmlEscape="false"/>  
 <spring:message code="tfusername" var="tfusernamelabel" htmlEscape="false"/>  
 <spring:message code="tfpassword" var="tfpasswordlabel" htmlEscape="false"/>
@@ -45,7 +46,16 @@
 		
 	<table class="ItemDetailContainer" width="100%" >
 			<tbody>
-			 	<tr>
+			    <tr>
+				<td class="ItemDetailName">
+				<form:label path="">${tfurllabel}:</form:label>
+				</td>
+				<td class="ItemDetailValue"> 
+				<input type="hidden" name="tfUrlParticipantConfig.name" value="ccf.participant.tf.url"/>
+				<form:input id="tfUrlParticipantConfig" path="tfUrlParticipantConfig.val"  size="80" cssClass="inputfield" readonly="true"/>
+				</td>
+				</tr>
+				<tr>
 				<td class="ItemDetailName">
 				<form:label path="teamforge.timezone">${tftimezonelabel}:</form:label>
 				</td>
