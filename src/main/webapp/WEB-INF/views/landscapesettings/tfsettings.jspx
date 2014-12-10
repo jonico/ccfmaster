@@ -8,12 +8,14 @@
 <spring:message code="bytes" var="byteslabel" htmlEscape="false"/>  
 <spring:message code="button_cancel" var="cancel_button"/>
 <spring:message code="button_save" var="save_button"/>
-<spring:message code="testconnection" var="testconnectionlabel" htmlEscape="false"/>  
+<spring:message code="testconnection" var="testconnectionlabel" htmlEscape="false"/>
+<spring:message code="tfurltooltip" var="tfurltooltip" htmlEscape="false"/> 
 <spring:url value="/admin/displaytfsettings" var="canceltfsettings_url" />
 <spring:url value="/admin/savetfsettings" var="savetfsettings_url" />
 <spring:url value="/admin/tftestconnection" var="testconnection_url"/>		
 <spring:url value="/images/icons/spinner.gif" var="spinner_image_url" />
 <spring:url value="/js/jquery-1.6.2.min.js" var="jquery_url" />
+<spring:url value="/images/icons/help.png" var="help_image_url" />
 <script src="${fn:escapeXml(jquery_url)}" type="text/javascript"><!-- Prevent self-closing --> </script> 
 
 <spring:url value="/js/jquery-ui-1.8.16.custom.min.js" var="jqueryui_url" />
@@ -47,12 +49,13 @@
 	<table class="ItemDetailContainer" width="100%" >
 			<tbody>
 			    <tr>
-				<td class="ItemDetailName">
+			  	<td class="ItemDetailName">
 				<form:label path="">${tfurllabel}:</form:label>
 				</td>
 				<td class="ItemDetailValue"> 
 				<input type="hidden" name="tfUrlParticipantConfig.name" value="ccf.participant.tf.url"/>
-				<form:input id="tfUrlParticipantConfig" path="tfUrlParticipantConfig.val"  size="80" cssClass="inputfield" readonly="true"/>
+				<form:input id="tfUrlParticipantConfig" path="tfUrlParticipantConfig.val"  size="80" cssClass="inputfield" disabled="true"/>
+				<a title="${tfurltooltip}"> <img src="${fn:escapeXml(help_image_url)}" border="0"/></a>
 				</td>
 				</tr>
 				<tr>
