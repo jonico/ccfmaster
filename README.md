@@ -1,6 +1,6 @@
 Project:
 	CCFMaster is an Open Source web based project use spring MVC as defacto framework for web development.
-	More details visit http://ctf.open.collab.net or http://ccf.open.collab.net
+	More details visit http://ctf.open.collab.net or http://ccf.open.collab.net     
 
 
 For new developers:
