@@ -46,6 +46,8 @@ public class LandscapeTFSettingsController extends AbstractLandscapeController {
         TFSettingsModel tfSettingsModel = new TFSettingsModel();
         tfSettingsHelper.populateTFSettingsModel(tfSettingsModel);
         tfSettingsHelper.makeModel(tfSettingsModel, model);
+        model.addAttribute("ccfruntimeConfigPath",
+                ccfRuntimePropertyHolder.getCCFHomeRuntimeConfigPath());
         return UIPathConstants.LANDSCAPESETTINGS_DISPLAYTFSETTINGS;
 
     }

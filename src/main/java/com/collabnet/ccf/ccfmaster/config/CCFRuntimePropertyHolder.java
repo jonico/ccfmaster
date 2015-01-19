@@ -39,30 +39,34 @@ public class CCFRuntimePropertyHolder {
         }
     }
 
-    static final Logger log = LoggerFactory
-                                    .getLogger(CCFRuntimePropertyHolder.class);
+    private static final String APPLICATION_CONTEXT_DEVELOPMENT_CCFRUNTIMEPROPERTIES_XML = "applicationContext-development-ccfruntimeproperties.xml";
 
-    private String      tfUrl;
+    private static final String ENVIRONMENT_VARIABLE_CONFIGURATION                       = "environment/system property";
 
-    private String      ccfBaseUrl;
+    private static final Logger log                                                      = LoggerFactory
+                                                                                                 .getLogger(CCFRuntimePropertyHolder.class);
 
-    private String      ccfHome;
+    private String              tfUrl;
 
-    private String      maxAttachmentSize;
+    private String              ccfBaseUrl;
 
-    private String      iafServiceEndpoint;
+    private String              ccfHome;
 
-    private String      ccfDBPort;
+    private String              maxAttachmentSize;
 
-    private String      jmxForwardPort;
+    private String              iafServiceEndpoint;
 
-    private String      jmxReversePort;
+    private String              ccfDBPort;
 
-    private String      saasMode;
+    private String              jmxForwardPort;
 
-    private String      isArchiveRequired;
+    private String              jmxReversePort;
 
-    private Properties  defaultRuntimePropvalues;
+    private String              saasMode;
+
+    private String              isArchiveRequired;
+
+    private Properties          defaultRuntimePropvalues;
 
     public String getCcfBaseUrl() {
         return ccfBaseUrl;
@@ -74,6 +78,20 @@ public class CCFRuntimePropertyHolder {
 
     public String getCcfHome() {
         return ccfHome;
+    }
+
+    public String getCCFHomeRuntimeConfigPath() {
+        String ccfRuntimeConfigPath = String.format(
+                "%s%sccfhomeruntimeconfig.properties", getCcfHome(),
+                File.separator);
+        File ccfRuntimeconfigFile = new File(ccfRuntimeConfigPath);
+        if (!ccfRuntimeconfigFile.exists()) {
+            String tfUrl = getConfiguredPropertyValue(RuntimePropertyNameEnum.CCF_TF_URL
+                    .getPropertyName());
+            return tfUrl == null ? APPLICATION_CONTEXT_DEVELOPMENT_CCFRUNTIMEPROPERTIES_XML
+                    : ENVIRONMENT_VARIABLE_CONFIGURATION;
+        }
+        return ccfRuntimeConfigPath;
     }
 
     public Properties getDefaultRuntimePropvalues() {

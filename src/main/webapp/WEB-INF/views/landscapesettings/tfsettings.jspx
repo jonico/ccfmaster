@@ -9,7 +9,6 @@
 <spring:message code="button_cancel" var="cancel_button"/>
 <spring:message code="button_save" var="save_button"/>
 <spring:message code="testconnection" var="testconnectionlabel" htmlEscape="false"/>
-<spring:message code="tfurltooltip" var="tfurltooltip" htmlEscape="false"/> 
 <spring:url value="/admin/displaytfsettings" var="canceltfsettings_url" />
 <spring:url value="/admin/savetfsettings" var="savetfsettings_url" />
 <spring:url value="/admin/tftestconnection" var="testconnection_url"/>		
@@ -55,6 +54,7 @@
 				<td class="ItemDetailValue"> 
 				<input type="hidden" name="tfUrlParticipantConfig.name" value="ccf.participant.tf.url"/>
 				<form:input id="tfUrlParticipantConfig" path="tfUrlParticipantConfig.val"  size="80" cssClass="inputfield" disabled="true"/>
+				<spring:message code="tfurltooltip" var="tfurltooltip" arguments="${ccfruntimeConfigPath}" htmlEscape="false"/>
 				<a title="${tfurltooltip}"> <img src="${fn:escapeXml(help_image_url)}" border="0"/></a>
 				</td>
 				</tr>
