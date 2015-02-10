@@ -1,6 +1,12 @@
 package com.collabnet.ccf.ccfmaster.server.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.rmi.RemoteException;
+
+import mockit.Mocked;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,17 +15,16 @@ import com.collabnet.ccf.ccfmaster.controller.web.UIPathConstants;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ce.soap50.webservices.pluggable.PluggableComponentSoapDO;
 import com.collabnet.teamforge.api.Connection;
+import com.collabnet.teamforge.api.filestorage.FileStorageClient;
 import com.collabnet.teamforge.api.pluggable.IntegratedApplicationClient;
 import com.collabnet.teamforge.api.pluggable.PluggableComponentDO;
 import com.collabnet.teamforge.api.pluggable.PluggableComponentParameterDO;
 import com.collabnet.teamforge.api.pluggable.PluggablePermissionDO;
 
-import mockit.*;
-import static org.junit.Assert.*;
-
 public class CreateIntegratedAppStrategyTest {
 
     private class TestIntegratedApplicationClient extends IntegratedApplicationClient {
+
         private final PluggableComponentDO integratedApp;
 
         private TestIntegratedApplicationClient(
@@ -66,8 +71,10 @@ public class CreateIntegratedAppStrategyTest {
     @Test
     public void createCalledAndGetAppByNameNotCalledWhenIADoesNotExist() {
         final Landscape landscape = new Landscape();
+        FileStorageClient fileStorageClient = null;
         landscape.setName("TestLandscapeName");
         final String plugId = "plug9999";
+        final boolean isCTF8Support = false;
         final PluggableComponentDO integratedApp = new PluggableComponentDO(
                 (PluggableComponentSoapDO) null) {
             @Override
@@ -82,9 +89,10 @@ public class CreateIntegratedAppStrategyTest {
                 return null;
             }
         };
+
         final String baseUrl = "foo";
-        new CreateIntegratedAppStrategy(baseUrl, "iafEndpoint", client)
-                .beforeCreate(landscape);
+        new CreateIntegratedAppStrategy(baseUrl, "iafEndpoint", client,
+                fileStorageClient, isCTF8Support).beforeCreate(landscape);
         assertTrue("createIntegratedApplication not called", createCalled);
         assertFalse("getIntegratedApplicationByName was called",
                 getAppByNameCalled);

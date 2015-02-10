@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ce.soap50.webservices.pluggable.PluggableComponentSoapDO;
 import com.collabnet.teamforge.api.Connection;
+import com.collabnet.teamforge.api.filestorage.FileStorageClient;
 import com.collabnet.teamforge.api.pluggable.IntegratedApplicationClient;
 import com.collabnet.teamforge.api.pluggable.PluggableComponentDO;
 import com.collabnet.teamforge.api.pluggable.PluggableComponentParameterDO;
@@ -87,8 +88,10 @@ public class CreateIntegratedAppStrategyTest2 {
                 return plugId;
             }
         };
-        new CreateIntegratedAppStrategy("foo", "iafEndpoint", client)
-                .beforeCreate(landscape);
+        FileStorageClient fileStorageClient = null;
+        final boolean isCTF8Support = false;
+        new CreateIntegratedAppStrategy("foo", "iafEndpoint", client,
+                fileStorageClient, isCTF8Support).beforeCreate(landscape);
         assertFalse("createIntegratedApplication was called", createCalled);
         assertFalse("getIntegratedApplicationByName was called",
                 getAppByNameCalled);

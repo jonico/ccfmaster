@@ -88,6 +88,11 @@
 	<dependencies>
 		<!-- General dependencies for standard applications -->
 		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
 			<groupId>mockit</groupId>
 			<artifactId>jmockit</artifactId>
 			<version>0.999.4</version>

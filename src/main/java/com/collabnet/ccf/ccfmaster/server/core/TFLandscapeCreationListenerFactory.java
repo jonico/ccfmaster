@@ -29,7 +29,9 @@ public class TFLandscapeCreationListenerFactory implements LandscapeCreationList
             IntegratedApplicationClient integratedAppClient = tfConnection
                     .getIntegratedAppClient();
             return new CreateIntegratedAppStrategy(baseUrl,
-                    getIafServiceEndpoint(tfClient), integratedAppClient);
+                    getIafServiceEndpoint(tfClient), integratedAppClient,
+                    tfConnection.getFileStorageClient(),
+                    tfConnection.supports65());
         } catch (RemoteException e) {
             throw new CoreConfigurationException(e);
         }
