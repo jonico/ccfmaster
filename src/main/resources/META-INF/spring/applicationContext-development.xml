@@ -204,6 +204,7 @@
 		<property name="dbPath" value="#{CCFRunTimeProperties.ccfHome}/CCFDB" />
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 		<property name="startCoresOnBootBean" ref="startCoresOnBootBean" />
-	</bean>
-  
+	</bean> 
+	<!-- Make sure IconUploader bean definition placed below the ccfDB server bean -->
+	<bean id="iconUploader" class="com.collabnet.ccf.core.utils.IconUploader" init-method="updateIAFIcon"></bean>  
 </beans>

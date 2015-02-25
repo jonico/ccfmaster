@@ -1,20 +1,15 @@
 package com.collabnet.ccf.ccfmaster.server.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.Random;
 
-import javax.activation.DataHandler;
-
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import com.collabnet.ccf.ccfmaster.controller.web.UIPathConstants;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
+import com.collabnet.ccf.core.utils.IconUploader;
 import com.collabnet.teamforge.api.filestorage.FileStorageClient;
 import com.collabnet.teamforge.api.pluggable.IntegratedApplicationClient;
 import com.collabnet.teamforge.api.pluggable.PluggableComponentDO;
@@ -51,13 +46,12 @@ public class CreateIntegratedAppStrategy extends AbstractLandscapeCreationListen
     public CreateIntegratedAppStrategy(String baseUrl,
             String iafServiceEndpoint,
             IntegratedApplicationClient integratedAppClient,
-            FileStorageClient fileStorageClient, Boolean isCTF8Support) {
+            FileStorageClient fileStorageClient, boolean isCTF8Support) {
         this.baseUrl = baseUrl;
         this.endPoint = iafServiceEndpoint;
         this.integratedAppClient = integratedAppClient;
         this.fileStorageClient = fileStorageClient;
         this.isCTF8Support = isCTF8Support;
-
     }
 
     @Override
@@ -80,7 +74,8 @@ public class CreateIntegratedAppStrategy extends AbstractLandscapeCreationListen
                                 pceResultFormat, pceDescription, pceTitle);
                 plugId = integratedApplication.getId();
                 if (isCTF8Support) {
-                    uploadIcon(plugId);
+                    IconUploader.loadIcon(plugId, fileStorageClient,
+                            integratedAppClient);
                 }
                 // make sure the description appears properly.
                 integratedAppClient.setPluggableAppMessageResource(plugId,
@@ -117,27 +112,6 @@ public class CreateIntegratedAppStrategy extends AbstractLandscapeCreationListen
 
     public void setPermissionNames(String[] permissionNames) {
         this.permissionNames = permissionNames.clone();
-    }
-
-    private void uploadIcon(String plugId) {
-        File fileIcon = new File("ccf.png");
-        try {
-            if (plugId != null) {
-                File tempIconFile = new File(FileUtils.getTempDirectory()
-                        + File.separator + fileIcon);
-                FileUtils.copyInputStreamToFile(
-                        CreateIntegratedAppStrategy.class
-                                .getResourceAsStream("ccf.png"), tempIconFile);
-                String iconFileKey = fileStorageClient
-                        .uploadFile(new DataHandler(tempIconFile.toURL()));
-                integratedAppClient.setIntegratedApplicationIcon(plugId,
-                        iconFileKey, "ccf.png", "image/png");
-            }
-        } catch (MalformedURLException e) {
-            throw new CoreConfigurationException(e);
-        } catch (IOException e) {
-            throw new CoreConfigurationException(e);
-        }
     }
 
     PluggablePermissionDO[] buildPermissions() {

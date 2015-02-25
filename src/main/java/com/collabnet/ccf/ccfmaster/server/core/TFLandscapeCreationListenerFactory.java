@@ -56,7 +56,7 @@ public class TFLandscapeCreationListenerFactory implements LandscapeCreationList
     }
 
     public void setBaseUrl(String baseUrl) {
-        // ensure thath the Base URL ends with a slash.
+        // ensure that the Base URL ends with a slash.
         if (!baseUrl.endsWith("/")) {
             baseUrl = baseUrl + "/";
         }
