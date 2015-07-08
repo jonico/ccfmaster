@@ -152,7 +152,7 @@
 			         },
 	        type: "POST",
 	        url: posturl,
-	        data: "username=" + username + "&amp;password=" + password,
+	        data: "username=" + encodeURIComponent(username) + "&amp;password=" + encodeURIComponent(password),
 	        success: function(response){
 	        $('#info').html(response);
 	        $('#username').val('');

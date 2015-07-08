@@ -336,7 +336,7 @@
 			         },
 	        type: "POST",
 	        url: posturl,
-	        data: "url=" + url + "&amp;username=" + username + "&amp;password=" + password,
+	        data: "url=" + encodeURIComponent(url) + "&amp;username=" + encodeURIComponent(username) + "&amp;password=" + encodeURIComponent(password),
 	        success: function(response){
 	        $('#info').html(response);
 	        $('#url').val('');
@@ -363,7 +363,7 @@
 			         },
 	        type: "POST",
 	        url: posturl,
-	        data: "url=" + url + "&amp;resyncusername=" + resyncusername + "&amp;resyncpassword=" + resyncpassword,
+	        data: "url=" + encodeURIComponent(url) + "&amp;resyncusername=" + encodeURIComponent(resyncusername) + "&amp;resyncpassword=" + encodeURIComponent(resyncpassword),
 	        success: function(response){
 	        $('#resyncinfo').html(response);
 	        $('#url').val('');
