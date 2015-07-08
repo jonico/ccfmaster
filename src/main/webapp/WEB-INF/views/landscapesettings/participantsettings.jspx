@@ -326,7 +326,7 @@
 	        // get the form values
 	        var url = $('#participantUrlParticipantConfig').val();
 	        var username = $('#participantUserNameLandscapeConfig').val();
-	        var password = $('#participantPasswordLandscapeConfig').val();	        
+	        var password = encodeURIComponent($('#participantPasswordLandscapeConfig').val());	        
 			 $.ajax({
 				 	 beforeSend: function() {
 			  			 $('#spinner').show();
@@ -352,7 +352,7 @@
 		function doAjaxResyncPost(posturl) {
 			var url = $('#participantUrlParticipantConfig').val();
 	        var resyncusername = $('#participantResyncUserNameLandscapeConfig').val();
-	        var resyncpassword = $('#participantResyncPasswordLandscapeConfig').val();
+	        var resyncpassword = encodeURIComponent($('#participantResyncPasswordLandscapeConfig').val());
 	        
 			 $.ajax({
 				 	 beforeSend: function() {

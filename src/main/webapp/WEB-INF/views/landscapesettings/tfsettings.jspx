@@ -141,7 +141,7 @@
 		function doAjaxPost(posturl) {
 	        // get the form values
 	        var username = $('#tfUserNameLandscapeConfig').val();
-	        var password = $('#tfPasswordLandscapeConfig').val();
+	        var password = encodeURIComponent($('#tfPasswordLandscapeConfig').val());
 	        
 			 $.ajax({
 				 	 beforeSend: function() {
