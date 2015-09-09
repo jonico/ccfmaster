@@ -29,6 +29,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @XmlAccessorType(XmlAccessType.FIELD)
 @RooEntity(finders = {
+        "findFieldMappingLandscapeTemplateNamesByParentAndDirection",
         "findFieldMappingLandscapeTemplatesByParentAndNameAndDirection",
         "findFieldMappingLandscapeTemplatesByParent",
         "findFieldMappingLandscapeTemplatesByParentAndDirection",

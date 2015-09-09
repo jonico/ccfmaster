@@ -23,9 +23,8 @@ import com.collabnet.ccf.ccfmaster.server.domain.ExternalApp;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMapping;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingExternalAppTemplate;
 import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingLandscapeTemplate;
-import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
-import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
+import com.collabnet.ccf.ccfmaster.web.helper.FieldMappingHelper;
 import com.collabnet.ccf.ccfmaster.web.model.FieldMappingTemplateModel;
 
 @Controller
@@ -53,22 +52,7 @@ public class CreateFieldMappingController extends AbstractProjectController {
             Model model, HttpServletRequest request) {
 
         validateRepositoryMappingDirection(ea, rmd);
-        Landscape landscape = ControllerHelper.findLandscape();
         FieldMappingTemplateModel fieldMappingTemplateModel = new FieldMappingTemplateModel();
-        //Get landscape templates by landscape and direction - connector templates
-        List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate = FieldMappingLandscapeTemplate
-                .findFieldMappingLandscapeTemplatesByParentAndDirection(
-                        landscape, rmd.getDirection()).getResultList();
-        //Get external app templates by external app and direction - project templates
-        List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate = FieldMappingExternalAppTemplate
-                .findFieldMappingExternalAppTemplatesByParentAndDirection(
-                        rmd.getRepositoryMapping().getExternalApp(),
-                        rmd.getDirection()).getResultList();
-
-        fieldMappingTemplateModel
-                .setFieldMappingLandscapeTemplate(fieldMappingLandscapeTemplate);
-        fieldMappingTemplateModel
-                .setFieldMappingExternalAppTemplate(fieldMappingExternalAppTemplate);
         model.addAttribute("rmdid", rmd.getId());
         model.addAttribute("direction", rmd.getDirection().name());
         model.addAttribute("fieldMappingTemplateModel",
@@ -117,6 +101,20 @@ public class CreateFieldMappingController extends AbstractProjectController {
         model.addAttribute(RMD_ID_REQUEST_PARAM, rmd.getId());
         return "redirect:" + PROJECT_FIELD_MAPPING_PATH;
 
+    }
+
+    @ModelAttribute(value = "fieldMappingExternalAppTemplateNames")
+    public List<FieldMappingExternalAppTemplate> getfieldMappingExternalAppTemplateNames(
+            @RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection rmd) {
+        return FieldMappingHelper
+                .getfieldMappingExternalAppTemplateNames(rmd);
+    }
+
+    @ModelAttribute(value = "fieldMappingLandscapeTemplateNames")
+    public List<FieldMappingLandscapeTemplate> getFieldMappingLandscapeTemplateNames(
+            @RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection rmd) {
+        return FieldMappingHelper
+                .getFieldMappingLandscapeTemplateNames(rmd);
     }
 
     @RequestMapping(method = RequestMethod.GET)

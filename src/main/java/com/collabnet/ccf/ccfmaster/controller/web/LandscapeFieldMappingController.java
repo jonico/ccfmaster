@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.mvc.extensions.flash.FlashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import com.collabnet.ccf.ccfmaster.server.domain.FieldMappingValueMapEntry;
 import com.collabnet.ccf.ccfmaster.server.domain.Landscape;
 import com.collabnet.ccf.ccfmaster.server.domain.RepositoryMappingDirection;
 import com.collabnet.ccf.ccfmaster.web.helper.ControllerHelper;
+import com.collabnet.ccf.ccfmaster.web.helper.FieldMappingHelper;
 import com.collabnet.ccf.ccfmaster.web.model.FieldMappingTemplateModel;
 
 @RequestMapping("/admin/**")
@@ -46,22 +48,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
             @RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection rmd,
             Model model, HttpServletRequest request) {
 
-        Landscape landscape = ControllerHelper.findLandscape();
         FieldMappingTemplateModel fieldMappingTemplateModel = new FieldMappingTemplateModel();
-        //Get landscape templates by landscape and direction - connector templates
-        List<FieldMappingLandscapeTemplate> fieldMappingLandscapeTemplate = FieldMappingLandscapeTemplate
-                .findFieldMappingLandscapeTemplatesByParentAndDirection(
-                        landscape, rmd.getDirection()).getResultList();
-        //Get external app templates by external app and direction - project templates
-        List<FieldMappingExternalAppTemplate> fieldMappingExternalAppTemplate = FieldMappingExternalAppTemplate
-                .findFieldMappingExternalAppTemplatesByParentAndDirection(
-                        rmd.getRepositoryMapping().getExternalApp(),
-                        rmd.getDirection()).getResultList();
-
-        fieldMappingTemplateModel
-                .setFieldMappingLandscapeTemplate(fieldMappingLandscapeTemplate);
-        fieldMappingTemplateModel
-                .setFieldMappingExternalAppTemplate(fieldMappingExternalAppTemplate);
         model.addAttribute("rmdid", rmd.getId());
         model.addAttribute("direction", rmd.getDirection().name());
         model.addAttribute("fieldMappingTemplateModel",
@@ -104,6 +91,22 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
         model.addAttribute(RMD_ID_REQUEST_PARAM, rmd.getId());
         return "redirect:/" + UIPathConstants.ASSOCIATED_FIELD_MAPPINGS_BY_RMD;
 
+    }
+
+    @ModelAttribute(value = "fieldMappingExternalAppTemplateNames")
+    public List<FieldMappingExternalAppTemplate> getfieldMappingExternalAppTemplateNames(
+            @RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection rmd) {
+
+        return FieldMappingHelper
+                .getfieldMappingExternalAppTemplateNames(rmd);
+    }
+
+    @ModelAttribute(value = "fieldMappingLandscapeTemplateNames")
+    public List<FieldMappingLandscapeTemplate> getFieldMappingLandscapeTemplateNames(
+            @RequestParam(RMD_ID_REQUEST_PARAM) RepositoryMappingDirection rmd) {
+
+        return FieldMappingHelper
+                .getFieldMappingLandscapeTemplateNames(rmd);
     }
 
     /**
@@ -231,6 +234,7 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
     public static void createFieldMappingTemplate(
             FieldMappingTemplateModel fieldMappingTemplateModel,
             RepositoryMappingDirection rmd, FieldMapping fieldMapping) {
+        Landscape landscape = ControllerHelper.findLandscape();
         // Check if new field mapping with the same name already exists. display error message to the user
         if (isTemplateExists(fieldMappingTemplateModel.getFieldmappingName(),
                 rmd, FieldMappingScope.REPOSITORY_MAPPING_DIRECTION)) {
@@ -245,26 +249,12 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
                     .setScope(FieldMappingScope.REPOSITORY_MAPPING_DIRECTION);
             if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel
                     .getTemplateType())) {
-                FieldMappingLandscapeTemplate fieldMappingLandscapeTemplate = fieldMappingTemplateModel
-                        .getFieldMappingLandscapeTemplate().get(0);
-                fieldMapping.setKind(fieldMappingLandscapeTemplate.getKind());
-                fieldMapping
-                        .setRules(cloneFieldMappingRules(fieldMappingLandscapeTemplate
-                                .getRules()));
-                fieldMapping
-                        .setValueMaps(cloneFieldMappingValueMap(fieldMappingLandscapeTemplate
-                                .getValueMaps()));
+                createConnectorLandscapeFMTemplate(fieldMappingTemplateModel,
+                        rmd, fieldMapping, landscape);
             } else if (PROJECT_TEMPLATE_TYPE.equals(fieldMappingTemplateModel
                     .getTemplateType())) {
-                FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate = fieldMappingTemplateModel
-                        .getFieldMappingExternalAppTemplate().get(0);
-                fieldMapping.setKind(fieldMappingExternalAppTemplate.getKind());
-                fieldMapping
-                        .setRules(cloneFieldMappingRules(fieldMappingExternalAppTemplate
-                                .getRules()));
-                fieldMapping
-                        .setValueMaps(cloneFieldMappingValueMap(fieldMappingExternalAppTemplate
-                                .getValueMaps()));
+                createProjectExternalAppFMTemplate(fieldMappingTemplateModel,
+                        rmd, fieldMapping);
             }
             fieldMapping.persist();
             FlashMap.setSuccessMessage(ControllerConstants.FIELD_MAPPING_CREATE_SUCCESS_MESSAGE);
@@ -282,35 +272,32 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
             RepositoryMappingDirection rmd,
             FieldMappingTemplateModel fieldMappingTemplateModel,
             FieldMapping fieldMapping) {
-        FieldMappingLandscapeTemplate fieldMappingLandscapeTemplate = fieldMappingTemplateModel
-                .getFieldMappingLandscapeTemplate().get(0);
-        FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate = fieldMappingTemplateModel
-                .getFieldMappingExternalAppTemplate().get(0);
+        Landscape landscape = ControllerHelper.findLandscape();
 
         //  if its a connector template and the template is already with the same name display error message
         if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel
                 .getTemplateType())
-                && isTemplateExists(fieldMappingLandscapeTemplate.getName(),
+                && isTemplateExists(
+                        fieldMappingTemplateModel.getFmLandscapeTemplate(),
                         rmd, FieldMappingScope.LANDSCAPE)) {
             FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_ALREADY_LINKED_MESSAGE);
         }
         // if its a project template and the template is already with the same name display error message
         else if (PROJECT_TEMPLATE_TYPE.equals(fieldMappingTemplateModel
                 .getTemplateType())
-                && isTemplateExists(fieldMappingExternalAppTemplate.getName(),
+                && isTemplateExists(
+                        fieldMappingTemplateModel.getFmExternalAppTemplate(),
                         rmd, FieldMappingScope.EXTERNAL_APP)) {
             FlashMap.setErrorMessage(ControllerConstants.FIELD_MAPPING_ALREADY_LINKED_MESSAGE);
         } else {
             if (CONNECTOR_TEMPLATE_TYPE.equals(fieldMappingTemplateModel
                     .getTemplateType())) {
-                fieldMapping.setScope(FieldMappingScope.LANDSCAPE);
-                fieldMapping.setName(fieldMappingLandscapeTemplate.getName());
-                fieldMapping.setKind(fieldMappingLandscapeTemplate.getKind());
+                createLinkedConnectorLandscapeFMTemplate(rmd,
+                        fieldMappingTemplateModel, fieldMapping, landscape);
             } else if (PROJECT_TEMPLATE_TYPE.equals(fieldMappingTemplateModel
                     .getTemplateType())) {
-                fieldMapping.setScope(FieldMappingScope.EXTERNAL_APP);
-                fieldMapping.setName(fieldMappingExternalAppTemplate.getName());
-                fieldMapping.setKind(fieldMappingExternalAppTemplate.getKind());
+                createLinkedProjectExternalAppFMTemplate(rmd,
+                        fieldMappingTemplateModel, fieldMapping);
             }
             fieldMapping.setRules(null);
             fieldMapping.setValueMaps(null);
@@ -406,6 +393,92 @@ public class LandscapeFieldMappingController extends AbstractLandscapeController
         }
         model.addAttribute("page", page);
         model.addAttribute("size", size);
+    }
+
+    /**
+     * @param fieldMappingTemplateModel
+     * @param rmd
+     * @param fieldMapping
+     * @param landscape
+     */
+    private static void createConnectorLandscapeFMTemplate(
+            FieldMappingTemplateModel fieldMappingTemplateModel,
+            RepositoryMappingDirection rmd, FieldMapping fieldMapping,
+            Landscape landscape) {
+        FieldMappingLandscapeTemplate fieldMappingLandscapeTemplate = FieldMappingLandscapeTemplate
+                .findFieldMappingLandscapeTemplatesByParentAndNameAndDirection(
+                        landscape,
+                        fieldMappingTemplateModel.getFmLandscapeTemplate(),
+                        rmd.getDirection()).getSingleResult();
+        fieldMapping.setKind(fieldMappingLandscapeTemplate.getKind());
+        fieldMapping
+                .setRules(cloneFieldMappingRules(fieldMappingLandscapeTemplate
+                        .getRules()));
+        fieldMapping
+                .setValueMaps(cloneFieldMappingValueMap(fieldMappingLandscapeTemplate
+                        .getValueMaps()));
+    }
+
+    /**
+     * @param rmd
+     * @param fieldMappingTemplateModel
+     * @param fieldMapping
+     * @param landscape
+     */
+    private static void createLinkedConnectorLandscapeFMTemplate(
+            RepositoryMappingDirection rmd,
+            FieldMappingTemplateModel fieldMappingTemplateModel,
+            FieldMapping fieldMapping, Landscape landscape) {
+        FieldMappingLandscapeTemplate fieldMappingLandscapeTemplate = FieldMappingLandscapeTemplate
+                .findFieldMappingLandscapeTemplatesByParentAndNameAndDirection(
+                        landscape,
+                        fieldMappingTemplateModel.getFmLandscapeTemplate(),
+                        rmd.getDirection()).getSingleResult();
+        fieldMapping.setScope(FieldMappingScope.LANDSCAPE);
+        fieldMapping.setName(fieldMappingLandscapeTemplate.getName());
+        fieldMapping.setKind(fieldMappingLandscapeTemplate.getKind());
+    }
+
+    /**
+     * @param rmd
+     * @param fieldMappingTemplateModel
+     * @param fieldMapping
+     */
+    private static void createLinkedProjectExternalAppFMTemplate(
+            RepositoryMappingDirection rmd,
+            FieldMappingTemplateModel fieldMappingTemplateModel,
+            FieldMapping fieldMapping) {
+        FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate = FieldMappingExternalAppTemplate
+                .findFieldMappingExternalAppTemplatesByParentAndNameAndDirection(
+                        rmd.getRepositoryMapping().getExternalApp(),
+                        fieldMappingTemplateModel.getFmExternalAppTemplate(),
+                        rmd.getDirection()).getSingleResult();
+
+        fieldMapping.setScope(FieldMappingScope.EXTERNAL_APP);
+        fieldMapping.setName(fieldMappingExternalAppTemplate.getName());
+        fieldMapping.setKind(fieldMappingExternalAppTemplate.getKind());
+    }
+
+    /**
+     * @param fieldMappingTemplateModel
+     * @param rmd
+     * @param fieldMapping
+     */
+    private static void createProjectExternalAppFMTemplate(
+            FieldMappingTemplateModel fieldMappingTemplateModel,
+            RepositoryMappingDirection rmd, FieldMapping fieldMapping) {
+        FieldMappingExternalAppTemplate fieldMappingExternalAppTemplate = FieldMappingExternalAppTemplate
+                .findFieldMappingExternalAppTemplatesByParentAndNameAndDirection(
+                        rmd.getRepositoryMapping().getExternalApp(),
+                        fieldMappingTemplateModel.getFmExternalAppTemplate(),
+                        rmd.getDirection()).getSingleResult();
+        fieldMapping.setKind(fieldMappingExternalAppTemplate.getKind());
+        fieldMapping
+                .setRules(cloneFieldMappingRules(fieldMappingExternalAppTemplate
+                        .getRules()));
+        fieldMapping
+                .setValueMaps(cloneFieldMappingValueMap(fieldMappingExternalAppTemplate
+                        .getValueMaps()));
     }
 
     static void populateFieldMappingModel(

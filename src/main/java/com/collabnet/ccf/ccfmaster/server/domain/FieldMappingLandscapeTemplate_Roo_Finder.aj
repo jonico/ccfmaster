@@ -12,6 +12,16 @@ import javax.persistence.TypedQuery;
 
 privileged aspect FieldMappingLandscapeTemplate_Roo_Finder {
     
+    public static TypedQuery<FieldMappingLandscapeTemplate> FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplateNamesByParentAndDirection(Landscape parent, Directions direction) {
+        if (parent == null) throw new IllegalArgumentException("The parent argument is required");
+        if (direction == null) throw new IllegalArgumentException("The direction argument is required");
+        EntityManager em = FieldMappingLandscapeTemplate.entityManager();
+        TypedQuery<FieldMappingLandscapeTemplate> q = em.createQuery("SELECT o FROM FieldMappingLandscapeTemplate AS o WHERE o.parent = :parent AND o.direction = :direction", FieldMappingLandscapeTemplate.class);
+        q.setParameter("parent", parent);
+        q.setParameter("direction", direction);
+        return q;
+    }
+    
     public static TypedQuery<FieldMappingLandscapeTemplate> FieldMappingLandscapeTemplate.findFieldMappingLandscapeTemplatesByDirection(Directions direction) {
         if (direction == null) throw new IllegalArgumentException("The direction argument is required");
         EntityManager em = FieldMappingLandscapeTemplate.entityManager();

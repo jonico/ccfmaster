@@ -44,16 +44,14 @@
 				<form:label  path="" name="fieldMappingTemplateModel">Select a field mapping template :</form:label>
 			</td>
 				<td class="ItemDetailValue"> 
-					<form:select  path="fieldMappingLandscapeTemplate"  id="fieldMappingLandscapeTemplate" multiple="single" cssClass="inputfield" >
-						<form:option selected="selected" value="-1" label="--- Select ---"/>
-						<form:options items="${fieldMappingTemplateModel.fieldMappingLandscapeTemplate}" itemLabel="name" itemValue="id" />
-            			<form:option selected="selected" value="-1" label="--- Select ---"/>
-           			</form:select>
-					<form:select  path="fieldMappingExternalAppTemplate" id="fieldMappingExternalAppTemplate" multiple="single" cssClass="inputfield" style="display:none">
-						<form:option selected="selected" value="-1" label="--- Select ---"/>
-						<form:options items="${fieldMappingTemplateModel.fieldMappingExternalAppTemplate}" itemLabel="name" itemValue="id" />
-            			<form:option selected="selected" value="-1" label="--- Select ---"/>
-           			</form:select>
+					<form:select path="fmLandscapeTemplate" id="fieldMappingLandscapeTemplate" multiple="single" cssClass="inputfield" >
+						<form:option value="" label="--- Select ---"/>
+						<form:options items="${fieldMappingLandscapeTemplateNames}"/>
+            		</form:select>
+					<form:select  path="fmExternalAppTemplate" id="fieldMappingExternalAppTemplate" multiple="single" cssClass="inputfield" style="display:none">
+						<form:option value="" label="--- Select ---"/>
+					    <form:options items="${fieldMappingExternalAppTemplateNames}"/>
+            		</form:select>
 				</td>
 			</tr>
 			<tr><td><br/></td></tr>		
@@ -128,7 +126,7 @@
 			 
 		
 		$(function(){
-		    $("#linktemplate").click(function () {
+			$("#linktemplate").click(function () {
 		    	  if($('#linktemplate').is(':checked')){
 		        	  $('#fieldmappingName').attr("disabled", true);
 		          }
@@ -149,11 +147,11 @@
 		 }); 
 		
 		$("#connector").click(function() {
-            $("#fieldMappingExternalAppTemplate").hide();
+			$("#fieldMappingExternalAppTemplate").hide();
             $("#fieldMappingLandscapeTemplate").show();
         });
         $("#project").click(function() {
-            $("#fieldMappingLandscapeTemplate").hide();
+        	$("#fieldMappingLandscapeTemplate").hide();
             $("#fieldMappingExternalAppTemplate").show();
             
         });
@@ -187,6 +185,4 @@
 			});
 			});
  	</script>  
-
-
 </div>

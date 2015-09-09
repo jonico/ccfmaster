@@ -30,6 +30,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @XmlAccessorType(XmlAccessType.FIELD)
 @RooEntity(finders = {
+        "findFieldMappingExternalAppTemplateNamesByParentAndDirection",
         "findFieldMappingExternalAppTemplatesByParentAndNameAndDirection",
         "findFieldMappingExternalAppTemplatesByParentAndDirection",
         "findFieldMappingExternalAppTemplatesByParent" })
@@ -106,6 +107,24 @@ public class FieldMappingExternalAppTemplate implements Template<ExternalApp> {
         q.setParameter("externalApp", externalApp);
         q.setParameter("direction", direction);
         return q.getSingleResult();
+    }
+
+    public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplateNamesByParentAndDirection(
+            ExternalApp parent, Directions direction) {
+        if (parent == null)
+            throw new IllegalArgumentException(
+                    "The parent argument is required");
+        if (direction == null)
+            throw new IllegalArgumentException(
+                    "The direction argument is required");
+        EntityManager em = FieldMappingExternalAppTemplate.entityManager();
+        TypedQuery<FieldMappingExternalAppTemplate> q = em
+                .createQuery(
+                        "SELECT o FROM FieldMappingExternalAppTemplate AS o WHERE o.parent = :parent AND o.direction = :direction ORDER BY o.id",
+                        FieldMappingExternalAppTemplate.class);
+        q.setParameter("parent", parent);
+        q.setParameter("direction", direction);
+        return q;
     }
 
     public static TypedQuery<FieldMappingExternalAppTemplate> findFieldMappingExternalAppTemplatesByParent(
