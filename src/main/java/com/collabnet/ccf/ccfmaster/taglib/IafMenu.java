@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -42,7 +41,11 @@ public class IafMenu extends TagSupport {
     private static final long   serialVersionUID  = 1L;
     private static final Logger log               = LoggerFactory
                                                           .getLogger(IafMenu.class);
+    private static final String CTF82_API_VERSION = "6.7.0.0";
     private static final String CTF71_API_VERSION = "6.3.0.0";
+    private static final String IFRAME_BEGIN      = "<iframe id=\"myframe\" scrolling=\"no\" marginwidth=\"0\" marginheight=\"0\" cellspacing=\"0\" cellpadding=\"0\" frameborder=\"0\" vspace=\"0\" hspace=\"0\" style=\"overflow: hidden; width: 100%\" src=\"";
+    private static final String IFRAME_END        = "</iframe>";
+    private static final String CLOSE_TAG         = "\">";
 
     @Override
     public int doEndTag() throws JspException {
@@ -60,16 +63,11 @@ public class IafMenu extends TagSupport {
             String apiVersion = connection.getTeamForgeClient().getApiVersion();
             //From TF 7.2 use the default code implementation of topinclude (http://<>/sf/sfmain/do/topInclude/projects.xxxx?linkId=prplxxxx)
             if (apiVersion.compareTo(CTF71_API_VERSION) > 0) {
-                URI uri = constructURI(user);
-                HttpServletResponse servletresponse = (HttpServletResponse) pageContext
-                        .getResponse();
-                servletresponse.sendRedirect(uri.toString());
+                pageContext.getOut().write(getCTFHeaderBar(user, request));
             } else {
-                //Older version of TF less than 7.2 still use the custom implementation where we hide the jumptoId box.
                 pageContext.getOut().write(getBanner(user, request));
-                pageContext.getOut().flush();
             }
-
+            pageContext.getOut().flush();
             return EVAL_PAGE;
         } catch (RemoteException e) {
             throw new JspException("Error communicating with TeamForge", e);
@@ -133,6 +131,7 @@ public class IafMenu extends TagSupport {
 
         InputStreamReader isr = new InputStreamReader(is, Charsets.UTF_8);
         StringBuffer buf = new StringBuffer();
+        buf.append(IFRAME_BEGIN).append(uri).append(CLOSE_TAG);
         /*
          * the following hacky string replacements and additions are adopted
          * from com.collabnet.ce.soap50.integratedapps.taglib.ViewButtonBarTag
@@ -180,7 +179,46 @@ public class IafMenu extends TagSupport {
                 .append("    document.body.onselectstart=function(){return false}")
                 .append("</script>").toString();
         buf.append("</body></html>");
+        buf.append(IFRAME_END);
 
+        return buf.toString();
+
+    }
+
+    private String getCTFHeaderBar(IafUserDetails user,
+            HttpServletRequest request) throws ClientProtocolException,
+            IOException, URISyntaxException {
+        final Connection conn = user.getConnection();
+        String apiVersion = conn.getTeamForgeClient().getApiVersion();
+        StringBuffer buf = new StringBuffer();
+        /*
+         * In TF8.1 and previous versions IAF apps use iframe in their base
+         * pages/html and this iframe is rendered within every page of the iaf
+         * application. From TF8.2 Instead of iframe, 2 html tags(<script> and
+         * <div>) used in the same page/html/erb where the iframe is currently
+         * embedded.
+         */
+
+        if (apiVersion.compareTo(CTF82_API_VERSION) >= 0) {
+            final String serverUrl = conn.getServerUrl();
+            buf.append("<script src=\"")
+                    .append(serverUrl)
+                    .append("/ctf/js/ctf-header.js\" data-ctf-header-include=\"")
+                    .append(serverUrl)
+                    .append("\" data-project-path=\"")
+                    .append(user.getProjectPath())
+                    .append("\" data-app-id=\"")
+                    .append(user.getLinkId())
+                    .append("\" data-app-base-url=\"")
+                    .append(request.getContextPath())
+                    .append("\" type=\"text/javascript\"></script>")
+                    .append("<div class=\"ctf_7_x_styles\" saturn=\"\" ctf-url=\"")
+                    .append(serverUrl)
+                    .append("\"><div ng-bindable=\"\" class=\"widgets-header-include\"></div></div>");
+        } else {
+            buf.append(IFRAME_BEGIN).append(constructURI(user))
+                    .append(CLOSE_TAG).append(IFRAME_END);
+        }
         return buf.toString();
 
     }

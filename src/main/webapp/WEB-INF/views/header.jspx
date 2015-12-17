@@ -10,13 +10,8 @@
 	<link rel="stylesheet" type="text/css" href="${tfstyle_url}"><!-- Prevent self-closing --> </link>
 	
 	<sec:authorize access="hasRole('ROLE_IAF_USER')">
-		<spring:url value="/iapp.jsp" var="iapp_url" />
-		<iframe id="myframe" scrolling="no" marginwidth="0" marginheight="0"
-			cellspacing="0" cellpadding="0" frameborder="0" vspace="0" hspace="0"
-			style="overflow: hidden; width: 100%" src="${iapp_url}"
-			srcdontuse="http://192.168.63.128/sf/sfmain/do/topInclude/projects.brokerage_system_sample">
-			<p>Your browser does not support iframes.</p>
-		</iframe>
+	<!-- custom tag implemented in iaf.tld library to generate TF version specific code." -->
+		<iapp:viewbuttonbar/>
 	</sec:authorize>
 	
 	<sec:authorize access="not hasRole('ROLE_IAF_USER')">
